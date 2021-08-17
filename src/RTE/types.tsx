@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { RTEPlugin } from "./index";
 
 export declare interface IRteParam {
@@ -7,12 +7,6 @@ export declare interface IRteParam {
 
 export declare type IOnFunction = {
     exec: () => {};
-    render: (
-        element: React.ReactElement,
-        attrs: { [key: string]: any },
-        path: number[],
-        rte: IRteParam
-    ) => React.ReactElement;
 
     normalize: (rte: IRteParam) => {};
 
@@ -31,7 +25,6 @@ export declare type IOnType =
     | "normalize"
     | "deleteBackwards"
     | "deleteForwards"
-    | "render"
     | "insertBreak"
     | "beforeRender"
     | "beforeChildRender"
@@ -54,6 +47,7 @@ export declare interface IConfig {
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
+    Component?: (...params: any) => ReactElement;
 }
 
 export declare interface IRegistryDnd {
@@ -77,7 +71,12 @@ export declare interface IRegistry {
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
     handleMouseDown?: (...params: any) => any;
-    Component?: (...params: any) => any;
+    Component?: (
+        element: React.ReactElement,
+        attrs: { [key: string]: any },
+        path: number[],
+        rte: IRteParam
+    ) => React.ReactElement;
 }
 
 export declare interface IMeta {

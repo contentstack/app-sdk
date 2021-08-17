@@ -71,11 +71,6 @@ export class RTEPlugin {
                 break;
             }
 
-            case "render": {
-                this.pluginMetaData.registry.Component = callback;
-                break;
-            }
-
             case "paste":
             case "deleteBackward":
             case "deleteForward":
@@ -215,6 +210,11 @@ export const rtePluginInitializer = (
                             }
                         );
                     }
+                }
+
+                case "Component": {
+                    PluginMetaData.registry.Component = value
+                    break
                 }
             }
         }
