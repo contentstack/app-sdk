@@ -91,15 +91,7 @@ class Extension {
         break
       }
 
-      case 'RTE': {
-        import('./RTE').then(({ rtePluginInitializer }) => {
-          this.Extension.RTEPlugin = rtePluginInitializer
-        })
-        break;
-      }
-
-      case 'FIELD':
-      default: {
+      case 'FIELD': {
         this.Extension.CustomField = {
           field: new Field(initializationData as IFieldInitData, postRobot, emitter),
           fieldConfig: initializationData.data.field_config,
@@ -109,6 +101,14 @@ class Extension {
         }
 
         break
+      }
+
+      case 'RTE':
+      default: {
+        import('./RTE').then(({ rtePluginInitializer }) => {
+          this.Extension.RTEPlugin = rtePluginInitializer
+        })
+        break;
       }
     }
 
