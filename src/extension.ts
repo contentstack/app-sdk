@@ -5,7 +5,7 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IConfig, ICustomField, IDashboardInitData, IDashboardWidget, IFieldConfig, IFieldInitData, ILocation, IRTE, ISidebarInitData, ISidebarWidget, IUser, } from './types'
+import { IConfig, ICustomField, IDashboardInitData, IDashboardWidget, IFieldConfig, IFieldInitData, ILocation, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, } from './types'
 
 const emitter = new EventEmitter();
 
@@ -30,10 +30,10 @@ class Extension {
     DashboardWidget: IDashboardWidget | null
     SidebarWidget: ISidebarWidget | null
     CustomField: ICustomField | null
-    RTE: IRTE | null
+    RTEPlugin: IRTE | null
   }
 
-  constructor(initData: IDashboardInitData | IFieldInitData | ISidebarInitData) {
+  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData) {
     const initializationData = initData;
 
     this.postRobot = postRobot;
@@ -71,7 +71,7 @@ class Extension {
       DashboardWidget: null,
       CustomField: null,
       SidebarWidget: null,
-      RTE: null
+      RTEPlugin: null
     }
 
     switch (initializationData.data.type) {
@@ -89,6 +89,13 @@ class Extension {
           stack: new Stack(initializationData.data.stack, postRobot)
         }
         break
+      }
+
+      case 'RTE': {
+        import('./RTE').then(({ rtePluginInitializer }) => {
+          this.Extension.RTEPlugin = rtePluginInitializer
+        })
+        break;
       }
 
       case 'FIELD':

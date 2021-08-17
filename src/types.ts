@@ -85,10 +85,20 @@ export declare interface IFieldInitData {
     }
 }
 
+export declare interface IRTEInitData {
+    data: {
+        config: IConfig,
+        stack: ICurrentStack,
+        type: 'RTE',
+        user: IUser,
+    }
+}
+
 export declare interface IInitializationData {
     'FIELD': IFieldConfig
     'SIDEBAR': ISidebarInitData
     'DASHBOARD': IDashboardInitData
+    'RTE': IRTEInitData
 }
 
-export declare type ILocation = "FIELD" | "DASHBOARD" | "SIDEBAR"
+export declare type ILocation = "FIELD" | "DASHBOARD" | "SIDEBAR" | "RTE"

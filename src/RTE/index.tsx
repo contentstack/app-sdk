@@ -9,9 +9,6 @@ export class RTEPlugin {
     private pluginMetaData: IPluginMetaData;
     private isContainer: boolean = false;
     private containerMetaData: IContainerMetaData;
-    static allPlugins = [];
-
-    static register = () => {};
 
     constructor(pluginMetaData: IPluginMetaData) {
         this.pluginMetaData = pluginMetaData;
@@ -54,18 +51,6 @@ export class RTEPlugin {
         });
     };
 
-    register = () => {
-        if (this.isContainer) {
-            //* register as container
-
-            // register dependent plugin
-            this.containerMetaData.meta.dependentPlugins.forEach((plugin) => {
-                plugin.register();
-            });
-        } else {
-            //* register as plugin
-        }
-    };
     on = <Type extends keyof IOnFunction>(
         type: Type,
         callback: IOnFunction[Type]
@@ -100,6 +85,10 @@ export class RTEPlugin {
                 break;
             }
         }
+    };
+
+    get = () => {
+        return this.isContainer ? this.containerMetaData : this.pluginMetaData;
     };
 }
 
