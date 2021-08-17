@@ -1,13 +1,10 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { RTEPlugin } from "./index";
 export declare interface IRteParam {
     [key: string]: any;
 }
 export declare type IOnFunction = {
     exec: () => {};
-    render: (element: React.ReactElement, attrs: {
-        [key: string]: any;
-    }, path: number[], rte: IRteParam) => React.ReactElement;
     normalize: (rte: IRteParam) => {};
     insertBreak: (rte: IRteParam) => {};
     deleteBackward: (rte: IRteParam) => {};
@@ -16,7 +13,7 @@ export declare type IOnFunction = {
     beforeChildRender: () => {};
     copy: (rte: IRteParam) => void;
 };
-export declare type IOnType = "exec" | "normalize" | "deleteBackwards" | "deleteForwards" | "render" | "insertBreak" | "beforeRender" | "beforeChildRender" | "copy" | "paste";
+export declare type IOnType = "exec" | "normalize" | "deleteBackwards" | "deleteForwards" | "insertBreak" | "beforeRender" | "beforeChildRender" | "copy" | "paste";
 export declare type IDisplayOnOptions = "toolbar" | "hoveringToolbar";
 export declare type IElementTypeOptions = "inline" | "void" | "block" | "text";
 export declare interface IDnd {
@@ -32,6 +29,7 @@ export declare interface IConfig {
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
+    Component?: (...params: any) => ReactElement;
 }
 export declare interface IRegistryDnd {
     DisableDND: boolean;
@@ -53,7 +51,9 @@ export declare interface IRegistry {
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
     handleMouseDown?: (...params: any) => any;
-    Component?: (...params: any) => any;
+    Component?: (element: React.ReactElement, attrs: {
+        [key: string]: any;
+    }, path: number[], rte: IRteParam) => React.ReactElement;
 }
 export declare interface IMeta {
     id: string;
