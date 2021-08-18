@@ -101,6 +101,7 @@ export const rtePluginInitializer = (
                 inHoveringToolbar: true,
             },
             dndOptions: {},
+            isContentstackElement: true,
         },
         meta: {
             id,
@@ -210,6 +211,7 @@ export const rtePluginInitializer = (
                             }
                         );
                     }
+                    break;
                 }
 
                 case "Component": {

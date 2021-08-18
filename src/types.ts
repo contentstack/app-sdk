@@ -52,7 +52,7 @@ export declare interface IDashboardInitData {
         dashboard_width: "full_width" | "half_width",
         config: IConfig
         stack: ICurrentStack
-        type: 'DASHBOARD'
+        type: 'DASHBOARD' | 'DASHBOARD_WIDGET'
         user: IUser,
     }
 }
@@ -64,7 +64,7 @@ export declare interface ISidebarInitData {
         entry: ICurrentEntry,
         locale: string,
         stack: ICurrentStack,
-        type: 'SIDEBAR'
+        type: 'SIDEBAR' | 'SIDEBAR_WIDGET'
         user: IUser,
     }
 }
@@ -81,7 +81,7 @@ export declare interface IFieldInitData {
         value: any
         field_config: IFieldConfig
         stack: ICurrentStack
-        type: 'FIELD'
+        type: 'FIELD' | 'CUSTOM_FIELD'
     }
 }
 
@@ -96,9 +96,18 @@ export declare interface IRTEInitData {
 
 export declare interface IInitializationData {
     'FIELD': IFieldConfig
+    'CUSTOM_FIELD': IFieldConfig
     'SIDEBAR': ISidebarInitData
+    'SIDEBAR_WIDGET': ISidebarInitData
     'DASHBOARD': IDashboardInitData
+    'DASHBOARD_WIDGET': IDashboardInitData
     'RTE': IRTEInitData
 }
 
-export declare type ILocation = "FIELD" | "DASHBOARD" | "SIDEBAR" | "RTE"
+
+export const isLocation = (value: IType | ILocation): value is ILocation => {
+    return ['CUSTOM_FIELD', 'SIDEBAR_WIDGET', 'DASHBOARD_WIDGET', 'RTE'].includes(value)
+}
+export declare type IType = "FIELD" | "DASHBOARD" | "SIDEBAR"
+
+export declare type ILocation = "RTE" | "CUSTOM_FIELD" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET"
