@@ -5,7 +5,7 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IConfig, ICustomField, IDashboardInitData, IDashboardWidget, IFieldConfig, IFieldInitData, ILocation, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, } from './types'
+import { IConfig, ICustomField, IDashboardInitData, IDashboardWidget, IFieldConfig, IFieldInitData, ILocation, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, isLocation, IType, IUser, } from './types'
 
 const emitter = new EventEmitter();
 
@@ -19,9 +19,11 @@ class Extension {
   config: IConfig
   postRobot: any
   currentUser: IUser
-  location: ILocation
+  location?: ILocation
+  type?: IType
   fieldConfig?: IFieldConfig
   field?: Field
+  app_id?: string
 
   store: Store
   stack: Stack
@@ -48,11 +50,22 @@ class Extension {
      * @type {Object}
      */
     this.currentUser = initializationData.data.user;
-    /**
-     * location of extension, 'FIELD' || 'WIDGET' || 'DASHBOARD'.
-     * @type {string}
-     */
-    this.location = initializationData.data.type || 'FIELD';
+    if (isLocation(initializationData.data.type)) {
+      /**
+       * location of extension, 'CUSTOM_FIELD' || 'SIDEBAR_WIDGET' || 'DASHBOARD_WIDGET`X'.
+       * @type {string}
+       */
+      this.location = initializationData.data.type;
+      delete this.type
+
+    } else {
+      /**
+      * type of extension, 'FIELD' || 'WIDGET' || 'DASHBOARD'.
+      * @type {string}
+      */
+      this.type = initializationData.data.type
+      delete this.location
+    }
     /**
      * Store to persist data for extension.
      * Note: Data is stored in the browser {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
@@ -76,14 +89,16 @@ class Extension {
 
     switch (initializationData.data.type) {
 
-      case "DASHBOARD": {
+      case "DASHBOARD":
+      case "DASHBOARD_WIDGET": {
         this.Extension.DashboardWidget = {
           frame: new Window(postRobot, this.location as 'DASHBOARD', emitter, initializationData.data.dashboard_width),
           stack: new Stack(initializationData.data.stack, postRobot)
         }
         break
       }
-      case "SIDEBAR": {
+      case "SIDEBAR":
+      case "SIDEBAR_WIDGET": {
         this.Extension.SidebarWidget = {
           entry: new Entry(initializationData as ISidebarInitData, postRobot, emitter),
           stack: new Stack(initializationData.data.stack, postRobot)
@@ -91,7 +106,8 @@ class Extension {
         break
       }
 
-      case 'FIELD': {
+      case 'FIELD':
+      case "CUSTOM_FIELD": {
         this.Extension.CustomField = {
           field: new Field(initializationData as IFieldInitData, postRobot, emitter),
           fieldConfig: initializationData.data.field_config,

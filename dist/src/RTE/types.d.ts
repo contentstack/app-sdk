@@ -48,6 +48,7 @@ export declare interface IRegistry {
         inHoveringToolbar: boolean;
     };
     dndOptions: Partial<IRegistryDnd>;
+    isContentstackElement: boolean;
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
     handleMouseDown?: (...params: any) => any;
