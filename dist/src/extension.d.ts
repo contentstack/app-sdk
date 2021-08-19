@@ -1,29 +1,28 @@
-import Field from './field';
 import Stack from './stack';
 import Store from './store';
-import { IConfig, ICustomField, IDashboardInitData, IDashboardWidget, IFieldConfig, IFieldInitData, ILocation, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IType, IUser } from './types';
-/** Class representing an extension from Contentstack UI. */
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser } from './types';
+/** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
      * @hideconstructor
      */
-    config: IConfig;
-    postRobot: any;
+    app_id: string;
     currentUser: IUser;
-    location?: ILocation;
-    type?: IType;
-    fieldConfig?: IFieldConfig;
-    field?: Field;
-    app_id?: string;
-    store: Store;
+    location: ILocation;
+    postRobot: any;
     stack: Stack;
+    store: Store;
     Extension: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
         CustomField: ICustomField | null;
         RTEPlugin: IRTE | null;
+        StackConfigWidget: IStackConfgWidget | null;
+        AppConfigWidget: IAppConfigWidget | null;
+        FullscreenAppWidget: IPageWidget | null;
     };
-    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData);
+    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData);
+    getConfig: () => void;
     static initialize(version: string): any;
     setReady(): any;
 }
