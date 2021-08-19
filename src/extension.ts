@@ -5,37 +5,35 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IConfig, ICustomField, IDashboardInitData, IDashboardWidget, IFieldConfig, IFieldInitData, ILocation, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, isLocation, IType, IUser, } from './types'
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
 
 const emitter = new EventEmitter();
 
-/** Class representing an extension from Contentstack UI. */
+/** Class representing an extension from Contentstack App Framework SDK. */
 
 class Extension {
   /**
    * @hideconstructor
    */
 
-  config: IConfig
-  postRobot: any
+  app_id: string
   currentUser: IUser
-  location?: ILocation
-  type?: IType
-  fieldConfig?: IFieldConfig
-  field?: Field
-  app_id?: string
-
-  store: Store
+  location: ILocation
+  postRobot: any
   stack: Stack
+  store: Store
 
   Extension: {
     DashboardWidget: IDashboardWidget | null
     SidebarWidget: ISidebarWidget | null
     CustomField: ICustomField | null
     RTEPlugin: IRTE | null
+    StackConfigWidget: IStackConfgWidget | null
+    AppConfigWidget: IAppConfigWidget | null
+    FullscreenAppWidget: IPageWidget | null
   }
 
-  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData) {
+  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData) {
     const initializationData = initData;
 
     this.postRobot = postRobot;
@@ -44,28 +42,19 @@ class Extension {
      * @type {Object}
      */
 
-    this.config = initializationData.data.config;
+    this.app_id = initializationData.data.app_id
     /**
      * This object holds details of the current user.
      * @type {Object}
      */
     this.currentUser = initializationData.data.user;
-    if (isLocation(initializationData.data.type)) {
-      /**
-       * location of extension, 'CUSTOM_FIELD' || 'SIDEBAR_WIDGET' || 'DASHBOARD_WIDGET`X'.
-       * @type {string}
-       */
-      this.location = initializationData.data.type;
-      delete this.type
 
-    } else {
-      /**
-      * type of extension, 'FIELD' || 'WIDGET' || 'DASHBOARD'.
-      * @type {string}
-      */
-      this.type = initializationData.data.type
-      delete this.location
-    }
+    /**
+     * location of extension, "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "STACK_CONFIG_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
+     * @type {string}
+     */
+    this.location = initializationData.data.type;
+
     /**
      * Store to persist data for extension.
      * Note: Data is stored in the browser {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
@@ -84,12 +73,14 @@ class Extension {
       DashboardWidget: null,
       CustomField: null,
       SidebarWidget: null,
-      RTEPlugin: null
+      RTEPlugin: null,
+      StackConfigWidget: null,
+      AppConfigWidget: null,
+      FullscreenAppWidget: null
     }
 
     switch (initializationData.data.type) {
 
-      case "DASHBOARD":
       case "DASHBOARD_WIDGET": {
         this.Extension.DashboardWidget = {
           frame: new Window(postRobot, this.location as 'DASHBOARD', emitter, initializationData.data.dashboard_width),
@@ -97,7 +88,6 @@ class Extension {
         }
         break
       }
-      case "SIDEBAR":
       case "SIDEBAR_WIDGET": {
         this.Extension.SidebarWidget = {
           entry: new Entry(initializationData as ISidebarInitData, postRobot, emitter),
@@ -106,8 +96,7 @@ class Extension {
         break
       }
 
-      case 'FIELD':
-      case "CUSTOM_FIELD": {
+      case "CUSTOM_FIELD_WIDGET": {
         this.Extension.CustomField = {
           field: new Field(initializationData as IFieldInitData, postRobot, emitter),
           fieldConfig: initializationData.data.field_config,
@@ -119,7 +108,25 @@ class Extension {
         break
       }
 
-      case 'RTE':
+      case 'STACK_CONFIG_WIDGET': {
+        this.Extension.StackConfigWidget = {
+          setConfig: (config: { [key: string]: any }) => {
+            //@ts-ignore
+            this.postRobot.sendToParent('set-config', config)
+          }
+        }
+        break
+      }
+
+      case "APP_CONFIG_WIDGET": {
+        break
+      }
+
+      case "FULL_SCREEN_WIDGET": {
+        break
+      }
+
+      case 'RTE_EXTENSION_WIDGET':
       default: {
         import('./RTE').then(({ rtePluginInitializer }) => {
           this.Extension.RTEPlugin = rtePluginInitializer
@@ -155,6 +162,11 @@ class Extension {
         emitter.emitEvent('extensionFieldChange', [{ data: event.data.data }]);
       }
     });
+  }
+  getConfig = () => {
+    //@ts-ignore
+    this.postRobot.sendToParent('get-config')
+
   }
 
   static initialize(version: string) {
