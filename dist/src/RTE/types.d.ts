@@ -25,7 +25,7 @@ export declare interface IDnd {
     disableColumnLayout: boolean;
 }
 export declare interface IConfig {
-    icon: React.ReactElement;
+    iconName: React.ReactElement;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
@@ -41,7 +41,7 @@ export declare interface IRegistryDnd {
 }
 export declare interface IRegistry {
     title: string;
-    icon?: React.ReactElement;
+    iconName?: React.ReactElement;
     category?: string;
     toolbar: {
         inMainToolbar: boolean;
