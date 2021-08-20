@@ -115,8 +115,8 @@ export const rtePluginInitializer = (
         //@ts-ignore
         <Key extends keyof IConfig>([key, value]: [Key, any]) => {
             switch (key) {
-                case "icon": {
-                    PluginMetaData.registry.icon = value;
+                case "iconName": {
+                    PluginMetaData.registry.iconName = value;
                     break;
                 }
                 case "displayOn": {
