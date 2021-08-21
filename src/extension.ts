@@ -6,6 +6,7 @@ import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
 import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
+import { IRTEPluginInitializer } from './RTE/types';
 
 const emitter = new EventEmitter();
 
@@ -27,7 +28,7 @@ class Extension {
     DashboardWidget: IDashboardWidget | null
     SidebarWidget: ISidebarWidget | null
     CustomField: ICustomField | null
-    RTEPlugin: IRTE | null
+    RTEPlugin: IRTEPluginInitializer | null
     StackConfigWidget: IStackConfgWidget | null
     AppConfigWidget: IAppConfigWidget | null
     FullscreenAppWidget: IPageWidget | null

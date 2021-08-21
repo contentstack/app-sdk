@@ -85,4 +85,5 @@ export declare interface IContainerMetaData {
     registry: IContainerRegistry;
     meta: IContainerMeta;
 }
+export declare type IRTEPluginInitializer = (id: string, title: string, config: Partial<IConfig>) => RTEPlugin;
 //# sourceMappingURL=types.d.ts.map

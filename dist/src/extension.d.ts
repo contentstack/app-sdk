@@ -1,6 +1,7 @@
 import Stack from './stack';
 import Store from './store';
-import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser } from './types';
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser } from './types';
+import { IRTEPluginInitializer } from './RTE/types';
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -16,7 +17,7 @@ declare class Extension {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
         CustomField: ICustomField | null;
-        RTEPlugin: IRTE | null;
+        RTEPlugin: IRTEPluginInitializer | null;
         StackConfigWidget: IStackConfgWidget | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
