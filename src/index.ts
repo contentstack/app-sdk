@@ -11,7 +11,7 @@ postRobot.CONFIG.LOG_LEVEL = 'error';
    * @hideconstructor
    */
 
-class ContentstackUIExtension {
+class ContentstackAppSDK {
   /**
     * You need to first include Contentstack UI Extensions SDK and
     * Contentstack UI Stylesheet in you HTML file and then call
@@ -42,11 +42,10 @@ class ContentstackUIExtension {
 
   static _extension: Extension
 
-  static init() {
-    if (this._extension) { return Promise.resolve(this._extension); }
+  static init(): Promise<Extension> {
+    if (this._extension) { return Promise.resolve<Extension>(this._extension); }
     return Extension.initialize(version).then((initializationData: ISidebarInitData | IDashboardInitData | IFieldInitData) => {
       this._extension = new Extension(initializationData);
-      console.error('mayhem app-sdk: extension obj', this._extension)
       return Promise.resolve(this._extension);
     }).catch((e: Error) => Promise.reject(e));
   }
@@ -61,5 +60,5 @@ class ContentstackUIExtension {
   }
 }
 
-export default ContentstackUIExtension;
-module.exports = ContentstackUIExtension
+export default ContentstackAppSDK;
+module.exports = ContentstackAppSDK
