@@ -3,7 +3,7 @@ import Extension from './extension';
 /**
    * @hideconstructor
    */
-declare class ContentstackUIExtension {
+declare class ContentstackAppSDK {
     /**
       * You need to first include Contentstack UI Extensions SDK and
       * Contentstack UI Stylesheet in you HTML file and then call
@@ -32,12 +32,12 @@ declare class ContentstackUIExtension {
       * @return {external:Promise}  A promise object which will be resolved with an instance of the {@link Extension} class which is instantiated using the data received from the Contentstack UI.
       */
     static _extension: Extension;
-    static init(): any;
+    static init(): Promise<Extension>;
     /**
       * Version of Contentstack UI extension.
       * @type {string}
       */
     static get SDK_VERSION(): string;
 }
-export default ContentstackUIExtension;
+export default ContentstackAppSDK;
 //# sourceMappingURL=index.d.ts.map
