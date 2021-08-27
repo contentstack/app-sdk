@@ -111,15 +111,22 @@ class Extension {
 
       case 'STACK_CONFIG_WIDGET': {
         this.Extension.StackConfigWidget = {
-          setConfig: (config: { [key: string]: any }) => {
-            //@ts-ignore
-            this.postRobot.sendToParent('set-config', config)
+          setStackConfig: (config: { [key: string]: any }) => {
+            this.postRobot.sendToParent('setStackConfig', config)
+          },
+          setServerSecrets: (config: { [key: string]: any }) => {
+            this.postRobot.sendToParent('setServerSecrets', config)
           }
         }
         break
       }
 
       case "APP_CONFIG_WIDGET": {
+        this.Extension.AppConfigWidget = {
+          setAppConfig: (config: { [key: string]: any }) => {
+            this.postRobot.sendToParent('setAppConfig', config)
+          }
+        }
         break
       }
 
@@ -164,10 +171,21 @@ class Extension {
       }
     });
   }
-  getConfig = () => {
-    //@ts-ignore
-    this.postRobot.sendToParent('get-config')
 
+  getStackConfig = () => {
+    //@ts-ignore
+    this.postRobot.sendToParent('getStackConfig')
+  }
+
+  getAppConfig = () => {
+    //@ts-ignore
+    this.postRobot.sendToParent('getAppConfig')
+  }
+
+
+  getServerSecrets = () => {
+    //@ts-ignore
+    this.postRobot.sendToParent('getServerSecrets')
   }
 
   static initialize(version: string) {
