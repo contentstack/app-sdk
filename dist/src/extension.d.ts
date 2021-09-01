@@ -1,6 +1,6 @@
 import Stack from './stack';
 import Store from './store';
-import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser } from './types';
+import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, IAssetSidebarWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser } from './types';
 import { IRTEPluginInitializer } from './RTE/types';
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
@@ -21,8 +21,9 @@ declare class Extension {
         StackConfigWidget: IStackConfgWidget | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
+        AssetSidebarWidget: IAssetSidebarWidget | null;
     };
-    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData);
+    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData | IAssetSidebarInitData);
     getConfig: () => void;
     static initialize(version: string): any;
     setReady(): any;
