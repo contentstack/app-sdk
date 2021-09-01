@@ -5,7 +5,7 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
+import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, IAssetSidebarWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
 import { IRTEPluginInitializer } from './RTE/types';
 
 const emitter = new EventEmitter();
@@ -32,9 +32,10 @@ class Extension {
     StackConfigWidget: IStackConfgWidget | null
     AppConfigWidget: IAppConfigWidget | null
     FullscreenAppWidget: IPageWidget | null
+    AssetSidebarWidget: IAssetSidebarWidget | null
   }
 
-  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData) {
+  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData | IAssetSidebarInitData) {
     const initializationData = initData;
 
     this.postRobot = postRobot;
@@ -77,7 +78,8 @@ class Extension {
       RTEPlugin: null,
       StackConfigWidget: null,
       AppConfigWidget: null,
-      FullscreenAppWidget: null
+      FullscreenAppWidget: null,
+      AssetSidebarWidget: null
     }
 
     switch (initializationData.data.type) {
@@ -114,6 +116,17 @@ class Extension {
           setConfig: (config: { [key: string]: any }) => {
             //@ts-ignore
             this.postRobot.sendToParent('set-config', config)
+          }
+        }
+        break
+      }
+
+      case "ASSET_SIDEBAR_WIDGET": {
+        this.Extension.AssetSidebarWidget = {
+          currentAsset: initializationData.data.currentAsset,
+          setData: (asset: Partial<IAssetSidebarInitData>) => {
+            //@ts-ignore
+            this.postRobot.sendToParent('set-data', asset)
           }
         }
         break

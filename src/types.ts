@@ -10,6 +10,10 @@ export declare interface ISidebarWidget {
     [key: string]: any
 }
 
+export declare interface IAssetSidebarWidget {
+    [key: string]: any
+}
+
 export declare interface IRTE {
     [key: string]: any
 }
@@ -133,6 +137,20 @@ export declare interface IFullScreenInitData {
     }
 }
 
+export declare interface ICurrentAsset {
+    [key: string]: any
+}
+
+export declare interface IAssetSidebarInitData {
+    data: {
+        app_id: string,
+        stack: ICurrentStack,
+        type: 'ASSET_SIDEBAR_WIDGET',
+        user: IUser,
+        currentAsset: ICurrentAsset
+    }
+}
+
 
 // End of Init data
 
@@ -144,7 +162,8 @@ export declare interface IInitializationData {
     "STACK_CONFIG_WIDGET": IStackConfigInitData
     "APP_CONFIG_WIDGET": IAppConfigInitData
     "FULL_SCREEN_WIDGET": IFullScreenInitData
+    "ASSET_SIDEBAR_WIDGET": IAssetSidebarInitData
 }
 
 
-export declare type ILocation = "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "STACK_CONFIG_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET"
+export declare type ILocation = "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "STACK_CONFIG_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET" | "ASSET_SIDEBAR_WIDGET"
