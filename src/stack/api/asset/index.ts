@@ -2,6 +2,7 @@
 
 import Base from '../base';
 import { getReferences, language, environment } from '../../utils';
+import postRobot from 'post-robot';
 
 let connection = {};
 
@@ -230,12 +231,10 @@ class Asset extends Base {
   }
 
   static upload(files) {
-    console.log('this', this);
     if (!files || !files.length) {
       return Promise.reject(new Error('Kindly provide valid parameters'));
     }
     const uid = new Date().getUTCMilliseconds();
-    const postRobot = this.connection;
     (async function() {
       try {
         const uploadReadyListener = postRobot.on(`uploadReady_${uid}`, function(){
