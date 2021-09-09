@@ -228,6 +228,34 @@ class Asset extends Base {
     }
     return this.fetch('unpublishAsset', payload);
   }
+
+  static upload(files) {
+    if (!files || !files.length) {
+      return Promise.reject(new Error('Kindly provide valid parameters'));
+    }
+    const uid = new Date().getUTCMilliseconds();
+    const postRobot = this.connection;
+    (async function() {
+      try {
+        const uploadReadyListener = postRobot.on(`uploadReady_${uid}`, function(){
+          window.parent.postMessage({ 
+            type: `upload_${uid}`,
+            files
+          }, '*');
+      
+          uploadReadyListener.cancel();
+          return Promise.resolve({});
+        });
+        await postRobot.sendToParent('stackOptionsQuery', {
+          action: `upload_${uid}`,
+          uid
+        });
+        return postRobot.sendToParent(`upload_${uid}`, {});
+      } catch(err) {
+        return Promise.reject(err);
+      }
+    })();
+  }
 }
 
 export default (uiConnection) => {
