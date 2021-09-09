@@ -230,10 +230,15 @@ class Asset extends Base {
     return this.fetch('unpublishAsset', payload);
   }
 
-  static upload(files) {
-    if (!files || !files.length) {
+  static upload(_files) {
+    if (!_files || !_files.length) {
       return Promise.reject(new Error('Kindly provide valid parameters'));
     }
+    const files = [];
+    Array.from(_files).forEach(_ => {
+      const file = new File([_], _.name, { type: _.type });
+      files.push(file);
+    })
     const uid = new Date().getUTCMilliseconds();
     (async function() {
       try {
