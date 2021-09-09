@@ -240,7 +240,7 @@ class Asset extends Base {
       files.push(file);
     })
     const uid = new Date().getUTCMilliseconds();
-    (async function() {
+    return (async function() {
       try {
         const uploadReadyListener = postRobot.on(`uploadReady_${uid}`, function(){
           window.parent.postMessage({ 
