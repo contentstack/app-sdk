@@ -230,6 +230,7 @@ class Asset extends Base {
   }
 
   static upload(files) {
+    console.log('this', this);
     if (!files || !files.length) {
       return Promise.reject(new Error('Kindly provide valid parameters'));
     }

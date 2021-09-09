@@ -6,6 +6,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "webpack",
+        "dev-build": "webpack && cp -r ./dist /Users/ravilamkoti/Desktop/Workplace/Frontend/asset-field-extension/node_modules/@contentstack/app-sdk",
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "webpack --watch --mode development"
     },

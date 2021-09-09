@@ -99,7 +99,7 @@ class Extension {
         break
       }
 
-      case "CUSTOM_FIELD_WIDGET": {
+      case "CUSTOM_FIELD_WIDGET":  {
         this.Extension.CustomField = {
           field: new Field(initializationData as IFieldInitData, postRobot, emitter),
           fieldConfig: initializationData.data.field_config,
