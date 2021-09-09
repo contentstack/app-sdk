@@ -151,6 +151,7 @@ declare class Asset extends Base {
      * @return {external:Promise}
      */
     unpublish(payload: any): any;
+    static upload(files: any): Promise<never> | undefined;
 }
 declare const _default: (uiConnection: any) => typeof Asset;
 export default _default;
