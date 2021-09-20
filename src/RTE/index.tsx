@@ -45,7 +45,7 @@ export class RTEPlugin {
             }
 
             plugin.pluginMetaData.registry.category =
-                this.pluginMetaData.meta.id;
+                this.pluginMetaData.registry;
             this.containerMetaData.meta.dependentPlugins.push(plugin);
             plugin.pluginMetaData.meta.isDependent = true;
         });
@@ -75,7 +75,8 @@ export class RTEPlugin {
             case "deleteBackward":
             case "deleteForward":
             case "insertBreak":
-            case "normalize": {
+            case "normalize":
+            default: {
                 this.pluginMetaData.meta.editorCallbacks[type] = callback;
                 break;
             }

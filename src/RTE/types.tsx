@@ -62,7 +62,7 @@ export declare interface IRegistryDnd {
 export declare interface IRegistry {
     title: string;
     iconName?: React.ReactElement;
-    category?: string;
+    category?: object;
     toolbar: {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
