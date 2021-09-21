@@ -5,6 +5,8 @@ export declare interface IRteParam {
     [key: string]: any;
 }
 
+export declare type IConfigCallback = (rte: IRteParam) => Partial<IConfig>;
+
 export declare type IOnFunction = {
     exec: () => {};
 
@@ -43,6 +45,7 @@ export declare interface IDnd {
 }
 
 export declare interface IConfig {
+    title: string;
     iconName: React.ReactElement;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
@@ -116,6 +119,5 @@ export declare interface IContainerMetaData {
 
 export declare type IRTEPluginInitializer = (
     id: string,
-    title: string,
-    config: Partial<IConfig>
+    config: IConfigCallback
 ) => RTEPlugin;
