@@ -86,6 +86,12 @@ export class RTEPlugin {
                 break;
             }
 
+            case "keydown": {
+                this.pluginMetaData.meta.editorCallbacks["v2.keydown"] =
+                    callback;
+                break;
+            }
+
             case "paste":
             case "deleteBackward":
             case "deleteForward":
