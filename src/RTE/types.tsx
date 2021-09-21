@@ -9,6 +9,7 @@ export declare type IConfigCallback = (rte: IRteParam) => Partial<IConfig>;
 
 export declare type IOnFunction = {
     exec: () => {};
+    keydown: (rte: IRteParam) => void;
 
     normalize: (rte: IRteParam) => {};
 
