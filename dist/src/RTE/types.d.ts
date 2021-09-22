@@ -3,8 +3,10 @@ import { RTEPlugin } from "./index";
 export declare interface IRteParam {
     [key: string]: any;
 }
+export declare type IConfigCallback = (rte: IRteParam) => Partial<IConfig>;
 export declare type IOnFunction = {
     exec: () => {};
+    keydown: (rte: IRteParam) => void;
     normalize: (rte: IRteParam) => {};
     insertBreak: (rte: IRteParam) => {};
     deleteBackward: (rte: IRteParam) => {};
@@ -25,6 +27,7 @@ export declare interface IDnd {
     disableColumnLayout: boolean;
 }
 export declare interface IConfig {
+    title: string;
     iconName: React.ReactElement;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
@@ -85,5 +88,5 @@ export declare interface IContainerMetaData {
     registry: IContainerRegistry;
     meta: IContainerMeta;
 }
-export declare type IRTEPluginInitializer = (id: string, title: string, config: Partial<IConfig>) => RTEPlugin;
+export declare type IRTEPluginInitializer = (id: string, config: IConfigCallback) => RTEPlugin;
 //# sourceMappingURL=types.d.ts.map
