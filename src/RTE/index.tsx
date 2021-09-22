@@ -96,7 +96,8 @@ export class RTEPlugin {
             case "deleteBackward":
             case "deleteForward":
             case "insertBreak":
-            case "normalize": {
+            case "normalize":
+            default: {
                 this.pluginMetaData.meta.editorCallbacks[type] = callback;
                 break;
             }
