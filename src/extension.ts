@@ -5,7 +5,7 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfigWidget, IStackConfigInitData, IUser, } from './types'
 import { IRTEPluginInitializer } from './RTE/types';
 
 const emitter = new EventEmitter();
@@ -17,7 +17,8 @@ class Extension {
    * @hideconstructor
    */
 
-  app_id: string
+  appUID: string
+  installationUID: string
   currentUser: IUser
   location: ILocation
   postRobot: any
@@ -29,7 +30,7 @@ class Extension {
     SidebarWidget: ISidebarWidget | null
     CustomField: ICustomField | null
     RTEPlugin: IRTEPluginInitializer | null
-    StackConfigWidget: IStackConfgWidget | null
+    StackConfigWidget: IStackConfigWidget | null
     AppConfigWidget: IAppConfigWidget | null
     FullscreenAppWidget: IPageWidget | null
   }
@@ -43,7 +44,13 @@ class Extension {
      * @type {Object}
      */
 
-    this.app_id = initializationData.data.app_id
+    this.appUID = initializationData.data.app_id
+
+    /**
+     * This object holds details of the current user.
+     * @type {Object}
+     */
+     this.installationUID = initializationData.data.installation_uid;
     /**
      * This object holds details of the current user.
      * @type {Object}
@@ -111,9 +118,9 @@ class Extension {
 
       case 'STACK_CONFIG_WIDGET': {
         this.Extension.StackConfigWidget = {
-          setConfig: (config: { [key: string]: any }) => {
+          setAppConfig: (config: { [key: string]: any }) => {
             //@ts-ignore
-            this.postRobot.sendToParent('set-config', config)
+            this.postRobot.sendToParent('set-app-config', config)
           }
         }
         break
@@ -164,10 +171,9 @@ class Extension {
       }
     });
   }
-  getConfig = () => {
+  getAppConfig = () => {
     //@ts-ignore
-    this.postRobot.sendToParent('get-config')
-
+    this.postRobot.sendToParent('get-app-config')
   }
 
   static initialize(version: string) {

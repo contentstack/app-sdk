@@ -51,7 +51,7 @@ export declare interface IDashboardInitData {
 export declare interface ISidebarInitData {
     data: {
         app_id: string;
-        config: IConfig;
+        app_config: IConfig;
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
         locale: string;
@@ -69,7 +69,7 @@ export declare interface IFieldInitData {
         user: IUser;
         uid: string;
         schema: ISchema;
-        config: IConfig;
+        app_config: IConfig;
         value: any;
         field_config: IFieldConfig;
         stack: ICurrentStack;
@@ -95,6 +95,7 @@ export declare interface IStackConfigInitData {
 export declare interface IAppConfigInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         stack: ICurrentStack;
         type: 'APP_CONFIG_WIDGET';
         user: IUser;
@@ -103,6 +104,7 @@ export declare interface IAppConfigInitData {
 export declare interface IFullScreenInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         stack: ICurrentStack;
         type: 'FULL_SCREEN_WIDGET';
         user: IUser;

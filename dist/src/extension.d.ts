@@ -23,7 +23,7 @@ declare class Extension {
         FullscreenAppWidget: IPageWidget | null;
     };
     constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData);
-    getConfig: () => void;
+    getAppConfig: () => void;
     static initialize(version: string): any;
     setReady(): any;
 }
