@@ -10,7 +10,7 @@ export declare interface ISidebarWidget {
 export declare interface IRTE {
     [key: string]: any;
 }
-export declare interface IStackConfgWidget {
+export declare interface IStackConfigWidget {
     [key: string]: any;
 }
 export declare interface IAppConfigWidget {
@@ -42,6 +42,7 @@ export declare interface IFieldConfig {
 export declare interface IDashboardInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         dashboard_width: "full_width" | "half_width";
         stack: ICurrentStack;
         type: 'DASHBOARD_WIDGET';
@@ -51,6 +52,7 @@ export declare interface IDashboardInitData {
 export declare interface ISidebarInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         app_config: IConfig;
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
@@ -63,6 +65,7 @@ export declare interface ISidebarInitData {
 export declare interface IFieldInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         entry: ICurrentEntry;
         content_type: ICurrentContentType;
         locale: string;
@@ -79,6 +82,7 @@ export declare interface IFieldInitData {
 export declare interface IRTEInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         stack: ICurrentStack;
         type: 'RTE_EXTENSION_WIDGET';
         user: IUser;
@@ -87,6 +91,7 @@ export declare interface IRTEInitData {
 export declare interface IStackConfigInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         stack: ICurrentStack;
         type: 'STACK_CONFIG_WIDGET';
         user: IUser;
