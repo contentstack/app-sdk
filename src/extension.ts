@@ -143,33 +143,37 @@ class Extension {
       }
     }
 
-    //@ts-ignore
-    postRobot.on('extensionEvent', (event) => {
-      if (event.data.name === 'entrySave') {
-        emitter.emitEvent('entrySave', [{ data: event.data.data }]);
-        emitter.emitEvent('updateFields', [{ data: event.data.data }]);
-      }
-
-      if (event.data.name === 'entryChange') {
-        emitter.emitEvent('entryChange', [{ data: event.data.data }]);
-      }
-
-      if (event.data.name === 'entryPublish') {
-        emitter.emitEvent('entryPublish', [{ data: event.data.data }]);
-      }
-
-      if (event.data.name === 'entryUnPublish') {
-        emitter.emitEvent('entryUnPublish', [{ data: event.data.data }]);
-      }
-
-      if (event.data.name === 'dashboardResize') {
-        emitter.emitEvent('dashboardResize', [{ state: event.data.state }]);
-      }
-
-      if (event.data.name === 'extensionFieldChange') {
-        emitter.emitEvent('extensionFieldChange', [{ data: event.data.data }]);
-      }
-    });
+    try {
+      //@ts-ignore
+      postRobot.on('extensionEvent', (event) => {
+        if (event.data.name === 'entrySave') {
+          emitter.emitEvent('entrySave', [{ data: event.data.data }]);
+          emitter.emitEvent('updateFields', [{ data: event.data.data }]);
+        }
+  
+        if (event.data.name === 'entryChange') {
+          emitter.emitEvent('entryChange', [{ data: event.data.data }]);
+        }
+  
+        if (event.data.name === 'entryPublish') {
+          emitter.emitEvent('entryPublish', [{ data: event.data.data }]);
+        }
+  
+        if (event.data.name === 'entryUnPublish') {
+          emitter.emitEvent('entryUnPublish', [{ data: event.data.data }]);
+        }
+  
+        if (event.data.name === 'dashboardResize') {
+          emitter.emitEvent('dashboardResize', [{ state: event.data.state }]);
+        }
+  
+        if (event.data.name === 'extensionFieldChange') {
+          emitter.emitEvent('extensionFieldChange', [{ data: event.data.data }]);
+        }
+      });
+    }catch(err) {
+      console.log('extension Event',err);
+    }
   }
   getAppConfig = () => {
     //@ts-ignore
