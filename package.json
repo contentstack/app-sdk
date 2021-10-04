@@ -19,6 +19,7 @@
         "@types/react": "^17.0.18",
         "babel-loader": "^8.0.5",
         "css-loader": "^5.2.2",
+        "slate": "^0.66.5",
         "ts-loader": "^8.1.0",
         "typescript": "^4.2.4",
         "webpack": "^4.29.0",
