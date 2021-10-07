@@ -11,7 +11,7 @@
         "dev": "webpack --watch --mode development"
     },
     "publishConfig": {
-        "registry":"https://npm.pkg.github.com/@contentstack"
+        "registry": "https://npm.pkg.github.com/@contentstack"
     },
     "keywords": [],
     "author": "Deepak Kharah",

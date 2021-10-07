@@ -10,10 +10,15 @@ export declare interface ISidebarWidget {
 export declare interface IRTE {
     [key: string]: any;
 }
-export declare interface IStackConfigWidget {
-    [key: string]: any;
-}
 export declare interface IAppConfigWidget {
+    setInstallationData: (config: {
+        [key: string]: any;
+    }) => Promise<{
+        [key: string]: any;
+    }>;
+    getInstallationData: () => Promise<{
+        [key: string]: any;
+    }>;
     [key: string]: any;
 }
 export declare interface IPageWidget {
@@ -88,15 +93,6 @@ export declare interface IRTEInitData {
         user: IUser;
     };
 }
-export declare interface IStackConfigInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
-        stack: ICurrentStack;
-        type: 'STACK_CONFIG_WIDGET';
-        user: IUser;
-    };
-}
 export declare interface IAppConfigInitData {
     data: {
         app_id: string;
@@ -115,14 +111,32 @@ export declare interface IFullScreenInitData {
         user: IUser;
     };
 }
+export declare interface InstallationData {
+    configuration?: {
+        [key: string]: any;
+    };
+    server_configuration?: {
+        [key: string]: any;
+    };
+    webhooks?: Array<{
+        webhook_uid: '';
+        channels: [];
+    }>;
+    ui_locations?: Array<{
+        type: string;
+        meta: Array<{
+            enable: boolean;
+            extension_uid: string;
+        }>;
+    }>;
+}
 export declare interface IInitializationData {
     'CUSTOM_FIELD_WIDGET': IFieldConfig;
     'SIDEBAR_WIDGET': ISidebarInitData;
     'DASHBOARD_WIDGET': IDashboardInitData;
     'RTE_EXTENSION_WIDGET': IRTEInitData;
-    "STACK_CONFIG_WIDGET": IStackConfigInitData;
     "APP_CONFIG_WIDGET": IAppConfigInitData;
     "FULL_SCREEN_WIDGET": IFullScreenInitData;
 }
-export declare type ILocation = "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "STACK_CONFIG_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET";
+export declare type ILocation = "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET";
 //# sourceMappingURL=types.d.ts.map
