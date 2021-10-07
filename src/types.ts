@@ -128,22 +128,43 @@ export declare interface IFullScreenInitData {
     }
 }
 
-export declare interface InstallationData {
-    configuration?: { [key: string]: any };
-    server_configuration?: { [key: string]: any };
-    webhooks?: Array<{
-        webhook_uid: '';
-        channels: [];
-    }>;
-    ui_locations?: Array<{
-        type: string;
-        meta: Array<{
-            enable: boolean;
-            extension_uid: string;
-        }>;
-    }>;
+export enum StackLocation {
+    STACK_CONFIG = 'cs.cm.stack.config',
+    DASHBOARD = 'cs.cm.stack.dashboard',
+    SIDEBAR = 'cs.cm.stack.sidebar',
+    CUSTOM_FIELD = 'cs.cm.stack.custom_field',
+    RTE = 'cs.cm.stack.rte',
 }
 
+export enum OrganizationLocation {
+    ORG_CONFIG = 'cs.org.config',
+}
+
+export type AppLocation = StackLocation | OrganizationLocation;
+
+export interface Scope {
+    content_types: string[];
+}
+
+/**
+ * installation details API response
+ */
+export interface IInstallationData {
+    configuration?: { [key: string]: any };
+    server_configuration?: { [key: string]: any };
+    webhooks?: {
+        webhook_uid: string;
+        channels: string[];
+    }[];
+    ui_locations?: {
+        type: AppLocation;
+        meta: {
+            enabled: boolean;
+            scope?: Scope;
+            extention_uid: string;
+        }[];
+    }[];
+}
 // End of Init data
 
 export declare interface IInitializationData {
