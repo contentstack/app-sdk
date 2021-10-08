@@ -4,6 +4,7 @@ import {
     IOnFunction,
     IPluginMetaData,
     IRteParam,
+    IConfig
 } from "./types";
 
 export class RTEPlugin {
@@ -217,8 +218,8 @@ export class RTEPlugin {
                         break;
                     }
 
-                    case "Component": {
-                        this.pluginMetaData.registry.Component = value;
+                    case "render": {
+                        this.pluginMetaData.registry.render = value;
                         break;
                     }
                 }

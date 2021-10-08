@@ -181,7 +181,7 @@ export declare interface IConfig {
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
-    Component?: (...params: any) => ReactElement;
+    render?: (...params: any) => ReactElement;
 }
 
 export declare interface IRegistryDnd {
@@ -206,7 +206,7 @@ export declare interface IRegistry {
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
     handleMouseDown?: (...params: any) => any;
-    Component?: (
+    render?: (
         element: React.ReactElement,
         attrs: { [key: string]: any },
         path: number[],
