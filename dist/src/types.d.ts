@@ -10,10 +10,15 @@ export declare interface ISidebarWidget {
 export declare interface IRTE {
     [key: string]: any;
 }
-export declare interface IStackConfgWidget {
-    [key: string]: any;
-}
 export declare interface IAppConfigWidget {
+    setInstallationData: (config: {
+        [key: string]: any;
+    }) => Promise<{
+        [key: string]: any;
+    }>;
+    getInstallationData: () => Promise<{
+        [key: string]: any;
+    }>;
     [key: string]: any;
 }
 export declare interface IPageWidget {
@@ -42,6 +47,7 @@ export declare interface IFieldConfig {
 export declare interface IDashboardInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         dashboard_width: "full_width" | "half_width";
         stack: ICurrentStack;
         type: 'DASHBOARD_WIDGET';
@@ -51,7 +57,8 @@ export declare interface IDashboardInitData {
 export declare interface ISidebarInitData {
     data: {
         app_id: string;
-        config: IConfig;
+        installation_uid: string;
+        app_config: IConfig;
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
         locale: string;
@@ -63,13 +70,14 @@ export declare interface ISidebarInitData {
 export declare interface IFieldInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         entry: ICurrentEntry;
         content_type: ICurrentContentType;
         locale: string;
         user: IUser;
         uid: string;
         schema: ISchema;
-        config: IConfig;
+        app_config: IConfig;
         value: any;
         field_config: IFieldConfig;
         stack: ICurrentStack;
@@ -79,22 +87,16 @@ export declare interface IFieldInitData {
 export declare interface IRTEInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         stack: ICurrentStack;
         type: 'RTE_EXTENSION_WIDGET';
-        user: IUser;
-    };
-}
-export declare interface IStackConfigInitData {
-    data: {
-        app_id: string;
-        stack: ICurrentStack;
-        type: 'STACK_CONFIG_WIDGET';
         user: IUser;
     };
 }
 export declare interface IAppConfigInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         stack: ICurrentStack;
         type: 'APP_CONFIG_WIDGET';
         user: IUser;
@@ -103,19 +105,56 @@ export declare interface IAppConfigInitData {
 export declare interface IFullScreenInitData {
     data: {
         app_id: string;
+        installation_uid: string;
         stack: ICurrentStack;
         type: 'FULL_SCREEN_WIDGET';
         user: IUser;
     };
+}
+export declare enum StackLocation {
+    STACK_CONFIG = "cs.cm.stack.config",
+    DASHBOARD = "cs.cm.stack.dashboard",
+    SIDEBAR = "cs.cm.stack.sidebar",
+    CUSTOM_FIELD = "cs.cm.stack.custom_field",
+    RTE = "cs.cm.stack.rte"
+}
+export declare enum OrganizationLocation {
+    ORG_CONFIG = "cs.org.config"
+}
+export declare type AppLocation = StackLocation | OrganizationLocation;
+export interface Scope {
+    content_types: string[];
+}
+/**
+ * installation details API response
+ */
+export interface IInstallationData {
+    configuration?: {
+        [key: string]: any;
+    };
+    server_configuration?: {
+        [key: string]: any;
+    };
+    webhooks?: {
+        webhook_uid: string;
+        channels: string[];
+    }[];
+    ui_locations?: {
+        type: AppLocation;
+        meta: {
+            enabled: boolean;
+            scope?: Scope;
+            extention_uid: string;
+        }[];
+    }[];
 }
 export declare interface IInitializationData {
     'CUSTOM_FIELD_WIDGET': IFieldConfig;
     'SIDEBAR_WIDGET': ISidebarInitData;
     'DASHBOARD_WIDGET': IDashboardInitData;
     'RTE_EXTENSION_WIDGET': IRTEInitData;
-    "STACK_CONFIG_WIDGET": IStackConfigInitData;
     "APP_CONFIG_WIDGET": IAppConfigInitData;
     "FULL_SCREEN_WIDGET": IFullScreenInitData;
 }
-export declare type ILocation = "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "STACK_CONFIG_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET";
+export declare type ILocation = "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET";
 //# sourceMappingURL=types.d.ts.map

@@ -5,8 +5,10 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, } from './types'
 import { IRTEPluginInitializer } from './RTE/types';
+import { onData, onError } from "./utils";
+import { AppConfig } from './appConfig';
 
 const emitter = new EventEmitter();
 
@@ -17,7 +19,8 @@ class Extension {
    * @hideconstructor
    */
 
-  app_id: string
+  appUID: string
+  installationUID: string
   currentUser: IUser
   location: ILocation
   postRobot: any
@@ -29,12 +32,11 @@ class Extension {
     SidebarWidget: ISidebarWidget | null
     CustomField: ICustomField | null
     RTEPlugin: IRTEPluginInitializer | null
-    StackConfigWidget: IStackConfgWidget | null
     AppConfigWidget: IAppConfigWidget | null
     FullscreenAppWidget: IPageWidget | null
   }
 
-  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData) {
+  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IFullScreenInitData) {
     const initializationData = initData;
 
     this.postRobot = postRobot;
@@ -43,7 +45,13 @@ class Extension {
      * @type {Object}
      */
 
-    this.app_id = initializationData.data.app_id
+    this.appUID = initializationData.data.app_id
+
+    /**
+     * This object holds details of the app initialization user.
+     * @type {Object}
+     */
+     this.installationUID = initializationData.data.installation_uid;
     /**
      * This object holds details of the current user.
      * @type {Object}
@@ -51,7 +59,7 @@ class Extension {
     this.currentUser = initializationData.data.user;
 
     /**
-     * location of extension, "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "STACK_CONFIG_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
+     * location of extension, "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
      * @type {string}
      */
     this.location = initializationData.data.type;
@@ -75,7 +83,6 @@ class Extension {
       CustomField: null,
       SidebarWidget: null,
       RTEPlugin: null,
-      StackConfigWidget: null,
       AppConfigWidget: null,
       FullscreenAppWidget: null
     }
@@ -109,24 +116,8 @@ class Extension {
         break
       }
 
-      case 'STACK_CONFIG_WIDGET': {
-        this.Extension.StackConfigWidget = {
-          setStackConfig: (config: { [key: string]: any }) => {
-            this.postRobot.sendToParent('setStackConfig', config)
-          },
-          setServerSecrets: (config: { [key: string]: any }) => {
-            this.postRobot.sendToParent('setServerSecrets', config)
-          }
-        }
-        break
-      }
-
-      case "APP_CONFIG_WIDGET": {
-        this.Extension.AppConfigWidget = {
-          setAppConfig: (config: { [key: string]: any }) => {
-            this.postRobot.sendToParent('setAppConfig', config)
-          }
-        }
+      case "APP_CONFIG_WIDGET": {        
+        this.Extension.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
         break
       }
 
@@ -175,21 +166,9 @@ class Extension {
       console.log('extension Event',err);
     }
   }
-
-  getStackConfig = () => {
-    //@ts-ignore
-    this.postRobot.sendToParent('getStackConfig')
-  }
-
-  getAppConfig = () => {
-    //@ts-ignore
-    this.postRobot.sendToParent('getAppConfig')
-  }
-
-
-  getServerSecrets = () => {
-    //@ts-ignore
-    this.postRobot.sendToParent('getServerSecrets')
+  
+  getConfig = () : Promise<{[key: string]: any}> => {
+    return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
   }
 
   static initialize(version: string) {
