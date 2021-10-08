@@ -4,6 +4,7 @@ import {
     IOnFunction,
     IPluginMetaData,
     IRteParam,
+    IConfig
 } from "./types";
 
 export class RTEPlugin {
@@ -87,7 +88,7 @@ export class RTEPlugin {
             }
 
             case "keydown": {
-                this.pluginMetaData.meta.editorCallbacks["v2.keydown"] =
+                this.pluginMetaData.meta.editorCallbacks["keydown"] =
                     callback;
                 break;
             }
@@ -217,8 +218,8 @@ export class RTEPlugin {
                         break;
                     }
 
-                    case "Component": {
-                        this.pluginMetaData.registry.Component = value;
+                    case "render": {
+                        this.pluginMetaData.registry.render = value;
                         break;
                     }
                 }
