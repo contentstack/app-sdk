@@ -11,14 +11,10 @@ export declare interface IRTE {
     [key: string]: any;
 }
 export declare interface IAppConfigWidget {
-    setInstallationData: (config: {
-        [key: string]: any;
-    }) => Promise<{
+    setInstallationData: (installationData: IInstallationData) => Promise<{
         [key: string]: any;
     }>;
-    getInstallationData: () => Promise<{
-        [key: string]: any;
-    }>;
+    getInstallationData: () => Promise<IInstallationData>;
     [key: string]: any;
 }
 export declare interface IPageWidget {
@@ -129,10 +125,10 @@ export interface Scope {
  * installation details API response
  */
 export interface IInstallationData {
-    configuration?: {
+    configuration: {
         [key: string]: any;
     };
-    server_configuration?: {
+    server_configuration: {
         [key: string]: any;
     };
     webhooks?: {
