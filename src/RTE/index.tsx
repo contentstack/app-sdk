@@ -88,7 +88,7 @@ export class RTEPlugin {
             }
 
             case "keydown": {
-                this.pluginMetaData.meta.editorCallbacks["v2.keydown"] =
+                this.pluginMetaData.meta.editorCallbacks["keydown"] =
                     callback;
                 break;
             }
