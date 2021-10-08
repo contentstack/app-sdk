@@ -15,8 +15,8 @@ export declare interface IRTE {
 }
 
 export declare interface IAppConfigWidget {
-    setInstallationData: (config: { [key: string]: any }) => Promise<{ [key: string]: any }>
-    getInstallationData: () => Promise<{ [key: string]: any }>
+    setInstallationData: (installationData: IInstallationData) => Promise<{ [key: string]: any }>
+    getInstallationData: () => Promise<IInstallationData>
     [key: string]: any
 }
 
@@ -150,8 +150,8 @@ export interface Scope {
  * installation details API response
  */
 export interface IInstallationData {
-    configuration?: { [key: string]: any };
-    server_configuration?: { [key: string]: any };
+    configuration: { [key: string]: any };
+    server_configuration: { [key: string]: any };
     webhooks?: {
         webhook_uid: string;
         channels: string[];
