@@ -10,14 +10,14 @@ declare class Extension {
     appUID: string;
     installationUID: string;
     currentUser: IUser;
-    location: ILocation;
+    private type;
     postRobot: any;
     stack: Stack;
     store: Store;
-    Extension: {
+    location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
-        CustomField: ICustomField | null;
+        CustomFieldWidget: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
@@ -26,6 +26,7 @@ declare class Extension {
     getConfig: () => Promise<{
         [key: string]: any;
     }>;
+    getCurrentLocation: () => ILocation;
     static initialize(version: string): any;
     setReady(): any;
 }

@@ -1,8 +1,5029 @@
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.AppFrameworkSDK=t():e.AppFrameworkSDK=t()}(this,(function(){return function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=5)}([function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.getReferences=t.includeReference=t.includeSchema=t.includeContentType=t.includeOwner=t.environment=t.language=t.addQuery=t.addParam=t._type=t.mergeDeep=t.merge=t.transform=void 0,t.transform=function(e){return function(){switch(this._query[e]=this._query[e]||{},arguments.length){case 1:if(Array.isArray(arguments[0])||"string"==typeof arguments[0])return t=(t=this._query[e].BASE||[]).concat(arguments[0]),this._query[e].BASE=t,this;throw Error("Kindly provide valid parameters");case 2:var t;if("string"==typeof arguments[0]&&(Array.isArray(arguments[1])||"string"==typeof arguments[1]))return t=(t=this._query[e][arguments[0]]||[]).concat(arguments[1]),this._query[e][arguments[0]]=t,this;throw Error("Kindly provide valid parameters");default:throw Error("Kindly provide valid parameters")}}},t.merge=function(e,t){var n=e;return e&&t&&Object.keys(t).forEach((function(e){n[e]=t[e]})),n},t.mergeDeep=function(e,t){var n=e,r=this,o=function(e,t){var n=e;Object.keys(t).forEach((function(e){"object"===r._type(t[e])&&r._type(n[e])===r._type(t[e])?o(n[e],t[e]):"array"===r._type(t[e])&&r._type(n[e])===r._type(t[e])?n[e]=n[e].concat(t[e]):n[e]=t[e]}))};return o(n,t),n},t._type=function(e){var t=typeof e;return"object"===t&&Array.isArray(e)&&(t="array"),t},t.addParam=function(e,t){if(e&&"string"==typeof e&&t&&"string"==typeof t)return this._query[e]=t,this;throw Error("Kindly provide valid parameters.")},t.addQuery=function(e,t){if(e&&t&&"string"==typeof e)return this._query[e]=t,this;throw Error("First argument should be a String.")},t.language=function(e){if(e&&"string"==typeof e)return this._query.locale=e,this;throw Error("Argument should be a String.")},t.environment=function(e){if(e&&"string"==typeof e)return this._query.environment=e,this;throw Error("Argument should be a String.")},t.includeOwner=function(){return this._query.include_owner=!0,this},t.includeContentType=function(){return this._query.include_content_type=!0,this},t.includeSchema=function(){return this._query.include_schema=!0,this},t.includeReference=function(e){if(Array.isArray(e))for(var t=0;t<e.length;t+=1)this._query["include[]"]=this._query["include[]"]||[],this._query["include[]"]=this._query["include[]"].concat(e[t]);else{if("string"!=typeof e)throw Error("Argument should be a String or an Array.");for(t=0;t<arguments.length;t+=1)this._query["include[]"]=this._query["include[]"]||[],this._query["include[]"]=this._query["include[]"].concat(arguments[t])}return this},t.getReferences=function(){return this.fetch("get"+this.constructor.module()+"References")}},function(e,t,n){"use strict";var r=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var o=r(n(11)),i=n(0);function a(e){return"string"==typeof e.data?Promise.reject(e.data):Promise.resolve(e.data)}function s(e){return Promise.reject(e)}var u=function(){function e(e){if(!e)throw new Error("uid is required");this.uid=e,this._query={},this.only=i.transform("only"),this.except=i.transform("except"),this.addParam=i.addParam}return e.Query=function(){return new o.default(this.connection,this.module(!0),this.contentTypeUid)},e.create=function(e){var t={payload:e,content_type_uid:this.contentTypeUid,action:"create"+this.module()};return this.connection.sendToParent("stackQuery",t).then(a).catch(s)},e.prototype.update=function(e){return!e||"object"!=typeof e||e instanceof Array?Promise.reject(new Error("Kindly provide valid parameters")):this.fetch("update"+this.constructor.module(),e)},e.prototype.delete=function(){return this.fetch("delete"+this.constructor.module())},e.prototype.fetch=function(e,t){var n={payload:t,content_type_uid:this.constructor.contentTypeUid,uid:this.uid,params:this._query,action:e||"get"+this.constructor.module()};return t||delete n.payload,this.constructor.contentTypeUid||delete n.content_type_uid,this.constructor.connection.sendToParent("stackQuery",n).then(a).catch(s)},e}();t.default=u},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.onError=t.onData=void 0,t.onData=function(e){return"string"==typeof e.data?Promise.reject(e.data):Promise.resolve(e.data)},t.onError=function(e){return Promise.reject(e)}},function(e,t,n){e.exports=n(7),e.exports.default=e.exports},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=["file","reference","blocks","group","global_field"];var o=function(){function e(e,t,n){this.uid=e.data.uid,this.data_type=e.data.schema.data_type,this.schema=e.data.schema,this._emitter=n;var r,o,i,a,s=(r=this,o=e.data.value,i=o,a=o,"file"===r.data_type&&(o?(i=o,a=!0===r.schema.multiple?o.map((function(e){return e.uid})):o.uid):!0===r.schema.multiple&&(i=[],a=[])),{resolvedData:i,unResolvedData:a});this._data=s.unResolvedData,this._resolvedData=s.resolvedData,this._connection=t,this._self=e.data.self||!1;var u=this;n.on("updateFields",(function(e){var t=u.uid.split("."),n=e.data;t.forEach((function(e){n&&(n=n[e])})),u._data!==n&&(u._data=n)}))}return e.prototype.setData=function(e){var t=this,n=this,o={data:e,uid:n.uid,self:n._self};return n._self||-1===r.indexOf(n.data_type)&&n.data_type?this._connection.sendToParent("setData",o).then((function(){return t._data=e,Promise.resolve(n)})).catch((function(e){return Promise.reject(e)})):Promise.reject(new Error("Cannot call set data for current field type"))},e.prototype.getData=function(e){var t=(void 0===e?{}:e).resolved;return void 0!==t&&t?this._resolvedData:this._data},e.prototype.setFocus=function(){return this._connection.sendToParent("focus")},e.prototype.onChange=function(e){var t=this;if(!e||"function"!=typeof e)throw Error("Callback must be a function");this._emitter.on("extensionFieldChange",(function(n){t._data=n.data,t._resolvedData=n.data,e(n.data)}))},e}();t.default=o},function(e,t,n){"use strict";var r=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var o=r(n(6)),i=r(n(3)),a=n(19);i.default.CONFIG.LOG_LEVEL="error";var s=function(){function e(){}return e.init=function(){var e=this;return this._extension?Promise.resolve(this._extension):o.default.initialize(a.version).then((function(t){return e._extension=new o.default(t),Promise.resolve(e._extension)})).catch((function(e){return Promise.reject(e)}))},Object.defineProperty(e,"SDK_VERSION",{get:function(){return a.version},enumerable:!1,configurable:!0}),e}();t.default=s,e.exports=s},function(e,t,n){"use strict";var r=this&&this.__createBinding||(Object.create?function(e,t,n,r){void 0===r&&(r=n),Object.defineProperty(e,r,{enumerable:!0,get:function(){return t[n]}})}:function(e,t,n,r){void 0===r&&(r=n),e[r]=t[n]}),o=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),i=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)"default"!==n&&Object.prototype.hasOwnProperty.call(e,n)&&r(t,e,n);return o(t,e),t},a=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var s=a(n(3)),u=a(n(4)),c=a(n(8)),d=a(n(9)),f=a(n(14)),l=a(n(15)),h=a(n(16)),p=n(2),y=n(17),_=new h.default,m=function(){function e(e){var t=this;this.getConfig=function(){return t.postRobot.sendToParent("getConfig").then(p.onData).catch(p.onError)};var r=e;switch(this.postRobot=s.default,this.appUID=r.data.app_id,this.installationUID=r.data.installation_uid,this.currentUser=r.data.user,this.location=r.data.type,this.store=new l.default(s.default),this.stack=new d.default(r.data.stack,s.default),this.Extension={DashboardWidget:null,CustomField:null,SidebarWidget:null,RTEPlugin:null,AppConfigWidget:null,FullscreenAppWidget:null},r.data.type){case"DASHBOARD_WIDGET":this.Extension.DashboardWidget={frame:new c.default(s.default,this.location,_,r.data.dashboard_width),stack:new d.default(r.data.stack,s.default)};break;case"SIDEBAR_WIDGET":this.Extension.SidebarWidget={entry:new f.default(r,s.default,_),stack:new d.default(r.data.stack,s.default)};break;case"CUSTOM_FIELD_WIDGET":this.Extension.CustomField={field:new u.default(r,s.default,_),fieldConfig:r.data.field_config,entry:new f.default(r,s.default,_),stack:new d.default(r.data.stack,s.default),frame:new c.default(s.default,this.location,_)};break;case"APP_CONFIG_WIDGET":this.Extension.AppConfigWidget=new y.AppConfig(r,s.default,_);break;case"FULL_SCREEN_WIDGET":break;case"RTE_EXTENSION_WIDGET":default:Promise.resolve().then((function(){return i(n(18))})).then((function(e){var n=e.rtePluginInitializer;t.Extension.RTEPlugin=n}))}try{s.default.on("extensionEvent",(function(e){"entrySave"===e.data.name&&(_.emitEvent("entrySave",[{data:e.data.data}]),_.emitEvent("updateFields",[{data:e.data.data}])),"entryChange"===e.data.name&&_.emitEvent("entryChange",[{data:e.data.data}]),"entryPublish"===e.data.name&&_.emitEvent("entryPublish",[{data:e.data.data}]),"entryUnPublish"===e.data.name&&_.emitEvent("entryUnPublish",[{data:e.data.data}]),"dashboardResize"===e.data.name&&_.emitEvent("dashboardResize",[{state:e.data.state}]),"extensionFieldChange"===e.data.name&&_.emitEvent("extensionFieldChange",[{data:e.data.data}])}))}catch(e){console.log("extension Event",e)}}return e.initialize=function(e){return s.default.sendToParent("init",{version:e})},e.prototype.setReady=function(){return this.postRobot.sendToParent("ready")},e}();t.default=m},function(e,t,n){"undefined"!=typeof self&&self,e.exports=function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:r})},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s="./src/index.js")}({"./node_modules/cross-domain-utils/src/index.js":function(e,t,n){"use strict";var r=n("./node_modules/cross-domain-utils/src/utils.js");n.d(t,"getActualDomain",(function(){return r.a})),n.d(t,"getAncestor",(function(){return r.b})),n.d(t,"getDomain",(function(){return r.c})),n.d(t,"getUserAgent",(function(){return r.d})),n.d(t,"isActuallySameDomain",(function(){return r.e})),n.d(t,"isAncestor",(function(){return r.f})),n.d(t,"isIframe",(function(){return r.g})),n.d(t,"isPopup",(function(){return r.h})),n.d(t,"isWindow",(function(){return r.i})),n.d(t,"isWindowClosed",(function(){return r.j})),n.d(t,"matchDomain",(function(){return r.k})),n.d(t,"stringifyDomainPattern",(function(){return r.l}));var o=n("./node_modules/cross-domain-utils/src/types.js");n.n(o)},"./node_modules/cross-domain-utils/src/types.js":function(e,t){},"./node_modules/cross-domain-utils/src/utils.js":function(e,t,n){"use strict";function r(e){return"[object RegExp]"===Object.prototype.toString.call(e)}t.a=d,t.c=f,t.e=l,t.j=function(e){var t=!(arguments.length>1&&void 0!==arguments[1])||arguments[1];try{if(e===window)return!1}catch(e){return!0}try{if(!e)return!0}catch(e){return!0}try{if(e.closed)return!0}catch(e){return!e||e.message!==i}if(t&&function(e){if(!l(e))return!1;try{if(e===window)return!0;if(a(e)&&c(e))return!0;if(f(window)===f(e))return!0}catch(e){}return!1}(e))try{if(e.mockclosed)return!0}catch(e){}try{if(!e.parent||!e.top)return!0}catch(e){}var n=function(e,t){for(var n=0;n<e.length;n++)try{if(e[n]===t)return n}catch(e){}return-1}(y,e);if(-1!==n){var r=_[n];if(r&&function(e){if(!e.contentWindow)return!0;if(!e.parentNode)return!0;var t=e.ownerDocument;return!(!t||!t.body||t.body.contains(e))}(r))return!0}return!1},t.d=function(e){return(e=e||window).navigator.mockUserAgent||e.navigator.userAgent},t.b=m,t.f=function(e,t){var n=m(t);if(n)return n===e;if(t===e)return!1;if(function(e){if(e){try{if(e.top)return e.top}catch(e){}if(s(e)===e)return e;try{if(h(window,e)&&window.top)return window.top}catch(e){}try{if(h(e,window)&&window.top)return window.top}catch(e){}for(var t=0,n=function e(t){for(var n=[],r=0,o=p(t),i=null==o?0:o.length;r<i;r++){var a=o[r];n.push(a);for(var s=0,u=e(a),c=null==u?0:u.length;s<c;s++){var d=u[s];n.push(d)}}return n}(e),r=null==n?0:n.length;t<r;t++){var o=n[t];try{if(o.top)return o.top}catch(e){}if(s(o)===o)return o}}}(t)===t)return!1;for(var r=0,o=p(e),i=null==o?0:o.length;r<i;r++)if(o[r]===t)return!0;return!1},t.h=function(){return Boolean(u(window))},t.g=function(){return Boolean(s(window))},t.k=function e(t,n){if("string"==typeof t){if("string"==typeof n)return t===o.WILDCARD||n===t;if(r(n))return!1;if(Array.isArray(n))return!1}return r(t)?r(n)?t.toString()===n.toString():!Array.isArray(n)&&Boolean(n.match(t)):!!Array.isArray(t)&&(Array.isArray(n)?JSON.stringify(t)===JSON.stringify(n):!r(n)&&t.some((function(t){return e(t,n)})))},t.l=function(e){return Array.isArray(e)?"("+e.join(" | ")+")":r(e)?"RegExp("+e.toString():e.toString()},t.i=function(e){try{if(e===window)return!0}catch(e){if(e&&e.message===i)return!0}try{if("[object Window]"===Object.prototype.toString.call(e))return!0}catch(e){if(e&&e.message===i)return!0}try{if(window.Window&&e instanceof window.Window)return!0}catch(e){if(e&&e.message===i)return!0}try{if(e&&e.self===e)return!0}catch(e){if(e&&e.message===i)return!0}try{if(e&&e.parent===e)return!0}catch(e){if(e&&e.message===i)return!0}try{if(e&&e.top===e)return!0}catch(e){if(e&&e.message===i)return!0}try{e&&e.__cross_domain_utils_window_check__}catch(e){return!0}return!1};var o={MOCK_PROTOCOL:"mock:",FILE_PROTOCOL:"file:",ABOUT_PROTOCOL:"about:",WILDCARD:"*"},i="Call was rejected by callee.\r\n";function a(){return(arguments.length>0&&void 0!==arguments[0]?arguments[0]:window).location.protocol===o.ABOUT_PROTOCOL}function s(e){if(e)try{if(e.parent&&e.parent!==e)return e.parent}catch(e){}}function u(e){if(e&&!s(e))try{return e.opener}catch(e){}}function c(e){try{return e&&e.location&&e.location.href,!0}catch(e){}return!1}function d(e){var t=(e=e||window).location;if(!t)throw new Error("Can not read window location");var n=t.protocol;if(!n)throw new Error("Can not read window protocol");if(n===o.FILE_PROTOCOL)return o.FILE_PROTOCOL+"//";if(n===o.ABOUT_PROTOCOL){var r=s(e);return r&&c(r)?d(r):o.ABOUT_PROTOCOL+"//"}var i=t.host;if(!i)throw new Error("Can not read window host");return n+"//"+i}function f(e){var t=d(e=e||window);return t&&e.mockDomain&&0===e.mockDomain.indexOf(o.MOCK_PROTOCOL)?e.mockDomain:t}function l(e){try{if(e===window)return!0}catch(e){}try{var t=Object.getOwnPropertyDescriptor(e,"location");if(t&&!1===t.enumerable)return!1}catch(e){}try{if(a(e)&&c(e))return!0}catch(e){}try{if(d(e)===d(window))return!0}catch(e){}return!1}function h(e,t){if(!e||!t)return!1;var n=s(t);return n?n===e:-1!==function(e){var t=[];try{for(;e.parent!==e;)t.push(e.parent),e=e.parent}catch(e){}return t}(t).indexOf(e)}function p(e){var t=[],n=void 0;try{n=e.frames}catch(t){n=e}var r=void 0;try{r=n.length}catch(e){}if(0===r)return t;if(r){for(var o=0;o<r;o++){var i=void 0;try{i=n[o]}catch(e){continue}t.push(i)}return t}for(var a=0;a<100;a++){var s=void 0;try{s=n[a]}catch(e){return t}if(!s)return t;t.push(s)}return t}var y=[],_=[];function m(e){return u(e=e||window)||s(e)||void 0}},"./src/index.js":function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),n.d({},"WeakMap",(function(){return c}));var r={};n.d(r,"cleanUpWindow",(function(){return te})),n.d(r,"Promise",(function(){return O})),n.d(r,"bridge",(function(){return ne})),n.d(r,"init",(function(){return re})),n.d(r,"parent",(function(){return ee})),n.d(r,"send",(function(){return B})),n.d(r,"request",(function(){return F})),n.d(r,"sendToParent",(function(){return z})),n.d(r,"client",(function(){return Q})),n.d(r,"on",(function(){return Z})),n.d(r,"listen",(function(){return J})),n.d(r,"once",(function(){return $})),n.d(r,"listener",(function(){return V})),n.d(r,"CONFIG",(function(){return l})),n.d(r,"CONSTANTS",(function(){return d})),n.d(r,"disable",(function(){return X}));var o=n("./node_modules/cross-domain-utils/src/index.js");function i(e,t){for(var n=0;n<e.length;n++)try{if(e[n]===t)return n}catch(e){}return-1}var a,s=Object.defineProperty,u=Date.now()%1e9,c=function(){function e(){if(function(t,n){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this),u+=1,this.name="__weakmap_"+(1e9*Math.random()>>>0)+"__"+u,function(){if(!window.WeakMap)return!1;if(!window.Object.freeze)return!1;try{var e=new window.WeakMap,t={};return window.Object.freeze(t),e.set(t,"__testvalue__"),"__testvalue__"===e.get(t)}catch(e){return!1}}())try{this.weakmap=new window.WeakMap}catch(e){}this.keys=[],this.values=[]}return e.prototype._cleanupClosedWindows=function(){for(var e=this.weakmap,t=this.keys,n=0;n<t.length;n++){var r=t[n];if(Object(o.isWindow)(r)&&Object(o.isWindowClosed)(r)){if(e)try{e.delete(r)}catch(e){}t.splice(n,1),this.values.splice(n,1),n-=1}}},e.prototype.isSafeToReadWrite=function(e){if(Object(o.isWindow)(e))return!1;try{e&&e.self,e&&e[this.name]}catch(e){return!1}return!0},e.prototype.set=function(e,t){if(!e)throw new Error("WeakMap expected key");var n=this.weakmap;if(n)try{n.set(e,t)}catch(e){delete this.weakmap}if(this.isSafeToReadWrite(e)){var r=this.name,o=e[r];o&&o[0]===e?o[1]=t:s(e,r,{value:[e,t],writable:!0})}else{this._cleanupClosedWindows();var a=this.keys,u=this.values,c=i(a,e);-1===c?(a.push(e),u.push(t)):u[c]=t}},e.prototype.get=function(e){if(!e)throw new Error("WeakMap expected key");var t=this.weakmap;if(t)try{if(t.has(e))return t.get(e)}catch(e){delete this.weakmap}if(!this.isSafeToReadWrite(e)){this._cleanupClosedWindows();var n=i(this.keys,e);if(-1===n)return;return this.values[n]}var r=e[this.name];if(r&&r[0]===e)return r[1]},e.prototype.delete=function(e){if(!e)throw new Error("WeakMap expected key");var t=this.weakmap;if(t)try{t.delete(e)}catch(e){delete this.weakmap}if(this.isSafeToReadWrite(e)){var n=e[this.name];n&&n[0]===e&&(n[0]=n[1]=void 0)}else{this._cleanupClosedWindows();var r=this.keys,o=i(r,e);-1!==o&&(r.splice(o,1),this.values.splice(o,1))}},e.prototype.has=function(e){if(!e)throw new Error("WeakMap expected key");var t=this.weakmap;if(t)try{return t.has(e)}catch(e){delete this.weakmap}if(this.isSafeToReadWrite(e)){var n=e[this.name];return!(!n||n[0]!==e)}return this._cleanupClosedWindows(),-1!==i(this.keys,e)},e}(),d={POST_MESSAGE_TYPE:{REQUEST:"postrobot_message_request",RESPONSE:"postrobot_message_response",ACK:"postrobot_message_ack"},POST_MESSAGE_ACK:{SUCCESS:"success",ERROR:"error"},POST_MESSAGE_NAMES:{METHOD:"postrobot_method",HELLO:"postrobot_ready",OPEN_TUNNEL:"postrobot_open_tunnel"},WINDOW_TYPES:{FULLPAGE:"fullpage",POPUP:"popup",IFRAME:"iframe"},WINDOW_PROPS:{POSTROBOT:"__postRobot__"},SERIALIZATION_TYPES:{METHOD:"postrobot_method",ERROR:"postrobot_error",PROMISE:"postrobot_promise",ZALGO_PROMISE:"postrobot_zalgo_promise",REGEX:"regex"},SEND_STRATEGIES:{POST_MESSAGE:"postrobot_post_message",BRIDGE:"postrobot_bridge",GLOBAL:"postrobot_global"},MOCK_PROTOCOL:"mock:",FILE_PROTOCOL:"file:",BRIDGE_NAME_PREFIX:"__postrobot_bridge__",POSTROBOT_PROXY:"__postrobot_proxy__",WILDCARD:"*"},f={METHOD:"postrobot_method",HELLO:"postrobot_hello",OPEN_TUNNEL:"postrobot_open_tunnel"},l=(Object.keys(f).map((function(e){return f[e]})),{ALLOW_POSTMESSAGE_POPUP:!("__ALLOW_POSTMESSAGE_POPUP__"in window)||window.__ALLOW_POSTMESSAGE_POPUP__,BRIDGE_TIMEOUT:5e3,CHILD_WINDOW_TIMEOUT:5e3,ACK_TIMEOUT:-1!==window.navigator.userAgent.match(/MSIE/i)?2e3:1e3,RES_TIMEOUT:-1,ALLOWED_POST_MESSAGE_METHODS:(a={},a[d.SEND_STRATEGIES.POST_MESSAGE]=!0,a[d.SEND_STRATEGIES.BRIDGE]=!0,a[d.SEND_STRATEGIES.GLOBAL]=!0,a),ALLOW_SAME_ORIGIN:!1});0===window.location.href.indexOf(d.FILE_PROTOCOL)&&(l.ALLOW_POSTMESSAGE_POPUP=!0);var h="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};function p(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:1;if(t>=3)return"stringifyError stack overflow";try{if(!e)return"<unknown error: "+Object.prototype.toString.call(e)+">";if("string"==typeof e)return e;if(e instanceof Error){var n=e&&e.stack,r=e&&e.message;if(n&&r)return-1!==n.indexOf(r)?n:r+"\n"+n;if(n)return n;if(r)return r}return"function"==typeof e.toString?e.toString():Object.prototype.toString.call(e)}catch(e){return"Error while stringifying error: "+p(e,t+1)}}var y=function(e){if(!e)return e;var t=!1;return function(){if(!t)return t=!0,e.apply(this,arguments)}};function _(){}function m(){var e="0123456789abcdef";return"xxxxxxxxxx".replace(/./g,(function(){return e.charAt(Math.floor(Math.random()*e.length))}))}function v(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:1;if(n>=100)throw new Error("Self-referential object passed, or object contained too many layers");var r=void 0;if("object"!==(void 0===e?"undefined":h(e))||null===e||Array.isArray(e)){if(!Array.isArray(e))throw new TypeError("Invalid type: "+(void 0===e?"undefined":h(e)));r=[]}else r={};return function(e,t){Array.isArray(e)?function(e,t){for(var n=0;n<e.length;n++)t(e[n],n)}(e,t):"object"===(void 0===e?"undefined":h(e))&&null!==e&&function(e,t){for(var n in e)e.hasOwnProperty(n)&&t(e[n],n)}(e,t)}(e,(function(e,o){var i=t(e,o);void 0!==i?r[o]=i:"object"===(void 0===e?"undefined":h(e))&&null!==e?r[o]=v(e,t,n+1):r[o]=e})),r}function w(e){return"[object RegExp]"===Object.prototype.toString.call(e)}function g(e){try{if(!e)return!1;if("undefined"!=typeof Promise&&e instanceof Promise)return!0;if("undefined"!=typeof window&&window.Window&&e instanceof window.Window)return!1;if("undefined"!=typeof window&&window.constructor&&e instanceof window.constructor)return!1;var t={}.toString;if(t){var n=t.call(e);if("[object Window]"===n||"[object global]"===n||"[object DOMWindow]"===n)return!1}if("function"==typeof e.then)return!0}catch(e){return!1}return!1}function E(){var e=void 0;if("undefined"!=typeof window)e=window;else{if("undefined"==typeof window)throw new TypeError("Can not find global");e=window}var t=e.__zalgopromise__=e.__zalgopromise__||{};return t.flushPromises=t.flushPromises||[],t.activeCount=t.activeCount||0,t.possiblyUnhandledPromiseHandlers=t.possiblyUnhandledPromiseHandlers||[],t.dispatchedErrors=t.dispatchedErrors||[],t}var O=function(){function e(t){var n=this;if(function(t,n){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this),this.resolved=!1,this.rejected=!1,this.errorHandled=!1,this.handlers=[],t){var r=void 0,o=void 0,i=!1,a=!1,s=!1;try{t((function(e){s?n.resolve(e):(i=!0,r=e)}),(function(e){s?n.reject(e):(a=!0,o=e)}))}catch(e){return void this.reject(e)}s=!0,i?this.resolve(r):a&&this.reject(o)}}return e.prototype.resolve=function(e){if(this.resolved||this.rejected)return this;if(g(e))throw new Error("Can not resolve promise with another promise");return this.resolved=!0,this.value=e,this.dispatch(),this},e.prototype.reject=function(e){var t=this;if(this.resolved||this.rejected)return this;if(g(e))throw new Error("Can not reject promise with another promise");if(!e){var n=e&&"function"==typeof e.toString?e.toString():Object.prototype.toString.call(e);e=new Error("Expected reject to be called with Error, got "+n)}return this.rejected=!0,this.error=e,this.errorHandled||setTimeout((function(){t.errorHandled||function(e,t){if(-1===E().dispatchedErrors.indexOf(e)){E().dispatchedErrors.push(e),setTimeout((function(){throw e}),1);for(var n=0;n<E().possiblyUnhandledPromiseHandlers.length;n++)E().possiblyUnhandledPromiseHandlers[n](e,t)}}(e,t)}),1),this.dispatch(),this},e.prototype.asyncReject=function(e){this.errorHandled=!0,this.reject(e)},e.prototype.dispatch=function(){var t=this,n=this.dispatching,r=this.resolved,o=this.rejected,i=this.handlers;if(!n&&(r||o)){this.dispatching=!0,E().activeCount+=1;for(var a=function(n){var a=i[n],s=a.onSuccess,u=a.onError,c=a.promise,d=void 0;if(r)try{d=s?s(t.value):t.value}catch(e){return c.reject(e),"continue"}else if(o){if(!u)return c.reject(t.error),"continue";try{d=u(t.error)}catch(e){return c.reject(e),"continue"}}d instanceof e&&(d.resolved||d.rejected)?(d.resolved?c.resolve(d.value):c.reject(d.error),d.errorHandled=!0):g(d)?d instanceof e&&(d.resolved||d.rejected)?d.resolved?c.resolve(d.value):c.reject(d.error):d.then((function(e){c.resolve(e)}),(function(e){c.reject(e)})):c.resolve(d)},s=0;s<i.length;s++)a(s);i.length=0,this.dispatching=!1,E().activeCount-=1,0===E().activeCount&&e.flushQueue()}},e.prototype.then=function(t,n){if(t&&"function"!=typeof t&&!t.call)throw new Error("Promise.then expected a function for success handler");if(n&&"function"!=typeof n&&!n.call)throw new Error("Promise.then expected a function for error handler");var r=new e;return this.handlers.push({promise:r,onSuccess:t,onError:n}),this.errorHandled=!0,this.dispatch(),r},e.prototype.catch=function(e){return this.then(void 0,e)},e.prototype.finally=function(t){if(t&&"function"!=typeof t&&!t.call)throw new Error("Promise.finally expected a function");return this.then((function(n){return e.try(t).then((function(){return n}))}),(function(n){return e.try(t).then((function(){throw n}))}))},e.prototype.timeout=function(e,t){var n=this;if(this.resolved||this.rejected)return this;var r=setTimeout((function(){n.resolved||n.rejected||n.reject(t||new Error("Promise timed out after "+e+"ms"))}),e);return this.then((function(e){return clearTimeout(r),e}))},e.prototype.toPromise=function(){if("undefined"==typeof Promise)throw new TypeError("Could not find Promise");return Promise.resolve(this)},e.resolve=function(t){return t instanceof e?t:g(t)?new e((function(e,n){return t.then(e,n)})):(new e).resolve(t)},e.reject=function(t){return(new e).reject(t)},e.all=function(t){var n=new e,r=t.length,o=[];if(!r)return n.resolve(o),n;for(var i=function(i){var a=t[i];if(a instanceof e){if(a.resolved)return o[i]=a.value,r-=1,"continue"}else if(!g(a))return o[i]=a,r-=1,"continue";e.resolve(a).then((function(e){o[i]=e,0==(r-=1)&&n.resolve(o)}),(function(e){n.reject(e)}))},a=0;a<t.length;a++)i(a);return 0===r&&n.resolve(o),n},e.hash=function(t){var n={};return e.all(Object.keys(t).map((function(r){return e.resolve(t[r]).then((function(e){n[r]=e}))}))).then((function(){return n}))},e.map=function(t,n){return e.all(t.map(n))},e.onPossiblyUnhandledException=function(e){return function(e){return E().possiblyUnhandledPromiseHandlers.push(e),{cancel:function(){E().possiblyUnhandledPromiseHandlers.splice(E().possiblyUnhandledPromiseHandlers.indexOf(e),1)}}}(e)},e.try=function(t,n,r){if(t&&"function"!=typeof t&&!t.call)throw new Error("Promise.try expected a function");var o=void 0;try{o=t.apply(n,r||[])}catch(t){return e.reject(t)}return e.resolve(o)},e.delay=function(t){return new e((function(e){setTimeout(e,t)}))},e.isPromise=function(t){return!!(t&&t instanceof e)||g(t)},e.flush=function(){var t=new e;return E().flushPromises.push(t),0===E().activeCount&&e.flushQueue(),t},e.flushQueue=function(){var e=E().flushPromises;E().flushPromises=[];for(var t=0,n=null==e?0:e.length;t<n;t++)e[t].resolve()},e}(),b=window[d.WINDOW_PROPS.POSTROBOT]=window[d.WINDOW_PROPS.POSTROBOT]||{};b.registerSelf=function(){};var P="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};b.methods=b.methods||new c;var S=y((function(){b.on(d.POST_MESSAGE_NAMES.METHOD,{origin:d.WILDCARD},(function(e){var t=e.source,n=e.origin,r=e.data,i=b.methods.get(t);if(!i)throw new Error("Could not find any methods this window has privileges to call");var a=i[r.id];if(!a)throw new Error("Could not find method with id: "+r.id);if(!Object(o.matchDomain)(a.domain,n))throw new Error("Method domain "+a.domain+" does not match origin "+n);return O.try((function(){return a.method.apply({source:t,origin:n,data:r},r.args)})).then((function(e){return{result:e,id:r.id,name:r.name}}))}))}));function T(e,t){return"object"===(void 0===e?"undefined":P(e))&&null!==e&&e.__type__===t}function A(e,t,n,r){var o=m(),i=b.methods.get(e);return i||(i={},b.methods.set(e,i)),i[o]={domain:t,method:n},{__type__:d.SERIALIZATION_TYPES.METHOD,__id__:o,__name__:r}}function D(e,t,n){function r(){var r=Array.prototype.slice.call(arguments);return b.send(e,d.POST_MESSAGE_NAMES.METHOD,{id:n.__id__,name:n.__name__,args:r},{domain:t,timeout:-1}).then((function(e){return e.data.result}),(function(e){throw e}))}return r.__name__=n.__name__,r.__xdomain__=!0,r.source=e,r.origin=t,r}function j(e,t,n){return new O((function(r,o){return D(e,t,n.__then__)(r,o)}))}function R(e){return b.send(e,d.POST_MESSAGE_NAMES.HELLO,{},{domain:d.WILDCARD,timeout:-1}).then((function(e){return{origin:e.origin}}))}b.readyPromises=b.readyPromises||new c;var M={};M[d.SEND_STRATEGIES.POST_MESSAGE]=function(e,t,n){(Array.isArray(n)?n:"string"==typeof n?[n]:[d.WILDCARD]).map((function(t){if(0===t.indexOf(d.MOCK_PROTOCOL)){if(window.location.protocol===d.FILE_PROTOCOL)return d.WILDCARD;if(!Object(o.isActuallySameDomain)(e))throw new Error("Attempting to send messsage to mock domain "+t+", but window is actually cross-domain");return Object(o.getActualDomain)(e)}return 0===t.indexOf(d.FILE_PROTOCOL)?d.WILDCARD:t})).forEach((function(n){return e.postMessage(t,n)}))};var C,L=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};function I(e,t,n){return O.try((function(){var r;if(t=function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{},r=m(),i=Object(o.isPopup)()?d.WINDOW_TYPES.POPUP:Object(o.isIframe)()?d.WINDOW_TYPES.IFRAME:d.WINDOW_TYPES.FULLPAGE,a=Object(o.getDomain)(window);return L({},t,n,{sourceDomain:a,id:t.id||r,windowType:i})}(e,t,{data:function(e,n,r){return v({obj:t.data},(function(t,r){return"function"==typeof t?A(e,n,t,r.toString()):t instanceof Error?(o=t,{__type__:d.SERIALIZATION_TYPES.ERROR,__message__:p(o),__code__:o.code}):window.Promise&&t instanceof window.Promise?function(e,t,n,r){return{__type__:d.SERIALIZATION_TYPES.PROMISE,__then__:A(e,t,(function(e,t){return n.then(e,t)}),r+".then")}}(e,n,t,r.toString()):O.isPromise(t)?function(e,t,n,r){return{__type__:d.SERIALIZATION_TYPES.ZALGO_PROMISE,__then__:A(e,t,(function(e,t){return n.then(e,t)}),r+".then")}}(e,n,t,r.toString()):w(t)?(i=t,{__type__:d.SERIALIZATION_TYPES.REGEX,__source__:i.source}):void 0;var o,i})).obj}(e,n),domain:n}),e===window&&!l.ALLOW_SAME_ORIGIN)throw new Error("Attemping to send message to self");if(Object(o.isWindowClosed)(e))throw new Error("Window is closed");var i=[],a=function(e,t,n){var r=void 0,o=void 0;try{if("{}"!==JSON.stringify({})&&(r=Object.prototype.toJSON,delete Object.prototype.toJSON),"{}"!==JSON.stringify({}))throw new Error("Can not correctly serialize JSON objects");if("[]"!==JSON.stringify([])&&(o=Array.prototype.toJSON,delete Array.prototype.toJSON),"[]"!==JSON.stringify([]))throw new Error("Can not correctly serialize JSON objects")}catch(e){throw new Error("Can not repair JSON.stringify: "+e.message)}var i=JSON.stringify.call(this,e,null,2);try{r&&(Object.prototype.toJSON=r),o&&(Array.prototype.toJSON=o)}catch(e){throw new Error("Can not repair JSON.stringify: "+e.message)}return i}(((r={})[d.WINDOW_PROPS.POSTROBOT]=t,r));return O.map(Object.keys(M),(function(t){return O.try((function(){if(!l.ALLOWED_POST_MESSAGE_METHODS[t])throw new Error("Strategy disallowed: "+t);return M[t](e,a,n)})).then((function(){return i.push(t+": success"),!0}),(function(e){return i.push(t+": "+p(e)+"\n"),!1}))})).then((function(e){var n=e.some(Boolean),r=t.type+" "+t.name+" "+(n?"success":"error")+":\n  - "+i.join("\n  - ")+"\n";if(!n)throw new Error(r)}))}))}function k(e){return b.responseListeners[e]}function W(e){delete b.responseListeners[e]}function x(e){return Boolean(b.erroredResponseListeners[e])}function q(e){var t=e.name,n=e.win,r=e.domain;if(n===d.WILDCARD&&(n=null),r===d.WILDCARD&&(r=null),!t)throw new Error("Name required to get request listener");var i=b.requestListeners[t];if(i)for(var a=0,s=[n,b.WINDOW_WILDCARD],u=null==s?0:s.length;a<u;a++){var c=s[a],f=c&&i.get(c);if(f){if(r&&"string"==typeof r){if(f[r])return f[r];if(f.__domain_regex__)for(var l=0,h=f.__domain_regex__,p=null==h?0:h.length;l<p;l++){var y=h[l],_=y.regex,m=y.listener;if(Object(o.matchDomain)(_,r))return m}}if(f[d.WILDCARD])return f[d.WILDCARD]}}}b.responseListeners=b.responseListeners||{},b.requestListeners=b.requestListeners||{},b.WINDOW_WILDCARD=b.WINDOW_WILDCARD||new function(){},b.erroredResponseListeners=b.erroredResponseListeners||{};var N=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},U=((C={})[d.POST_MESSAGE_TYPE.ACK]=function(e,t,n){if(!x(n.hash)){var r=k(n.hash);if(!r)throw new Error("No handler found for post message ack for message: "+n.name+" from "+t+" in "+window.location.protocol+"//"+window.location.host+window.location.pathname);if(!Object(o.matchDomain)(r.domain,t))throw new Error("Ack origin "+t+" does not match domain "+r.domain.toString());r.ack=!0}},C[d.POST_MESSAGE_TYPE.REQUEST]=function(e,t,n){var r=q({name:n.name,win:e,domain:t});function i(r){return n.fireAndForget||Object(o.isWindowClosed)(e)?O.resolve():I(e,N({target:n.originalSource,hash:n.hash,name:n.name},r),t)}return O.all([i({type:d.POST_MESSAGE_TYPE.ACK}),O.try((function(){if(!r)throw new Error("No handler found for post message: "+n.name+" from "+t+" in "+window.location.protocol+"//"+window.location.host+window.location.pathname);if(!Object(o.matchDomain)(r.domain,t))throw new Error("Request origin "+t+" does not match domain "+r.domain.toString());var i=n.data;return r.handler({source:e,origin:t,data:i})})).then((function(e){return i({type:d.POST_MESSAGE_TYPE.RESPONSE,ack:d.POST_MESSAGE_ACK.SUCCESS,data:e})}),(function(e){var t=p(e).replace(/^Error: /,""),n=e.code;return i({type:d.POST_MESSAGE_TYPE.RESPONSE,ack:d.POST_MESSAGE_ACK.ERROR,error:t,code:n})}))]).then(_).catch((function(e){if(r&&r.handleError)return r.handleError(e);throw e}))},C[d.POST_MESSAGE_TYPE.RESPONSE]=function(e,t,n){if(!x(n.hash)){var r=k(n.hash);if(!r)throw new Error("No handler found for post message response for message: "+n.name+" from "+t+" in "+window.location.protocol+"//"+window.location.host+window.location.pathname);if(!Object(o.matchDomain)(r.domain,t))throw new Error("Response origin "+t+" does not match domain "+Object(o.stringifyDomainPattern)(r.domain));if(W(n.hash),n.ack===d.POST_MESSAGE_ACK.ERROR){var i=new Error(n.error);return n.code&&(i.code=n.code),r.respond(i,null)}if(n.ack===d.POST_MESSAGE_ACK.SUCCESS){var a=n.data||n.response;return r.respond(null,{source:e,origin:t,data:a})}}},C),G="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};function K(e){if(!window||window.closed)throw new Error("Message recieved in closed window");try{if(!e.source)return}catch(e){return}var t=e.source,n=e.origin,r=function(e){var t,n=void 0;try{t=e,n=JSON.parse(t)}catch(e){return}if(n&&"object"===(void 0===n?"undefined":G(n))&&null!==n&&(n=n[d.WINDOW_PROPS.POSTROBOT])&&"object"===(void 0===n?"undefined":G(n))&&null!==n&&n.type&&"string"==typeof n.type&&U[n.type])return n}(e.data);if(r){if(!r.sourceDomain||"string"!=typeof r.sourceDomain)throw new Error("Expected message to have sourceDomain");0!==r.sourceDomain.indexOf(d.MOCK_PROTOCOL)&&0!==r.sourceDomain.indexOf(d.FILE_PROTOCOL)||(n=r.sourceDomain),-1===b.receivedMessages.indexOf(r.id)&&(b.receivedMessages.push(r.id),Object(o.isWindowClosed)(t)&&!r.fireAndForget||(r.data&&(r.data=function(e,t,n){return v({obj:r.data},(function(n){if("object"===(void 0===n?"undefined":P(n))&&null!==n)return T(n,d.SERIALIZATION_TYPES.METHOD)?D(e,t,n):T(n,d.SERIALIZATION_TYPES.ERROR)?function(e,t,n){var r=new Error(n.__message__);return n.__code__&&(r.code=n.__code__),r}(0,0,n):T(n,d.SERIALIZATION_TYPES.PROMISE)?function(e,t,n){return window.Promise?new window.Promise((function(r,o){return D(e,t,n.__then__)(r,o)})):j(e,t,n)}(e,t,n):T(n,d.SERIALIZATION_TYPES.ZALGO_PROMISE)?j(e,t,n):T(n,d.SERIALIZATION_TYPES.REGEX)?function(e,t,n){return new RegExp(n.__source__)}(0,0,n):void 0})).obj}(t,n)),U[r.type](t,n,r)))}}function H(e){try{e.source}catch(e){return}K({source:e.source||e.sourceElement,origin:e.origin||e.originalEvent&&e.originalEvent.origin,data:e.data})}function F(e){return O.try((function(){if(!e.name)throw new Error("Expected options.name");var t=e.name,n=void 0,r=void 0;if("string"==typeof e.window){var i=document.getElementById(e.window);if(!i)throw new Error("Expected options.window "+Object.prototype.toString.call(e.window)+" to be a valid element id");if("iframe"!==i.tagName.toLowerCase())throw new Error("Expected options.window "+Object.prototype.toString.call(e.window)+" to be an iframe");if(!i.contentWindow)throw new Error("Iframe must have contentWindow.  Make sure it has a src attribute and is in the DOM.");n=i.contentWindow}else if(e.window instanceof HTMLIFrameElement){if("iframe"!==e.window.tagName.toLowerCase())throw new Error("Expected options.window "+Object.prototype.toString.call(e.window)+" to be an iframe");if(e.window&&!e.window.contentWindow)throw new Error("Iframe must have contentWindow.  Make sure it has a src attribute and is in the DOM.");e.window&&e.window.contentWindow&&(n=e.window.contentWindow)}else n=e.window;if(!n)throw new Error("Expected options.window to be a window object, iframe, or iframe element id.");var a=n;r=e.domain||d.WILDCARD;var s=e.name+"_"+m();if(Object(o.isWindowClosed)(a))throw new Error("Target window is closed");var u=!1,c=b.requestPromises.get(a);c||(c=[],b.requestPromises.set(a,c));var f=O.try((function(){if(Object(o.isAncestor)(window,a))return function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:5e3,n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"Window",r=b.readyPromises.get(e);return r||(r=new O,b.readyPromises.set(e,r),-1!==t&&setTimeout((function(){return r.reject(new Error(n+" did not load after "+t+"ms"))}),t),r)}(a,e.timeout||l.CHILD_WINDOW_TIMEOUT)})).then((function(){var e=(arguments.length>0&&void 0!==arguments[0]?arguments[0]:{}).origin;if(w(r)&&!e)return R(a)})).then((function(){var n=(arguments.length>0&&void 0!==arguments[0]?arguments[0]:{}).origin;if(w(r)){if(!Object(o.matchDomain)(r,n))throw new Error("Remote window domain "+n+" does not match regex: "+r.toString());r=n}if("string"!=typeof r&&!Array.isArray(r))throw new TypeError("Expected domain to be a string or array");var i=r;return new O((function(n,r){var h=void 0;if(e.fireAndForget||function(e,t){b.responseListeners[e]=t}(s,h={name:t,window:a,domain:i,respond:function(e,t){e||(u=!0,c.splice(c.indexOf(f,1))),e?r(e):n(t)}}),I(a,{type:d.POST_MESSAGE_TYPE.REQUEST,hash:s,name:t,data:e.data,fireAndForget:e.fireAndForget},i).catch(r),e.fireAndForget)return n();var p=l.ACK_TIMEOUT,y=e.timeout||l.RES_TIMEOUT,_=100;setTimeout((function n(){if(!u){if(Object(o.isWindowClosed)(a))return h.ack?r(new Error("Window closed for "+t+" before response")):r(new Error("Window closed for "+t+" before ack"));if(p=Math.max(p-_,0),-1!==y&&(y=Math.max(y-_,0)),h.ack){if(-1===y)return;_=Math.min(y,2e3)}else{if(0===p)return r(new Error("No ack for postMessage "+t+" in "+Object(o.getDomain)()+" in "+l.ACK_TIMEOUT+"ms"));if(0===y)return r(new Error("No response for postMessage "+t+" in "+Object(o.getDomain)()+" in "+(e.timeout||l.RES_TIMEOUT)+"ms"))}setTimeout(n,_)}}),_)}))}));return f.catch((function(){!function(e){b.erroredResponseListeners[e]=!0}(s),W(s)})),c.push(f),f}))}function B(e,t,n,r){return(r=r||{}).window=e,r.name=t,r.data=n,F(r)}function z(e,t,n){var r=Object(o.getAncestor)();return r?B(r,e,t,n):new O((function(e,t){return t(new Error("Window does not have a parent"))}))}function Q(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};if(!e.window)throw new Error("Expected options.window");var t=e.window;return{send:function(n,r){return B(t,n,r,e)}}}b.receivedMessages=b.receivedMessages||[],b.receiveMessage=K,b.requestPromises=b.requestPromises||new c,b.send=B;var Y="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};function J(e){if(!e.name)throw new Error("Expected options.name");if(!e.handler)throw new Error("Expected options.handler");var t,n=e.name,r=e.window,i=e.domain,a={handler:e.handler,handleError:e.errorHandler||function(e){throw e},window:r,domain:i||d.WILDCARD,name:n},s=function e(t,n){var r=t.name,o=t.win,i=t.domain;if(!r||"string"!=typeof r)throw new Error("Name required to add request listener");if(Array.isArray(o)){for(var a=[],s=0,u=o,f=null==u?0:u.length;s<f;s++){var l=u[s];a.push(e({name:r,domain:i,win:l},n))}return{cancel:function(){for(var e=0,t=null==a?0:a.length;e<t;e++)a[e].cancel()}}}if(Array.isArray(i)){for(var h=[],p=0,y=i,_=null==y?0:y.length;p<_;p++){var m=y[p];h.push(e({name:r,win:o,domain:m},n))}return{cancel:function(){for(var e=0,t=null==h?0:h.length;e<t;e++)h[e].cancel()}}}var v=q({name:r,win:o,domain:i});if(o&&o!==d.WILDCARD||(o=b.WINDOW_WILDCARD),i=i||d.WILDCARD,v)throw o&&i?new Error("Request listener already exists for "+r+" on domain "+i.toString()+" for "+(o===b.WINDOW_WILDCARD?"wildcard":"specified")+" window"):o?new Error("Request listener already exists for "+r+" for "+(o===b.WINDOW_WILDCARD?"wildcard":"specified")+" window"):i?new Error("Request listener already exists for "+r+" on domain "+i.toString()):new Error("Request listener already exists for "+r);var g=b.requestListeners,E=g[r];E||(E=new c,g[r]=E);var O=E.get(o);O||(O={},E.set(o,O));var P=i.toString(),S=O.__domain_regex__,T=void 0;return w(i)?(S||(S=[],O.__domain_regex__=S),T={regex:i,listener:n},S.push(T)):O[P]=n,{cancel:function(){O&&(delete O[P],o&&0===Object.keys(O).length&&E.delete(o),T&&S.splice(S.indexOf(T,1)))}}}({name:n,win:r,domain:i},a);if(e.once){var u=a.handler;a.handler=y((function(){return s.cancel(),u.apply(this,arguments)}))}if(a.window&&e.errorOnClose)var f=(t=void 0,t=setTimeout((function e(){t=setTimeout(e,50),function(){r&&"object"===(void 0===r?"undefined":Y(r))&&Object(o.isWindowClosed)(r)&&(f.cancel(),a.handleError(new Error("Post message target window is closed")))}.call()}),50),{cancel:function(){clearTimeout(t)}});return{cancel:function(){s.cancel()}}}function Z(e,t,n){return"function"==typeof t&&(n=t,t={}),(t=t||{}).name=e,t.handler=n||t.handler,J(t)}function $(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=arguments[2];"function"==typeof t&&(n=t,t={}),t=t||{},n=n||t.handler;var r=t.errorHandler,o=new O((function(o,i){(t=t||{}).name=e,t.once=!0,t.handler=function(e){if(o(e),n)return n(e)},t.errorHandler=function(e){if(i(e),r)return r(e)}})),i=J(t);return o.cancel=i.cancel,o}function V(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};return{on:function(t,n){return Z(t,e,n)}}}function X(){delete window[d.WINDOW_PROPS.POSTROBOT],window.removeEventListener("message",H)}b.on=Z;var ee=Object(o.getAncestor)();function te(e){var t=b.requestPromises.get(e);if(t)for(var n=0,r=null==t?0:t.length;n<r;n++)t[n].reject(new Error("No response from window - cleaned up"));b.popupWindowsByWin&&b.popupWindowsByWin.delete(e),b.remoteWindows&&b.remoteWindows.delete(e),b.requestPromises.delete(e),b.methods.delete(e),b.readyPromises.delete(e)}var ne=null;function re(){var e,t;b.initialized||(t=H,(e=window).addEventListener?e.addEventListener("message",t):e.attachEvent("onmessage",t),function(){e=function(e){var t=e.source,n=e.origin,r=b.readyPromises.get(t)||new O;r.resolve({origin:n}),b.readyPromises.set(t,r)},b.on(d.POST_MESSAGE_NAMES.HELLO,{domain:d.WILDCARD},(function(t){var n=t.source,r=t.origin;return e({source:n,origin:r})}));var e,t=Object(o.getAncestor)();t&&R(t).catch(_)}(),S({on:Z,send:B})),b.initialized=!0}re(),n.d(t,"cleanUpWindow",(function(){return te})),n.d(t,"Promise",(function(){return O})),n.d(t,"bridge",(function(){return ne})),n.d(t,"init",(function(){return re})),n.d(t,"parent",(function(){return ee})),n.d(t,"send",(function(){return B})),n.d(t,"request",(function(){return F})),n.d(t,"sendToParent",(function(){return z})),n.d(t,"client",(function(){return Q})),n.d(t,"on",(function(){return Z})),n.d(t,"listen",(function(){return J})),n.d(t,"once",(function(){return $})),n.d(t,"listener",(function(){return V})),n.d(t,"CONFIG",(function(){return l})),n.d(t,"CONSTANTS",(function(){return d})),n.d(t,"disable",(function(){return X})),t.default=r}})},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r,o={attributes:!0,childList:!0,subtree:!0},i=function(){function e(e,t,n,r){void 0===r&&(r="half_width"),this._connection=e,this._autoResizingEnabled=!1,this._resizingEnabled=!1,this.type=t,this.state=r,this._emitter=n}return e.prototype.enableResizing=function(){return"DASHBOARD"!==this.type?Promise.resolve():(this._resizingEnabled=!0,this._connection.sendToParent("window",{action:"enableResizing"}))},e.prototype.onDashboardResize=function(e){var t=this;if("DASHBOARD"!==this.type)return!1;if(!e||"function"!=typeof e)throw Error("Callback must be a function");return t._emitter.on("dashboardResize",(function(n){t.state=n.state,e(n.state)})),!0},e.prototype.updateHeight=function(e){if("DASHBOARD"===this.type&&"half_width"===this.state)return Promise.resolve();if(!e||isNaN(e))this._height=Math.ceil(document.documentElement.getBoundingClientRect().height);else{if(this._height===e)return Promise.resolve();this._height=e}return this._connection.sendToParent("resize",this._height)},e.prototype.enableAutoResizing=function(){return this._autoResizingEnabled||"half_width"===this.state&&"DASHBOARD"===this.type||(this._autoResizingEnabled=!0,(r=new MutationObserver(this.updateHeight.bind(this))).observe(window.document.body,o)),this},e.prototype.disableAutoResizing=function(){return this._autoResizingEnabled?(this._autoResizingEnabled=!1,r.disconnect(),this):this},e}();t.default=i},function(e,t,n){"use strict";var r=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var o=r(n(10)),i=r(n(12)),a=n(2),s=function(){function e(e,t){this._connection=t,this._data=e,this.ContentType=i.default(t),this.Asset=o.default(t)}return e.prototype.getData=function(){return this._data},e.prototype.getContentType=function(e,t){if(void 0===t&&(t={}),!e)return Promise.reject(new Error("uid is required"));var n={uid:e,params:t,action:"getContentType"};return this._connection.sendToParent("stackQuery",n).then(a.onData).catch(a.onError)},e.prototype.getContentTypes=function(e,t){void 0===e&&(e={}),void 0===t&&(t={});var n=t;n.query=e;var r={params:n,action:"getContentTypes"};return this._connection.sendToParent("stackQuery",r).then(a.onData).catch(a.onError)},e.prototype.getEnvironment=function(e,t){if(void 0===t&&(t={}),!e)return Promise.reject(new Error("name is required"));var n={name:e,params:t,action:"getEnvironment"};return this._connection.sendToParent("stackQuery",n).then(a.onData).catch(a.onError)},e.prototype.getEnvironments=function(e,t){void 0===e&&(e={}),void 0===t&&(t={});var n=t;n.query=e;var r={params:n,action:"getEnvironments"};return this._connection.sendToParent("stackQuery",r).then(a.onData).catch(a.onError)},e.prototype.getLocale=function(e,t){if(void 0===t&&(t={}),!e)return Promise.reject(new Error("code is required"));var n={code:e,params:t,action:"getLocale"};return this._connection.sendToParent("stackQuery",n).then(a.onData).catch(a.onError)},e.prototype.getLocales=function(e,t){void 0===e&&(e={}),void 0===t&&(t={});var n=t;n.query=e;var r={params:n,action:"getLocales"};return this._connection.sendToParent("stackQuery",r).then(a.onData).catch(a.onError)},e}();t.default=s},function(e,t,n){"use strict";var r,o=this&&this.__extends||(r=function(e,t){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&(e[n]=t[n])})(e,t)},function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Class extends value "+String(t)+" is not a constructor or null");function n(){this.constructor=e}r(e,t),e.prototype=null===t?Object.create(t):(n.prototype=t.prototype,new n)}),i=this&&this.__spreadArray||function(e,t){for(var n=0,r=t.length,o=e.length;n<r;n++,o++)e[o]=t[n];return e},a=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var s=a(n(1)),u=n(0),c={};function d(e){return"string"==typeof e.data?Promise.reject(e.data):Promise.resolve(e.data)}function f(e){return Promise.reject(e)}var l=function(e){function t(t){var n=e.call(this,t)||this;return n.getReferences=u.getReferences,n.environment=u.environment,n}return o(t,e),t.Query=function(){var t=e.Query.call(this);return Object.assign(t,{language:u.language,environment:u.environment}),t},t.module=function(e){return void 0===e&&(e=!1),e?"Assets":"Asset"},Object.defineProperty(t,"connection",{get:function(){return c},enumerable:!1,configurable:!0}),t.getRteAssets=function(){return this.connection.sendToParent("stackQuery",{action:"getRteAssets"}).then(d).catch(f)},t.getAssetsOfSpecificTypes=function(e){return e&&"string"==typeof e?this.connection.sendToParent("stackQuery",{action:"getAssetsOfSpecificTypes",asset_type:e}).then(d).catch(f):Promise.reject(new Error("Kindly provide valid parameters"))},t.prototype.publish=function(e){return!e||"object"!=typeof e||e instanceof Array?Promise.reject(new Error("Kindly provide valid parameters")):this.fetch("publishAsset",e)},t.prototype.unpublish=function(e){return!e||"object"!=typeof e||e instanceof Array?Promise.reject(new Error("Kindly provide valid parameters")):this.fetch("unpublishAsset",e)},t}(s.default);t.default=function(e){return c=e,new Proxy(l,{apply:function(e,t,n){return new(e.bind.apply(e,i([void 0],n)))}})}},function(e,t,n){"use strict";var r=this&&this.__createBinding||(Object.create?function(e,t,n,r){void 0===r&&(r=n),Object.defineProperty(e,r,{enumerable:!0,get:function(){return t[n]}})}:function(e,t,n,r){void 0===r&&(r=n),e[r]=t[n]}),o=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),i=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)"default"!==n&&Object.prototype.hasOwnProperty.call(e,n)&&r(t,e,n);return o(t,e),t};Object.defineProperty(t,"__esModule",{value:!0});var a=i(n(0));function s(e){return"string"==typeof e.data?Promise.reject(e.data):Promise.resolve(e.data)}function u(e){return Promise.reject(e)}var c=function(e){return function(t,n){if(t&&n&&"string"==typeof t&&void 0!==n)return this._query.query[t]=this._query.query.file_size||{},this._query.query[t][e]=n,this;throw Error("Kindly provide valid parameters.")}},d=function(e){var t=e?"$in":"$nin";return function(e,n){if(e&&n&&"string"==typeof e&&Array.isArray(n))return this._query.query[e]=this._query.query[e]||{},this._query.query[e][t]=this._query.query[e][t]||[],this._query.query[e][t]=this._query.query[e][t].concat(n),this;throw Error("Kindly provide valid parameters.")}},f=function(e){return function(t){if(t&&"string"==typeof t)return this._query.query[t]=this._query.query[t]||{},this._query.query[t].$exists=e,this;throw Error("Kindly provide valid parameters.")}},l=function(e){return function(){for(var t=[],n=0,r=arguments.length;n<r;n+=1)arguments[n]instanceof y&&arguments[n]._query.query?t.push(arguments[n]._query.query):"object"==typeof arguments[n]&&t.push(arguments[n]);return this._query.query[e]?this._query.query[e]=this._query.query[e].concat(t):this._query.query[e]=t,this}},h=function(e){return function(t){if(t&&"string"==typeof t)return this._query[e]=t,this;throw Error("Argument should be a string.")}},p=function(e){return function(t){if("number"==typeof t)return this._query[e]=t,this;throw Error("Argument should be a number.")}},y=function(){function e(e,t,n){this.module=t,this._connection=e,this._query={},this._query.query=this._query.query||{},this.contentTypeUid=n,this.only=a.transform("only"),this.except=a.transform("except"),this.addQuery=a.addQuery,this.lessThan=c("$lt"),this.lessThanOrEqualTo=c("$lte"),this.greaterThan=c("$gt"),this.greaterThanOrEqualTo=c("$gte"),this.notEqualTo=c("$ne"),this.containedIn=d(!0),this.notContainedIn=d(!1),this.exists=f(!0),this.notExists=f(!1),this.ascending=h("asc"),this.descending=h("desc"),this.beforeUid=h("before_uid"),this.afterUid=h("after_uid"),this.skip=p("skip"),this.limit=p("limit"),this.or=l("$or"),this.and=l("$and"),this.addParam=a.addParam}return e.prototype.equalTo=function(e,t){if(e&&"string"==typeof e)return this._query.query[e]=t,this;throw Error("Kindly provide valid parameters.")},e.prototype.where=function(e,t){if(e&&"string"==typeof e)return this._query.query[e]=t,this;throw Error("Kindly provide valid parameters.")},e.prototype.count=function(){this._query.count=!0;var e={content_type_uid:this.contentTypeUid,params:this._query,action:"get"+this.module};return this._connection.sendToParent("stackQuery",e).then(s).catch(u)},e.prototype.query=function(e){if("object"==typeof e)return this._query.query=a.mergeDeep(this._query.query,e),this;throw Error("Kindly provide valid parameters")},e.prototype.tags=function(e){if(Array.isArray(e))return this._query.tags=e,this;throw Error("Kindly provide valid parameters")},e.prototype.includeCount=function(){return this._query.include_count=!0,this},e.prototype.getQuery=function(){return this._query.query},e.prototype.regex=function(e,t,n){if(e&&t&&"string"==typeof e&&"string"==typeof t)return this._query.query[e]={$regex:t},n&&(this._query.query[e].$options=n),this;throw Error("Kindly provide valid parameters.")},e.prototype.search=function(e){if(e&&"string"==typeof e)return this._query.typeahead=e,this;throw Error("Kindly provide valid parameters.")},e.prototype.find=function(){var e={content_type_uid:this.contentTypeUid,params:this._query,action:"get"+this.module};return this._connection.sendToParent("stackQuery",e).then(s).catch(u)},e.prototype.findOne=function(){this.singleEntry=!0,this._query.limit=1;var e={content_type_uid:this.contentTypeUid,params:this._query,action:"get"+this.module};return this._connection.sendToParent("stackQuery",e).then(s).catch(u)},e}();t.default=y},function(e,t,n){"use strict";var r,o=this&&this.__extends||(r=function(e,t){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&(e[n]=t[n])})(e,t)},function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Class extends value "+String(t)+" is not a constructor or null");function n(){this.constructor=e}r(e,t),e.prototype=null===t?Object.create(t):(n.prototype=t.prototype,new n)}),i=this&&this.__spreadArray||function(e,t){for(var n=0,r=t.length,o=e.length;n<r;n++,o++)e[o]=t[n];return e},a=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var s=a(n(13)),u=a(n(1)),c={},d=function(e){function t(t){var n=e.call(this,t)||this;return n.Entry=s.default(n.constructor.connection,n.uid),n}return o(t,e),Object.defineProperty(t,"connection",{get:function(){return c},enumerable:!1,configurable:!0}),t}(u.default);t.default=function(e){return c=e,new Proxy(d,{apply:function(e,t,n){return new(e.bind.apply(e,i([void 0],n)))}})}},function(e,t,n){"use strict";var r,o=this&&this.__extends||(r=function(e,t){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&(e[n]=t[n])})(e,t)},function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Class extends value "+String(t)+" is not a constructor or null");function n(){this.constructor=e}r(e,t),e.prototype=null===t?Object.create(t):(n.prototype=t.prototype,new n)}),i=this&&this.__spreadArray||function(e,t){for(var n=0,r=t.length,o=e.length;n<r;n++,o++)e[o]=t[n];return e},a=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var s=a(n(1)),u=n(0),c={},d="",f=function(e){function t(t){var n=e.call(this,t)||this;return n._query={},n}return o(t,e),t.Query=function(){var t=e.Query.call(this);return Object.assign(t,{language:u.language,environment:u.environment,includeOwner:u.includeOwner,includeContentType:u.includeContentType,includeSchema:u.includeSchema,includeReference:u.includeReference}),t},Object.defineProperty(t,"connection",{get:function(){return c},enumerable:!1,configurable:!0}),Object.defineProperty(t,"contentTypeUid",{get:function(){return d},enumerable:!1,configurable:!0}),t.module=function(e){return void 0===e&&(e=!1),e?"Entries":"Entry"},t.prototype.getLanguages=function(){return this.fetch("getEntryLanguages")},t.prototype.unlocalize=function(e){return e&&"string"==typeof e?(this._query.locale=e,this.fetch("unlocalizeEntry")):Promise.reject(new Error("Kindly provide valid parameters"))},t.prototype.publish=function(e){return!e||"object"!=typeof e||e instanceof Array?Promise.reject(new Error("Kindly provide valid parameters")):(this._query={},this.fetch("publishEntry",e))},t.prototype.unpublish=function(e){return!e||"object"!=typeof e||e instanceof Array?Promise.reject(new Error("Kindly provide valid parameters")):(this._query={},this.fetch("unpublishEntry",e))},t.prototype.setWorkflowStage=function(e){return!e||"object"!=typeof e||e instanceof Array?Promise.reject(new Error("Kindly provide valid parameters")):this.fetch("setWorkflowStageEntry",e)},t.prototype.update=function(e,t){return!e||"object"!=typeof e||e instanceof Array?Promise.reject(new Error("Kindly provide valid parameters")):(this._query.locale=t,this.fetch("updateEntry",e))},t}(s.default);t.default=function(e,t){return c=e,d=t,new Proxy(f,{apply:function(e,t,n){var r=new(e.bind.apply(e,i([void 0],n)));return Object.assign(r,{getReferences:u.getReferences,addQuery:u.addQuery,language:u.language,environment:u.environment,includeOwner:u.includeOwner,includeContentType:u.includeContentType,includeSchema:u.includeSchema,includeReference:u.includeReference}),r}})}},function(e,t,n){"use strict";var r=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});var o=r(n(4)),i=function(){function e(e,t,n){this.content_type=e.data.content_type,this._data=e.data.entry,this.locale=e.data.locale,this._connection=t,this._emitter=n;var r=this;this._emitter.on("entrySave",(function(e){r._data=e.data})),this._emitter.on("entryChange",(function(e){r._changedData=e.data}))}return e.prototype.getData=function(){return this._data},e.prototype.getField=function(e){var t=e.split("."),n=this._data,r=this.content_type.schema;try{var i=!1,a=!1;t.forEach((function(e,o){if(i)a?a=!1:i=!1;else{if(!(r=r.find((function(t){return t.uid===e}))))throw Error("schema not found");if(n=n[e],"group"!==r.data_type&&"global_field"!==r.data_type||!1!==r.multiple||t.length===o+1)if("group"!==r.data_type&&"global_field"!==r.data_type||!0!==r.multiple||t.length===o+1){if("blocks"===r.data_type&&t.length!==o+1){var s=Object.keys(n[t[o+1]])[0];r=r.blocks.find((function(e){return e.uid===s})),t.length===o+2?n=n[t[o+1]]:(n=n[t[o+1]][s],r=r.schema),i=!0,a=!0}}else r=r.schema,n=n[t[o+1]],i=!0;else r=r.schema}}))}catch(e){throw Error("Invalid uid, Field not found")}var s={data:{uid:e,value:n,schema:r,data_type:r.data_type}},u=new o.default(s,this._connection,this._emitter);return delete u.onChange,u},e.prototype.onSave=function(e){if(!e||"function"!=typeof e)throw Error("Callback must be a function");this._emitter.on("entrySave",(function(t){e(t.data)}))},e.prototype.onChange=function(e){if(!e||"function"!=typeof e)throw Error("Callback must be a function");this._emitter.on("entryChange",(function(t){e(t.data)}))},e.prototype.onPublish=function(e){if(!e||"function"!=typeof e)throw Error("Callback must be a function");this._emitter.on("entryPublish",(function(t){e(t.data)}))},e.prototype.onUnPublish=function(e){if(!e||"function"!=typeof e)throw Error("Callback must be a function");this._emitter.on("entryUnPublish",(function(t){e(t.data)}))},e}();t.default=i},function(e,t,n){"use strict";function r(e){return Promise.reject(e)}Object.defineProperty(t,"__esModule",{value:!0});var o=function(){function e(e){this._connection=e}return e.prototype.get=function(e){if(!e||"string"!=typeof e)throw new Error("Kindly provide valid parameters");return this._connection.sendToParent("store",{action:"get",key:e}).then((function(e){return Promise.resolve(e.data)})).catch(r)},e.prototype.getAll=function(){return this._connection.sendToParent("store",{action:"getAll"}).then((function(e){var t=e.data,n=void 0===t?{}:t;return Promise.resolve(n)})).catch(r)},e.prototype.set=function(e,t){if(!e||!t||"string"!=typeof e)throw new Error("Kindly provide valid parameters");return this._connection.sendToParent("store",{action:"set",key:e,value:t}).then((function(){return Promise.resolve(!0)})).catch(r)},e.prototype.remove=function(e){if(!e||"string"!=typeof e)throw new Error("Kindly provide valid parameters");return this._connection.sendToParent("store",{action:"remove",key:e}).then((function(){return Promise.resolve(!0)})).catch(r)},e.prototype.clear=function(){return this._connection.sendToParent("store",{action:"clear"}).then((function(){return Promise.resolve(!0)})).catch(r)},e}();t.default=o},function(e,t,n){var r;
-/*!
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["AppFrameworkSDK"] = factory();
+	else
+		root["AppFrameworkSDK"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./node_modules/post-robot/dist/post-robot.js":
+/*!****************************************************!*\
+  !*** ./node_modules/post-robot/dist/post-robot.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(root, factory) {
+     true ? module.exports = factory() : undefined;
+}("undefined" != typeof self ? self : this, function() {
+    return function(modules) {
+        var installedModules = {};
+        function __webpack_require__(moduleId) {
+            if (installedModules[moduleId]) return installedModules[moduleId].exports;
+            var module = installedModules[moduleId] = {
+                i: moduleId,
+                l: !1,
+                exports: {}
+            };
+            modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+            module.l = !0;
+            return module.exports;
+        }
+        __webpack_require__.m = modules;
+        __webpack_require__.c = installedModules;
+        __webpack_require__.d = function(exports, name, getter) {
+            __webpack_require__.o(exports, name) || Object.defineProperty(exports, name, {
+                configurable: !1,
+                enumerable: !0,
+                get: getter
+            });
+        };
+        __webpack_require__.n = function(module) {
+            var getter = module && module.__esModule ? function() {
+                return module.default;
+            } : function() {
+                return module;
+            };
+            __webpack_require__.d(getter, "a", getter);
+            return getter;
+        };
+        __webpack_require__.o = function(object, property) {
+            return Object.prototype.hasOwnProperty.call(object, property);
+        };
+        __webpack_require__.p = "";
+        return __webpack_require__(__webpack_require__.s = "./src/index.js");
+    }({
+        "./node_modules/cross-domain-utils/src/index.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__("./node_modules/cross-domain-utils/src/utils.js");
+            __webpack_require__.d(__webpack_exports__, "getActualDomain", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.a;
+            });
+            __webpack_require__.d(__webpack_exports__, "getAncestor", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.b;
+            });
+            __webpack_require__.d(__webpack_exports__, "getDomain", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.c;
+            });
+            __webpack_require__.d(__webpack_exports__, "getUserAgent", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.d;
+            });
+            __webpack_require__.d(__webpack_exports__, "isActuallySameDomain", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.e;
+            });
+            __webpack_require__.d(__webpack_exports__, "isAncestor", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.f;
+            });
+            __webpack_require__.d(__webpack_exports__, "isIframe", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.g;
+            });
+            __webpack_require__.d(__webpack_exports__, "isPopup", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.h;
+            });
+            __webpack_require__.d(__webpack_exports__, "isWindow", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.i;
+            });
+            __webpack_require__.d(__webpack_exports__, "isWindowClosed", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.j;
+            });
+            __webpack_require__.d(__webpack_exports__, "matchDomain", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.k;
+            });
+            __webpack_require__.d(__webpack_exports__, "stringifyDomainPattern", function() {
+                return __WEBPACK_IMPORTED_MODULE_0__utils__.l;
+            });
+            var __WEBPACK_IMPORTED_MODULE_1__types__ = __webpack_require__("./node_modules/cross-domain-utils/src/types.js");
+            __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__types__);
+        },
+        "./node_modules/cross-domain-utils/src/types.js": function(module, exports) {},
+        "./node_modules/cross-domain-utils/src/utils.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            function isRegex(item) {
+                return "[object RegExp]" === Object.prototype.toString.call(item);
+            }
+            __webpack_exports__.a = getActualDomain;
+            __webpack_exports__.c = getDomain;
+            __webpack_exports__.e = isActuallySameDomain;
+            __webpack_exports__.j = function(win) {
+                var allowMock = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1];
+                try {
+                    if (win === window) return !1;
+                } catch (err) {
+                    return !0;
+                }
+                try {
+                    if (!win) return !0;
+                } catch (err) {
+                    return !0;
+                }
+                try {
+                    if (win.closed) return !0;
+                } catch (err) {
+                    return !err || err.message !== IE_WIN_ACCESS_ERROR;
+                }
+                if (allowMock && function(win) {
+                    if (!isActuallySameDomain(win)) return !1;
+                    try {
+                        if (win === window) return !0;
+                        if (isAboutProtocol(win) && canReadFromWindow(win)) return !0;
+                        if (getDomain(window) === getDomain(win)) return !0;
+                    } catch (err) {}
+                    return !1;
+                }(win)) try {
+                    if (win.mockclosed) return !0;
+                } catch (err) {}
+                try {
+                    if (!win.parent || !win.top) return !0;
+                } catch (err) {}
+                var iframeIndex = function(collection, item) {
+                    for (var i = 0; i < collection.length; i++) try {
+                        if (collection[i] === item) return i;
+                    } catch (err) {}
+                    return -1;
+                }(iframeWindows, win);
+                if (-1 !== iframeIndex) {
+                    var frame = iframeFrames[iframeIndex];
+                    if (frame && function(frame) {
+                        if (!frame.contentWindow) return !0;
+                        if (!frame.parentNode) return !0;
+                        var doc = frame.ownerDocument;
+                        return !(!doc || !doc.body || doc.body.contains(frame));
+                    }(frame)) return !0;
+                }
+                return !1;
+            };
+            __webpack_exports__.d = function(win) {
+                return (win = win || window).navigator.mockUserAgent || win.navigator.userAgent;
+            };
+            __webpack_exports__.b = getAncestor;
+            __webpack_exports__.f = function(parent, child) {
+                var actualParent = getAncestor(child);
+                if (actualParent) return actualParent === parent;
+                if (child === parent) return !1;
+                if (function(win) {
+                    if (win) {
+                        try {
+                            if (win.top) return win.top;
+                        } catch (err) {}
+                        if (getParent(win) === win) return win;
+                        try {
+                            if (isAncestorParent(window, win) && window.top) return window.top;
+                        } catch (err) {}
+                        try {
+                            if (isAncestorParent(win, window) && window.top) return window.top;
+                        } catch (err) {}
+                        for (var _i7 = 0, _getAllChildFrames4 = function getAllChildFrames(win) {
+                            for (var result = [], _i3 = 0, _getFrames2 = getFrames(win), _length2 = null == _getFrames2 ? 0 : _getFrames2.length; _i3 < _length2; _i3++) {
+                                var frame = _getFrames2[_i3];
+                                result.push(frame);
+                                for (var _i5 = 0, _getAllChildFrames2 = getAllChildFrames(frame), _length4 = null == _getAllChildFrames2 ? 0 : _getAllChildFrames2.length; _i5 < _length4; _i5++) {
+                                    var childFrame = _getAllChildFrames2[_i5];
+                                    result.push(childFrame);
+                                }
+                            }
+                            return result;
+                        }(win), _length6 = null == _getAllChildFrames4 ? 0 : _getAllChildFrames4.length; _i7 < _length6; _i7++) {
+                            var frame = _getAllChildFrames4[_i7];
+                            try {
+                                if (frame.top) return frame.top;
+                            } catch (err) {}
+                            if (getParent(frame) === frame) return frame;
+                        }
+                    }
+                }(child) === child) return !1;
+                for (var _i16 = 0, _getFrames8 = getFrames(parent), _length14 = null == _getFrames8 ? 0 : _getFrames8.length; _i16 < _length14; _i16++) if (_getFrames8[_i16] === child) return !0;
+                return !1;
+            };
+            __webpack_exports__.h = function() {
+                return Boolean(getOpener(window));
+            };
+            __webpack_exports__.g = function() {
+                return Boolean(getParent(window));
+            };
+            __webpack_exports__.k = function matchDomain(pattern, origin) {
+                if ("string" == typeof pattern) {
+                    if ("string" == typeof origin) return pattern === CONSTANTS.WILDCARD || origin === pattern;
+                    if (isRegex(origin)) return !1;
+                    if (Array.isArray(origin)) return !1;
+                }
+                return isRegex(pattern) ? isRegex(origin) ? pattern.toString() === origin.toString() : !Array.isArray(origin) && Boolean(origin.match(pattern)) : !!Array.isArray(pattern) && (Array.isArray(origin) ? JSON.stringify(pattern) === JSON.stringify(origin) : !isRegex(origin) && pattern.some(function(subpattern) {
+                    return matchDomain(subpattern, origin);
+                }));
+            };
+            __webpack_exports__.l = function(pattern) {
+                return Array.isArray(pattern) ? "(" + pattern.join(" | ") + ")" : isRegex(pattern) ? "RegExp(" + pattern.toString() : pattern.toString();
+            };
+            __webpack_exports__.i = function(obj) {
+                try {
+                    if (obj === window) return !0;
+                } catch (err) {
+                    if (err && err.message === IE_WIN_ACCESS_ERROR) return !0;
+                }
+                try {
+                    if ("[object Window]" === Object.prototype.toString.call(obj)) return !0;
+                } catch (err) {
+                    if (err && err.message === IE_WIN_ACCESS_ERROR) return !0;
+                }
+                try {
+                    if (window.Window && obj instanceof window.Window) return !0;
+                } catch (err) {
+                    if (err && err.message === IE_WIN_ACCESS_ERROR) return !0;
+                }
+                try {
+                    if (obj && obj.self === obj) return !0;
+                } catch (err) {
+                    if (err && err.message === IE_WIN_ACCESS_ERROR) return !0;
+                }
+                try {
+                    if (obj && obj.parent === obj) return !0;
+                } catch (err) {
+                    if (err && err.message === IE_WIN_ACCESS_ERROR) return !0;
+                }
+                try {
+                    if (obj && obj.top === obj) return !0;
+                } catch (err) {
+                    if (err && err.message === IE_WIN_ACCESS_ERROR) return !0;
+                }
+                try {
+                    obj && obj.__cross_domain_utils_window_check__;
+                } catch (err) {
+                    return !0;
+                }
+                return !1;
+            };
+            var CONSTANTS = {
+                MOCK_PROTOCOL: "mock:",
+                FILE_PROTOCOL: "file:",
+                ABOUT_PROTOCOL: "about:",
+                WILDCARD: "*"
+            }, IE_WIN_ACCESS_ERROR = "Call was rejected by callee.\r\n";
+            function isAboutProtocol() {
+                return (arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : window).location.protocol === CONSTANTS.ABOUT_PROTOCOL;
+            }
+            function getParent(win) {
+                if (win) try {
+                    if (win.parent && win.parent !== win) return win.parent;
+                } catch (err) {}
+            }
+            function getOpener(win) {
+                if (win && !getParent(win)) try {
+                    return win.opener;
+                } catch (err) {}
+            }
+            function canReadFromWindow(win) {
+                try {
+                    win && win.location && win.location.href;
+                    return !0;
+                } catch (err) {}
+                return !1;
+            }
+            function getActualDomain(win) {
+                var location = (win = win || window).location;
+                if (!location) throw new Error("Can not read window location");
+                var protocol = location.protocol;
+                if (!protocol) throw new Error("Can not read window protocol");
+                if (protocol === CONSTANTS.FILE_PROTOCOL) return CONSTANTS.FILE_PROTOCOL + "//";
+                if (protocol === CONSTANTS.ABOUT_PROTOCOL) {
+                    var parent = getParent(win);
+                    return parent && canReadFromWindow(parent) ? getActualDomain(parent) : CONSTANTS.ABOUT_PROTOCOL + "//";
+                }
+                var host = location.host;
+                if (!host) throw new Error("Can not read window host");
+                return protocol + "//" + host;
+            }
+            function getDomain(win) {
+                var domain = getActualDomain(win = win || window);
+                return domain && win.mockDomain && 0 === win.mockDomain.indexOf(CONSTANTS.MOCK_PROTOCOL) ? win.mockDomain : domain;
+            }
+            function isActuallySameDomain(win) {
+                try {
+                    if (win === window) return !0;
+                } catch (err) {}
+                try {
+                    var desc = Object.getOwnPropertyDescriptor(win, "location");
+                    if (desc && !1 === desc.enumerable) return !1;
+                } catch (err) {}
+                try {
+                    if (isAboutProtocol(win) && canReadFromWindow(win)) return !0;
+                } catch (err) {}
+                try {
+                    if (getActualDomain(win) === getActualDomain(window)) return !0;
+                } catch (err) {}
+                return !1;
+            }
+            function isAncestorParent(parent, child) {
+                if (!parent || !child) return !1;
+                var childParent = getParent(child);
+                return childParent ? childParent === parent : -1 !== function(win) {
+                    var result = [];
+                    try {
+                        for (;win.parent !== win; ) {
+                            result.push(win.parent);
+                            win = win.parent;
+                        }
+                    } catch (err) {}
+                    return result;
+                }(child).indexOf(parent);
+            }
+            function getFrames(win) {
+                var result = [], frames = void 0;
+                try {
+                    frames = win.frames;
+                } catch (err) {
+                    frames = win;
+                }
+                var len = void 0;
+                try {
+                    len = frames.length;
+                } catch (err) {}
+                if (0 === len) return result;
+                if (len) {
+                    for (var i = 0; i < len; i++) {
+                        var frame = void 0;
+                        try {
+                            frame = frames[i];
+                        } catch (err) {
+                            continue;
+                        }
+                        result.push(frame);
+                    }
+                    return result;
+                }
+                for (var _i = 0; _i < 100; _i++) {
+                    var _frame = void 0;
+                    try {
+                        _frame = frames[_i];
+                    } catch (err) {
+                        return result;
+                    }
+                    if (!_frame) return result;
+                    result.push(_frame);
+                }
+                return result;
+            }
+            var iframeWindows = [], iframeFrames = [];
+            function getAncestor(win) {
+                return getOpener(win = win || window) || getParent(win) || void 0;
+            }
+        },
+        "./src/index.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            Object.defineProperty(__webpack_exports__, "__esModule", {
+                value: !0
+            });
+            __webpack_require__.d({}, "WeakMap", function() {
+                return weakmap_CrossDomainSafeWeakMap;
+            });
+            var src_interface_namespaceObject = {};
+            __webpack_require__.d(src_interface_namespaceObject, "cleanUpWindow", function() {
+                return cleanUpWindow;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "Promise", function() {
+                return promise_ZalgoPromise;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "bridge", function() {
+                return bridge;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "init", function() {
+                return init;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "parent", function() {
+                return public_parent;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "send", function() {
+                return _send;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "request", function() {
+                return request;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "sendToParent", function() {
+                return sendToParent;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "client", function() {
+                return client;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "on", function() {
+                return _on;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "listen", function() {
+                return listen;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "once", function() {
+                return server_once;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "listener", function() {
+                return server_listener;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "CONFIG", function() {
+                return CONFIG;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "CONSTANTS", function() {
+                return constants_CONSTANTS;
+            });
+            __webpack_require__.d(src_interface_namespaceObject, "disable", function() {
+                return disable;
+            });
+            var src = __webpack_require__("./node_modules/cross-domain-utils/src/index.js");
+            function safeIndexOf(collection, item) {
+                for (var i = 0; i < collection.length; i++) try {
+                    if (collection[i] === item) return i;
+                } catch (err) {}
+                return -1;
+            }
+            var _ALLOWED_POST_MESSAGE, defineProperty = Object.defineProperty, counter = Date.now() % 1e9, weakmap_CrossDomainSafeWeakMap = function() {
+                function CrossDomainSafeWeakMap() {
+                    !function(instance, Constructor) {
+                        if (!(instance instanceof CrossDomainSafeWeakMap)) throw new TypeError("Cannot call a class as a function");
+                    }(this);
+                    counter += 1;
+                    this.name = "__weakmap_" + (1e9 * Math.random() >>> 0) + "__" + counter;
+                    if (function() {
+                        if (!window.WeakMap) return !1;
+                        if (!window.Object.freeze) return !1;
+                        try {
+                            var testWeakMap = new window.WeakMap(), testKey = {};
+                            window.Object.freeze(testKey);
+                            testWeakMap.set(testKey, "__testvalue__");
+                            return "__testvalue__" === testWeakMap.get(testKey);
+                        } catch (err) {
+                            return !1;
+                        }
+                    }()) try {
+                        this.weakmap = new window.WeakMap();
+                    } catch (err) {}
+                    this.keys = [];
+                    this.values = [];
+                }
+                CrossDomainSafeWeakMap.prototype._cleanupClosedWindows = function() {
+                    for (var weakmap = this.weakmap, keys = this.keys, i = 0; i < keys.length; i++) {
+                        var value = keys[i];
+                        if (Object(src.isWindow)(value) && Object(src.isWindowClosed)(value)) {
+                            if (weakmap) try {
+                                weakmap.delete(value);
+                            } catch (err) {}
+                            keys.splice(i, 1);
+                            this.values.splice(i, 1);
+                            i -= 1;
+                        }
+                    }
+                };
+                CrossDomainSafeWeakMap.prototype.isSafeToReadWrite = function(key) {
+                    if (Object(src.isWindow)(key)) return !1;
+                    try {
+                        key && key.self;
+                        key && key[this.name];
+                    } catch (err) {
+                        return !1;
+                    }
+                    return !0;
+                };
+                CrossDomainSafeWeakMap.prototype.set = function(key, value) {
+                    if (!key) throw new Error("WeakMap expected key");
+                    var weakmap = this.weakmap;
+                    if (weakmap) try {
+                        weakmap.set(key, value);
+                    } catch (err) {
+                        delete this.weakmap;
+                    }
+                    if (this.isSafeToReadWrite(key)) {
+                        var name = this.name, entry = key[name];
+                        entry && entry[0] === key ? entry[1] = value : defineProperty(key, name, {
+                            value: [ key, value ],
+                            writable: !0
+                        });
+                    } else {
+                        this._cleanupClosedWindows();
+                        var keys = this.keys, values = this.values, index = safeIndexOf(keys, key);
+                        if (-1 === index) {
+                            keys.push(key);
+                            values.push(value);
+                        } else values[index] = value;
+                    }
+                };
+                CrossDomainSafeWeakMap.prototype.get = function(key) {
+                    if (!key) throw new Error("WeakMap expected key");
+                    var weakmap = this.weakmap;
+                    if (weakmap) try {
+                        if (weakmap.has(key)) return weakmap.get(key);
+                    } catch (err) {
+                        delete this.weakmap;
+                    }
+                    if (!this.isSafeToReadWrite(key)) {
+                        this._cleanupClosedWindows();
+                        var index = safeIndexOf(this.keys, key);
+                        if (-1 === index) return;
+                        return this.values[index];
+                    }
+                    var entry = key[this.name];
+                    if (entry && entry[0] === key) return entry[1];
+                };
+                CrossDomainSafeWeakMap.prototype.delete = function(key) {
+                    if (!key) throw new Error("WeakMap expected key");
+                    var weakmap = this.weakmap;
+                    if (weakmap) try {
+                        weakmap.delete(key);
+                    } catch (err) {
+                        delete this.weakmap;
+                    }
+                    if (this.isSafeToReadWrite(key)) {
+                        var entry = key[this.name];
+                        entry && entry[0] === key && (entry[0] = entry[1] = void 0);
+                    } else {
+                        this._cleanupClosedWindows();
+                        var keys = this.keys, index = safeIndexOf(keys, key);
+                        if (-1 !== index) {
+                            keys.splice(index, 1);
+                            this.values.splice(index, 1);
+                        }
+                    }
+                };
+                CrossDomainSafeWeakMap.prototype.has = function(key) {
+                    if (!key) throw new Error("WeakMap expected key");
+                    var weakmap = this.weakmap;
+                    if (weakmap) try {
+                        return weakmap.has(key);
+                    } catch (err) {
+                        delete this.weakmap;
+                    }
+                    if (this.isSafeToReadWrite(key)) {
+                        var entry = key[this.name];
+                        return !(!entry || entry[0] !== key);
+                    }
+                    this._cleanupClosedWindows();
+                    return -1 !== safeIndexOf(this.keys, key);
+                };
+                return CrossDomainSafeWeakMap;
+            }(), constants_CONSTANTS = {
+                POST_MESSAGE_TYPE: {
+                    REQUEST: "postrobot_message_request",
+                    RESPONSE: "postrobot_message_response",
+                    ACK: "postrobot_message_ack"
+                },
+                POST_MESSAGE_ACK: {
+                    SUCCESS: "success",
+                    ERROR: "error"
+                },
+                POST_MESSAGE_NAMES: {
+                    METHOD: "postrobot_method",
+                    HELLO: "postrobot_ready",
+                    OPEN_TUNNEL: "postrobot_open_tunnel"
+                },
+                WINDOW_TYPES: {
+                    FULLPAGE: "fullpage",
+                    POPUP: "popup",
+                    IFRAME: "iframe"
+                },
+                WINDOW_PROPS: {
+                    POSTROBOT: "__postRobot__"
+                },
+                SERIALIZATION_TYPES: {
+                    METHOD: "postrobot_method",
+                    ERROR: "postrobot_error",
+                    PROMISE: "postrobot_promise",
+                    ZALGO_PROMISE: "postrobot_zalgo_promise",
+                    REGEX: "regex"
+                },
+                SEND_STRATEGIES: {
+                    POST_MESSAGE: "postrobot_post_message",
+                    BRIDGE: "postrobot_bridge",
+                    GLOBAL: "postrobot_global"
+                },
+                MOCK_PROTOCOL: "mock:",
+                FILE_PROTOCOL: "file:",
+                BRIDGE_NAME_PREFIX: "__postrobot_bridge__",
+                POSTROBOT_PROXY: "__postrobot_proxy__",
+                WILDCARD: "*"
+            }, POST_MESSAGE_NAMES = {
+                METHOD: "postrobot_method",
+                HELLO: "postrobot_hello",
+                OPEN_TUNNEL: "postrobot_open_tunnel"
+            }, CONFIG = (Object.keys(POST_MESSAGE_NAMES).map(function(key) {
+                return POST_MESSAGE_NAMES[key];
+            }), {
+                ALLOW_POSTMESSAGE_POPUP: !("__ALLOW_POSTMESSAGE_POPUP__" in window) || window.__ALLOW_POSTMESSAGE_POPUP__,
+                BRIDGE_TIMEOUT: 5e3,
+                CHILD_WINDOW_TIMEOUT: 5e3,
+                ACK_TIMEOUT: -1 !== window.navigator.userAgent.match(/MSIE/i) ? 2e3 : 1e3,
+                RES_TIMEOUT: -1,
+                ALLOWED_POST_MESSAGE_METHODS: (_ALLOWED_POST_MESSAGE = {}, _ALLOWED_POST_MESSAGE[constants_CONSTANTS.SEND_STRATEGIES.POST_MESSAGE] = !0, 
+                _ALLOWED_POST_MESSAGE[constants_CONSTANTS.SEND_STRATEGIES.BRIDGE] = !0, _ALLOWED_POST_MESSAGE[constants_CONSTANTS.SEND_STRATEGIES.GLOBAL] = !0, 
+                _ALLOWED_POST_MESSAGE),
+                ALLOW_SAME_ORIGIN: !1
+            });
+            0 === window.location.href.indexOf(constants_CONSTANTS.FILE_PROTOCOL) && (CONFIG.ALLOW_POSTMESSAGE_POPUP = !0);
+            var _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+                return typeof obj;
+            } : function(obj) {
+                return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
+            function stringifyError(err) {
+                var level = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : 1;
+                if (level >= 3) return "stringifyError stack overflow";
+                try {
+                    if (!err) return "<unknown error: " + Object.prototype.toString.call(err) + ">";
+                    if ("string" == typeof err) return err;
+                    if (err instanceof Error) {
+                        var stack = err && err.stack, message = err && err.message;
+                        if (stack && message) return -1 !== stack.indexOf(message) ? stack : message + "\n" + stack;
+                        if (stack) return stack;
+                        if (message) return message;
+                    }
+                    return "function" == typeof err.toString ? err.toString() : Object.prototype.toString.call(err);
+                } catch (newErr) {
+                    return "Error while stringifying error: " + stringifyError(newErr, level + 1);
+                }
+            }
+            var once = function(method) {
+                if (!method) return method;
+                var called = !1;
+                return function() {
+                    if (!called) {
+                        called = !0;
+                        return method.apply(this, arguments);
+                    }
+                };
+            };
+            function util_noop() {}
+            function uniqueID() {
+                var chars = "0123456789abcdef";
+                return "xxxxxxxxxx".replace(/./g, function() {
+                    return chars.charAt(Math.floor(Math.random() * chars.length));
+                });
+            }
+            function replaceObject(item, callback) {
+                var depth = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 1;
+                if (depth >= 100) throw new Error("Self-referential object passed, or object contained too many layers");
+                var newobj = void 0;
+                if ("object" !== (void 0 === item ? "undefined" : _typeof(item)) || null === item || Array.isArray(item)) {
+                    if (!Array.isArray(item)) throw new TypeError("Invalid type: " + (void 0 === item ? "undefined" : _typeof(item)));
+                    newobj = [];
+                } else newobj = {};
+                !function(item, callback) {
+                    Array.isArray(item) ? function(item, callback) {
+                        for (var i = 0; i < item.length; i++) callback(item[i], i);
+                    }(item, callback) : "object" === (void 0 === item ? "undefined" : _typeof(item)) && null !== item && function(item, callback) {
+                        for (var _key in item) item.hasOwnProperty(_key) && callback(item[_key], _key);
+                    }(item, callback);
+                }(item, function(childItem, key) {
+                    var result = callback(childItem, key);
+                    void 0 !== result ? newobj[key] = result : "object" === (void 0 === childItem ? "undefined" : _typeof(childItem)) && null !== childItem ? newobj[key] = replaceObject(childItem, callback, depth + 1) : newobj[key] = childItem;
+                });
+                return newobj;
+            }
+            function isRegex(item) {
+                return "[object RegExp]" === Object.prototype.toString.call(item);
+            }
+            function utils_isPromise(item) {
+                try {
+                    if (!item) return !1;
+                    if ("undefined" != typeof Promise && item instanceof Promise) return !0;
+                    if ("undefined" != typeof window && window.Window && item instanceof window.Window) return !1;
+                    if ("undefined" != typeof window && window.constructor && item instanceof window.constructor) return !1;
+                    var _toString = {}.toString;
+                    if (_toString) {
+                        var name = _toString.call(item);
+                        if ("[object Window]" === name || "[object global]" === name || "[object DOMWindow]" === name) return !1;
+                    }
+                    if ("function" == typeof item.then) return !0;
+                } catch (err) {
+                    return !1;
+                }
+                return !1;
+            }
+            function getGlobal() {
+                var glob = void 0;
+                if ("undefined" != typeof window) glob = window; else {
+                    if ("undefined" == typeof window) throw new TypeError("Can not find global");
+                    glob = window;
+                }
+                var zalgoGlobal = glob.__zalgopromise__ = glob.__zalgopromise__ || {};
+                zalgoGlobal.flushPromises = zalgoGlobal.flushPromises || [];
+                zalgoGlobal.activeCount = zalgoGlobal.activeCount || 0;
+                zalgoGlobal.possiblyUnhandledPromiseHandlers = zalgoGlobal.possiblyUnhandledPromiseHandlers || [];
+                zalgoGlobal.dispatchedErrors = zalgoGlobal.dispatchedErrors || [];
+                return zalgoGlobal;
+            }
+            var promise_ZalgoPromise = function() {
+                function ZalgoPromise(handler) {
+                    var _this = this;
+                    !function(instance, Constructor) {
+                        if (!(instance instanceof ZalgoPromise)) throw new TypeError("Cannot call a class as a function");
+                    }(this);
+                    this.resolved = !1;
+                    this.rejected = !1;
+                    this.errorHandled = !1;
+                    this.handlers = [];
+                    if (handler) {
+                        var _result = void 0, _error = void 0, resolved = !1, rejected = !1, isAsync = !1;
+                        try {
+                            handler(function(res) {
+                                if (isAsync) _this.resolve(res); else {
+                                    resolved = !0;
+                                    _result = res;
+                                }
+                            }, function(err) {
+                                if (isAsync) _this.reject(err); else {
+                                    rejected = !0;
+                                    _error = err;
+                                }
+                            });
+                        } catch (err) {
+                            this.reject(err);
+                            return;
+                        }
+                        isAsync = !0;
+                        resolved ? this.resolve(_result) : rejected && this.reject(_error);
+                    }
+                }
+                ZalgoPromise.prototype.resolve = function(result) {
+                    if (this.resolved || this.rejected) return this;
+                    if (utils_isPromise(result)) throw new Error("Can not resolve promise with another promise");
+                    this.resolved = !0;
+                    this.value = result;
+                    this.dispatch();
+                    return this;
+                };
+                ZalgoPromise.prototype.reject = function(error) {
+                    var _this2 = this;
+                    if (this.resolved || this.rejected) return this;
+                    if (utils_isPromise(error)) throw new Error("Can not reject promise with another promise");
+                    if (!error) {
+                        var _err = error && "function" == typeof error.toString ? error.toString() : Object.prototype.toString.call(error);
+                        error = new Error("Expected reject to be called with Error, got " + _err);
+                    }
+                    this.rejected = !0;
+                    this.error = error;
+                    this.errorHandled || setTimeout(function() {
+                        _this2.errorHandled || function(err, promise) {
+                            if (-1 === getGlobal().dispatchedErrors.indexOf(err)) {
+                                getGlobal().dispatchedErrors.push(err);
+                                setTimeout(function() {
+                                    throw err;
+                                }, 1);
+                                for (var j = 0; j < getGlobal().possiblyUnhandledPromiseHandlers.length; j++) getGlobal().possiblyUnhandledPromiseHandlers[j](err, promise);
+                            }
+                        }(error, _this2);
+                    }, 1);
+                    this.dispatch();
+                    return this;
+                };
+                ZalgoPromise.prototype.asyncReject = function(error) {
+                    this.errorHandled = !0;
+                    this.reject(error);
+                };
+                ZalgoPromise.prototype.dispatch = function() {
+                    var _this3 = this, dispatching = this.dispatching, resolved = this.resolved, rejected = this.rejected, handlers = this.handlers;
+                    if (!dispatching && (resolved || rejected)) {
+                        this.dispatching = !0;
+                        getGlobal().activeCount += 1;
+                        for (var _loop = function(i) {
+                            var _handlers$i = handlers[i], onSuccess = _handlers$i.onSuccess, onError = _handlers$i.onError, promise = _handlers$i.promise, result = void 0;
+                            if (resolved) try {
+                                result = onSuccess ? onSuccess(_this3.value) : _this3.value;
+                            } catch (err) {
+                                promise.reject(err);
+                                return "continue";
+                            } else if (rejected) {
+                                if (!onError) {
+                                    promise.reject(_this3.error);
+                                    return "continue";
+                                }
+                                try {
+                                    result = onError(_this3.error);
+                                } catch (err) {
+                                    promise.reject(err);
+                                    return "continue";
+                                }
+                            }
+                            if (result instanceof ZalgoPromise && (result.resolved || result.rejected)) {
+                                result.resolved ? promise.resolve(result.value) : promise.reject(result.error);
+                                result.errorHandled = !0;
+                            } else utils_isPromise(result) ? result instanceof ZalgoPromise && (result.resolved || result.rejected) ? result.resolved ? promise.resolve(result.value) : promise.reject(result.error) : result.then(function(res) {
+                                promise.resolve(res);
+                            }, function(err) {
+                                promise.reject(err);
+                            }) : promise.resolve(result);
+                        }, i = 0; i < handlers.length; i++) _loop(i);
+                        handlers.length = 0;
+                        this.dispatching = !1;
+                        getGlobal().activeCount -= 1;
+                        0 === getGlobal().activeCount && ZalgoPromise.flushQueue();
+                    }
+                };
+                ZalgoPromise.prototype.then = function(onSuccess, onError) {
+                    if (onSuccess && "function" != typeof onSuccess && !onSuccess.call) throw new Error("Promise.then expected a function for success handler");
+                    if (onError && "function" != typeof onError && !onError.call) throw new Error("Promise.then expected a function for error handler");
+                    var promise = new ZalgoPromise();
+                    this.handlers.push({
+                        promise: promise,
+                        onSuccess: onSuccess,
+                        onError: onError
+                    });
+                    this.errorHandled = !0;
+                    this.dispatch();
+                    return promise;
+                };
+                ZalgoPromise.prototype.catch = function(onError) {
+                    return this.then(void 0, onError);
+                };
+                ZalgoPromise.prototype.finally = function(onFinally) {
+                    if (onFinally && "function" != typeof onFinally && !onFinally.call) throw new Error("Promise.finally expected a function");
+                    return this.then(function(result) {
+                        return ZalgoPromise.try(onFinally).then(function() {
+                            return result;
+                        });
+                    }, function(err) {
+                        return ZalgoPromise.try(onFinally).then(function() {
+                            throw err;
+                        });
+                    });
+                };
+                ZalgoPromise.prototype.timeout = function(time, err) {
+                    var _this4 = this;
+                    if (this.resolved || this.rejected) return this;
+                    var timeout = setTimeout(function() {
+                        _this4.resolved || _this4.rejected || _this4.reject(err || new Error("Promise timed out after " + time + "ms"));
+                    }, time);
+                    return this.then(function(result) {
+                        clearTimeout(timeout);
+                        return result;
+                    });
+                };
+                ZalgoPromise.prototype.toPromise = function() {
+                    if ("undefined" == typeof Promise) throw new TypeError("Could not find Promise");
+                    return Promise.resolve(this);
+                };
+                ZalgoPromise.resolve = function(value) {
+                    return value instanceof ZalgoPromise ? value : utils_isPromise(value) ? new ZalgoPromise(function(resolve, reject) {
+                        return value.then(resolve, reject);
+                    }) : new ZalgoPromise().resolve(value);
+                };
+                ZalgoPromise.reject = function(error) {
+                    return new ZalgoPromise().reject(error);
+                };
+                ZalgoPromise.all = function(promises) {
+                    var promise = new ZalgoPromise(), count = promises.length, results = [];
+                    if (!count) {
+                        promise.resolve(results);
+                        return promise;
+                    }
+                    for (var _loop2 = function(i) {
+                        var prom = promises[i];
+                        if (prom instanceof ZalgoPromise) {
+                            if (prom.resolved) {
+                                results[i] = prom.value;
+                                count -= 1;
+                                return "continue";
+                            }
+                        } else if (!utils_isPromise(prom)) {
+                            results[i] = prom;
+                            count -= 1;
+                            return "continue";
+                        }
+                        ZalgoPromise.resolve(prom).then(function(result) {
+                            results[i] = result;
+                            0 == (count -= 1) && promise.resolve(results);
+                        }, function(err) {
+                            promise.reject(err);
+                        });
+                    }, i = 0; i < promises.length; i++) _loop2(i);
+                    0 === count && promise.resolve(results);
+                    return promise;
+                };
+                ZalgoPromise.hash = function(promises) {
+                    var result = {};
+                    return ZalgoPromise.all(Object.keys(promises).map(function(key) {
+                        return ZalgoPromise.resolve(promises[key]).then(function(value) {
+                            result[key] = value;
+                        });
+                    })).then(function() {
+                        return result;
+                    });
+                };
+                ZalgoPromise.map = function(items, method) {
+                    return ZalgoPromise.all(items.map(method));
+                };
+                ZalgoPromise.onPossiblyUnhandledException = function(handler) {
+                    return function(handler) {
+                        getGlobal().possiblyUnhandledPromiseHandlers.push(handler);
+                        return {
+                            cancel: function() {
+                                getGlobal().possiblyUnhandledPromiseHandlers.splice(getGlobal().possiblyUnhandledPromiseHandlers.indexOf(handler), 1);
+                            }
+                        };
+                    }(handler);
+                };
+                ZalgoPromise.try = function(method, context, args) {
+                    if (method && "function" != typeof method && !method.call) throw new Error("Promise.try expected a function");
+                    var result = void 0;
+                    try {
+                        result = method.apply(context, args || []);
+                    } catch (err) {
+                        return ZalgoPromise.reject(err);
+                    }
+                    return ZalgoPromise.resolve(result);
+                };
+                ZalgoPromise.delay = function(_delay) {
+                    return new ZalgoPromise(function(resolve) {
+                        setTimeout(resolve, _delay);
+                    });
+                };
+                ZalgoPromise.isPromise = function(value) {
+                    return !!(value && value instanceof ZalgoPromise) || utils_isPromise(value);
+                };
+                ZalgoPromise.flush = function() {
+                    var promise = new ZalgoPromise();
+                    getGlobal().flushPromises.push(promise);
+                    0 === getGlobal().activeCount && ZalgoPromise.flushQueue();
+                    return promise;
+                };
+                ZalgoPromise.flushQueue = function() {
+                    var promisesToFlush = getGlobal().flushPromises;
+                    getGlobal().flushPromises = [];
+                    for (var _i2 = 0, _length2 = null == promisesToFlush ? 0 : promisesToFlush.length; _i2 < _length2; _i2++) promisesToFlush[_i2].resolve();
+                };
+                return ZalgoPromise;
+            }(), global = window[constants_CONSTANTS.WINDOW_PROPS.POSTROBOT] = window[constants_CONSTANTS.WINDOW_PROPS.POSTROBOT] || {};
+            global.registerSelf = function() {};
+            var serialize__typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+                return typeof obj;
+            } : function(obj) {
+                return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
+            global.methods = global.methods || new weakmap_CrossDomainSafeWeakMap();
+            var listenForMethods = once(function() {
+                global.on(constants_CONSTANTS.POST_MESSAGE_NAMES.METHOD, {
+                    origin: constants_CONSTANTS.WILDCARD
+                }, function(_ref) {
+                    var source = _ref.source, origin = _ref.origin, data = _ref.data, methods = global.methods.get(source);
+                    if (!methods) throw new Error("Could not find any methods this window has privileges to call");
+                    var meth = methods[data.id];
+                    if (!meth) throw new Error("Could not find method with id: " + data.id);
+                    if (!Object(src.matchDomain)(meth.domain, origin)) throw new Error("Method domain " + meth.domain + " does not match origin " + origin);
+                    return promise_ZalgoPromise.try(function() {
+                        return meth.method.apply({
+                            source: source,
+                            origin: origin,
+                            data: data
+                        }, data.args);
+                    }).then(function(result) {
+                        return {
+                            result: result,
+                            id: data.id,
+                            name: data.name
+                        };
+                    });
+                });
+            });
+            function isSerialized(item, type) {
+                return "object" === (void 0 === item ? "undefined" : serialize__typeof(item)) && null !== item && item.__type__ === type;
+            }
+            function serializeMethod(destination, domain, method, name) {
+                var id = uniqueID(), methods = global.methods.get(destination);
+                if (!methods) {
+                    methods = {};
+                    global.methods.set(destination, methods);
+                }
+                methods[id] = {
+                    domain: domain,
+                    method: method
+                };
+                return {
+                    __type__: constants_CONSTANTS.SERIALIZATION_TYPES.METHOD,
+                    __id__: id,
+                    __name__: name
+                };
+            }
+            function deserializeMethod(source, origin, obj) {
+                function wrapper() {
+                    var args = Array.prototype.slice.call(arguments);
+                    return global.send(source, constants_CONSTANTS.POST_MESSAGE_NAMES.METHOD, {
+                        id: obj.__id__,
+                        name: obj.__name__,
+                        args: args
+                    }, {
+                        domain: origin,
+                        timeout: -1
+                    }).then(function(_ref2) {
+                        return _ref2.data.result;
+                    }, function(err) {
+                        throw err;
+                    });
+                }
+                wrapper.__name__ = obj.__name__;
+                wrapper.__xdomain__ = !0;
+                wrapper.source = source;
+                wrapper.origin = origin;
+                return wrapper;
+            }
+            function deserializeZalgoPromise(source, origin, prom) {
+                return new promise_ZalgoPromise(function(resolve, reject) {
+                    return deserializeMethod(source, origin, prom.__then__)(resolve, reject);
+                });
+            }
+            global.readyPromises = global.readyPromises || new weakmap_CrossDomainSafeWeakMap();
+            function sayHello(win) {
+                return global.send(win, constants_CONSTANTS.POST_MESSAGE_NAMES.HELLO, {}, {
+                    domain: constants_CONSTANTS.WILDCARD,
+                    timeout: -1
+                }).then(function(_ref2) {
+                    return {
+                        origin: _ref2.origin
+                    };
+                });
+            }
+            var SEND_MESSAGE_STRATEGIES = {};
+            SEND_MESSAGE_STRATEGIES[constants_CONSTANTS.SEND_STRATEGIES.POST_MESSAGE] = function(win, serializedMessage, domain) {
+                (Array.isArray(domain) ? domain : "string" == typeof domain ? [ domain ] : [ constants_CONSTANTS.WILDCARD ]).map(function(dom) {
+                    if (0 === dom.indexOf(constants_CONSTANTS.MOCK_PROTOCOL)) {
+                        if (window.location.protocol === constants_CONSTANTS.FILE_PROTOCOL) return constants_CONSTANTS.WILDCARD;
+                        if (!Object(src.isActuallySameDomain)(win)) throw new Error("Attempting to send messsage to mock domain " + dom + ", but window is actually cross-domain");
+                        return Object(src.getActualDomain)(win);
+                    }
+                    return 0 === dom.indexOf(constants_CONSTANTS.FILE_PROTOCOL) ? constants_CONSTANTS.WILDCARD : dom;
+                }).forEach(function(dom) {
+                    return win.postMessage(serializedMessage, dom);
+                });
+            };
+            var _extends = Object.assign || function(target) {
+                for (var i = 1; i < arguments.length; i++) {
+                    var source = arguments[i];
+                    for (var key in source) Object.prototype.hasOwnProperty.call(source, key) && (target[key] = source[key]);
+                }
+                return target;
+            };
+            function sendMessage(win, message, domain) {
+                return promise_ZalgoPromise.try(function() {
+                    var _jsonStringify;
+                    message = function(win, message) {
+                        var options = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}, id = uniqueID(), type = Object(src.isPopup)() ? constants_CONSTANTS.WINDOW_TYPES.POPUP : Object(src.isIframe)() ? constants_CONSTANTS.WINDOW_TYPES.IFRAME : constants_CONSTANTS.WINDOW_TYPES.FULLPAGE, sourceDomain = Object(src.getDomain)(window);
+                        return _extends({}, message, options, {
+                            sourceDomain: sourceDomain,
+                            id: message.id || id,
+                            windowType: type
+                        });
+                    }(win, message, {
+                        data: function(destination, domain, obj) {
+                            return replaceObject({
+                                obj: message.data
+                            }, function(item, key) {
+                                return "function" == typeof item ? serializeMethod(destination, domain, item, key.toString()) : item instanceof Error ? (err = item, 
+                                {
+                                    __type__: constants_CONSTANTS.SERIALIZATION_TYPES.ERROR,
+                                    __message__: stringifyError(err),
+                                    __code__: err.code
+                                }) : window.Promise && item instanceof window.Promise ? function(destination, domain, promise, name) {
+                                    return {
+                                        __type__: constants_CONSTANTS.SERIALIZATION_TYPES.PROMISE,
+                                        __then__: serializeMethod(destination, domain, function(resolve, reject) {
+                                            return promise.then(resolve, reject);
+                                        }, name + ".then")
+                                    };
+                                }(destination, domain, item, key.toString()) : promise_ZalgoPromise.isPromise(item) ? function(destination, domain, promise, name) {
+                                    return {
+                                        __type__: constants_CONSTANTS.SERIALIZATION_TYPES.ZALGO_PROMISE,
+                                        __then__: serializeMethod(destination, domain, function(resolve, reject) {
+                                            return promise.then(resolve, reject);
+                                        }, name + ".then")
+                                    };
+                                }(destination, domain, item, key.toString()) : isRegex(item) ? (regex = item, {
+                                    __type__: constants_CONSTANTS.SERIALIZATION_TYPES.REGEX,
+                                    __source__: regex.source
+                                }) : void 0;
+                                var err, regex;
+                            }).obj;
+                        }(win, domain),
+                        domain: domain
+                    });
+                    if (win === window && !CONFIG.ALLOW_SAME_ORIGIN) throw new Error("Attemping to send message to self");
+                    if (Object(src.isWindowClosed)(win)) throw new Error("Window is closed");
+                    var messages = [], serializedMessage = function(obj, replacer, indent) {
+                        var objectToJSON = void 0, arrayToJSON = void 0;
+                        try {
+                            if ("{}" !== JSON.stringify({})) {
+                                objectToJSON = Object.prototype.toJSON;
+                                delete Object.prototype.toJSON;
+                            }
+                            if ("{}" !== JSON.stringify({})) throw new Error("Can not correctly serialize JSON objects");
+                            if ("[]" !== JSON.stringify([])) {
+                                arrayToJSON = Array.prototype.toJSON;
+                                delete Array.prototype.toJSON;
+                            }
+                            if ("[]" !== JSON.stringify([])) throw new Error("Can not correctly serialize JSON objects");
+                        } catch (err) {
+                            throw new Error("Can not repair JSON.stringify: " + err.message);
+                        }
+                        var result = JSON.stringify.call(this, obj, null, 2);
+                        try {
+                            objectToJSON && (Object.prototype.toJSON = objectToJSON);
+                            arrayToJSON && (Array.prototype.toJSON = arrayToJSON);
+                        } catch (err) {
+                            throw new Error("Can not repair JSON.stringify: " + err.message);
+                        }
+                        return result;
+                    }(((_jsonStringify = {})[constants_CONSTANTS.WINDOW_PROPS.POSTROBOT] = message, 
+                    _jsonStringify));
+                    return promise_ZalgoPromise.map(Object.keys(SEND_MESSAGE_STRATEGIES), function(strategyName) {
+                        return promise_ZalgoPromise.try(function() {
+                            if (!CONFIG.ALLOWED_POST_MESSAGE_METHODS[strategyName]) throw new Error("Strategy disallowed: " + strategyName);
+                            return SEND_MESSAGE_STRATEGIES[strategyName](win, serializedMessage, domain);
+                        }).then(function() {
+                            messages.push(strategyName + ": success");
+                            return !0;
+                        }, function(err) {
+                            messages.push(strategyName + ": " + stringifyError(err) + "\n");
+                            return !1;
+                        });
+                    }).then(function(results) {
+                        var success = results.some(Boolean), status = message.type + " " + message.name + " " + (success ? "success" : "error") + ":\n  - " + messages.join("\n  - ") + "\n";
+                        if (!success) throw new Error(status);
+                    });
+                });
+            }
+            global.responseListeners = global.responseListeners || {};
+            global.requestListeners = global.requestListeners || {};
+            global.WINDOW_WILDCARD = global.WINDOW_WILDCARD || new function() {}();
+            global.erroredResponseListeners = global.erroredResponseListeners || {};
+            var _RECEIVE_MESSAGE_TYPE, __DOMAIN_REGEX__ = "__domain_regex__";
+            function getResponseListener(hash) {
+                return global.responseListeners[hash];
+            }
+            function deleteResponseListener(hash) {
+                delete global.responseListeners[hash];
+            }
+            function isResponseListenerErrored(hash) {
+                return Boolean(global.erroredResponseListeners[hash]);
+            }
+            function getRequestListener(_ref) {
+                var name = _ref.name, win = _ref.win, domain = _ref.domain;
+                win === constants_CONSTANTS.WILDCARD && (win = null);
+                domain === constants_CONSTANTS.WILDCARD && (domain = null);
+                if (!name) throw new Error("Name required to get request listener");
+                var nameListeners = global.requestListeners[name];
+                if (nameListeners) for (var _i2 = 0, _ref3 = [ win, global.WINDOW_WILDCARD ], _length2 = null == _ref3 ? 0 : _ref3.length; _i2 < _length2; _i2++) {
+                    var winQualifier = _ref3[_i2], winListeners = winQualifier && nameListeners.get(winQualifier);
+                    if (winListeners) {
+                        if (domain && "string" == typeof domain) {
+                            if (winListeners[domain]) return winListeners[domain];
+                            if (winListeners[__DOMAIN_REGEX__]) for (var _i4 = 0, _winListeners$__DOMAI2 = winListeners[__DOMAIN_REGEX__], _length4 = null == _winListeners$__DOMAI2 ? 0 : _winListeners$__DOMAI2.length; _i4 < _length4; _i4++) {
+                                var _ref5 = _winListeners$__DOMAI2[_i4], regex = _ref5.regex, listener = _ref5.listener;
+                                if (Object(src.matchDomain)(regex, domain)) return listener;
+                            }
+                        }
+                        if (winListeners[constants_CONSTANTS.WILDCARD]) return winListeners[constants_CONSTANTS.WILDCARD];
+                    }
+                }
+            }
+            var types__extends = Object.assign || function(target) {
+                for (var i = 1; i < arguments.length; i++) {
+                    var source = arguments[i];
+                    for (var key in source) Object.prototype.hasOwnProperty.call(source, key) && (target[key] = source[key]);
+                }
+                return target;
+            }, RECEIVE_MESSAGE_TYPES = ((_RECEIVE_MESSAGE_TYPE = {})[constants_CONSTANTS.POST_MESSAGE_TYPE.ACK] = function(source, origin, message) {
+                if (!isResponseListenerErrored(message.hash)) {
+                    var options = getResponseListener(message.hash);
+                    if (!options) throw new Error("No handler found for post message ack for message: " + message.name + " from " + origin + " in " + window.location.protocol + "//" + window.location.host + window.location.pathname);
+                    if (!Object(src.matchDomain)(options.domain, origin)) throw new Error("Ack origin " + origin + " does not match domain " + options.domain.toString());
+                    options.ack = !0;
+                }
+            }, _RECEIVE_MESSAGE_TYPE[constants_CONSTANTS.POST_MESSAGE_TYPE.REQUEST] = function(source, origin, message) {
+                var options = getRequestListener({
+                    name: message.name,
+                    win: source,
+                    domain: origin
+                });
+                function respond(data) {
+                    return message.fireAndForget || Object(src.isWindowClosed)(source) ? promise_ZalgoPromise.resolve() : sendMessage(source, types__extends({
+                        target: message.originalSource,
+                        hash: message.hash,
+                        name: message.name
+                    }, data), origin);
+                }
+                return promise_ZalgoPromise.all([ respond({
+                    type: constants_CONSTANTS.POST_MESSAGE_TYPE.ACK
+                }), promise_ZalgoPromise.try(function() {
+                    if (!options) throw new Error("No handler found for post message: " + message.name + " from " + origin + " in " + window.location.protocol + "//" + window.location.host + window.location.pathname);
+                    if (!Object(src.matchDomain)(options.domain, origin)) throw new Error("Request origin " + origin + " does not match domain " + options.domain.toString());
+                    var data = message.data;
+                    return options.handler({
+                        source: source,
+                        origin: origin,
+                        data: data
+                    });
+                }).then(function(data) {
+                    return respond({
+                        type: constants_CONSTANTS.POST_MESSAGE_TYPE.RESPONSE,
+                        ack: constants_CONSTANTS.POST_MESSAGE_ACK.SUCCESS,
+                        data: data
+                    });
+                }, function(err) {
+                    var error = stringifyError(err).replace(/^Error: /, ""), code = err.code;
+                    return respond({
+                        type: constants_CONSTANTS.POST_MESSAGE_TYPE.RESPONSE,
+                        ack: constants_CONSTANTS.POST_MESSAGE_ACK.ERROR,
+                        error: error,
+                        code: code
+                    });
+                }) ]).then(util_noop).catch(function(err) {
+                    if (options && options.handleError) return options.handleError(err);
+                    throw err;
+                });
+            }, _RECEIVE_MESSAGE_TYPE[constants_CONSTANTS.POST_MESSAGE_TYPE.RESPONSE] = function(source, origin, message) {
+                if (!isResponseListenerErrored(message.hash)) {
+                    var options = getResponseListener(message.hash);
+                    if (!options) throw new Error("No handler found for post message response for message: " + message.name + " from " + origin + " in " + window.location.protocol + "//" + window.location.host + window.location.pathname);
+                    if (!Object(src.matchDomain)(options.domain, origin)) throw new Error("Response origin " + origin + " does not match domain " + Object(src.stringifyDomainPattern)(options.domain));
+                    deleteResponseListener(message.hash);
+                    if (message.ack === constants_CONSTANTS.POST_MESSAGE_ACK.ERROR) {
+                        var err = new Error(message.error);
+                        message.code && (err.code = message.code);
+                        return options.respond(err, null);
+                    }
+                    if (message.ack === constants_CONSTANTS.POST_MESSAGE_ACK.SUCCESS) {
+                        var data = message.data || message.response;
+                        return options.respond(null, {
+                            source: source,
+                            origin: origin,
+                            data: data
+                        });
+                    }
+                }
+            }, _RECEIVE_MESSAGE_TYPE), receive__typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+                return typeof obj;
+            } : function(obj) {
+                return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
+            global.receivedMessages = global.receivedMessages || [];
+            function receiveMessage(event) {
+                if (!window || window.closed) throw new Error("Message recieved in closed window");
+                try {
+                    if (!event.source) return;
+                } catch (err) {
+                    return;
+                }
+                var source = event.source, origin = event.origin, message = function(message) {
+                    var item, parsedMessage = void 0;
+                    try {
+                        parsedMessage = (item = message, JSON.parse(item));
+                    } catch (err) {
+                        return;
+                    }
+                    if (parsedMessage && "object" === (void 0 === parsedMessage ? "undefined" : receive__typeof(parsedMessage)) && null !== parsedMessage && (parsedMessage = parsedMessage[constants_CONSTANTS.WINDOW_PROPS.POSTROBOT]) && "object" === (void 0 === parsedMessage ? "undefined" : receive__typeof(parsedMessage)) && null !== parsedMessage && parsedMessage.type && "string" == typeof parsedMessage.type && RECEIVE_MESSAGE_TYPES[parsedMessage.type]) return parsedMessage;
+                }(event.data);
+                if (message) {
+                    if (!message.sourceDomain || "string" != typeof message.sourceDomain) throw new Error("Expected message to have sourceDomain");
+                    0 !== message.sourceDomain.indexOf(constants_CONSTANTS.MOCK_PROTOCOL) && 0 !== message.sourceDomain.indexOf(constants_CONSTANTS.FILE_PROTOCOL) || (origin = message.sourceDomain);
+                    if (-1 === global.receivedMessages.indexOf(message.id)) {
+                        global.receivedMessages.push(message.id);
+                        if (!Object(src.isWindowClosed)(source) || message.fireAndForget) {
+                            message.data && (message.data = function(source, origin, obj) {
+                                return replaceObject({
+                                    obj: message.data
+                                }, function(item) {
+                                    if ("object" === (void 0 === item ? "undefined" : serialize__typeof(item)) && null !== item) return isSerialized(item, constants_CONSTANTS.SERIALIZATION_TYPES.METHOD) ? deserializeMethod(source, origin, item) : isSerialized(item, constants_CONSTANTS.SERIALIZATION_TYPES.ERROR) ? function(source, origin, obj) {
+                                        var err = new Error(obj.__message__);
+                                        obj.__code__ && (err.code = obj.__code__);
+                                        return err;
+                                    }(0, 0, item) : isSerialized(item, constants_CONSTANTS.SERIALIZATION_TYPES.PROMISE) ? function(source, origin, prom) {
+                                        return window.Promise ? new window.Promise(function(resolve, reject) {
+                                            return deserializeMethod(source, origin, prom.__then__)(resolve, reject);
+                                        }) : deserializeZalgoPromise(source, origin, prom);
+                                    }(source, origin, item) : isSerialized(item, constants_CONSTANTS.SERIALIZATION_TYPES.ZALGO_PROMISE) ? deserializeZalgoPromise(source, origin, item) : isSerialized(item, constants_CONSTANTS.SERIALIZATION_TYPES.REGEX) ? function(source, origin, item) {
+                                        return new RegExp(item.__source__);
+                                    }(0, 0, item) : void 0;
+                                }).obj;
+                            }(source, origin));
+                            RECEIVE_MESSAGE_TYPES[message.type](source, origin, message);
+                        }
+                    }
+                }
+            }
+            function messageListener(event) {
+                try {
+                    event.source;
+                } catch (err) {
+                    return;
+                }
+                receiveMessage({
+                    source: event.source || event.sourceElement,
+                    origin: event.origin || event.originalEvent && event.originalEvent.origin,
+                    data: event.data
+                });
+            }
+            global.receiveMessage = receiveMessage;
+            global.requestPromises = global.requestPromises || new weakmap_CrossDomainSafeWeakMap();
+            function request(options) {
+                return promise_ZalgoPromise.try(function() {
+                    if (!options.name) throw new Error("Expected options.name");
+                    var name = options.name, targetWindow = void 0, domain = void 0;
+                    if ("string" == typeof options.window) {
+                        var el = document.getElementById(options.window);
+                        if (!el) throw new Error("Expected options.window " + Object.prototype.toString.call(options.window) + " to be a valid element id");
+                        if ("iframe" !== el.tagName.toLowerCase()) throw new Error("Expected options.window " + Object.prototype.toString.call(options.window) + " to be an iframe");
+                        if (!el.contentWindow) throw new Error("Iframe must have contentWindow.  Make sure it has a src attribute and is in the DOM.");
+                        targetWindow = el.contentWindow;
+                    } else if (options.window instanceof HTMLIFrameElement) {
+                        if ("iframe" !== options.window.tagName.toLowerCase()) throw new Error("Expected options.window " + Object.prototype.toString.call(options.window) + " to be an iframe");
+                        if (options.window && !options.window.contentWindow) throw new Error("Iframe must have contentWindow.  Make sure it has a src attribute and is in the DOM.");
+                        options.window && options.window.contentWindow && (targetWindow = options.window.contentWindow);
+                    } else targetWindow = options.window;
+                    if (!targetWindow) throw new Error("Expected options.window to be a window object, iframe, or iframe element id.");
+                    var win = targetWindow;
+                    domain = options.domain || constants_CONSTANTS.WILDCARD;
+                    var hash = options.name + "_" + uniqueID();
+                    if (Object(src.isWindowClosed)(win)) throw new Error("Target window is closed");
+                    var hasResult = !1, requestPromises = global.requestPromises.get(win);
+                    if (!requestPromises) {
+                        requestPromises = [];
+                        global.requestPromises.set(win, requestPromises);
+                    }
+                    var requestPromise = promise_ZalgoPromise.try(function() {
+                        if (Object(src.isAncestor)(window, win)) return function(win) {
+                            var timeout = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : 5e3, name = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : "Window", promise = global.readyPromises.get(win);
+                            if (promise) return promise;
+                            promise = new promise_ZalgoPromise();
+                            global.readyPromises.set(win, promise);
+                            -1 !== timeout && setTimeout(function() {
+                                return promise.reject(new Error(name + " did not load after " + timeout + "ms"));
+                            }, timeout);
+                            return promise;
+                        }(win, options.timeout || CONFIG.CHILD_WINDOW_TIMEOUT);
+                    }).then(function() {
+                        var origin = (arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}).origin;
+                        if (isRegex(domain) && !origin) return sayHello(win);
+                    }).then(function() {
+                        var origin = (arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}).origin;
+                        if (isRegex(domain)) {
+                            if (!Object(src.matchDomain)(domain, origin)) throw new Error("Remote window domain " + origin + " does not match regex: " + domain.toString());
+                            domain = origin;
+                        }
+                        if ("string" != typeof domain && !Array.isArray(domain)) throw new TypeError("Expected domain to be a string or array");
+                        var actualDomain = domain;
+                        return new promise_ZalgoPromise(function(resolve, reject) {
+                            var responseListener = void 0;
+                            options.fireAndForget || function(hash, listener) {
+                                global.responseListeners[hash] = listener;
+                            }(hash, responseListener = {
+                                name: name,
+                                window: win,
+                                domain: actualDomain,
+                                respond: function(err, result) {
+                                    if (!err) {
+                                        hasResult = !0;
+                                        requestPromises.splice(requestPromises.indexOf(requestPromise, 1));
+                                    }
+                                    err ? reject(err) : resolve(result);
+                                }
+                            });
+                            sendMessage(win, {
+                                type: constants_CONSTANTS.POST_MESSAGE_TYPE.REQUEST,
+                                hash: hash,
+                                name: name,
+                                data: options.data,
+                                fireAndForget: options.fireAndForget
+                            }, actualDomain).catch(reject);
+                            if (options.fireAndForget) return resolve();
+                            var ackTimeout = CONFIG.ACK_TIMEOUT, resTimeout = options.timeout || CONFIG.RES_TIMEOUT, cycleTime = 100;
+                            setTimeout(function cycle() {
+                                if (!hasResult) {
+                                    if (Object(src.isWindowClosed)(win)) return responseListener.ack ? reject(new Error("Window closed for " + name + " before response")) : reject(new Error("Window closed for " + name + " before ack"));
+                                    ackTimeout = Math.max(ackTimeout - cycleTime, 0);
+                                    -1 !== resTimeout && (resTimeout = Math.max(resTimeout - cycleTime, 0));
+                                    if (responseListener.ack) {
+                                        if (-1 === resTimeout) return;
+                                        cycleTime = Math.min(resTimeout, 2e3);
+                                    } else {
+                                        if (0 === ackTimeout) return reject(new Error("No ack for postMessage " + name + " in " + Object(src.getDomain)() + " in " + CONFIG.ACK_TIMEOUT + "ms"));
+                                        if (0 === resTimeout) return reject(new Error("No response for postMessage " + name + " in " + Object(src.getDomain)() + " in " + (options.timeout || CONFIG.RES_TIMEOUT) + "ms"));
+                                    }
+                                    setTimeout(cycle, cycleTime);
+                                }
+                            }, cycleTime);
+                        });
+                    });
+                    requestPromise.catch(function() {
+                        !function(hash) {
+                            global.erroredResponseListeners[hash] = !0;
+                        }(hash);
+                        deleteResponseListener(hash);
+                    });
+                    requestPromises.push(requestPromise);
+                    return requestPromise;
+                });
+            }
+            function _send(window, name, data, options) {
+                (options = options || {}).window = window;
+                options.name = name;
+                options.data = data;
+                return request(options);
+            }
+            function sendToParent(name, data, options) {
+                var win = Object(src.getAncestor)();
+                return win ? _send(win, name, data, options) : new promise_ZalgoPromise(function(resolve, reject) {
+                    return reject(new Error("Window does not have a parent"));
+                });
+            }
+            function client() {
+                var options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+                if (!options.window) throw new Error("Expected options.window");
+                var win = options.window;
+                return {
+                    send: function(name, data) {
+                        return _send(win, name, data, options);
+                    }
+                };
+            }
+            global.send = _send;
+            var server__typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+                return typeof obj;
+            } : function(obj) {
+                return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
+            function listen(options) {
+                if (!options.name) throw new Error("Expected options.name");
+                if (!options.handler) throw new Error("Expected options.handler");
+                var name = options.name, win = options.window, domain = options.domain, listenerOptions = {
+                    handler: options.handler,
+                    handleError: options.errorHandler || function(err) {
+                        throw err;
+                    },
+                    window: win,
+                    domain: domain || constants_CONSTANTS.WILDCARD,
+                    name: name
+                }, requestListener = function addRequestListener(_ref6, listener) {
+                    var name = _ref6.name, win = _ref6.win, domain = _ref6.domain;
+                    if (!name || "string" != typeof name) throw new Error("Name required to add request listener");
+                    if (Array.isArray(win)) {
+                        for (var listenersCollection = [], _i6 = 0, _win2 = win, _length6 = null == _win2 ? 0 : _win2.length; _i6 < _length6; _i6++) {
+                            var item = _win2[_i6];
+                            listenersCollection.push(addRequestListener({
+                                name: name,
+                                domain: domain,
+                                win: item
+                            }, listener));
+                        }
+                        return {
+                            cancel: function() {
+                                for (var _i8 = 0, _length8 = null == listenersCollection ? 0 : listenersCollection.length; _i8 < _length8; _i8++) listenersCollection[_i8].cancel();
+                            }
+                        };
+                    }
+                    if (Array.isArray(domain)) {
+                        for (var _listenersCollection = [], _i10 = 0, _domain2 = domain, _length10 = null == _domain2 ? 0 : _domain2.length; _i10 < _length10; _i10++) {
+                            var _item = _domain2[_i10];
+                            _listenersCollection.push(addRequestListener({
+                                name: name,
+                                win: win,
+                                domain: _item
+                            }, listener));
+                        }
+                        return {
+                            cancel: function() {
+                                for (var _i12 = 0, _length12 = null == _listenersCollection ? 0 : _listenersCollection.length; _i12 < _length12; _i12++) _listenersCollection[_i12].cancel();
+                            }
+                        };
+                    }
+                    var existingListener = getRequestListener({
+                        name: name,
+                        win: win,
+                        domain: domain
+                    });
+                    win && win !== constants_CONSTANTS.WILDCARD || (win = global.WINDOW_WILDCARD);
+                    domain = domain || constants_CONSTANTS.WILDCARD;
+                    if (existingListener) throw win && domain ? new Error("Request listener already exists for " + name + " on domain " + domain.toString() + " for " + (win === global.WINDOW_WILDCARD ? "wildcard" : "specified") + " window") : win ? new Error("Request listener already exists for " + name + " for " + (win === global.WINDOW_WILDCARD ? "wildcard" : "specified") + " window") : domain ? new Error("Request listener already exists for " + name + " on domain " + domain.toString()) : new Error("Request listener already exists for " + name);
+                    var requestListeners = global.requestListeners, nameListeners = requestListeners[name];
+                    if (!nameListeners) {
+                        nameListeners = new weakmap_CrossDomainSafeWeakMap();
+                        requestListeners[name] = nameListeners;
+                    }
+                    var winListeners = nameListeners.get(win);
+                    if (!winListeners) {
+                        winListeners = {};
+                        nameListeners.set(win, winListeners);
+                    }
+                    var strDomain = domain.toString(), regexListeners = winListeners[__DOMAIN_REGEX__], regexListener = void 0;
+                    if (isRegex(domain)) {
+                        if (!regexListeners) {
+                            regexListeners = [];
+                            winListeners[__DOMAIN_REGEX__] = regexListeners;
+                        }
+                        regexListener = {
+                            regex: domain,
+                            listener: listener
+                        };
+                        regexListeners.push(regexListener);
+                    } else winListeners[strDomain] = listener;
+                    return {
+                        cancel: function() {
+                            if (winListeners) {
+                                delete winListeners[strDomain];
+                                win && 0 === Object.keys(winListeners).length && nameListeners.delete(win);
+                                regexListener && regexListeners.splice(regexListeners.indexOf(regexListener, 1));
+                            }
+                        }
+                    };
+                }({
+                    name: name,
+                    win: win,
+                    domain: domain
+                }, listenerOptions);
+                if (options.once) {
+                    var _handler = listenerOptions.handler;
+                    listenerOptions.handler = once(function() {
+                        requestListener.cancel();
+                        return _handler.apply(this, arguments);
+                    });
+                }
+                if (listenerOptions.window && options.errorOnClose) var interval = function(method, time) {
+                    var timeout = void 0;
+                    timeout = setTimeout(function runInterval() {
+                        timeout = setTimeout(runInterval, 50);
+                        (function() {
+                            if (win && "object" === (void 0 === win ? "undefined" : server__typeof(win)) && Object(src.isWindowClosed)(win)) {
+                                interval.cancel();
+                                listenerOptions.handleError(new Error("Post message target window is closed"));
+                            }
+                        }).call();
+                    }, 50);
+                    return {
+                        cancel: function() {
+                            clearTimeout(timeout);
+                        }
+                    };
+                }();
+                return {
+                    cancel: function() {
+                        requestListener.cancel();
+                    }
+                };
+            }
+            function _on(name, options, handler) {
+                if ("function" == typeof options) {
+                    handler = options;
+                    options = {};
+                }
+                (options = options || {}).name = name;
+                options.handler = handler || options.handler;
+                return listen(options);
+            }
+            function server_once(name) {
+                var options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}, handler = arguments[2];
+                if ("function" == typeof options) {
+                    handler = options;
+                    options = {};
+                }
+                options = options || {};
+                handler = handler || options.handler;
+                var errorHandler = options.errorHandler, promise = new promise_ZalgoPromise(function(resolve, reject) {
+                    (options = options || {}).name = name;
+                    options.once = !0;
+                    options.handler = function(event) {
+                        resolve(event);
+                        if (handler) return handler(event);
+                    };
+                    options.errorHandler = function(err) {
+                        reject(err);
+                        if (errorHandler) return errorHandler(err);
+                    };
+                }), onceListener = listen(options);
+                promise.cancel = onceListener.cancel;
+                return promise;
+            }
+            function server_listener() {
+                var options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+                return {
+                    on: function(name, handler) {
+                        return _on(name, options, handler);
+                    }
+                };
+            }
+            global.on = _on;
+            function disable() {
+                delete window[constants_CONSTANTS.WINDOW_PROPS.POSTROBOT];
+                window.removeEventListener("message", messageListener);
+            }
+            var public_parent = Object(src.getAncestor)();
+            function cleanUpWindow(win) {
+                var requestPromises = global.requestPromises.get(win);
+                if (requestPromises) for (var _i2 = 0, _length2 = null == requestPromises ? 0 : requestPromises.length; _i2 < _length2; _i2++) requestPromises[_i2].reject(new Error("No response from window - cleaned up"));
+                global.popupWindowsByWin && global.popupWindowsByWin.delete(win);
+                global.remoteWindows && global.remoteWindows.delete(win);
+                global.requestPromises.delete(win);
+                global.methods.delete(win);
+                global.readyPromises.delete(win);
+            }
+            var bridge = null;
+            function init() {
+                if (!global.initialized) {
+                    handler = messageListener, (obj = window).addEventListener ? obj.addEventListener("message", handler) : obj.attachEvent("onmessage", handler);
+                    !function() {
+                        handler = function(_ref3) {
+                            var source = _ref3.source, origin = _ref3.origin, promise = global.readyPromises.get(source) || new promise_ZalgoPromise();
+                            promise.resolve({
+                                origin: origin
+                            });
+                            global.readyPromises.set(source, promise);
+                        }, global.on(constants_CONSTANTS.POST_MESSAGE_NAMES.HELLO, {
+                            domain: constants_CONSTANTS.WILDCARD
+                        }, function(_ref) {
+                            var source = _ref.source, origin = _ref.origin;
+                            return handler({
+                                source: source,
+                                origin: origin
+                            });
+                        });
+                        var handler, parent = Object(src.getAncestor)();
+                        parent && sayHello(parent).catch(util_noop);
+                    }();
+                    listenForMethods({
+                        on: _on,
+                        send: _send
+                    });
+                }
+                var obj, handler;
+                global.initialized = !0;
+            }
+            init();
+            __webpack_require__.d(__webpack_exports__, "cleanUpWindow", function() {
+                return cleanUpWindow;
+            });
+            __webpack_require__.d(__webpack_exports__, "Promise", function() {
+                return promise_ZalgoPromise;
+            });
+            __webpack_require__.d(__webpack_exports__, "bridge", function() {
+                return bridge;
+            });
+            __webpack_require__.d(__webpack_exports__, "init", function() {
+                return init;
+            });
+            __webpack_require__.d(__webpack_exports__, "parent", function() {
+                return public_parent;
+            });
+            __webpack_require__.d(__webpack_exports__, "send", function() {
+                return _send;
+            });
+            __webpack_require__.d(__webpack_exports__, "request", function() {
+                return request;
+            });
+            __webpack_require__.d(__webpack_exports__, "sendToParent", function() {
+                return sendToParent;
+            });
+            __webpack_require__.d(__webpack_exports__, "client", function() {
+                return client;
+            });
+            __webpack_require__.d(__webpack_exports__, "on", function() {
+                return _on;
+            });
+            __webpack_require__.d(__webpack_exports__, "listen", function() {
+                return listen;
+            });
+            __webpack_require__.d(__webpack_exports__, "once", function() {
+                return server_once;
+            });
+            __webpack_require__.d(__webpack_exports__, "listener", function() {
+                return server_listener;
+            });
+            __webpack_require__.d(__webpack_exports__, "CONFIG", function() {
+                return CONFIG;
+            });
+            __webpack_require__.d(__webpack_exports__, "CONSTANTS", function() {
+                return constants_CONSTANTS;
+            });
+            __webpack_require__.d(__webpack_exports__, "disable", function() {
+                return disable;
+            });
+            __webpack_exports__.default = src_interface_namespaceObject;
+        }
+    });
+});
+//# sourceMappingURL=post-robot.js.map
+//# sourceMappingURL=post-robot.js.map
+
+/***/ }),
+
+/***/ "./node_modules/post-robot/index.js":
+/*!******************************************!*\
+  !*** ./node_modules/post-robot/index.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* @flow */
+
+// eslint-disable-next-line import/no-commonjs
+module.exports = __webpack_require__(/*! ./dist/post-robot */ "./node_modules/post-robot/dist/post-robot.js");
+
+// eslint-disable-next-line import/no-commonjs
+module.exports.default = module.exports;
+
+
+/***/ }),
+
+/***/ "./node_modules/wolfy87-eventemitter/EventEmitter.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/wolfy87-eventemitter/EventEmitter.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * EventEmitter v5.2.4 - git.io/ee
  * Unlicense - http://unlicense.org/
  * Oliver Caldwell - http://oli.me.uk/
  * @preserve
- */!function(t){"use strict";function o(){}var i=o.prototype,a=t.EventEmitter;function s(e,t){for(var n=e.length;n--;)if(e[n].listener===t)return n;return-1}function u(e){return function(){return this[e].apply(this,arguments)}}i.getListeners=function(e){var t,n,r=this._getEvents();if(e instanceof RegExp)for(n in t={},r)r.hasOwnProperty(n)&&e.test(n)&&(t[n]=r[n]);else t=r[e]||(r[e]=[]);return t},i.flattenListeners=function(e){var t,n=[];for(t=0;t<e.length;t+=1)n.push(e[t].listener);return n},i.getListenersAsObject=function(e){var t,n=this.getListeners(e);return n instanceof Array&&((t={})[e]=n),t||n},i.addListener=function(e,t){if(!function e(t){return"function"==typeof t||t instanceof RegExp||!(!t||"object"!=typeof t)&&e(t.listener)}(t))throw new TypeError("listener must be a function");var n,r=this.getListenersAsObject(e),o="object"==typeof t;for(n in r)r.hasOwnProperty(n)&&-1===s(r[n],t)&&r[n].push(o?t:{listener:t,once:!1});return this},i.on=u("addListener"),i.addOnceListener=function(e,t){return this.addListener(e,{listener:t,once:!0})},i.once=u("addOnceListener"),i.defineEvent=function(e){return this.getListeners(e),this},i.defineEvents=function(e){for(var t=0;t<e.length;t+=1)this.defineEvent(e[t]);return this},i.removeListener=function(e,t){var n,r,o=this.getListenersAsObject(e);for(r in o)o.hasOwnProperty(r)&&-1!==(n=s(o[r],t))&&o[r].splice(n,1);return this},i.off=u("removeListener"),i.addListeners=function(e,t){return this.manipulateListeners(!1,e,t)},i.removeListeners=function(e,t){return this.manipulateListeners(!0,e,t)},i.manipulateListeners=function(e,t,n){var r,o,i=e?this.removeListener:this.addListener,a=e?this.removeListeners:this.addListeners;if("object"!=typeof t||t instanceof RegExp)for(r=n.length;r--;)i.call(this,t,n[r]);else for(r in t)t.hasOwnProperty(r)&&(o=t[r])&&("function"==typeof o?i.call(this,r,o):a.call(this,r,o));return this},i.removeEvent=function(e){var t,n=typeof e,r=this._getEvents();if("string"===n)delete r[e];else if(e instanceof RegExp)for(t in r)r.hasOwnProperty(t)&&e.test(t)&&delete r[t];else delete this._events;return this},i.removeAllListeners=u("removeEvent"),i.emitEvent=function(e,t){var n,r,o,i,a=this.getListenersAsObject(e);for(i in a)if(a.hasOwnProperty(i))for(n=a[i].slice(0),o=0;o<n.length;o++)!0===(r=n[o]).once&&this.removeListener(e,r.listener),r.listener.apply(this,t||[])===this._getOnceReturnValue()&&this.removeListener(e,r.listener);return this},i.trigger=u("emitEvent"),i.emit=function(e){var t=Array.prototype.slice.call(arguments,1);return this.emitEvent(e,t)},i.setOnceReturnValue=function(e){return this._onceReturnValue=e,this},i._getOnceReturnValue=function(){return!this.hasOwnProperty("_onceReturnValue")||this._onceReturnValue},i._getEvents=function(){return this._events||(this._events={})},o.noConflict=function(){return t.EventEmitter=a,o},void 0===(r=function(){return o}.call(t,n,t,e))||(e.exports=r)}(this||{})},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.AppConfig=void 0;var r=n(2),o=function(e,t,n){var o=this;this.setInstallationData=function(e){return o._connection.sendToParent("setInstallationData",e).then(r.onData).catch(r.onError)},this.getInstallationData=function(){return o._connection.sendToParent("getInstallationData").then(r.onData).catch(r.onError)},this._data=e,this._connection=t,this._emitter=n};t.AppConfig=o},function(e,t,n){"use strict";var r=this&&this.__assign||function(){return(r=Object.assign||function(e){for(var t,n=1,r=arguments.length;n<r;n++)for(var o in t=arguments[n])Object.prototype.hasOwnProperty.call(t,o)&&(e[o]=t[o]);return e}).apply(this,arguments)};Object.defineProperty(t,"__esModule",{value:!0}),t.rtePluginInitializer=t.RTEPlugin=void 0;var o=function(e,t){var n=this;this.configCallback=t,this.pluginMetaData={registry:{title:"",toolbar:{inMainToolbar:!0,inHoveringToolbar:!0},dndOptions:{},isContentstackElement:!0},meta:{id:"",elementType:null,editorCallbacks:{},isDependent:!1}},this.isContainer=!1,this.containerMetaData={registry:{id:this.pluginMetaData.meta.id,title:this.pluginMetaData.registry.title,rootCategory:!1,toolbar:r({},this.pluginMetaData.registry.toolbar)},meta:{id:this.pluginMetaData.meta.id,dependentPlugins:[]}},this.addPlugins=function(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];if(n.pluginMetaData.meta.isDependent)throw Error("cannot have another container inside");n.isContainer=!0,e.forEach((function(e){if(e.isContainer)throw Error("cannot have another container inside");e.pluginMetaData.registry.category=n.pluginMetaData.meta.id,n.containerMetaData.meta.dependentPlugins.push(e),e.pluginMetaData.meta.isDependent=!0}))},this.on=function(e,t){switch(e){case"beforeChildRender":n.pluginMetaData.registry.beforeChildrenRender=t;break;case"beforeRender":n.pluginMetaData.registry.beforeElementRender=t;break;case"exec":n.pluginMetaData.registry.handleMouseDown=t;break;case"keydown":n.pluginMetaData.meta.editorCallbacks.keydown=t;break;case"paste":case"deleteBackward":case"deleteForward":case"insertBreak":case"normalize":default:n.pluginMetaData.meta.editorCallbacks[e]=t}},this.get=function(e){var t=n.configCallback(e);return Object.entries(t).forEach((function(e){var t=e[0],r=e[1];switch(t){case"title":n.pluginMetaData.registry.title=r;break;case"iconName":n.pluginMetaData.registry.iconName=r;break;case"displayOn":if(n.pluginMetaData.registry.toolbar={inHoveringToolbar:!1,inMainToolbar:!1},"string"==typeof r)switch(r){case"toolbar":n.pluginMetaData.registry.toolbar.inMainToolbar=!0;break;case"hoveringToolbar":n.pluginMetaData.registry.toolbar.inHoveringToolbar=!0}else Array.isArray(r)&&r.forEach((function(e){switch(e){case"toolbar":n.pluginMetaData.registry.toolbar.inMainToolbar=!0;break;case"hoveringToolbar":n.pluginMetaData.registry.toolbar.inHoveringToolbar=!0}}));break;case"elementType":n.pluginMetaData.meta.elementType=r;break;case"dnd":"object"!=typeof r||Array.isArray(r)||(void 0===n.pluginMetaData.registry.dndOptions&&(n.pluginMetaData.registry.dndOptions={DisableDND:!1}),Object.entries(r).forEach((function(e){var t=e[0],r=e[1];switch(t){case"disable":n.pluginMetaData.registry.dndOptions.DisableDND=r;break;case"hideSelectionBackground":n.pluginMetaData.registry.dndOptions.DisableSelectionHalo=r;break;case"icon":n.pluginMetaData.registry.dndOptions.CustomDndIcon=r;break;case"className":n.pluginMetaData.registry.dndOptions.ContainerClassName=r;break;case"droppableContainer":n.pluginMetaData.registry.dndOptions.getDroppableContainer=r;break;case"disableColumnLayout":n.pluginMetaData.registry.dndOptions.DisableGridDnd=r}})));break;case"render":n.pluginMetaData.registry.render=r}})),n.containerMetaData={registry:{id:n.pluginMetaData.meta.id,title:n.pluginMetaData.registry.title,rootCategory:!1,toolbar:r({},n.pluginMetaData.registry.toolbar)},meta:{id:n.pluginMetaData.meta.id,dependentPlugins:[]}},n.isContainer?n.containerMetaData:n.pluginMetaData},this.pluginMetaData.meta.id=e};t.RTEPlugin=o;t.rtePluginInitializer=function(e,t){if(!e||!t)throw Error("i am an error");return new o(e,t)}},function(e){e.exports=JSON.parse('{"name":"@contentstack/app-sdk","version":"0.0.5","types":"dist/src/index.d.ts","description":"This SDK helps connect to the development server of the Contentstack and sync the data.","main":"dist/index.js","repository":"https://github.com/contentstack/app-sdk","scripts":{"prepublish":"npm run build","build":"webpack","test":"echo \\"Error: no test specified\\" && exit 1","dev":"webpack --watch --mode development"},"publishConfig":{"registry":"https://npm.pkg.github.com/@contentstack"},"keywords":[],"author":"Deepak Kharah","license":"MIT","devDependencies":{"@babel/core":"^7.2.2","@babel/preset-env":"^7.3.1","@types/post-robot":"^10.0.3","@types/react":"^17.0.18","babel-loader":"^8.0.5","css-loader":"^5.2.2","slate":"^0.66.5","ts-loader":"^8.1.0","typescript":"^4.2.4","webpack":"^4.29.0","webpack-cli":"^3.2.1","webpack-dev-server":"^3.11.2"},"dependencies":{"post-robot":"8.0.29","wolfy87-eventemitter":"5.2.4"}}')}])}));
+ */
+
+;(function (exports) {
+    'use strict';
+
+    /**
+     * Class for managing events.
+     * Can be extended to provide event functionality in other classes.
+     *
+     * @class EventEmitter Manages event registering and emitting.
+     */
+    function EventEmitter() {}
+
+    // Shortcuts to improve speed and size
+    var proto = EventEmitter.prototype;
+    var originalGlobalValue = exports.EventEmitter;
+
+    /**
+     * Finds the index of the listener for the event in its storage array.
+     *
+     * @param {Function[]} listeners Array of listeners to search through.
+     * @param {Function} listener Method to look for.
+     * @return {Number} Index of the specified listener, -1 if not found
+     * @api private
+     */
+    function indexOfListener(listeners, listener) {
+        var i = listeners.length;
+        while (i--) {
+            if (listeners[i].listener === listener) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Alias a method while keeping the context correct, to allow for overwriting of target method.
+     *
+     * @param {String} name The name of the target method.
+     * @return {Function} The aliased method
+     * @api private
+     */
+    function alias(name) {
+        return function aliasClosure() {
+            return this[name].apply(this, arguments);
+        };
+    }
+
+    /**
+     * Returns the listener array for the specified event.
+     * Will initialise the event object and listener arrays if required.
+     * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
+     * Each property in the object response is an array of listener functions.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Function[]|Object} All listener functions for the event.
+     */
+    proto.getListeners = function getListeners(evt) {
+        var events = this._getEvents();
+        var response;
+        var key;
+
+        // Return a concatenated array of all matching events if
+        // the selector is a regular expression.
+        if (evt instanceof RegExp) {
+            response = {};
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    response[key] = events[key];
+                }
+            }
+        }
+        else {
+            response = events[evt] || (events[evt] = []);
+        }
+
+        return response;
+    };
+
+    /**
+     * Takes a list of listener objects and flattens it into a list of listener functions.
+     *
+     * @param {Object[]} listeners Raw listener objects.
+     * @return {Function[]} Just the listener functions.
+     */
+    proto.flattenListeners = function flattenListeners(listeners) {
+        var flatListeners = [];
+        var i;
+
+        for (i = 0; i < listeners.length; i += 1) {
+            flatListeners.push(listeners[i].listener);
+        }
+
+        return flatListeners;
+    };
+
+    /**
+     * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
+     *
+     * @param {String|RegExp} evt Name of the event to return the listeners from.
+     * @return {Object} All listener functions for an event in an object.
+     */
+    proto.getListenersAsObject = function getListenersAsObject(evt) {
+        var listeners = this.getListeners(evt);
+        var response;
+
+        if (listeners instanceof Array) {
+            response = {};
+            response[evt] = listeners;
+        }
+
+        return response || listeners;
+    };
+
+    function isValidListener (listener) {
+        if (typeof listener === 'function' || listener instanceof RegExp) {
+            return true
+        } else if (listener && typeof listener === 'object') {
+            return isValidListener(listener.listener)
+        } else {
+            return false
+        }
+    }
+
+    /**
+     * Adds a listener function to the specified event.
+     * The listener will not be added if it is a duplicate.
+     * If the listener returns true then it will be removed after it is called.
+     * If you pass a regular expression as the event name then the listener will be added to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListener = function addListener(evt, listener) {
+        if (!isValidListener(listener)) {
+            throw new TypeError('listener must be a function');
+        }
+
+        var listeners = this.getListenersAsObject(evt);
+        var listenerIsWrapped = typeof listener === 'object';
+        var key;
+
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
+                listeners[key].push(listenerIsWrapped ? listener : {
+                    listener: listener,
+                    once: false
+                });
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of addListener
+     */
+    proto.on = alias('addListener');
+
+    /**
+     * Semi-alias of addListener. It will add a listener that will be
+     * automatically removed after its first execution.
+     *
+     * @param {String|RegExp} evt Name of the event to attach the listener to.
+     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addOnceListener = function addOnceListener(evt, listener) {
+        return this.addListener(evt, {
+            listener: listener,
+            once: true
+        });
+    };
+
+    /**
+     * Alias of addOnceListener.
+     */
+    proto.once = alias('addOnceListener');
+
+    /**
+     * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
+     * You need to tell it what event names should be matched by a regex.
+     *
+     * @param {String} evt Name of the event to create.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvent = function defineEvent(evt) {
+        this.getListeners(evt);
+        return this;
+    };
+
+    /**
+     * Uses defineEvent to define multiple events.
+     *
+     * @param {String[]} evts An array of event names to define.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.defineEvents = function defineEvents(evts) {
+        for (var i = 0; i < evts.length; i += 1) {
+            this.defineEvent(evts[i]);
+        }
+        return this;
+    };
+
+    /**
+     * Removes a listener function from the specified event.
+     * When passed a regular expression as the event name, it will remove the listener from all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to remove the listener from.
+     * @param {Function} listener Method to remove from the event.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListener = function removeListener(evt, listener) {
+        var listeners = this.getListenersAsObject(evt);
+        var index;
+        var key;
+
+        for (key in listeners) {
+            if (listeners.hasOwnProperty(key)) {
+                index = indexOfListener(listeners[key], listener);
+
+                if (index !== -1) {
+                    listeners[key].splice(index, 1);
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of removeListener
+     */
+    proto.off = alias('removeListener');
+
+    /**
+     * Adds listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the first argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
+     * You can also pass it a regular expression to add the array of listeners to all events that match it.
+     * Yeah, this function does quite a bit. That's probably a bad thing.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.addListeners = function addListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(false, evt, listeners);
+    };
+
+    /**
+     * Removes listeners in bulk using the manipulateListeners method.
+     * If you pass an object as the first argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be removed.
+     * You can also pass it a regular expression to remove the listeners from all events that match it.
+     *
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeListeners = function removeListeners(evt, listeners) {
+        // Pass through to manipulateListeners
+        return this.manipulateListeners(true, evt, listeners);
+    };
+
+    /**
+     * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
+     * The first argument will determine if the listeners are removed (true) or added (false).
+     * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
+     * You can also pass it an event name and an array of listeners to be added/removed.
+     * You can also pass it a regular expression to manipulate the listeners of all events that match it.
+     *
+     * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
+     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
+     * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
+        var i;
+        var value;
+        var single = remove ? this.removeListener : this.addListener;
+        var multiple = remove ? this.removeListeners : this.addListeners;
+
+        // If evt is an object then pass each of its properties to this method
+        if (typeof evt === 'object' && !(evt instanceof RegExp)) {
+            for (i in evt) {
+                if (evt.hasOwnProperty(i) && (value = evt[i])) {
+                    // Pass the single listener straight through to the singular method
+                    if (typeof value === 'function') {
+                        single.call(this, i, value);
+                    }
+                    else {
+                        // Otherwise pass back to the multiple function
+                        multiple.call(this, i, value);
+                    }
+                }
+            }
+        }
+        else {
+            // So evt must be a string
+            // And listeners must be an array of listeners
+            // Loop over it and pass each one to the multiple method
+            i = listeners.length;
+            while (i--) {
+                single.call(this, evt, listeners[i]);
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Removes all listeners from a specified event.
+     * If you do not specify an event then all listeners will be removed.
+     * That means every event will be emptied.
+     * You can also pass a regex to remove all events that match it.
+     *
+     * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.removeEvent = function removeEvent(evt) {
+        var type = typeof evt;
+        var events = this._getEvents();
+        var key;
+
+        // Remove different things depending on the state of evt
+        if (type === 'string') {
+            // Remove all listeners for the specified event
+            delete events[evt];
+        }
+        else if (evt instanceof RegExp) {
+            // Remove all events matching the regex.
+            for (key in events) {
+                if (events.hasOwnProperty(key) && evt.test(key)) {
+                    delete events[key];
+                }
+            }
+        }
+        else {
+            // Remove all listeners in all events
+            delete this._events;
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of removeEvent.
+     *
+     * Added to mirror the node API.
+     */
+    proto.removeAllListeners = alias('removeEvent');
+
+    /**
+     * Emits an event of your choice.
+     * When emitted, every listener attached to that event will be executed.
+     * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
+     * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
+     * So they will not arrive within the array on the other side, they will be separate.
+     * You can also pass a regular expression to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {Array} [args] Optional array of arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emitEvent = function emitEvent(evt, args) {
+        var listenersMap = this.getListenersAsObject(evt);
+        var listeners;
+        var listener;
+        var i;
+        var key;
+        var response;
+
+        for (key in listenersMap) {
+            if (listenersMap.hasOwnProperty(key)) {
+                listeners = listenersMap[key].slice(0);
+
+                for (i = 0; i < listeners.length; i++) {
+                    // If the listener returns true then it shall be removed from the event
+                    // The function is executed either with a basic call or an apply if there is an args array
+                    listener = listeners[i];
+
+                    if (listener.once === true) {
+                        this.removeListener(evt, listener.listener);
+                    }
+
+                    response = listener.listener.apply(this, args || []);
+
+                    if (response === this._getOnceReturnValue()) {
+                        this.removeListener(evt, listener.listener);
+                    }
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Alias of emitEvent
+     */
+    proto.trigger = alias('emitEvent');
+
+    /**
+     * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
+     * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
+     *
+     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
+     * @param {...*} Optional additional arguments to be passed to each listener.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.emit = function emit(evt) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.emitEvent(evt, args);
+    };
+
+    /**
+     * Sets the current value to check against when executing listeners. If a
+     * listeners return value matches the one set here then it will be removed
+     * after execution. This value defaults to true.
+     *
+     * @param {*} value The new value to check for when executing listeners.
+     * @return {Object} Current instance of EventEmitter for chaining.
+     */
+    proto.setOnceReturnValue = function setOnceReturnValue(value) {
+        this._onceReturnValue = value;
+        return this;
+    };
+
+    /**
+     * Fetches the current value to check against when executing listeners. If
+     * the listeners return value matches this one then it should be removed
+     * automatically. It will return true by default.
+     *
+     * @return {*|Boolean} The current value to check for or the default, true.
+     * @api private
+     */
+    proto._getOnceReturnValue = function _getOnceReturnValue() {
+        if (this.hasOwnProperty('_onceReturnValue')) {
+            return this._onceReturnValue;
+        }
+        else {
+            return true;
+        }
+    };
+
+    /**
+     * Fetches the events object and creates one if required.
+     *
+     * @return {Object} The events storage object.
+     * @api private
+     */
+    proto._getEvents = function _getEvents() {
+        return this._events || (this._events = {});
+    };
+
+    /**
+     * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
+     *
+     * @return {Function} Non conflicting EventEmitter class.
+     */
+    EventEmitter.noConflict = function noConflict() {
+        exports.EventEmitter = originalGlobalValue;
+        return EventEmitter;
+    };
+
+    // Expose the class either via AMD, CommonJS or the global object
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+            return EventEmitter;
+        }).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    }
+    else {}
+}(this || {}));
+
+
+/***/ }),
+
+/***/ "./package.json":
+/*!**********************!*\
+  !*** ./package.json ***!
+  \**********************/
+/*! exports provided: name, version, types, description, main, repository, scripts, publishConfig, keywords, author, license, devDependencies, dependencies, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"name\":\"@contentstack/app-sdk\",\"version\":\"0.0.5\",\"types\":\"dist/src/index.d.ts\",\"description\":\"This SDK helps connect to the development server of the Contentstack and sync the data.\",\"main\":\"dist/index.js\",\"repository\":\"https://github.com/contentstack/app-sdk\",\"scripts\":{\"prepublish\":\"npm run build\",\"build\":\"webpack\",\"test\":\"echo \\\"Error: no test specified\\\" && exit 1\",\"dev\":\"webpack --watch --mode development\"},\"publishConfig\":{\"registry\":\"https://npm.pkg.github.com/@contentstack\"},\"keywords\":[],\"author\":\"Deepak Kharah\",\"license\":\"MIT\",\"devDependencies\":{\"@babel/core\":\"^7.2.2\",\"@babel/preset-env\":\"^7.3.1\",\"@types/post-robot\":\"^10.0.3\",\"@types/react\":\"^17.0.18\",\"babel-loader\":\"^8.0.5\",\"css-loader\":\"^5.2.2\",\"slate\":\"^0.66.5\",\"ts-loader\":\"^8.1.0\",\"typescript\":\"^4.2.4\",\"webpack\":\"^4.29.0\",\"webpack-cli\":\"^3.2.1\",\"webpack-dev-server\":\"^3.11.2\"},\"dependencies\":{\"post-robot\":\"8.0.29\",\"wolfy87-eventemitter\":\"5.2.4\"}}");
+
+/***/ }),
+
+/***/ "./src/RTE/index.tsx":
+/*!***************************!*\
+  !*** ./src/RTE/index.tsx ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.rtePluginInitializer = exports.RTEPlugin = void 0;
+var RTEPlugin = /** @class */ (function () {
+    function RTEPlugin(id, configCallback) {
+        var _this = this;
+        this.configCallback = configCallback;
+        this.pluginMetaData = {
+            registry: {
+                title: "",
+                toolbar: {
+                    inMainToolbar: true,
+                    inHoveringToolbar: true,
+                },
+                dndOptions: {},
+                isContentstackElement: true,
+            },
+            meta: {
+                id: "",
+                elementType: null,
+                editorCallbacks: {},
+                isDependent: false,
+            },
+        };
+        this.isContainer = false;
+        this.containerMetaData = {
+            registry: {
+                id: this.pluginMetaData.meta.id,
+                title: this.pluginMetaData.registry.title,
+                rootCategory: false,
+                toolbar: __assign({}, this.pluginMetaData.registry.toolbar),
+            },
+            meta: {
+                id: this.pluginMetaData.meta.id,
+                dependentPlugins: [],
+            },
+        };
+        this.addPlugins = function () {
+            var plugins = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                plugins[_i] = arguments[_i];
+            }
+            // convert to dropdown if not already
+            if (_this.pluginMetaData.meta.isDependent)
+                throw Error("cannot have another container inside");
+            _this.isContainer = true;
+            // clean pluginMetaData
+            plugins.forEach(function (plugin) {
+                // make sure that this plugin is not another dropdown
+                if (plugin.isContainer) {
+                    throw Error("cannot have another container inside");
+                }
+                plugin.pluginMetaData.registry.category =
+                    _this.pluginMetaData.meta.id;
+                _this.containerMetaData.meta.dependentPlugins.push(plugin);
+                plugin.pluginMetaData.meta.isDependent = true;
+            });
+        };
+        this.on = function (type, callback) {
+            switch (type) {
+                case "beforeChildRender": {
+                    _this.pluginMetaData.registry.beforeChildrenRender = callback;
+                    break;
+                }
+                case "beforeRender": {
+                    _this.pluginMetaData.registry.beforeElementRender = callback;
+                    break;
+                }
+                case "exec": {
+                    _this.pluginMetaData.registry.handleMouseDown = callback;
+                    break;
+                }
+                case "keydown": {
+                    _this.pluginMetaData.meta.editorCallbacks["keydown"] =
+                        callback;
+                    break;
+                }
+                case "paste":
+                case "deleteBackward":
+                case "deleteForward":
+                case "insertBreak":
+                case "normalize":
+                default: {
+                    _this.pluginMetaData.meta.editorCallbacks[type] = callback;
+                    break;
+                }
+            }
+        };
+        this.get = function (rte) {
+            var config = _this.configCallback(rte);
+            Object.entries(config).forEach(
+            //@ts-ignore
+            function (_a) {
+                var key = _a[0], value = _a[1];
+                switch (key) {
+                    case "title": {
+                        _this.pluginMetaData.registry.title = value;
+                        break;
+                    }
+                    case "iconName": {
+                        _this.pluginMetaData.registry.iconName = value;
+                        break;
+                    }
+                    case "displayOn": {
+                        // make every other options false
+                        _this.pluginMetaData.registry.toolbar = {
+                            inHoveringToolbar: false,
+                            inMainToolbar: false,
+                        };
+                        if (typeof value === "string") {
+                            switch (value) {
+                                case "toolbar": {
+                                    _this.pluginMetaData.registry.toolbar.inMainToolbar =
+                                        true;
+                                    break;
+                                }
+                                case "hoveringToolbar": {
+                                    _this.pluginMetaData.registry.toolbar.inHoveringToolbar =
+                                        true;
+                                    break;
+                                }
+                            }
+                        }
+                        else if (Array.isArray(value)) {
+                            value.forEach(function (display) {
+                                switch (display) {
+                                    case "toolbar": {
+                                        _this.pluginMetaData.registry.toolbar.inMainToolbar =
+                                            true;
+                                        break;
+                                    }
+                                    case "hoveringToolbar": {
+                                        _this.pluginMetaData.registry.toolbar.inHoveringToolbar =
+                                            true;
+                                        break;
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                    }
+                    case "elementType": {
+                        _this.pluginMetaData.meta.elementType = value;
+                        break;
+                    }
+                    case "dnd": {
+                        if (typeof value === "object" &&
+                            !Array.isArray(value)) {
+                            if (typeof _this.pluginMetaData.registry
+                                .dndOptions === "undefined") {
+                                _this.pluginMetaData.registry.dndOptions = {
+                                    DisableDND: false,
+                                };
+                            }
+                            Object.entries(value).forEach(function (_a) {
+                                var option = _a[0], val = _a[1];
+                                switch (option) {
+                                    case "disable": {
+                                        _this.pluginMetaData.registry.dndOptions.DisableDND =
+                                            val;
+                                        break;
+                                    }
+                                    case "hideSelectionBackground": {
+                                        _this.pluginMetaData.registry.dndOptions.DisableSelectionHalo =
+                                            val;
+                                        break;
+                                    }
+                                    case "icon": {
+                                        _this.pluginMetaData.registry.dndOptions.CustomDndIcon =
+                                            val;
+                                        break;
+                                    }
+                                    case "className": {
+                                        _this.pluginMetaData.registry.dndOptions.ContainerClassName =
+                                            val;
+                                        break;
+                                    }
+                                    case "droppableContainer": {
+                                        _this.pluginMetaData.registry.dndOptions.getDroppableContainer =
+                                            val;
+                                        break;
+                                    }
+                                    case "disableColumnLayout": {
+                                        _this.pluginMetaData.registry.dndOptions.DisableGridDnd =
+                                            val;
+                                        break;
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                    }
+                    case "render": {
+                        _this.pluginMetaData.registry.render = value;
+                        break;
+                    }
+                }
+            });
+            _this.containerMetaData = {
+                registry: {
+                    id: _this.pluginMetaData.meta.id,
+                    title: _this.pluginMetaData.registry.title,
+                    rootCategory: false,
+                    toolbar: __assign({}, _this.pluginMetaData.registry.toolbar),
+                },
+                meta: {
+                    id: _this.pluginMetaData.meta.id,
+                    dependentPlugins: [],
+                },
+            };
+            return _this.isContainer ? _this.containerMetaData : _this.pluginMetaData;
+        };
+        this.pluginMetaData.meta.id = id;
+    }
+    return RTEPlugin;
+}());
+exports.RTEPlugin = RTEPlugin;
+var rtePluginInitializer = function (id, configCallback) {
+    if (!(id && configCallback))
+        throw Error("i am an error");
+    return new RTEPlugin(id, configCallback);
+};
+exports.rtePluginInitializer = rtePluginInitializer;
+
+
+/***/ }),
+
+/***/ "./src/appConfig/index.ts":
+/*!********************************!*\
+  !*** ./src/appConfig/index.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppConfig = void 0;
+var utils_1 = __webpack_require__(/*! ../utils */ "./src/utils.ts");
+/**
+ * Class representing the current stack in Contentstack UI.
+ */
+var AppConfig = /** @class */ (function () {
+    function AppConfig(data, connection, emitter) {
+        var _this = this;
+        this.setInstallationData = function (installationData) {
+            return _this._connection.sendToParent('setInstallationData', installationData).then(utils_1.onData).catch(utils_1.onError);
+        };
+        this.getInstallationData = function () {
+            return _this._connection.sendToParent('getInstallationData').then(utils_1.onData).catch(utils_1.onError);
+        };
+        this._data = data;
+        this._connection = connection;
+        this._emitter = emitter;
+    }
+    return AppConfig;
+}());
+exports.AppConfig = AppConfig;
+
+
+/***/ }),
+
+/***/ "./src/entry.ts":
+/*!**********************!*\
+  !*** ./src/entry.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var field_1 = __importDefault(__webpack_require__(/*! ./field */ "./src/field.ts"));
+/** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
+var Entry = /** @class */ (function () {
+    function Entry(initializationData, connection, emitter) {
+        /**
+         * Gets the content type of the current entry.
+         * @type {Object}
+         */
+        this.content_type = initializationData.data.content_type;
+        this._data = initializationData.data.entry;
+        /**
+         * Gets the locale of the current entry.
+         * @type {string}
+         */
+        this.locale = initializationData.data.locale;
+        this._connection = connection;
+        this._emitter = emitter;
+        var thisEntry = this;
+        this._emitter.on('entrySave', function (event) {
+            thisEntry._data = event.data;
+        });
+        this._emitter.on('entryChange', function (event) {
+            thisEntry._changedData = event.data;
+        });
+    }
+    /**
+     * Gets data of the current entry.
+     * @return {Object} Returns entry data.
+    */
+    Entry.prototype.getData = function () {
+        return this._data;
+    };
+    /**
+     * Gets the field object which allows you to interact with the field.
+     * This object will have all the same methods and properties of extension.field.
+     * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and extension of data type text, number, boolean, and date.
+     * @example
+     * var field = entry.getField('field_uid');
+     * var fieldSchema = field.schema;
+     * var fieldUid = field.uid;
+     * var fieldData = field.getData();
+     * @param {string} uid Unique ID of the field
+     * @return {Object} Field object
+    */
+    Entry.prototype.getField = function (uid) {
+        var path = uid.split('.');
+        var value = this._data;
+        var schema = this.content_type.schema;
+        try {
+            var skipNext_1 = false;
+            var skipNextTwo_1 = false;
+            path.forEach(function (key, index) {
+                if (skipNext_1) {
+                    if (skipNextTwo_1) {
+                        skipNextTwo_1 = false;
+                    }
+                    else {
+                        skipNext_1 = false;
+                    }
+                    return;
+                }
+                schema = schema.find(function (x) { return x.uid === key; });
+                if (!schema) {
+                    throw Error('schema not found');
+                }
+                value = value[key];
+                if ((schema.data_type === 'group' || schema.data_type === 'global_field') && schema.multiple === false
+                    && path.length !== (index + 1)) {
+                    schema = schema.schema;
+                }
+                else if ((schema.data_type === 'group' || schema.data_type === 'global_field') && schema.multiple === true
+                    && path.length !== (index + 1)) {
+                    schema = schema.schema;
+                    value = value[path[index + 1]];
+                    skipNext_1 = true;
+                }
+                else if (schema.data_type === 'blocks' && path.length !== (index + 1)) {
+                    var blockId_1 = Object.keys(value[path[index + 1]])[0];
+                    schema = schema.blocks.find(function (block) { return block.uid === blockId_1; });
+                    if (path.length === index + 2) { // complete block value with uid
+                        value = value[path[index + 1]];
+                    }
+                    else { // block value without uid
+                        value = value[path[index + 1]][blockId_1];
+                        schema = schema.schema;
+                    }
+                    skipNext_1 = true;
+                    skipNextTwo_1 = true;
+                }
+            });
+        }
+        catch (e) {
+            throw Error('Invalid uid, Field not found');
+        }
+        var fieldIntilaizationDataObject = {
+            data: {
+                uid: uid,
+                value: value,
+                schema: schema,
+                data_type: schema.data_type
+            }
+        };
+        //@ts-ignore
+        var fieldObject = new field_1.default(fieldIntilaizationDataObject, this._connection, this._emitter);
+        delete fieldObject.onChange;
+        return fieldObject;
+    };
+    /**
+     * This function executes the callback function every time an entry is saved.
+     * @param {function} callback The function to be called when an entry is saved.
+     */
+    Entry.prototype.onSave = function (callback) {
+        var entryObj = this;
+        if (callback && typeof (callback) === 'function') {
+            entryObj._emitter.on('entrySave', function (event) {
+                callback(event.data);
+            });
+        }
+        else {
+            throw Error('Callback must be a function');
+        }
+    };
+    /**
+     * The field.onChange() function is called when another extension programmatically changes the data of the current extension field using the field.setData() function. This function is only available for extension fields that support the following data types: text, number, boolean, or date.
+     * @param {function} callback The function to be called when an entry is edited/changed.
+     */
+    Entry.prototype.onChange = function (callback) {
+        var entryObj = this;
+        if (callback && typeof (callback) === 'function') {
+            entryObj._emitter.on('entryChange', function (event) {
+                callback(event.data);
+            });
+        }
+        else {
+            throw Error('Callback must be a function');
+        }
+    };
+    /**
+     * The onPublish() function executes the callback function every time an entry has been published with the respective payload.
+     * @param {function} callback The function to be called when an entry is published.
+     */
+    Entry.prototype.onPublish = function (callback) {
+        var entryObj = this;
+        if (callback && typeof (callback) === 'function') {
+            entryObj._emitter.on('entryPublish', function (event) {
+                callback(event.data);
+            });
+        }
+        else {
+            throw Error('Callback must be a function');
+        }
+    };
+    /**
+     * The onUnPublish() function executes the callback function every time an entry has been unpublished with the respective payload.
+     * @param {function} callback The function to be called when an entry is un published.
+     */
+    Entry.prototype.onUnPublish = function (callback) {
+        var entryObj = this;
+        if (callback && typeof (callback) === 'function') {
+            entryObj._emitter.on('entryUnPublish', function (event) {
+                callback(event.data);
+            });
+        }
+        else {
+            throw Error('Callback must be a function');
+        }
+    };
+    return Entry;
+}());
+exports.default = Entry;
+
+
+/***/ }),
+
+/***/ "./src/extension.ts":
+/*!**************************!*\
+  !*** ./src/extension.ts ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var post_robot_1 = __importDefault(__webpack_require__(/*! post-robot */ "./node_modules/post-robot/index.js"));
+var field_1 = __importDefault(__webpack_require__(/*! ./field */ "./src/field.ts"));
+var window_1 = __importDefault(__webpack_require__(/*! ./window */ "./src/window.ts"));
+var stack_1 = __importDefault(__webpack_require__(/*! ./stack */ "./src/stack/index.ts"));
+var entry_1 = __importDefault(__webpack_require__(/*! ./entry */ "./src/entry.ts"));
+var store_1 = __importDefault(__webpack_require__(/*! ./store */ "./src/store.ts"));
+var wolfy87_eventemitter_1 = __importDefault(__webpack_require__(/*! wolfy87-eventemitter */ "./node_modules/wolfy87-eventemitter/EventEmitter.js"));
+var utils_1 = __webpack_require__(/*! ./utils */ "./src/utils.ts");
+var appConfig_1 = __webpack_require__(/*! ./appConfig */ "./src/appConfig/index.ts");
+var emitter = new wolfy87_eventemitter_1.default();
+/** Class representing an extension from Contentstack App Framework SDK. */
+var Extension = /** @class */ (function () {
+    function Extension(initData) {
+        var _this = this;
+        this.getConfig = function () {
+            return _this.postRobot.sendToParent('getConfig').then(utils_1.onData).catch(utils_1.onError);
+        };
+        this.getCurrentLocation = function () {
+            return _this.type;
+        };
+        var initializationData = initData;
+        this.postRobot = post_robot_1.default;
+        /**
+         * This method gives you the configuration parameters. Check out our {@link https://www.contentstack.com/docs/guide/extensions|UI Extension documentation} .
+         * @type {Object}
+         */
+        this.appUID = initializationData.data.app_id;
+        /**
+         * This object holds details of the app initialization user.
+         * @type {Object}
+         */
+        this.installationUID = initializationData.data.installation_uid;
+        /**
+         * This object holds details of the current user.
+         * @type {Object}
+         */
+        this.currentUser = initializationData.data.user;
+        /**
+         * location of extension, "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
+         * @type {string}
+         */
+        this.type = initializationData.data.type;
+        /**
+         * Store to persist data for extension.
+         * Note: Data is stored in the browser {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
+         * @type {Store}
+         */
+        this.store = new store_1.default(post_robot_1.default);
+        /**
+         * This method returns stack object which allows users to read and manipulate a range of objects in a stack.
+         * @type {Stack}
+         */
+        this.stack = new stack_1.default(initializationData.data.stack, post_robot_1.default);
+        this.location = {
+            DashboardWidget: null,
+            CustomFieldWidget: null,
+            SidebarWidget: null,
+            RTEPlugin: null,
+            AppConfigWidget: null,
+            FullscreenAppWidget: null
+        };
+        switch (initializationData.data.type) {
+            case "DASHBOARD_WIDGET": {
+                this.location.DashboardWidget = {
+                    frame: new window_1.default(post_robot_1.default, this.type, emitter, initializationData.data.dashboard_width),
+                    stack: new stack_1.default(initializationData.data.stack, post_robot_1.default)
+                };
+                break;
+            }
+            case "SIDEBAR_WIDGET": {
+                this.location.SidebarWidget = {
+                    entry: new entry_1.default(initializationData, post_robot_1.default, emitter),
+                    stack: new stack_1.default(initializationData.data.stack, post_robot_1.default)
+                };
+                break;
+            }
+            case "CUSTOM_FIELD_WIDGET": {
+                this.location.CustomFieldWidget = {
+                    field: new field_1.default(initializationData, post_robot_1.default, emitter),
+                    fieldConfig: initializationData.data.field_config,
+                    entry: new entry_1.default(initializationData, post_robot_1.default, emitter),
+                    stack: new stack_1.default(initializationData.data.stack, post_robot_1.default),
+                    frame: new window_1.default(post_robot_1.default, this.type, emitter)
+                };
+                break;
+            }
+            case "APP_CONFIG_WIDGET": {
+                this.location.AppConfigWidget = new appConfig_1.AppConfig(initializationData, post_robot_1.default, emitter);
+                break;
+            }
+            case "FULL_SCREEN_WIDGET": {
+                break;
+            }
+            case 'RTE_EXTENSION_WIDGET':
+            default: {
+                Promise.resolve().then(function () { return __importStar(__webpack_require__(/*! ./RTE */ "./src/RTE/index.tsx")); }).then(function (_a) {
+                    var rtePluginInitializer = _a.rtePluginInitializer;
+                    _this.location.RTEPlugin = rtePluginInitializer;
+                });
+                break;
+            }
+        }
+        try {
+            //@ts-ignore
+            post_robot_1.default.on('extensionEvent', function (event) {
+                if (event.data.name === 'entrySave') {
+                    emitter.emitEvent('entrySave', [{ data: event.data.data }]);
+                    emitter.emitEvent('updateFields', [{ data: event.data.data }]);
+                }
+                if (event.data.name === 'entryChange') {
+                    emitter.emitEvent('entryChange', [{ data: event.data.data }]);
+                }
+                if (event.data.name === 'entryPublish') {
+                    emitter.emitEvent('entryPublish', [{ data: event.data.data }]);
+                }
+                if (event.data.name === 'entryUnPublish') {
+                    emitter.emitEvent('entryUnPublish', [{ data: event.data.data }]);
+                }
+                if (event.data.name === 'dashboardResize') {
+                    emitter.emitEvent('dashboardResize', [{ state: event.data.state }]);
+                }
+                if (event.data.name === 'extensionFieldChange') {
+                    emitter.emitEvent('extensionFieldChange', [{ data: event.data.data }]);
+                }
+            });
+        }
+        catch (err) {
+            console.log('extension Event', err);
+        }
+    }
+    Extension.initialize = function (version) {
+        //@ts-ignore
+        return post_robot_1.default.sendToParent('init', { version: version });
+    };
+    Extension.prototype.setReady = function () {
+        return this.postRobot.sendToParent('ready');
+    };
+    return Extension;
+}());
+exports.default = Extension;
+
+
+/***/ }),
+
+/***/ "./src/field.ts":
+/*!**********************!*\
+  !*** ./src/field.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var excludedDataTypesForSetField = ['file', 'reference', 'blocks', 'group', 'global_field'];
+function separateResolvedData(field, value) {
+    var resolvedData = value;
+    var unResolvedData = value;
+    if (field.data_type === 'file') {
+        if (value) {
+            resolvedData = value;
+            unResolvedData = field.schema.multiple === true ?
+                value.map(function (file) { return file.uid; }) :
+                value.uid;
+        }
+        else if (field.schema.multiple === true) {
+            resolvedData = [];
+            unResolvedData = [];
+        }
+    }
+    return { resolvedData: resolvedData, unResolvedData: unResolvedData };
+}
+/** Class representing a field from Contentstack UI. Only available for Custom Field extension */
+var Field = /** @class */ (function () {
+    function Field(fieldDataObject, connection, emitter) {
+        /**
+         * The UID of the current field is defined in the content type of the entry.
+         * @type {string}
+         */
+        this.uid = fieldDataObject.data.uid;
+        /**
+         * The data type of the current field is set using this method.
+         * @type {string}
+         */
+        this.data_type = fieldDataObject.data.schema.data_type;
+        /**
+         * The schema of the current field (schema of fields such as ‘Single Line Textbox’, ‘Number’,
+         *  and so on) is set using this method.
+         * @type {Object}
+         */
+        this.schema = fieldDataObject.data.schema;
+        this._emitter = emitter;
+        var separatedData = separateResolvedData(this, fieldDataObject.data.value);
+        this._data = separatedData.unResolvedData;
+        this._resolvedData = separatedData.resolvedData;
+        this._connection = connection;
+        //@ts-ignore
+        this._self = fieldDataObject.data.self || false;
+        var fieldObj = this;
+        emitter.on('updateFields', function (event) {
+            var path = fieldObj.uid.split('.');
+            var value = event.data;
+            path.forEach(function (key) {
+                if (value) {
+                    value = value[key];
+                }
+            });
+            if (fieldObj._data !== value) {
+                fieldObj._data = value;
+            }
+        });
+    }
+    /**
+     * Sets the data for the current field.
+     * @param {Object|string|number} data Data to be set on the field
+     * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
+     */
+    Field.prototype.setData = function (data) {
+        var _this = this;
+        var currentFieldObj = this;
+        var dataObj = { data: data, uid: currentFieldObj.uid, self: currentFieldObj._self };
+        if (!currentFieldObj._self &&
+            ((excludedDataTypesForSetField.indexOf(currentFieldObj.data_type) !== -1) ||
+                !currentFieldObj.data_type)) {
+            return Promise.reject(new Error('Cannot call set data for current field type'));
+        }
+        return this._connection.sendToParent('setData', dataObj).then(function () {
+            _this._data = data;
+            return Promise.resolve(currentFieldObj);
+        }).catch(function (e) { return Promise.reject(e); });
+    };
+    /**
+      * Gets the data of the current field
+      * @param  {Object} options Options object for get Data method.
+      * @param  {boolean} options.resolved If the resolved parameter is set to true for the File field, then the method will return a resolved asset object along with all the field metadata, e.g. 'field.getData({resolved:true})'.
+      * @return {Object|string|number} Returns the field data.
+      */
+    Field.prototype.getData = function (_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.resolved, resolved = _c === void 0 ? false : _c;
+        return resolved ? this._resolvedData : this._data;
+    };
+    /**
+     * Sets the focus for a field when an extension is being used. This method shows user presence and highlights the extension field that the user is currently accessing in Contentstack UI.
+     * @return {Object} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
+     */
+    Field.prototype.setFocus = function () {
+        return this._connection.sendToParent('focus');
+    };
+    /**
+     * This function is called when another extension programmatically changes data of this field using field.setData() function, only available for extension field, only support extensions of data type text, number, boolean or date.
+     * @param {function} callback The function to be called when an entry is published.
+     */
+    Field.prototype.onChange = function (callback) {
+        var _this = this;
+        var fieldObj = this;
+        if (callback && typeof (callback) === 'function') {
+            fieldObj._emitter.on('extensionFieldChange', function (event) {
+                _this._data = event.data;
+                _this._resolvedData = event.data;
+                callback(event.data);
+            });
+        }
+        else {
+            throw Error('Callback must be a function');
+        }
+    };
+    return Field;
+}());
+exports.default = Field;
+
+
+/***/ }),
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var extension_1 = __importDefault(__webpack_require__(/*! ./extension */ "./src/extension.ts"));
+var post_robot_1 = __importDefault(__webpack_require__(/*! post-robot */ "./node_modules/post-robot/index.js"));
+var package_json_1 = __webpack_require__(/*! ../package.json */ "./package.json");
+//@ts-ignore
+post_robot_1.default.CONFIG.LOG_LEVEL = 'error';
+/** Class to initialize the plugin on Contentstack UI. */
+/**
+   * @hideconstructor
+   */
+var ContentstackAppSDK = /** @class */ (function () {
+    function ContentstackAppSDK() {
+    }
+    ContentstackAppSDK.init = function () {
+        var _this = this;
+        if (this._extension) {
+            return Promise.resolve(this._extension);
+        }
+        return extension_1.default.initialize(package_json_1.version).then(function (initializationData) {
+            _this._extension = new extension_1.default(initializationData);
+            return Promise.resolve(_this._extension);
+        }).catch(function (e) { return Promise.reject(e); });
+    };
+    Object.defineProperty(ContentstackAppSDK, "SDK_VERSION", {
+        /**
+          * Version of Contentstack UI extension.
+          * @type {string}
+          */
+        get: function () {
+            return package_json_1.version;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return ContentstackAppSDK;
+}());
+exports.default = ContentstackAppSDK;
+module.exports = ContentstackAppSDK;
+
+
+/***/ }),
+
+/***/ "./src/stack/api/asset/index.ts":
+/*!**************************************!*\
+  !*** ./src/stack/api/asset/index.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//@ts-nocheck
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var base_1 = __importDefault(__webpack_require__(/*! ../base */ "./src/stack/api/base.ts"));
+var utils_1 = __webpack_require__(/*! ../../utils */ "./src/stack/utils.ts");
+var connection = {};
+/**
+ * @summary Creates an instance of `Asset`.
+ * @description An initializer is responsible for creating an Asset object.
+ * @param {String} uid - uid of the asset
+ * @example
+ * let Asset = extension.stack.Asset('bltsomething123');
+ * @returns {Asset}
+ * @ignore
+ */
+function onData(data) {
+    if (typeof (data.data) === 'string') {
+        return Promise.reject(data.data);
+    }
+    return Promise.resolve(data.data);
+}
+function onError(error) {
+    return Promise.reject(error);
+}
+var Asset = /** @class */ (function (_super) {
+    __extends(Asset, _super);
+    function Asset(uid) {
+        var _this = _super.call(this, uid) || this;
+        _this.getReferences = utils_1.getReferences;
+        _this.environment = utils_1.environment;
+        return _this;
+    }
+    /**
+     * @function
+     * @name Stack#Asset.Query
+     * @description This static method instantiates the query module for assets. To see the list of methods that can be used for querying assets, refer the {@link Query} module.
+     * @example
+     * let assetQuery = extension.stack.Asset.Query();
+     * assetQuery.where("title": "main.js").limit(10).skip(10).find().then(...).catch(...);
+     * @return {Query}
+     */
+    Asset.Query = function () {
+        var entryQuery = _super.Query.call(this);
+        Object.assign(entryQuery, {
+            language: utils_1.language,
+            environment: utils_1.environment
+        });
+        return entryQuery;
+    };
+    Asset.module = function (plural) {
+        if (plural === void 0) { plural = false; }
+        return plural ? 'Assets' : 'Asset';
+    };
+    Object.defineProperty(Asset, "connection", {
+        get: function () {
+            return connection;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    /**
+     * @function
+     * @name Stack#Asset.getRteAssets
+     * @description This static method retrieves comprehensive information on all assets uploaded through the Rich Text Editor field.
+     * @return {external:Promise}
+     */
+    Asset.getRteAssets = function () {
+        return this.connection.sendToParent('stackQuery', { action: 'getRteAssets' }).then(onData).catch(onError);
+    };
+    /**
+     * @function
+     * @name Stack#Asset.getAssetsOfSpecificTypes
+     * @description This static method retrieves assets that are either image or video files, based on the request query.
+     * @param  {String} assetType Type of asset to be received for e.g., ‘image/png’
+     * @return {external:Promise}
+     */
+    Asset.getAssetsOfSpecificTypes = function (assetType) {
+        if (!assetType || typeof assetType !== 'string') {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        return this.connection.sendToParent('stackQuery', { action: 'getAssetsOfSpecificTypes', asset_type: assetType }).then(onData).catch(onError);
+    };
+    /**
+     * @name Stack#Asset#only
+     * @function
+     * @description This method is used to show the selected fields of the assets in the result set.
+     * @param {String} [key=BASE] - Single field of an asset
+     * @param {Array} values - Array of fields to be shown in the result set
+     * @example
+     * <caption> Only with the field UID </caption>
+     * extension.stack.Asset('bltsomething123').only('title').fetch();
+     * @example
+     * <caption> Only with the field UID </caption>
+     * extension.stack.Asset('bltsomething123').only('BASE','title').fetch();
+     * @example
+     * <caption> Only with the field UIDs(array) </caption>
+     * extension.stack.Asset('bltsomething123').only(['title','description']).fetch();
+     * @returns {Stack#Asset}
+     */
+    /**
+     * @name Stack#Asset#except
+     * @function
+     * @description This method is used to hide the selected fields of the assets in result set.
+     * @param {String} [key=BASE] - Single field of an asset
+     * @param {Array} values - Array of fields to be hidden in the result set
+     * @example
+     * <caption> .Except with the field UID </caption>
+     * extension.stack.Asset('bltsomething123').except('title').fetch();
+     * @example
+     * <caption> .Except with the field UID </caption>
+     * extension.stack.Asset('bltsomething123').except('BASE','title').fetch();
+     * @example
+     * <caption> .Except with the field UIDs(array) </caption>
+     * extension.stack.Asset('bltsomething123').except(['title','description']).fetch();
+     * @returns {Stack#Asset}
+     */
+    /**
+     * @function
+     * @name Stack#Asset#environment
+     * @description This method is used to set the environment name of which you want to retrieve the data.
+     * @param {String} environment_uid - UID/Name of environment
+     * @example extension.stack.Asset('bltsomething123').environment('development').fetch()
+     * @returns {Stack#Asset}
+     */
+    /**
+     This method includes a query parameter in your query.
+     @name Stack#Asset#addParam
+     @function
+     @example extension.stack.Asset('uid').addParam('key', 'value').fetch().then().catch();
+     @param {string} key - Key of the parammeter
+     @param {string} value - Value of the parammeter
+     @return {Stack#Asset}
+    */
+    /**
+     This method includes a query parameter in your query.
+     @name Stack#Asset#addQuery
+     @function
+     @example extension.stack.Asset('uid').addQuery('key', 'value').fetch().then().catch();
+     @param {string} key - Key of the parammeter
+     @param {string} value - Value of the parammeter
+     @return {Stack#Asset}
+    */
+    /**
+     This method will fetch the details of the entries and the assets in which the specified asset is referenced.
+     @see {@link
+     https://www.contentstack.com/docs/apis/content-management-api/#get-all-references-of-asset|
+     Asset References}
+     @name Stack#Asset#getReferences
+     @function
+     @example extension.stack.Asset('uid').getReferences().then().catch();
+     @return {external:Promise}
+    */
+    /**
+     This method deletes an existing asset.
+     @see {@link
+     https://www.contentstack.com/docs/apis/content-management-api/#delete-an-asset|
+     Delete Asset}
+     @name Stack#Asset#delete
+     @function
+     @example extension.stack.Asset('uid').delete().then().catch();
+     @return {external:Promise}
+     */
+    /**
+     * @name Stack#Asset#publish
+     * @function
+     * @description This method allows you to publish the asset either immediately or schedule the publish for a later date/time.
+     * @param {object} payload - Payload for the request.
+     * @example extension.stack.Asset('bltsomething123')
+     .publish(
+       {
+          "asset": {
+            "locales": [
+              "en-us"
+            ],
+            "environments": [
+              "development"
+            ]
+          },
+          "version": 1,
+          "scheduled_at": "2019-02-08T18:30:00.000Z"
+        });
+       * @return {external:Promise}
+       */
+    Asset.prototype.publish = function (payload) {
+        if (!payload || (typeof payload !== 'object') || (payload instanceof Array)) {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        return this.fetch('publishAsset', payload);
+    };
+    /**
+     * @function
+     * @name Stack#Asset#unpublish
+     * @description This method will instantly unpublish the asset, and also give you the provision to automatically unpublish the asset at a later date/time.
+     * @param {object} payload - Payload for the request.
+     * @example extension.stack.Asset('bltsomething123')
+      .unpublish({
+      "asset": {
+        "locales": [
+          "en-us"
+        ],
+        "environments": [
+          "development"
+        ]
+      },
+      "version": 1,
+      "scheduled_at": "2019-02-08T18:30:00.000Z"
+    });
+     * @return {external:Promise}
+     */
+    Asset.prototype.unpublish = function (payload) {
+        if (!payload || (typeof payload !== 'object') || (payload instanceof Array)) {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        return this.fetch('unpublishAsset', payload);
+    };
+    return Asset;
+}(base_1.default));
+exports.default = (function (uiConnection) {
+    connection = uiConnection;
+    return new Proxy(Asset, {
+        apply: function (Target, thisArg, argumentsList) {
+            return new (Target.bind.apply(Target, __spreadArray([void 0], argumentsList)))();
+        }
+    });
+});
+
+
+/***/ }),
+
+/***/ "./src/stack/api/base.ts":
+/*!*******************************!*\
+  !*** ./src/stack/api/base.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//@ts-nocheck
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var query_1 = __importDefault(__webpack_require__(/*! ./query */ "./src/stack/api/query.ts"));
+var utils_1 = __webpack_require__(/*! ../utils */ "./src/stack/utils.ts");
+function onData(data) {
+    if (typeof (data.data) === 'string') {
+        return Promise.reject(data.data);
+    }
+    return Promise.resolve(data.data);
+}
+function onError(error) {
+    return Promise.reject(error);
+}
+/**
+ * This is Base class, it holds all the methods required for Modle instance,
+ *  eg ContentType('uid').delete() or Asset('uid').update({...})
+ *  @ignore
+ */
+var Base = /** @class */ (function () {
+    function Base(uid) {
+        if (!uid) {
+            throw new Error('uid is required');
+        }
+        this.uid = uid;
+        this._query = {};
+        this.only = utils_1.transform('only');
+        this.except = utils_1.transform('except');
+        this.addParam = utils_1.addParam;
+    }
+    Base.Query = function () {
+        //@ts-ignore
+        return new query_1.default(this.connection, this.module(true), this.contentTypeUid);
+    };
+    Base.create = function (payload) {
+        var options = { payload: payload, content_type_uid: this.contentTypeUid, action: "create" + this.module() };
+        return this.connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    };
+    Base.prototype.update = function (payload) {
+        if (!payload || (typeof payload !== 'object') || (payload instanceof Array)) {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        return this.fetch("update" + this.constructor.module(), payload);
+    };
+    Base.prototype.delete = function () {
+        return this.fetch("delete" + this.constructor.module());
+    };
+    Base.prototype.fetch = function (action, payload) {
+        var options = {
+            payload: payload,
+            content_type_uid: this.constructor.contentTypeUid,
+            uid: this.uid,
+            params: this._query,
+            action: action || "get" + this.constructor.module()
+        };
+        if (!payload) {
+            delete options.payload;
+        }
+        if (!this.constructor.contentTypeUid) {
+            delete options.content_type_uid;
+        }
+        return this.constructor.connection.sendToParent('stackQuery', options)
+            .then(onData).catch(onError);
+    };
+    return Base;
+}());
+exports.default = Base;
+
+
+/***/ }),
+
+/***/ "./src/stack/api/content-type/entry.ts":
+/*!*********************************************!*\
+  !*** ./src/stack/api/content-type/entry.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var base_1 = __importDefault(__webpack_require__(/*! ../base */ "./src/stack/api/base.ts"));
+var utils_1 = __webpack_require__(/*! ../../utils */ "./src/stack/utils.ts");
+var connection = {};
+var contentTypeUid = '';
+var Entry = /** @class */ (function (_super) {
+    __extends(Entry, _super);
+    function Entry(uid) {
+        var _this = _super.call(this, uid) || this;
+        _this._query = {};
+        return _this;
+    }
+    /**
+     * @function
+     * @name Stack#ContentType#Entry.Query
+     * @description This static method instantiates the query module for entries. To see the list of methods that can be used for querying entries, refer the {@link Query} module.
+     * @example
+     * let entryQuery = extension.stack.ContentType('content_type_uid').Entry.Query();
+     * entryQuery.where("field_uid": "10").limit(10).skip(10).find().then(...).catch(...);
+     * @return {Query}
+     */
+    Entry.Query = function () {
+        var entryQuery = _super.Query.call(this);
+        Object.assign(entryQuery, {
+            language: utils_1.language,
+            environment: utils_1.environment,
+            includeOwner: utils_1.includeOwner,
+            includeContentType: utils_1.includeContentType,
+            includeSchema: utils_1.includeSchema,
+            includeReference: utils_1.includeReference
+        });
+        return entryQuery;
+    };
+    Object.defineProperty(Entry, "connection", {
+        get: function () {
+            return connection;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Entry, "contentTypeUid", {
+        get: function () {
+            return contentTypeUid;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Entry.module = function (plural) {
+        if (plural === void 0) { plural = false; }
+        return plural ? 'Entries' : 'Entry';
+    };
+    /**
+    This method creates a new entry.
+    @see {@link
+    https://www.contentstack.com/docs/apis/content-management-api/#create-a-an-entry|
+    Create Entry}
+    @name Stack#ContentType#Entry.create
+    @function
+    @example extension.stack.ContentType('content_type_uid').Entry.create({
+      "entry": {
+        "title": "example",
+        "url": "/example"
+      }
+    }).then(...).catch(...);
+    @param {Object} payload Data to create an entry
+    @return {external:Promise}
+    Required data if resolved successfully
+    */
+    /**
+    * @name Stack#ContentType#Entry#only
+    * @function
+    * @description This method is used to show the selected fields of an entry in the result set.
+    * @param {String} [key=BASE] - Single field of an entry
+    * @param {Array} values - Array of fields to be shown in the result set
+    * @example
+    * <caption> Only with field UID </caption>
+    * extension.stack.ContentType('content_type_uid').Entry('bltsomething123').only('title').fetch();
+    * @example
+    * <caption> Only with field UID </caption>
+    * extension.stack.ContentType('content_type_uid').Entry('bltsomething123').only('BASE','title').fetch();
+    * @example
+    * <caption> Only with field UIDs(array) </caption>
+    * extension.stack.ContentType('content_type_uid').Entry('bltsomething123').only(['title','description']).fetch();
+    * @returns {Stack#ContentType#Entry}
+    */
+    /**
+    * @name Stack#ContentType#Entry#except
+    * @function
+    * @description This method is used to hide the selected fields of an entry in the result set.
+    * @param {String} [key=BASE] - Single field of an entry
+    * @param {Array} values - Array of fields to be hidden in the result set
+    * @example
+    * <caption> Except with field uid </caption>
+    * extension.stack.ContentType('content_type_uid').Entry('bltsomething123').except('title').fetch();
+    * @example
+    * <caption> Except with field uid </caption>
+    * extension.stack.ContentType('content_type_uid').Entry('bltsomething123').except('BASE','title').fetch();
+    * @example
+    * <caption> Except with field uids(array) </caption>
+    * extension.stack.ContentType('content_type_uid').Entry('bltsomething123').except(['title','description']).fetch();
+    * @returns {Stack#ContentType#Entry}
+    */
+    /**
+    * This method includes a query parameter in your query.
+    * @name Stack#ContentType#Entry#addParam
+    * @function
+    * @example extension.stack.ContentType('content_type_uid').Entry('uid').addParam('include_count', 'true').fetch().then().catch();
+    * @param {string} key - Key of the parameter
+    * @param {string} value - Value of the parameter
+    * @return {Stack#ContentType#Entry} Returns
+    */
+    /**
+    This method will fetch all the entries in which the current entry is referenced.
+    @see {@link
+    https://www.contentstack.com/docs/apis/content-management-api/#get-all-references-of-an-entry|
+    Entry References}
+    @name Stack#ContentType#Entry#getReferences
+    @function
+    @example extension.stack.ContentType('content_type_uid').Entry('uid').getReferences().then().catch();
+    @return {external:Promise}
+    Required data if resolved successfully
+    */
+    /**
+    @example extension.stack.ContentType('content_type_uid').Entry('uid').update({"entry" : {...}}).then().catch();
+    @param {Object} payload Data to be update exsisting entry
+    @return {external:Promise}
+    Required data if resolved successfully
+    */
+    /**
+    This method deletes an existing entry.
+    @see {@link
+    https://www.contentstack.com/docs/apis/content-management-api/#delete-an-entry|
+    Delete Entry}
+    @name Stack#ContentType#Entry#delete
+    @function
+    @example extension.stack.ContentType('content_type_uid').Entry('uid').delete().then().catch();
+    @return {external:Promise}
+    Required data if resolved successfully
+    */
+    /**
+    This method fetches information of a specific entry.
+    @see {@link
+    https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-an-entry|
+    Get A Single Entry}
+    @name Stack#ContentType#Entry#fetch
+    @function
+    @example extension.stack.ContentType('content_type_uid').Entry('uid').fetch().then().catch();
+    @return {external:Promise}
+    Required data if resolved successfully
+    */
+    /**
+     * @function
+     * @name Stack#ContentType#Entry#includeReference
+     * @description This method is used to include referenced entries from other content types.
+     * @example
+     * <caption> .includeReference with reference_field_uids as array </caption>
+     * stack.ContentType('contenttype_uid').Entry('bltsomething123').includeReference(['category', 'author']).fetch()
+     * @example
+     * <caption> .includeReference with reference_field_uids </caption>
+     * stack.ContentType('contenttype_uid').Entry('bltsomething123').includeReference('category', 'author').fetch()
+     * @returns {Stack#ContentType#Entry}
+     */
+    /**
+     * @function
+     * @name Stack#ContentType#Entry#language
+     * @description This method is used to set the language code of which you want to retrieve the data.
+     * @param {String} languageCode - Language code, for e.g. 'en-us', 'ja-jp', and so on
+     * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').language('en-us').fetch()
+     * @returns {Stack#ContentType#Entry}
+     */
+    /**
+     * @function
+     * @name Stack#ContentType#Entry#environment
+     * @description This method is used to set the environment name of which you want to retrieve the data.
+     * @param {String} environment_uid - UID/Name of environment
+     * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').environment('development').fetch()
+     * @returns {Stack#ContentType#Entry}
+     */
+    /**
+     * @function
+     * @name Stack#ContentType#Entry#addQuery
+     * @description This method is used to add a query to an entry object.
+     * @param {String} key - Key of the query
+     * @param {String} value - Value of the query
+     * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').addQuery('include_schema',true).fetch()
+     * @returns {Stack#ContentType#Entry}
+     */
+    /**
+     * @function
+     * @name Stack#ContentType#Entry#includeSchema
+     * @description This method is used to include the schema of the current contenttype in result set along with the entry/entries.
+     * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').includeSchema().fetch()
+     * @returns {Stack#ContentType#Entry}
+     */
+    /**
+     * @function
+     * @name Stack#ContentType#Entry#includeContentType
+     * @description This method is used to include the current content type in the result set along with the entry(ies).
+     * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').includeContentType().fetch()
+     * @returns {Stack#ContentType#Entry}
+     */
+    /**
+     * @function
+     * @name Stack#ContentType#Entry#includeOwner
+     * @description This method is used to include the owner of the entry(ies) in the result set.
+     * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').includeOwner().fetch()
+     * @returns {Stack#ContentType#Entry}
+     */
+    /**
+    * @function
+    * @name Stack#ContentType#Entry#getLanguages
+    * @description This method returns the details of all the languages that an entry is localized in.
+    * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').getLanguages()
+    * @return {external:Promise}
+    */
+    Entry.prototype.getLanguages = function () {
+        return this.fetch('getEntryLanguages');
+    };
+    /**
+    * @function
+    * @name Stack#ContentType#Entry#unlocalize
+    * @description This method is used to unlocalize an entry
+    * @param  {string} locale Locale in which the entry has to be unlocalized
+    * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').unlocalize('fr-fr').then(...).catch(...);
+    * @return {external:Promise}
+    */
+    Entry.prototype.unlocalize = function (locale) {
+        if (!locale || typeof locale !== 'string') {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        this._query.locale = locale;
+        return this.fetch('unlocalizeEntry');
+    };
+    /**
+    * @function
+    * @name Stack#ContentType#Entry#publish
+    * @description This method lets you publish an entry either immediately or schedule it to be published automatically at a later date/time.
+    * @param {object} payload - Payload for the request
+    * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').publish({
+        "entry": {
+            "environments": ["development"],
+            "locales": ["en-us"]
+        },
+        "locale": "en-us",
+        "version": 1,
+        "scheduled_at": "2019-02-14T18:30:00.000Z"
+    }).then(...).catch(...);
+    * @return {external:Promise}
+    */
+    Entry.prototype.publish = function (payload) {
+        if (!payload || (typeof payload !== 'object') || (payload instanceof Array)) {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        this._query = {};
+        return this.fetch('publishEntry', payload);
+    };
+    /**
+    * @function
+    * @name Stack#ContentType#Entry#unpublish
+    * @description This method lets you publish an entry either immediately or schedule it to be published automatically at a later date/time.
+    * @param {object} payload - Payload for the request
+    * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').unpublish({
+        "entry": {
+            "environments": ["development"],
+            "locales": ["en-us"]
+        },
+        "locale": "en-us",
+        "version": 1,
+        "scheduled_at": "2019-02-14T18:30:00.000Z"
+    }).then(...).catch(...);
+    * @return {external:Promise}
+    */
+    Entry.prototype.unpublish = function (payload) {
+        if (!payload || (typeof payload !== 'object') || (payload instanceof Array)) {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        this._query = {};
+        return this.fetch('unpublishEntry', payload);
+    };
+    /**
+    * @function
+    * @name Stack#ContentType#Entry#setWorkflowStage
+    * @description This method allows you to either set a particular workflow stage or update the workflow stage details of an entry.
+    * @param {object} payload - Payload for the request
+    * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').setWorkflowStage({
+       "workflow": {
+           "workflow_stage": {
+               "comment": "Test Comment",
+               "due_date": "Thu Dec 01 2018",
+               "notify": false,
+               "uid": "blt9f52a2cd5e0014fb",
+               "assigned_to": [{
+                   "uid": "blt296a22e28cc0c63c",
+                   "name": "John Doe",
+                   "email": "john.doe@contentstack.com"
+               }],
+               "assigned_by_roles": [{
+                   "uid": "blt5b74c24c7ae25d94",
+                   "name": "Content Manager"
+               }]
+           }
+       }
+    }).then(...).catch(...);
+    * @return {external:Promise}
+    */
+    Entry.prototype.setWorkflowStage = function (payload) {
+        if (!payload || (typeof payload !== 'object') || (payload instanceof Array)) {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        return this.fetch('setWorkflowStageEntry', payload);
+    };
+    /**
+    * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#update-an-entry| Update Entry}
+    * @name Stack#ContentType#Entry#update
+    * @function
+    * @description This call allows you to update entry content.
+    * @param {object} payload - Payload for the request
+    * @param {string} [locale] - Passing the ‘locale’ parameter will localize the entry in the specified locale
+    *  to be localized in the specified locale.
+    * @example extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').update(
+        {
+        "entry": {
+            "title": "example",
+            "url": "/example"
+        }
+    }).then(...).catch(...);
+    * @return {external:Promise}
+    */
+    //@ts-ignore
+    Entry.prototype.update = function (payload, locale) {
+        if (!payload || (typeof payload !== 'object') || (payload instanceof Array)) {
+            return Promise.reject(new Error('Kindly provide valid parameters'));
+        }
+        this._query.locale = locale;
+        return this.fetch('updateEntry', payload);
+    };
+    return Entry;
+}(base_1.default));
+exports.default = (function (uiConnection, contentType) {
+    connection = uiConnection;
+    contentTypeUid = contentType;
+    return new Proxy(Entry, {
+        apply: function (Target, thisArg, argumentsList) {
+            var entryTarget = new (Target.bind.apply(Target, __spreadArray([void 0], argumentsList)))();
+            Object.assign(entryTarget, {
+                getReferences: utils_1.getReferences,
+                addQuery: utils_1.addQuery,
+                language: utils_1.language,
+                environment: utils_1.environment,
+                includeOwner: utils_1.includeOwner,
+                includeContentType: utils_1.includeContentType,
+                includeSchema: utils_1.includeSchema,
+                includeReference: utils_1.includeReference
+            });
+            return entryTarget;
+        }
+    });
+});
+
+
+/***/ }),
+
+/***/ "./src/stack/api/content-type/index.ts":
+/*!*********************************************!*\
+  !*** ./src/stack/api/content-type/index.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var entry_1 = __importDefault(__webpack_require__(/*! ./entry */ "./src/stack/api/content-type/entry.ts"));
+var base_1 = __importDefault(__webpack_require__(/*! ../base */ "./src/stack/api/base.ts"));
+var connection = {};
+var ContentType = /** @class */ (function (_super) {
+    __extends(ContentType, _super);
+    function ContentType(uid) {
+        var _this = _super.call(this, uid) || this;
+        /**
+         * @constructor
+         * @hideconstructor
+         * @name Stack#ContentType#Entry
+         * @version 2.2.0
+         * @desc An entry is the actual piece of content created using one of the defined content types
+         * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#entries| Entries}
+         */
+        // @ts-ignore
+        _this.Entry = entry_1.default(_this.constructor.connection, _this.uid);
+        return _this;
+    }
+    Object.defineProperty(ContentType, "connection", {
+        // static module(plural = false) {
+        //   return plural ? 'ContentTypes' : 'ContentType';
+        // }
+        get: function () {
+            return connection;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return ContentType;
+}(base_1.default));
+exports.default = (function (uiConnection) {
+    connection = uiConnection;
+    return new Proxy(ContentType, {
+        // target = Foo
+        apply: function (Target, thisArg, argumentsList) {
+            return new (Target.bind.apply(Target, __spreadArray([void 0], argumentsList)))();
+        }
+    });
+});
+
+
+/***/ }),
+
+/***/ "./src/stack/api/query.ts":
+/*!********************************!*\
+  !*** ./src/stack/api/query.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//@ts-nocheck
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var Utils = __importStar(__webpack_require__(/*! ../utils */ "./src/stack/utils.ts"));
+function onData(data) {
+    if (typeof (data.data) === 'string') {
+        return Promise.reject(data.data);
+    }
+    return Promise.resolve(data.data);
+}
+function onError(error) {
+    return Promise.reject(error);
+}
+var _extend = {
+    compare: function (type) {
+        return function (key, value) {
+            if (key && value && typeof key === 'string' && typeof value !== 'undefined') {
+                this._query.query[key] = this._query.query.file_size || {};
+                this._query.query[key][type] = value;
+                return this;
+            }
+            throw Error('Kindly provide valid parameters.');
+        };
+    },
+    contained: function (bool) {
+        var type = (bool) ? '$in' : '$nin';
+        return function (key, value) {
+            if (key && value && typeof key === 'string' && Array.isArray(value)) {
+                this._query.query[key] = this._query.query[key] || {};
+                this._query.query[key][type] = this._query.query[key][type] || [];
+                this._query.query[key][type] = this._query.query[key][type].concat(value);
+                return this;
+            }
+            throw Error('Kindly provide valid parameters.');
+        };
+    },
+    exists: function (bool) {
+        return function (key) {
+            if (key && typeof key === 'string') {
+                this._query.query[key] = this._query.query[key] || {};
+                this._query.query[key].$exists = bool;
+                return this;
+            }
+            throw Error('Kindly provide valid parameters.');
+        };
+    },
+    logical: function (type) {
+        return function () {
+            var _query = [];
+            for (var i = 0, _i = arguments.length; i < _i; i += 1) {
+                if (arguments[i] instanceof Query && arguments[i]._query.query) {
+                    _query.push(arguments[i]._query.query);
+                }
+                else if (typeof arguments[i] === 'object') {
+                    _query.push(arguments[i]);
+                }
+            }
+            if (this._query.query[type]) {
+                this._query.query[type] = this._query.query[type].concat(_query);
+            }
+            else {
+                this._query.query[type] = _query;
+            }
+            return this;
+        };
+    },
+    sort: function (type) {
+        return function (key) {
+            if (key && typeof key === 'string') {
+                this._query[type] = key;
+                return this;
+            }
+            throw Error('Argument should be a string.');
+        };
+    },
+    pagination: function (type) {
+        return function (value) {
+            if (typeof value === 'number') {
+                this._query[type] = value;
+                return this;
+            }
+            throw Error('Argument should be a number.');
+        };
+    }
+};
+/**
+ * Creates an instance of the query
+ * @version 2.2.0
+ * @hideconstructor
+ */
+var Query = /** @class */ (function () {
+    function Query(connection, module, contentTypeUid) {
+        this.module = module;
+        this._connection = connection;
+        this._query = {};
+        this._query.query = this._query.query || {};
+        this.contentTypeUid = contentTypeUid;
+        /**
+          * @name Query#only
+          * @function
+          * @description This method is used to show the selected fields of an entry in the result set.
+          * @param {String} [key=BASE] - Single field of an entry
+          * @param {Array} values - Array of fields to be shown in the result set
+          * @example
+          * <caption> Only with field UID </caption>
+          * extension.stack.ContentType('content_type_uid').Entry.Query().only('title').find();
+          * @example
+          * <caption> Only with field UID </caption>
+          * extension.stack.ContentType('content_type_uid').Entry.Query().only('BASE','title').find();
+          * @example
+          * <caption> Only with field UIDs(array) </caption>
+          * extension.stack.ContentType('content_type_uid').Entry.Query().only(['title','description']).find();
+          * @returns {Query}
+          */
+        this.only = Utils.transform('only');
+        /**
+          * @name Query#except
+          * @function
+          * @description This method is used to hide the selected fields of an entry in the result set.
+          * @param {String} [key=BASE] - Single field of an entry
+          * @param {Array} values - Array of fields to be hidden in the result set
+          * @example
+          * <caption> Except with field uid </caption>
+          * extension.stack.ContentType('content_type_uid').Entry.Query().except('title').find();
+          * @example
+          * <caption> Except with field uid </caption>
+          * extension.stack.ContentType('content_type_uid').Entry.Query().except('BASE','title').find();
+          * @example
+          * <caption> Except with field uids(array) </caption>
+          * extension.stack.ContentType('content_type_uid').Entry.Query().except(['title','description']).find();
+          * @returns {Query}
+          */
+        this.except = Utils.transform('except');
+        /**
+           This method includes a query parameter in your query.
+           @name Query#addQuery
+           @function
+           @example extension.stack.ContentType('content_type_uid').Entry.Query().addQuery('key', 'value').find().then().catch();
+           @param {string} key - Key of the parammeter
+           @param {string} value - Value of the parammeter
+           @return {Query}
+          */
+        this.addQuery = Utils.addQuery;
+        /**
+         * @name Query#lessThan
+         * @description This method provides only the entries with values less than the specified value for a field.
+         * @param {String} key - UID of the field
+         * @param {*} value - The value used to match or compare
+         * @example extension.stack.ContentType('blog').lessThan('created_at','2015-06-22')
+         * @returns {Query}
+         */
+        this.lessThan = _extend.compare('$lt');
+        /**
+         * @name Query#lessThanOrEqualTo
+         * @description This method provides only the entries with values less than or equal to the specified value for a field.
+         * @param {String} key - UID of the field
+         * @param {*} value - The value used to match or compare
+         * @example extension.stack.ContentType('blog').lessThanOrEqualTo('created_at','2015-03-12')
+         * @returns {Query}
+         */
+        this.lessThanOrEqualTo = _extend.compare('$lte');
+        /**
+         * @function
+         * @name Query#greaterThan
+         * @description This method provides only the entrieswith values
+         *  greater than the specified value for a field.
+         * @param {String} key - UID of the field
+         * @param {*} value - The value used to match or compare
+         * @example extension.stack.ContentType('blog').greaterThan('created_at','2015-03-12')
+         * @returns {Query}
+         */
+        this.greaterThan = _extend.compare('$gt');
+        /**
+         * @function
+         * @name Query#greaterThanOrEqualTo
+         * @description This method provides only the entries with values greater than or equal to the specified value for a field.
+         * @param {String} key - UID of the field
+         * @param {*} value - The value used to match or compare
+         * @example extension.stack.ContentType('blog').greaterThanOrEqualTo('created_at', '2015-06-22')
+         * @returns {Query}
+         */
+        this.greaterThanOrEqualTo = _extend.compare('$gte');
+        /**
+         * @function
+         * @name Query#notEqualTo
+         * @description This method provides only the entries with values not equal to the specified value for a field.
+         * @param {String} key - UID of the field
+         * @param {*} value - The value used to match or compare
+         * @example extension.stack.ContentType('blog').notEqualTo('title','Demo')
+         * @returns {Query}
+         */
+        this.notEqualTo = _extend.compare('$ne');
+        /**
+         * @function
+         * @name Query#containedIn
+         * @description This method provides only the entries with values matching the specified values for a field.
+         * @param {String} key - UID of the field
+         * @param {*} value - An array of values that are to be used to match or compare
+         * @example extension.stack.ContentType('blog').containedIn('title', ['Demo', 'Welcome'])
+         * @returns {Query}
+         */
+        this.containedIn = _extend.contained(true);
+        /**
+         * @function
+         * @name Query#notContainedIn
+         * @description This method provides only the entries that do not contain values matching the specified values for a field.
+         * @param {String} key - UID of the field
+         * @param {Array} value - An array of values that are to be used to match or compare
+         * @example extension.stack.ContentType('blog').notContainedIn('title', ['Demo', 'Welcome'])
+         * @returns {Query}
+         */
+        this.notContainedIn = _extend.contained(false);
+        /**
+         * @function
+         * @name Query#exists
+         * @description This method provides only the entries that contains the field matching the specified field UID.
+         * @param {String} key - UID of the field
+         * @example extension.stack.ContentType('blog').exists('featured')
+         * @returns {Query}
+         */
+        this.exists = _extend.exists(true);
+        /**
+         * @function
+         * @name Query#notExists
+         * @description This method provides only the entries that do not contain the field matching the specified field UID.
+         * @param {String} key - UID of the field
+         * @example extension.stack.ContentType('blog').notExists('featured')
+         * @returns {Query}
+         */
+        this.notExists = _extend.exists(false);
+        /**
+         * @function
+         * @name Query#ascending
+         * @description This parameter sorts the entries in ascending order on the basis of the value of the specified field.
+         * @param {String} key - Field UID to be used for sorting.
+         * @example extension.stack.ContentType('blog').ascending('created_at')
+         * @returns {Query}
+         */
+        this.ascending = _extend.sort('asc');
+        /**
+         * @function
+         * @name Query#descending
+         * @description This method sorts the entries in descending order on the basis of the specified field.
+         * @param {String} key - Field UID to be used for sorting
+         * @example extension.stack.ContentType('blog').descending('created_at')
+         * @returns {Query}
+         */
+        this.descending = _extend.sort('desc');
+        /**
+         * @function
+         * @name Query#beforeUid
+         * @description This method provides only the entries that are placed before the specified entry ID.
+         * @param {String} uid - UID of the entry
+         * @example extension.stack.ContentType('blog').beforeUid('blt1234567890abcdef')
+         * @returns {Query}
+         * @ignore
+         */
+        this.beforeUid = _extend.sort('before_uid');
+        /**
+         * @function
+         * @name Query#afterUid
+         * @description This method provides only the entries that are placed after the specified entry ID.
+         * @param {String} uid - UID of the entry
+         * @example extension.stack.ContentType('blog').afterUid('blt1234567890abcdef')
+         * @returns {Query}
+         * @ignore
+         */
+        this.afterUid = _extend.sort('after_uid');
+        /**
+         * @function
+         * @name Query#skip
+         * @description This method skips the specified number of entries.
+         * @param {Number} skip - Number of entries to be skipped
+         * @example extension.stack.ContentType('blog').skip(5)
+         * @returns {Query}
+         */
+        this.skip = _extend.pagination('skip');
+        /**
+         * @function
+         * @name Query#limit
+         * @description This method limits the response by providing only the specified number of entries.
+         * @param {Number} limit - Maximum number of entries to be returned in the result.
+         * @example extension.stack.ContentType('blog').limit(10)
+         * @returns {Query}
+         */
+        this.limit = _extend.pagination('limit');
+        /**
+         * @function
+         * @name Query#or
+         * @description This method performs the OR operation on the specified query objects and provides only the matching entries.
+         * @param {object} Array of query objects/raw queries
+         *  to be taken into consideration
+         * @example
+         * <caption> OR with query instances</caption>
+         * let Query1 = extension.stack.ContentType('blog').Entry.Query().where('title', 'Demo')
+         * let Query2 = extension.stack.ContentType('blog').Entry.Query().lessThan('comments', 10)
+         * let blogQuery = extension.stack.ContentType('blog').or(Query1, Query2)
+         * @example
+         * <caption> OR with query instances</caption>
+         * let Query1 = extension.stack.ContentType('blog').Entry.Query().where('title', 'Demo').getQuery()
+         * let Query2 = extension.stack.ContentType('blog').Entry.Query().lessThan('comments', 10).getQuery()
+         * let blogQuery = extension.stack.ContentType('blog').or(Query1, Query2)
+         * @returns {Query}
+         */
+        this.or = _extend.logical('$or');
+        /**
+         * @function
+         * @name Query#and
+         * @description This method performs the AND operation on the specified query objects and provides only the matching entries.
+         * @param {object} Array of query objects/raw queries to be taken into consideration
+         * @example
+         * <caption> AND with raw queries</caption>
+         * let Query1 = extension.stack.ContentType('blog').Entry.Query().where('title', 'Demo');
+         * let Query2 = extension.stack.ContentType('blog').Entry.Query().lessThan('comments', 10);
+         * let blogQuery = extension.stack.ContentType('blog').and(Query1, Query2)
+         * @example
+         * <caption> .and with raw queries</caption>
+         * let Query1 = extension.stack.ContentType('blog').Entry.Query().where('title', 'Demo').getQuery();
+         * let Query2 = extension.stack.ContentType('blog').Entry.Query().lessThan('comments', 10).getQuery();
+         * let blogQuery = extension.stack.ContentType('blog').and(Query1, Query2)
+         * @returns {Query}
+         */
+        this.and = _extend.logical('$and');
+        /**
+           This method includes a query parameter in your query.
+           @name Query#addParam
+           @function
+           @example extension.stack.ContentType('content_type_uid').Entry.Query().addParam('key', 'value').find().then().catch();
+           @param {string} key - Key of the parammeter
+           @param {string} value - Value of the parammeter
+           @return {Query}
+          */
+        this.addParam = Utils.addParam;
+    }
+    // -------------------------------------Entry Queries--------------------------------------------------
+    /**
+     * @function
+     * @name Query#includeReference
+     * @description This method is used to include referenced entries from other content types. Note: This method is only valid for querying {@link Stack#ContentType#Entry}.
+     * @example
+     * <caption> .includeReference with reference_field_uids as array </caption>
+     * stack.ContentType('contenttype_uid').Entry.Query().includeReference(['category', 'author']).find()
+     * @example
+     * <caption> .includeReference with reference_field_uids </caption>
+     * stack.ContentType('contenttype_uid').Entry.Query().includeReference('category', 'author').find()
+     * @returns {Query}
+     */
+    /**
+     * @function
+     * @name Query#includeSchema
+     * @description This method is used to include the schema of the current contenttype in result set along with the entry/entries. Note: This method is only valid for querying {@link Stack#ContentType#Entry}.
+     * @example extension.stack.ContentType('contenttype_uid').Entry.Query().includeSchema().find()
+     * @returns {Query}
+     */
+    /**
+     * @function
+     * @name Query#language
+     * @description This method is used to set the language code of which you want to retrieve the data. Note: This method is only valid for querying {@link Stack#ContentType#Entry}.
+     * @param {String} languageCode - Language code, for e.g. 'en-us', 'ja-jp', and so on
+     * @example extension.stack.ContentType('contenttype_uid').Entry.Query().language('en-us').find()
+     * @returns {Query}
+     */
+    /**
+     * @function
+     * @name Query#includeContentType
+     * @description This method is used to include the current content type in the result set along with the entry(ies). Note: This method is only valid for querying {@link Stack#ContentType#Entry}.
+     * @example extension.stack.ContentType('contenttype_uid').Entry.Query().includeContentType().find()
+     * @returns {Query}
+     */
+    /**
+     * @function
+     * @name Query#includeOwner
+     * @description This method is used to include the owner of the entry(ies) in the result set. Note: This method is only valid for querying {@link Stack#ContentType#Entry}.
+     * @example extension.stack.ContentType('contenttype_uid').Entry.Query().includeOwner().find()
+     * @returns {Query}
+     */
+    // -----------------------------------------Entry Queries End------------------------------------------------------
+    /**
+     * @function
+     * @name Query#environment
+     * @description This method is used to set the environment name of which you want to retrieve the data.
+     * @param {String} environment_uid - UID/Name of environment
+     * @example extension.stack.ContentType('contenttype_uid').Entry.Query().environment('development').find()
+     * @returns {Query}
+     */
+    /**
+       * @description This method provides only the entries containing field values matching the specified condition.
+       * @param {String} key - UID of the field
+       * @param {*} value - The value used to match or compare
+       * @example extension.stack.ContentType('blog').where('title','Demo')
+       * @returns {Query}
+       */
+    Query.prototype.equalTo = function (key, value) {
+        if (key && typeof key === 'string') {
+            this._query.query[key] = value;
+            return this;
+        }
+        throw Error('Kindly provide valid parameters.');
+    };
+    Query.prototype.where = function (key, value) {
+        if (key && typeof key === 'string') {
+            this._query.query[key] = value;
+            return this;
+        }
+        throw Error('Kindly provide valid parameters.');
+    };
+    /**
+       * @description This method provides only the number of entries matching the specified filters.
+       * @example extension.stack.ContentType('blog').count()
+       * @returns {Query}
+       */
+    Query.prototype.count = function () {
+        this._query.count = true;
+        var options = { content_type_uid: this.contentTypeUid, params: this._query, action: "get" + this.module };
+        return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    };
+    /**
+       * @description This method is used to set raw queries on the Query instance.
+       * @param {object} query -  Raw{json} queries to filter the entries in the result set.
+       * @returns {Query}
+       */
+    Query.prototype.query = function (query) {
+        if (typeof query === 'object') {
+            this._query.query = Utils.mergeDeep(this._query.query, query);
+            return this;
+        }
+        throw Error('Kindly provide valid parameters');
+    };
+    /**
+       * @description The ’tags’ parameter allows you to specify an array of tags to search for objects.
+       * @param {Array} values - Tags
+       * @example extension.stack.ContentType('blog').tags(['technology', 'business'])
+       * @returns {Query}
+       */
+    Query.prototype.tags = function (values) {
+        if (Array.isArray(values)) {
+            this._query.tags = values;
+            return this;
+        }
+        throw Error('Kindly provide valid parameters');
+    };
+    /**
+       * @description This method also includes the total number of entries returned in the response.
+       * @example extension.stack.ContentType('blog').includeCount()
+       * @returns {Query}
+       */
+    Query.prototype.includeCount = function () {
+        this._query.include_count = true;
+        return this;
+    };
+    /**
+       * @summary returns Returns the raw query which can be used for further calls (.and/.or).
+       * @description This method provides raw{json} queries based on the filters applied on the Query object.
+       * @example extension.stack.ContentType('blog').where('title','Demo').getQuery()
+       * @returns {Query}
+       */
+    Query.prototype.getQuery = function () {
+        return this._query.query;
+    };
+    /**
+       * @description This method provides only the entries matching the regular expression for the specified field.
+       * @param {String} key - UID of the field
+       * @param {*} value - The value used to match or compare
+       * @param {String} [options] - Match or compare a value in the entry
+       * @example
+       * <caption> .regex without options</caption>
+       * let blogQuery = extension.stack.ContentType('blog').regex('title','^Demo')
+       * @example
+       * <caption> .regex with options</caption>
+       * let blogQuery = extension.stack.ContentType('blog').regex('title','^Demo', 'i')
+       * @returns {Query}
+       */
+    Query.prototype.regex = function (key, value, options) {
+        if (key && value && typeof key === 'string' && typeof value === 'string') {
+            this._query.query[key] = {
+                $regex: value
+            };
+            if (options)
+                this._query.query[key].$options = options;
+            return this;
+        }
+        throw Error('Kindly provide valid parameters.');
+    };
+    /**
+       * @description This method is used to search data in entries.
+       * @param {string} value - Value to search in the entries.
+       * @example extension.stack.ContentType('blog').search('Welcome to demo')
+       * @returns {Query}
+       */
+    Query.prototype.search = function (value) {
+        if (value && typeof value === 'string') {
+            this._query.typeahead = value;
+            return this;
+        }
+        throw Error('Kindly provide valid parameters.');
+    };
+    /**
+       * @description This method provides all the entries which satisfy the specified query.
+       * @example
+       * let blogQuery = extension.stack.ContentType('blog').find()
+       */
+    Query.prototype.find = function () {
+        var options = { content_type_uid: this.contentTypeUid, params: this._query, action: "get" + this.module };
+        return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    };
+    /**
+       * @description This method provides a single entry from the result set.
+       * @example
+       * let blogQuery = extension.stack.ContentType('blog').findOne()
+       */
+    Query.prototype.findOne = function () {
+        this.singleEntry = true;
+        this._query.limit = 1;
+        var options = { content_type_uid: this.contentTypeUid, params: this._query, action: "get" + this.module };
+        return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    };
+    return Query;
+}());
+exports.default = Query;
+
+
+/***/ }),
+
+/***/ "./src/stack/index.ts":
+/*!****************************!*\
+  !*** ./src/stack/index.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var index_1 = __importDefault(__webpack_require__(/*! ./api/asset/index */ "./src/stack/api/asset/index.ts"));
+var index_2 = __importDefault(__webpack_require__(/*! ./api/content-type/index */ "./src/stack/api/content-type/index.ts"));
+var utils_1 = __webpack_require__(/*! ../utils */ "./src/utils.ts");
+/**
+ * Class representing the current stack in Contentstack UI.
+ */
+var Stack = /** @class */ (function () {
+    function Stack(data, connection) {
+        this._connection = connection;
+        this._data = data;
+        /**
+         * @constructor
+         * @hideconstructor
+         * @version 2.2.0
+         * @desc Content type defines the structure or schema of a page or a section of your web or mobile property
+         * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#content-types| ContentType}
+         * @param {string} uid - Uid of contenttype.
+         * @example extension.stack.ContentType('content_type_uid')
+         * */
+        this.ContentType = index_2.default(connection);
+        /**
+         * @constructor
+         * @version 2.2.0
+         * @hideconstructor
+         * @desc An initializer is responsible for creating an Asset object.
+         * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#assets| Asset}
+         * @param {string} uid - UID of the asset.
+         * @example extension.stack.Asset('asset_uid')
+         * */
+        this.Asset = index_1.default(connection);
+    }
+    /**
+     * This method returns the data of the current stack.
+     * @return {Object} Returns stack data.
+     */
+    Stack.prototype.getData = function () {
+        return this._data;
+    };
+    /**
+     * This API allows you to retrieve data of a content type of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-content-type| Content Type API} requests. This method returns a Promise object.
+     * @param {string} uid Uid of the desired content type
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with content type details.
+     */
+    Stack.prototype.getContentType = function (uid, params) {
+        if (params === void 0) { params = {}; }
+        if (!uid) {
+            return Promise.reject(new Error('uid is required'));
+        }
+        var options = { uid: uid, params: params, action: 'getContentType' };
+        return this._connection.sendToParent('stackQuery', options).then(utils_1.onData).catch(utils_1.onError);
+    };
+    /**
+     * This API allows you to retrieve data of a content types of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-all-content-types| Content Types API} requests. This method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with details of the content type.
+     */
+    Stack.prototype.getContentTypes = function (query, params) {
+        if (query === void 0) { query = {}; }
+        if (params === void 0) { params = {}; }
+        var optionParams = params;
+        optionParams.query = query;
+        var options = { params: optionParams, action: 'getContentTypes' };
+        return this._connection.sendToParent('stackQuery', options).then(utils_1.onData).catch(utils_1.onError);
+    };
+    /**
+     * This API allows you to retrieve environment details of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-environment| Environment API} requests. This method returns a Promise object.
+     * @param {string} name Name of the desired environment
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with environment details.
+     */
+    Stack.prototype.getEnvironment = function (name, params) {
+        if (params === void 0) { params = {}; }
+        if (!name) {
+            return Promise.reject(new Error('name is required'));
+        }
+        var options = { name: name, params: params, action: 'getEnvironment' };
+        return this._connection.sendToParent('stackQuery', options).then(utils_1.onData).catch(utils_1.onError);
+    };
+    /**
+     * This API allows you to retrieve details of environments of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-all-environments| Environments API} requests. This method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A Promise object which will be resolved with details of the environments.
+     */
+    Stack.prototype.getEnvironments = function (query, params) {
+        if (query === void 0) { query = {}; }
+        if (params === void 0) { params = {}; }
+        var optionParams = params;
+        optionParams.query = query;
+        var options = { params: optionParams, action: 'getEnvironments' };
+        return this._connection.sendToParent('stackQuery', options).then(utils_1.onData).catch(utils_1.onError);
+    };
+    /**
+     * This API allows you to retrive a locale of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-language| Language API} requests. Method returns a Promise object.
+     * @param {string} code Code of the desired locale
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with locale details.
+     */
+    Stack.prototype.getLocale = function (code, params) {
+        if (params === void 0) { params = {}; }
+        if (!code) {
+            return Promise.reject(new Error('code is required'));
+        }
+        var options = { code: code, params: params, action: 'getLocale' };
+        return this._connection.sendToParent('stackQuery', options).then(utils_1.onData).catch(utils_1.onError);
+    };
+    /**
+     * This API allows you to retrive the locales of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-all-content-types| Languages API} requests. Method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A Promise object which will be resolved with details of the locales.
+     */
+    Stack.prototype.getLocales = function (query, params) {
+        if (query === void 0) { query = {}; }
+        if (params === void 0) { params = {}; }
+        var optionParams = params;
+        optionParams.query = query;
+        var options = { params: optionParams, action: 'getLocales' };
+        return this._connection.sendToParent('stackQuery', options).then(utils_1.onData).catch(utils_1.onError);
+    };
+    return Stack;
+}());
+exports.default = Stack;
+
+
+/***/ }),
+
+/***/ "./src/stack/utils.ts":
+/*!****************************!*\
+  !*** ./src/stack/utils.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//@ts-nocheck
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getReferences = exports.includeReference = exports.includeSchema = exports.includeContentType = exports.includeOwner = exports.environment = exports.language = exports.addQuery = exports.addParam = exports._type = exports.mergeDeep = exports.merge = exports.transform = void 0;
+function transform(type) {
+    return function () {
+        this._query[type] = this._query[type] || {};
+        switch (arguments.length) {
+            case 1:
+                if (Array.isArray(arguments[0]) || typeof arguments[0] === 'string') {
+                    var query = this._query[type].BASE || [];
+                    query = query.concat(arguments[0]);
+                    this._query[type].BASE = query;
+                    return this;
+                }
+                throw Error('Kindly provide valid parameters');
+            case 2:
+                if (typeof arguments[0] === 'string' && (Array.isArray(arguments[1]) || typeof arguments[1] === 'string')) {
+                    var query = this._query[type][arguments[0]] || [];
+                    query = query.concat(arguments[1]);
+                    this._query[type][arguments[0]] = query;
+                    return this;
+                }
+                throw Error('Kindly provide valid parameters');
+            default:
+                throw Error('Kindly provide valid parameters');
+        }
+    };
+}
+exports.transform = transform;
+// merge two objects
+function merge(target, source) {
+    var newTraget = target;
+    if (target && source) {
+        Object.keys(source).forEach(function (key) {
+            newTraget[key] = source[key];
+        });
+    }
+    return newTraget;
+}
+exports.merge = merge;
+// merge two objects
+function mergeDeep(oldTarget, oldSource) {
+    var newTarget = oldTarget;
+    var self = this;
+    var _mergeRecursive = function (anotherTarget, source) {
+        var target = anotherTarget;
+        Object.keys(source).forEach(function (key) {
+            if (self._type(source[key]) === 'object' && self._type(target[key]) === self._type(source[key])) {
+                _mergeRecursive(target[key], source[key]);
+            }
+            else if (self._type(source[key]) === 'array' && self._type(target[key]) === self._type(source[key])) {
+                target[key] = target[key].concat(source[key]);
+            }
+            else {
+                target[key] = source[key];
+            }
+        });
+    };
+    _mergeRecursive(newTarget, oldSource);
+    return newTarget;
+}
+exports.mergeDeep = mergeDeep;
+function _type(val) {
+    var __typeof = typeof val;
+    if (__typeof === 'object' && Array.isArray(val)) {
+        __typeof = 'array';
+    }
+    return __typeof;
+}
+exports._type = _type;
+function addParam(key, value) {
+    if (key && typeof key === 'string' && value && typeof value === 'string') {
+        this._query[key] = value;
+        return this;
+    }
+    throw Error('Kindly provide valid parameters.');
+}
+exports.addParam = addParam;
+function addQuery(key, value) {
+    if (key && value && typeof key === 'string') {
+        this._query[key] = value;
+        return this;
+    }
+    throw Error('First argument should be a String.');
+}
+exports.addQuery = addQuery;
+function language(languageCode) {
+    if (languageCode && typeof languageCode === 'string') {
+        this._query.locale = languageCode;
+        return this;
+    }
+    throw Error('Argument should be a String.');
+}
+exports.language = language;
+function environment(environmentCode) {
+    if (environmentCode && typeof environmentCode === 'string') {
+        this._query.environment = environmentCode;
+        return this;
+    }
+    throw Error('Argument should be a String.');
+}
+exports.environment = environment;
+function includeOwner() {
+    this._query.include_owner = true;
+    return this;
+}
+exports.includeOwner = includeOwner;
+function includeContentType() {
+    this._query.include_content_type = true;
+    return this;
+}
+exports.includeContentType = includeContentType;
+function includeSchema() {
+    this._query.include_schema = true;
+    return this;
+}
+exports.includeSchema = includeSchema;
+function includeReference(val) {
+    if (Array.isArray(val)) {
+        for (var i = 0; i < val.length; i += 1) {
+            this._query['include[]'] = this._query['include[]'] || [];
+            this._query['include[]'] = this._query['include[]'].concat(val[i]);
+        }
+    }
+    else if (typeof val === 'string') {
+        for (var i = 0; i < arguments.length; i += 1) {
+            this._query['include[]'] = this._query['include[]'] || [];
+            this._query['include[]'] = this._query['include[]'].concat(arguments[i]);
+        }
+    }
+    else {
+        throw Error('Argument should be a String or an Array.');
+    }
+    return this;
+}
+exports.includeReference = includeReference;
+function getReferences() {
+    return this.fetch("get" + this.constructor.module() + "References");
+}
+exports.getReferences = getReferences;
+
+
+/***/ }),
+
+/***/ "./src/store.ts":
+/*!**********************!*\
+  !*** ./src/store.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function onError(error) {
+    return Promise.reject(error);
+}
+/**
+ * Class used by an extension to store your data in {@link external:localStorage}.
+ */
+var Store = /** @class */ (function () {
+    function Store(connection) {
+        this._connection = connection;
+    }
+    /**
+       * Gets the value of key
+       * @param  {string} key Key of the stored data
+       * @example extension.store.get('key').then((value) => console.log(value)) // will log value for the given key
+       * @return {external:Promise}
+       */
+    Store.prototype.get = function (key) {
+        if (!key || typeof key !== 'string') {
+            throw new Error('Kindly provide valid parameters');
+        }
+        return this._connection.sendToParent('store', { action: 'get', key: key })
+            .then(function (event) { return Promise.resolve(event.data); }).catch(onError);
+    };
+    /**
+       * Gets an object with all the stored key-value pairs.
+       * @example extension.store.getAll().then((obj) => obj)
+       * @return {external:Promise}
+       */
+    Store.prototype.getAll = function () {
+        return this._connection.sendToParent('store', { action: 'getAll' })
+            .then(function (_a) {
+            var _b = _a.data, data = _b === void 0 ? {} : _b;
+            return Promise.resolve(data);
+        }).catch(onError);
+    };
+    /**
+       * Sets the value of a key
+       * @param  {string} key Key of the stored data.
+       * @param {*} value Data to be stored.
+       * @example extension.store.set('key', 'value').then((success) => console.log(success)) // will log ‘true’ when value is set
+       * @return {external:Promise}
+       */
+    Store.prototype.set = function (key, value) {
+        if (!key || !value || typeof key !== 'string') {
+            throw new Error('Kindly provide valid parameters');
+        }
+        return this._connection.sendToParent('store', { action: 'set', key: key, value: value })
+            .then(function () { return Promise.resolve(true); }).catch(onError);
+    };
+    /**
+       * Removes the value of a key
+       * @param  {string} key  Key of the data to be removed from the store
+       * @example extension.store.remove('key').then((success) => console.log(success)) // will log ‘true’ when value is removed
+       * @return {external:Promise}
+       */
+    Store.prototype.remove = function (key) {
+        if (!key || typeof key !== 'string') {
+            throw new Error('Kindly provide valid parameters');
+        }
+        return this._connection.sendToParent('store', { action: 'remove', key: key })
+            .then(function () { return Promise.resolve(true); }).catch(onError);
+    };
+    /**
+       * Clears all the stored data of an extension
+       * @example extension.store.clear().then((success) => console.log(success)) // will log ‘true’ when values are cleared
+       * @return {external:Promise}
+       */
+    Store.prototype.clear = function () {
+        return this._connection.sendToParent('store', { action: 'clear' })
+            .then(function () { return Promise.resolve(true); }).catch(onError);
+    };
+    return Store;
+}());
+exports.default = Store;
+
+
+/***/ }),
+
+/***/ "./src/utils.ts":
+/*!**********************!*\
+  !*** ./src/utils.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.onError = exports.onData = void 0;
+function onData(data) {
+    if (typeof (data.data) === 'string') {
+        return Promise.reject(data.data);
+    }
+    return Promise.resolve(data.data);
+}
+exports.onData = onData;
+function onError(error) {
+    return Promise.reject(error);
+}
+exports.onError = onError;
+
+
+/***/ }),
+
+/***/ "./src/window.ts":
+/*!***********************!*\
+  !*** ./src/window.ts ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var config = { attributes: true, childList: true, subtree: true };
+var observer;
+/**
+ * Class representing an iframe window from Contentstack UI. Not available for Custom Widgets.
+ */
+var Window = /** @class */ (function () {
+    function Window(connection, type, emitter, state) {
+        if (state === void 0) { state = 'half_width'; }
+        this._connection = connection;
+        this._autoResizingEnabled = false;
+        this._resizingEnabled = false;
+        this.type = type;
+        this.state = state;
+        this._emitter = emitter;
+    }
+    /**
+     * This method activates the resize button that gives you the provision to resize the window size of your Dashboard Widget.
+     * @return {external:Promise}  A promise object which will resolve when a resize button is visible on the Dashboard Widget.
+     */
+    Window.prototype.enableResizing = function () {
+        if (this.type !== 'DASHBOARD') {
+            return Promise.resolve();
+        }
+        this._resizingEnabled = true;
+        return this._connection.sendToParent('window', { action: 'enableResizing' });
+    };
+    /**
+     * This function executes the callback function whenever a Dashboard Widget extension is maximized or minimized. Only applicable on Dashboard Widget extensions.
+     * @param {function} callback Function to be called when a Dashboard Widget extension is maximized or minimized
+     * @return {boolean} Will return true
+     */
+    Window.prototype.onDashboardResize = function (callback) {
+        var windowObj = this;
+        if (this.type !== 'DASHBOARD') {
+            return false;
+        }
+        if (callback && typeof (callback) === 'function') {
+            windowObj._emitter.on('dashboardResize', function (event) {
+                windowObj.state = event.state;
+                callback(event.state);
+            });
+        }
+        else {
+            throw Error('Callback must be a function');
+        }
+        return true;
+    };
+    /**
+     * This method updates the extension height on Contentstack UI.
+     * If the ‘height’ argument is not passed, it will calculate the scroll height and set the height of extension window accordingly.
+     * @param {string|number} height Desired height of the iframe window
+     * @return {external:Promise}  A promise object which will be resolved when Contentstack UI sends an acknowledgement stating that the height has been updated.
+     */
+    Window.prototype.updateHeight = function (height) {
+        if (this.type === 'DASHBOARD' && this.state === 'half_width') {
+            return Promise.resolve();
+        }
+        if (!height || isNaN(height)) {
+            this._height = Math.ceil(document.documentElement.getBoundingClientRect().height);
+        }
+        else if (this._height === height) {
+            return Promise.resolve();
+        }
+        else {
+            this._height = height;
+        }
+        return this._connection.sendToParent('resize', this._height);
+    };
+    /**
+     * This method enables auto resizing of the extension height.
+     * @return {Window}.
+     */
+    Window.prototype.enableAutoResizing = function () {
+        if (this._autoResizingEnabled || (this.state === 'half_width' && this.type === 'DASHBOARD')) {
+            return this;
+        }
+        this._autoResizingEnabled = true;
+        //@ts-ignore
+        observer = new MutationObserver(this.updateHeight.bind(this));
+        observer.observe(window.document.body, config);
+        return this;
+    };
+    /**
+     * This method disables auto resizing of the extension height.
+     * @return {Window}.
+     */
+    Window.prototype.disableAutoResizing = function () {
+        if (!this._autoResizingEnabled) {
+            return this;
+        }
+        this._autoResizingEnabled = false;
+        observer.disconnect();
+        return this;
+    };
+    return Window;
+}());
+exports.default = Window;
+
+
+/***/ })
+
+/******/ });
+});
 //# sourceMappingURL=index.js.map

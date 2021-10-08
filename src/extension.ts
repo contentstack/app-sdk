@@ -22,15 +22,15 @@ class Extension {
   appUID: string
   installationUID: string
   currentUser: IUser
-  location: ILocation
+  private type: ILocation
   postRobot: any
   stack: Stack
   store: Store
 
-  Extension: {
+  location: {
     DashboardWidget: IDashboardWidget | null
     SidebarWidget: ISidebarWidget | null
-    CustomField: ICustomField | null
+    CustomFieldWidget: ICustomField | null
     RTEPlugin: IRTEPluginInitializer | null
     AppConfigWidget: IAppConfigWidget | null
     FullscreenAppWidget: IPageWidget | null
@@ -62,7 +62,7 @@ class Extension {
      * location of extension, "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
      * @type {string}
      */
-    this.location = initializationData.data.type;
+    this.type = initializationData.data.type;
 
     /**
      * Store to persist data for extension.
@@ -78,9 +78,9 @@ class Extension {
     this.stack = new Stack(initializationData.data.stack, postRobot);
 
 
-    this.Extension = {
+    this.location = {
       DashboardWidget: null,
-      CustomField: null,
+      CustomFieldWidget: null,
       SidebarWidget: null,
       RTEPlugin: null,
       AppConfigWidget: null,
@@ -90,14 +90,14 @@ class Extension {
     switch (initializationData.data.type) {
 
       case "DASHBOARD_WIDGET": {
-        this.Extension.DashboardWidget = {
-          frame: new Window(postRobot, this.location as 'DASHBOARD', emitter, initializationData.data.dashboard_width),
+        this.location.DashboardWidget = {
+          frame: new Window(postRobot, this.type as 'DASHBOARD', emitter, initializationData.data.dashboard_width),
           stack: new Stack(initializationData.data.stack, postRobot)
         }
         break
       }
       case "SIDEBAR_WIDGET": {
-        this.Extension.SidebarWidget = {
+        this.location.SidebarWidget = {
           entry: new Entry(initializationData as ISidebarInitData, postRobot, emitter),
           stack: new Stack(initializationData.data.stack, postRobot)
         }
@@ -105,19 +105,19 @@ class Extension {
       }
 
       case "CUSTOM_FIELD_WIDGET": {
-        this.Extension.CustomField = {
+        this.location.CustomFieldWidget = {
           field: new Field(initializationData as IFieldInitData, postRobot, emitter),
           fieldConfig: initializationData.data.field_config,
           entry: new Entry(initializationData as IFieldInitData, postRobot, emitter),
           stack: new Stack(initializationData.data.stack, postRobot),
-          frame: new Window(postRobot, this.location as 'FIELD', emitter)
+          frame: new Window(postRobot, this.type as 'FIELD', emitter)
         }
 
         break
       }
 
       case "APP_CONFIG_WIDGET": {        
-        this.Extension.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
+        this.location.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
         break
       }
 
@@ -128,7 +128,7 @@ class Extension {
       case 'RTE_EXTENSION_WIDGET':
       default: {
         import('./RTE').then(({ rtePluginInitializer }) => {
-          this.Extension.RTEPlugin = rtePluginInitializer
+          this.location.RTEPlugin = rtePluginInitializer
         })
         break;
       }
@@ -169,6 +169,10 @@ class Extension {
   
   getConfig = () : Promise<{[key: string]: any}> => {
     return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
+  }
+
+  getCurrentLocation = () => {
+    return this.type
   }
 
   static initialize(version: string) {
