@@ -1,4 +1,4 @@
-import { InstallationData } from "../types";
+import { IInstallationData } from "../types";
 import { onData, onError } from "../utils";
 
 /**
@@ -16,11 +16,11 @@ export class AppConfig {
         this._emitter = emitter;
     }
 
-    setInstallationData = (installationData: InstallationData): Promise<{ [key: string]: any }> => {
+    setInstallationData = (installationData: IInstallationData): Promise<{ [key: string]: any }> => {
         return this._connection.sendToParent('setInstallationData', installationData).then(onData).catch(onError);
     }
 
-    getInstallationData = (): Promise<InstallationData> => {
+    getInstallationData = (): Promise<IInstallationData> => {
         return this._connection.sendToParent('getInstallationData').then(onData).catch(onError);
     }
 }
