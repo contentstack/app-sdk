@@ -17,7 +17,7 @@ declare class Extension {
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
-        CustomFieldWidget: ICustomField | null;
+        CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;

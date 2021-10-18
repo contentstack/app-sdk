@@ -5,7 +5,7 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, } from './types'
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, } from './types'
 import { IRTEPluginInitializer } from './RTE/types';
 import { onData, onError } from "./utils";
 import { AppConfig } from './appConfig';
@@ -30,7 +30,7 @@ class Extension {
   location: {
     DashboardWidget: IDashboardWidget | null
     SidebarWidget: ISidebarWidget | null
-    CustomFieldWidget: ICustomField | null
+    CustomField: ICustomField | null
     RTEPlugin: IRTEPluginInitializer | null
     AppConfigWidget: IAppConfigWidget | null
     FullscreenAppWidget: IPageWidget | null
@@ -59,7 +59,7 @@ class Extension {
     this.currentUser = initializationData.data.user;
 
     /**
-     * location of extension, "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
+     * location of extension, "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
      * @type {string}
      */
     this.type = initializationData.data.type;
@@ -80,7 +80,7 @@ class Extension {
 
     this.location = {
       DashboardWidget: null,
-      CustomFieldWidget: null,
+      CustomField: null,
       SidebarWidget: null,
       RTEPlugin: null,
       AppConfigWidget: null,
@@ -89,30 +89,18 @@ class Extension {
 
     switch (initializationData.data.type) {
 
-      case "DASHBOARD_WIDGET": {
+      case "DASHBOARD": {
         this.location.DashboardWidget = {
           frame: new Window(postRobot, this.type as 'DASHBOARD', emitter, initializationData.data.dashboard_width),
           stack: new Stack(initializationData.data.stack, postRobot)
         }
         break
       }
-      case "SIDEBAR_WIDGET": {
+      case "WIDGET": {
         this.location.SidebarWidget = {
           entry: new Entry(initializationData as ISidebarInitData, postRobot, emitter),
           stack: new Stack(initializationData.data.stack, postRobot)
         }
-        break
-      }
-
-      case "CUSTOM_FIELD_WIDGET": {
-        this.location.CustomFieldWidget = {
-          field: new Field(initializationData as IFieldInitData, postRobot, emitter),
-          fieldConfig: initializationData.data.field_config,
-          entry: new Entry(initializationData as IFieldInitData, postRobot, emitter),
-          stack: new Stack(initializationData.data.stack, postRobot),
-          frame: new Window(postRobot, this.type as 'FIELD', emitter)
-        }
-
         break
       }
 
@@ -125,12 +113,24 @@ class Extension {
         break
       }
 
-      case 'RTE_EXTENSION_WIDGET':
-      default: {
+      case 'RTE_EXTENSION_WIDGET': {
         import('./RTE').then(({ rtePluginInitializer }) => {
           this.location.RTEPlugin = rtePluginInitializer
         })
         break;
+      }
+
+      case "FIELD": 
+      default: {
+        this.location.CustomField = {
+          field: new Field(initializationData as IFieldInitData, postRobot, emitter),
+          fieldConfig: initializationData.data.field_config,
+          entry: new Entry(initializationData as IFieldInitData, postRobot, emitter),
+          stack: new Stack(initializationData.data.stack, postRobot),
+          frame: new Window(postRobot, this.type as 'FIELD', emitter)
+        }
+
+        break
       }
     }
 
