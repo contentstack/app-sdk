@@ -11,6 +11,7 @@ declare class Extension {
     installationUID: string;
     currentUser: IUser;
     private type;
+    private config;
     postRobot: any;
     stack: Stack;
     store: Store;

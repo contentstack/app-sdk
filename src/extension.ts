@@ -23,6 +23,7 @@ class Extension {
   installationUID: string
   currentUser: IUser
   private type: ILocation
+  private config: {[key: string]: any}
   postRobot: any
   stack: Stack
   store: Store
@@ -76,6 +77,8 @@ class Extension {
      * @type {Stack}
      */
     this.stack = new Stack(initializationData.data.stack, postRobot);
+
+    this.config = initializationData.data.config ?? {}
 
 
     this.location = {
@@ -168,6 +171,9 @@ class Extension {
   }
   
   getConfig = () : Promise<{[key: string]: any}> => {
+    if (!this.installationUID) {
+      return Promise.resolve(this.config)
+    }
     return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
   }
 

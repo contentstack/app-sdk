@@ -46,6 +46,9 @@ export declare interface IDashboardInitData {
         installation_uid: string;
         dashboard_width: "full_width" | "half_width";
         stack: ICurrentStack;
+        config?: {
+            [key: string]: any;
+        };
         type: "DASHBOARD";
         user: IUser;
     };
@@ -59,6 +62,9 @@ export declare interface ISidebarInitData {
         entry: ICurrentEntry;
         locale: string;
         stack: ICurrentStack;
+        config?: {
+            [key: string]: any;
+        };
         type: "WIDGET";
         user: IUser;
     };
@@ -76,6 +82,9 @@ export declare interface IFieldInitData {
         app_config: IConfig;
         value: any;
         field_config: IFieldConfig;
+        config?: {
+            [key: string]: any;
+        };
         stack: ICurrentStack;
         type: "FIELD";
     };
@@ -87,6 +96,9 @@ export declare interface IRTEInitData {
         stack: ICurrentStack;
         type: "RTE_EXTENSION_WIDGET";
         user: IUser;
+        config?: {
+            [key: string]: any;
+        };
     };
 }
 export declare interface IAppConfigInitData {
@@ -96,6 +108,9 @@ export declare interface IAppConfigInitData {
         stack: ICurrentStack;
         type: "APP_CONFIG_WIDGET";
         user: IUser;
+        config?: {
+            [key: string]: any;
+        };
     };
 }
 export declare interface IFullScreenInitData {
@@ -103,6 +118,9 @@ export declare interface IFullScreenInitData {
         app_id: string;
         installation_uid: string;
         stack: ICurrentStack;
+        config?: {
+            [key: string]: any;
+        };
         type: "FULL_SCREEN_WIDGET";
         user: IUser;
     };
