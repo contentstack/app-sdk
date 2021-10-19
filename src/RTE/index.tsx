@@ -118,6 +118,7 @@ export class RTEPlugin {
                     }
                     case "iconName": {
                         this.pluginMetaData.registry.iconName = value;
+                        this.containerMetaData.registry.iconName = value
                         break;
                     }
                     case "displayOn": {

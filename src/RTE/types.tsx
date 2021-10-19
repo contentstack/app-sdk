@@ -231,6 +231,7 @@ export declare interface IPluginMetaData {
 export declare interface IContainerRegistry {
     id: string;
     title: string;
+    iconName?: React.ReactElement;
     rootCategory: false;
     toolbar: {
         inMainToolbar: boolean;
