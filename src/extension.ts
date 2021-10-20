@@ -125,6 +125,7 @@ class Extension {
 
       case "FIELD": 
       default: {
+        initializationData.data.self = true
         this.location.CustomField = {
           field: new Field(initializationData as IFieldInitData, postRobot, emitter),
           fieldConfig: initializationData.data.field_config,
