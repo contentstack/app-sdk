@@ -86,6 +86,7 @@ export declare interface IFieldInitData {
             [key: string]: any;
         };
         stack: ICurrentStack;
+        self: boolean;
         type: "FIELD";
     };
 }
