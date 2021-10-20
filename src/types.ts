@@ -97,6 +97,7 @@ export declare interface IFieldInitData {
         field_config: IFieldConfig;
         config?: { [key: string]: any };
         stack: ICurrentStack;
+        self: boolean
         type: "FIELD";
     };
 }
