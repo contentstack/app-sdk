@@ -135,7 +135,7 @@ export declare interface IRteParam {
 }
 Transforms.wrapNodes;
 
-export declare type IConfigCallback = (rte: IRteParam) => Partial<IConfig>;
+export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 
 export declare type IOnFunction = {
     exec: () => {};
@@ -177,7 +177,7 @@ export declare interface IDnd {
 
 export declare interface IConfig {
     title: string;
-    iconName: React.ReactElement;
+    iconName: React.ReactElement | null;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
