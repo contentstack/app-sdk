@@ -226,19 +226,21 @@ export class RTEPlugin {
                 }
             }
         );
-
+        
+        const containerMeta = this.containerMetaData.meta;
         this.containerMetaData = {
             registry: {
+                ...this.containerMetaData.registry,
                 id: this.pluginMetaData.meta.id,
                 title: this.pluginMetaData.registry.title,
                 rootCategory: false,
                 toolbar: {
                     ...this.pluginMetaData.registry.toolbar,
-                },
+                }
             },
             meta: {
-                id: this.pluginMetaData.meta.id,
-                dependentPlugins: [],
+                ...containerMeta,
+                id: this.pluginMetaData.meta.id
             },
         };
 

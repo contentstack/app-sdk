@@ -19,8 +19,14 @@ const createDropdown = () => {
     return DropDown;
 }
 
-it('should work', () => {
+it('Dropdown get() has icon', () => {
     const dropdown = createDropdown().get();
-    console.log('dropdown', JSON.stringify(dropdown, null, 2));
-    expect(1).to.equal(1);
+    expect(dropdown.registry).to.have.property('iconName');
+    const stringify = (j:any):string => JSON.stringify(Object(j));
+    expect(stringify(dropdown.registry.iconName)).to.equal(stringify(React.createElement('p')));
+});
+
+it('Dropdown get() has dependent plugin', () => {
+    const dropdown:any = createDropdown().get();
+    expect(dropdown.meta.dependentPlugins).to.have.length(1);
 })
