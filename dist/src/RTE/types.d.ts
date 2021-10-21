@@ -120,7 +120,7 @@ export declare interface IConfig {
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
-    render?: (...params: any) => ReactElement;
+    Component?: (...params: any) => ReactElement;
 }
 export declare interface IRegistryDnd {
     DisableDND: boolean;
@@ -143,7 +143,7 @@ export declare interface IRegistry {
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
     handleMouseDown?: (...params: any) => any;
-    render?: (element: React.ReactElement, attrs: {
+    Component?: (element: React.ReactElement, attrs: {
         [key: string]: any;
     }, path: number[], rte: IRteParam) => React.ReactElement;
 }

@@ -219,8 +219,8 @@ export class RTEPlugin {
                         break;
                     }
 
-                    case "render": {
-                        this.pluginMetaData.registry.render = value;
+                    case "Component": {
+                        this.pluginMetaData.registry.Component = value;
                         break;
                     }
                 }
