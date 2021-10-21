@@ -105,7 +105,7 @@ export class RTEPlugin {
         }
     };
 
-    get = (rte: IRteParam) => {
+    get = (rte: IRteParam | void) => {
         const config = this.configCallback(rte);
 
         Object.entries(config).forEach(
