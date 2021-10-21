@@ -195,7 +195,7 @@ export declare interface IRegistryDnd {
 
 export declare interface IRegistry {
     title: string;
-    iconName?: React.ReactElement;
+    iconName?: React.ReactElement | null;
     category?: string;
     toolbar: {
         inMainToolbar: boolean;
@@ -231,7 +231,7 @@ export declare interface IPluginMetaData {
 export declare interface IContainerRegistry {
     id: string;
     title: string;
-    iconName?: React.ReactElement;
+    iconName?: React.ReactElement | null;
     rootCategory: false;
     toolbar: {
         inMainToolbar: boolean;
