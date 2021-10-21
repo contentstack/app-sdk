@@ -91,7 +91,7 @@ export declare interface IRteParam {
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
-export declare type IConfigCallback = (rte: IRteParam) => Partial<IConfig>;
+export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 export declare type IOnFunction = {
     exec: () => {};
     keydown: (rte: IRteParam) => void;
@@ -116,7 +116,7 @@ export declare interface IDnd {
 }
 export declare interface IConfig {
     title: string;
-    iconName: React.ReactElement;
+    iconName: React.ReactElement | null;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
