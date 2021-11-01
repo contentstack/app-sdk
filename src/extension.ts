@@ -127,6 +127,10 @@ class Extension {
           setData: (asset: Partial<IAssetSidebarInitData>) => {
             //@ts-ignore
             this.postRobot.sendToParent('setData', asset)
+          },
+          syncAsset: () => {
+            //@ts-ignore
+            this.postRobot.sendToParent('syncAsset')
           }
         }
         break
