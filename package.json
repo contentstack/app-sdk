@@ -8,7 +8,9 @@
     "scripts": {
         "prepublish": "npm run build",
         "build": "webpack",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest",
+        "test:watch": "jest --watchAll",
+        "test:coverage": "jest src --coverage --watchAll --coverageDirectory=\"coverage\"",
         "dev": "webpack --watch --mode development"
     },
     "publishConfig": {
@@ -20,11 +22,15 @@
     "devDependencies": {
         "@babel/core": "^7.2.2",
         "@babel/preset-env": "^7.3.1",
+        "@testing-library/jest-dom": "^5.14.1",
+        "@types/jest": "^27.0.2",
         "@types/post-robot": "^10.0.3",
         "@types/react": "^17.0.18",
         "babel-loader": "^8.0.5",
         "css-loader": "^5.2.2",
+        "jest": "^27.3.1",
         "slate": "^0.66.5",
+        "ts-jest": "^27.0.7",
         "ts-loader": "^8.1.0",
         "typescript": "^4.2.4",
         "webpack": "^4.29.0",
