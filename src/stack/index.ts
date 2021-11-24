@@ -61,7 +61,7 @@ class Stack {
    * @param {Object} params Optional parameters for the GET call
    * @return {Object} A promise object which will be resolved with content type details.
    */
-  getContentType(uid: string, params = {}) {
+  getContentType(uid: string, params = {}): Promise<{ [key: string]: any }> {
     if (!uid) {
       return Promise.reject(new Error('uid is required'));
     }
@@ -75,7 +75,7 @@ class Stack {
    * @param {Object} params Optional parameters for the GET call
    * @return {Object} A promise object which will be resolved with details of the content type.
    */
-  getContentTypes(query = {}, params: { [key: string]: any } = {}) {
+  getContentTypes(query = {}, params: { [key: string]: any } = {}): Promise<{ [key: string]: any }> {
     const optionParams = params;
     optionParams.query = query;
     const options = { params: optionParams, action: 'getContentTypes' };

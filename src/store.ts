@@ -44,7 +44,7 @@ class Store {
      * @return {external:Promise}
      */
 
-  set(key: string, value: { [key: string]: any }) {
+  set(key: string, value: string) {
     if (!key || !value || typeof key !== 'string') {
       throw new Error('Kindly provide valid parameters');
     }
