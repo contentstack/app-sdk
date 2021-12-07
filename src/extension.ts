@@ -108,7 +108,10 @@ class Extension {
       }
 
       case "APP_CONFIG_WIDGET": {        
-        this.location.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
+        this.location.AppConfigWidget = {
+          installation: new AppConfig(initializationData, postRobot, emitter),
+          stack: new Stack(initializationData.data.stack, postRobot),
+        }
         break
       }
 

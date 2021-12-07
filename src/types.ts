@@ -15,11 +15,12 @@ export declare interface IRTE {
 }
 
 export declare interface IAppConfigWidget {
-    setInstallationData: (
-        installationData: IInstallationData
-    ) => Promise<{ [key: string]: any }>;
-    getInstallationData: () => Promise<IInstallationData>;
-    [key: string]: any;
+    installation: {
+        setInstallationData: (installationData: IInstallationData) => Promise<{ [key: string]: any }>;
+        getInstallationData: () => Promise<IInstallationData>;
+        [key: string]: any;
+    },
+    stack:  {[key: string]: any};
 }
 
 export declare interface IPageWidget {
@@ -158,17 +159,17 @@ export interface Scope {
  */
 export interface IInstallationData {
     configuration: { [key: string]: any };
-    server_configuration: { [key: string]: any };
+    serverConfiguration: { [key: string]: any };
     webhooks?: {
-        webhook_uid: string;
+        webhookUid: string;
         channels: string[];
     }[];
-    ui_locations?: {
+    uiLocations?: {
         type: AppLocation;
         meta: {
             enabled: boolean;
             scope?: Scope;
-            extention_uid: string;
+            extentionUid: string;
         }[];
     }[];
 }
