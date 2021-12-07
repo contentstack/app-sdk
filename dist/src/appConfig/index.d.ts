@@ -1,3 +1,4 @@
+import Stack from "../stack";
 import { IInstallationData } from "../types";
 /**
  * Class representing the current stack in Contentstack UI.
@@ -11,6 +12,7 @@ export declare class AppConfig {
     constructor(data: {
         [key: string]: any;
     }, connection: any, emitter: EventEmitter);
+    stack: () => Stack;
     setInstallationData: (installationData: IInstallationData) => Promise<{
         [key: string]: any;
     }>;
