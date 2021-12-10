@@ -4,6 +4,7 @@ import Window from './window';
 import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
+import Metadata from './metadata';
 import EventEmitter from 'wolfy87-eventemitter';
 import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, IAssetSidebarWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
 import { IRTEPluginInitializer } from './RTE/types';
@@ -23,6 +24,7 @@ class Extension {
   postRobot: any
   stack: Stack
   store: Store
+  metadata: Metadata
 
   Extension: {
     DashboardWidget: IDashboardWidget | null
@@ -69,6 +71,7 @@ class Extension {
      * @type {Stack}
      */
     this.stack = new Stack(initializationData.data.stack, postRobot);
+    this.metadata = new Metadata(postRobot);
 
 
     this.Extension = {
