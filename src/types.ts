@@ -161,7 +161,6 @@ export interface IInstallationData {
     configuration: { [key: string]: any };
     serverConfiguration: { [key: string]: any };
     webhooks?: {
-        webhookUid: string;
         channels: string[];
     }[];
     uiLocations?: {
@@ -169,6 +168,7 @@ export interface IInstallationData {
         meta: {
             enabled: boolean;
             scope?: Scope;
+            name: string,
             extentionUid: string;
         }[];
     }[];

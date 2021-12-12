@@ -1,6 +1,6 @@
 {
     "name": "@contentstack/app-sdk",
-    "version": "0.0.5",
+    "version": "0.0.8-beta",
     "types": "dist/src/index.d.ts",
     "description": "This SDK helps connect to the development server of the Contentstack and sync the data.",
     "main": "dist/index.js",
