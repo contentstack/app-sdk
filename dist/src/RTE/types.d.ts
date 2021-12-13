@@ -146,6 +146,7 @@ export declare interface IRegistry {
     Component?: (element: React.ReactElement, attrs: {
         [key: string]: any;
     }, path: number[], rte: IRteParam) => React.ReactElement;
+    IngressComponent?: React.Component | null;
 }
 export declare interface IMeta {
     id: string;

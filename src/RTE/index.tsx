@@ -117,7 +117,7 @@ export class RTEPlugin {
                         this.pluginMetaData.registry.title = value;
                         break;
                     }
-                    case "iconName": {
+                    case "icon": {
                         this.pluginMetaData.registry.iconName = value;
                         this.containerMetaData.registry.iconName = value
                         break;
@@ -220,9 +220,12 @@ export class RTEPlugin {
                         break;
                     }
 
-                    case "Component": {
+                    case "render": {
                         this.pluginMetaData.registry.Component = value;
                         break;
+                    }
+                    case 'renderProps': {
+                        this.pluginMetaData.registry.IngressComponent = value;
                     }
                 }
             }
