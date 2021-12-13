@@ -212,6 +212,7 @@ export declare interface IRegistry {
         path: number[],
         rte: IRteParam
     ) => React.ReactElement;
+    IngressComponent?: React.Component | null
 }
 
 export declare interface IMeta {
