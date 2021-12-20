@@ -1,13 +1,18 @@
 {
-    "name": "contentstack-app-framework-sdk",
-    "version": "1.0.0",
+    "name": "@contentstack/app-sdk",
+    "version": "0.0.5",
     "types": "dist/src/index.d.ts",
     "description": "This SDK helps connect to the development server of the Contentstack and sync the data.",
     "main": "dist/index.js",
+    "repository": "https://github.com/contentstack/app-sdk",
     "scripts": {
+        "prepublish": "npm run build",
         "build": "webpack",
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/**/*.test.ts'",
         "dev": "webpack --watch --mode development"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/@contentstack"
     },
     "keywords": [],
     "author": "Deepak Kharah",

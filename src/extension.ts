@@ -5,8 +5,10 @@ import Stack from './stack';
 import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
-import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTE, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser, } from './types'
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, } from './types'
 import { IRTEPluginInitializer } from './RTE/types';
+import { onData, onError } from "./utils";
+import { AppConfig } from './appConfig';
 
 const emitter = new EventEmitter();
 
@@ -17,24 +19,25 @@ class Extension {
    * @hideconstructor
    */
 
-  app_id: string
+  appUID: string
+  installationUID: string
   currentUser: IUser
-  location: ILocation
+  private type: ILocation
+  private config: {[key: string]: any}
   postRobot: any
   stack: Stack
   store: Store
 
-  Extension: {
+  location: {
     DashboardWidget: IDashboardWidget | null
     SidebarWidget: ISidebarWidget | null
     CustomField: ICustomField | null
     RTEPlugin: IRTEPluginInitializer | null
-    StackConfigWidget: IStackConfgWidget | null
     AppConfigWidget: IAppConfigWidget | null
     FullscreenAppWidget: IPageWidget | null
   }
 
-  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData) {
+  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IFullScreenInitData) {
     const initializationData = initData;
 
     this.postRobot = postRobot;
@@ -43,7 +46,13 @@ class Extension {
      * @type {Object}
      */
 
-    this.app_id = initializationData.data.app_id
+    this.appUID = initializationData.data.app_id
+
+    /**
+     * This object holds details of the app initialization user.
+     * @type {Object}
+     */
+     this.installationUID = initializationData.data.installation_uid;
     /**
      * This object holds details of the current user.
      * @type {Object}
@@ -51,10 +60,10 @@ class Extension {
     this.currentUser = initializationData.data.user;
 
     /**
-     * location of extension, "RTE_EXTENSION_WIDGET" | "CUSTOM_FIELD_WIDGET" | "DASHBOARD_WIDGET" | "SIDEBAR_WIDGET" | "STACK_CONFIG_WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
+     * location of extension, "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
      * @type {string}
      */
-    this.location = initializationData.data.type;
+    this.type = initializationData.data.type;
 
     /**
      * Store to persist data for extension.
@@ -69,57 +78,37 @@ class Extension {
      */
     this.stack = new Stack(initializationData.data.stack, postRobot);
 
+    this.config = initializationData.data.config ?? {}
 
-    this.Extension = {
+
+    this.location = {
       DashboardWidget: null,
       CustomField: null,
       SidebarWidget: null,
       RTEPlugin: null,
-      StackConfigWidget: null,
       AppConfigWidget: null,
       FullscreenAppWidget: null
     }
 
     switch (initializationData.data.type) {
 
-      case "DASHBOARD_WIDGET": {
-        this.Extension.DashboardWidget = {
-          frame: new Window(postRobot, this.location as 'DASHBOARD', emitter, initializationData.data.dashboard_width),
+      case "DASHBOARD": {
+        this.location.DashboardWidget = {
+          frame: new Window(postRobot, this.type as 'DASHBOARD', emitter, initializationData.data.dashboard_width),
           stack: new Stack(initializationData.data.stack, postRobot)
         }
         break
       }
-      case "SIDEBAR_WIDGET": {
-        this.Extension.SidebarWidget = {
+      case "WIDGET": {
+        this.location.SidebarWidget = {
           entry: new Entry(initializationData as ISidebarInitData, postRobot, emitter),
           stack: new Stack(initializationData.data.stack, postRobot)
         }
         break
       }
 
-      case "CUSTOM_FIELD_WIDGET": {
-        this.Extension.CustomField = {
-          field: new Field(initializationData as IFieldInitData, postRobot, emitter),
-          fieldConfig: initializationData.data.field_config,
-          entry: new Entry(initializationData as IFieldInitData, postRobot, emitter),
-          stack: new Stack(initializationData.data.stack, postRobot),
-          frame: new Window(postRobot, this.location as 'FIELD', emitter)
-        }
-
-        break
-      }
-
-      case 'STACK_CONFIG_WIDGET': {
-        this.Extension.StackConfigWidget = {
-          setConfig: (config: { [key: string]: any }) => {
-            //@ts-ignore
-            this.postRobot.sendToParent('set-config', config)
-          }
-        }
-        break
-      }
-
-      case "APP_CONFIG_WIDGET": {
+      case "APP_CONFIG_WIDGET": {        
+        this.location.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
         break
       }
 
@@ -127,12 +116,25 @@ class Extension {
         break
       }
 
-      case 'RTE_EXTENSION_WIDGET':
-      default: {
+      case 'RTE_EXTENSION_WIDGET': {
         import('./RTE').then(({ rtePluginInitializer }) => {
-          this.Extension.RTEPlugin = rtePluginInitializer
+          this.location.RTEPlugin = rtePluginInitializer
         })
         break;
+      }
+
+      case "FIELD": 
+      default: {
+        initializationData.data.self = true
+        this.location.CustomField = {
+          field: new Field(initializationData as IFieldInitData, postRobot, emitter),
+          fieldConfig: initializationData.data.field_config,
+          entry: new Entry(initializationData as IFieldInitData, postRobot, emitter),
+          stack: new Stack(initializationData.data.stack, postRobot),
+          frame: new Window(postRobot, this.type as 'FIELD', emitter)
+        }
+
+        break
       }
     }
 
@@ -168,10 +170,16 @@ class Extension {
       console.log('extension Event',err);
     }
   }
-  getConfig = () => {
-    //@ts-ignore
-    this.postRobot.sendToParent('get-config')
+  
+  getConfig = () : Promise<{[key: string]: any}> => {
+    if (!this.installationUID) {
+      return Promise.resolve(this.config)
+    }
+    return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
+  }
 
+  getCurrentLocation = () => {
+    return this.type
   }
 
   static initialize(version: string) {
