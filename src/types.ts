@@ -179,8 +179,8 @@ export declare interface IInitializationData {
     WIDGET: ISidebarInitData;
     DASHBOARD: IDashboardInitData;
     RTE_EXTENSION_WIDGET: IRTEInitData;
-    APP_CONFIG_WIDGET: IAppConfigInitData;
-    FULL_SCREEN_WIDGET: IFullScreenInitData;
+    // APP_CONFIG_WIDGET: IAppConfigInitData;
+    // FULL_SCREEN_WIDGET: IFullScreenInitData;
 }
 
 export declare type ILocation =
@@ -188,5 +188,5 @@ export declare type ILocation =
     | "FIELD"
     | "DASHBOARD"
     | "WIDGET"
-    | "APP_CONFIG_WIDGET"
-    | "FULL_SCREEN_WIDGET";
+    // | "APP_CONFIG_WIDGET"
+    // | "FULL_SCREEN_WIDGET";
