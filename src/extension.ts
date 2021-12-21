@@ -19,8 +19,8 @@ class Extension {
    * @hideconstructor
    */
 
-  appUID: string
-  installationUID: string
+//   appUID: string
+//   installationUID: string
   currentUser: IUser
   private type: ILocation
   private config: {[key: string]: any}
@@ -33,11 +33,13 @@ class Extension {
     SidebarWidget: ISidebarWidget | null
     CustomField: ICustomField | null
     RTEPlugin: IRTEPluginInitializer | null
-    AppConfigWidget: IAppConfigWidget | null
-    FullscreenAppWidget: IPageWidget | null
+    // AppConfigWidget: IAppConfigWidget | null
+    // FullscreenAppWidget: IPageWidget | null
   }
 
-  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IFullScreenInitData) {
+  constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData 
+    // | IAppConfigInitData | IFullScreenInitData
+     ) {
     const initializationData = initData;
 
     this.postRobot = postRobot;
@@ -46,13 +48,13 @@ class Extension {
      * @type {Object}
      */
 
-    this.appUID = initializationData.data.app_id
+    // this.appUID = initializationData.data.app_id
 
     /**
      * This object holds details of the app initialization user.
      * @type {Object}
      */
-     this.installationUID = initializationData.data.installation_uid;
+    //  this.installationUID = initializationData.data.installation_uid;
     /**
      * This object holds details of the current user.
      * @type {Object}
@@ -86,8 +88,8 @@ class Extension {
       CustomField: null,
       SidebarWidget: null,
       RTEPlugin: null,
-      AppConfigWidget: null,
-      FullscreenAppWidget: null
+    //   AppConfigWidget: null,
+    //   FullscreenAppWidget: null
     }
 
     switch (initializationData.data.type) {
@@ -107,14 +109,14 @@ class Extension {
         break
       }
 
-      case "APP_CONFIG_WIDGET": {        
-        this.location.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
-        break
-      }
+    //   case "APP_CONFIG_WIDGET": {
+    //     this.location.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
+    //     break
+    //   }
 
-      case "FULL_SCREEN_WIDGET": {
-        break
-      }
+    //   case "FULL_SCREEN_WIDGET": {
+    //     break
+    //   }
 
       case 'RTE_EXTENSION_WIDGET': {
         import('./RTE').then(({ rtePluginInitializer }) => {
@@ -123,7 +125,7 @@ class Extension {
         break;
       }
 
-      case "FIELD": 
+      case "FIELD":
       default: {
         initializationData.data.self = true
         this.location.CustomField = {
@@ -145,23 +147,23 @@ class Extension {
           emitter.emitEvent('entrySave', [{ data: event.data.data }]);
           emitter.emitEvent('updateFields', [{ data: event.data.data }]);
         }
-  
+
         if (event.data.name === 'entryChange') {
           emitter.emitEvent('entryChange', [{ data: event.data.data }]);
         }
-  
+
         if (event.data.name === 'entryPublish') {
           emitter.emitEvent('entryPublish', [{ data: event.data.data }]);
         }
-  
+
         if (event.data.name === 'entryUnPublish') {
           emitter.emitEvent('entryUnPublish', [{ data: event.data.data }]);
         }
-  
+
         if (event.data.name === 'dashboardResize') {
           emitter.emitEvent('dashboardResize', [{ state: event.data.state }]);
         }
-  
+
         if (event.data.name === 'extensionFieldChange') {
           emitter.emitEvent('extensionFieldChange', [{ data: event.data.data }]);
         }
@@ -170,13 +172,13 @@ class Extension {
       console.log('extension Event',err);
     }
   }
-  
-  getConfig = () : Promise<{[key: string]: any}> => {
-    if (!this.installationUID) {
-      return Promise.resolve(this.config)
-    }
-    return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
-  }
+
+//   getConfig = () : Promise<{[key: string]: any}> => {
+//     if (!this.installationUID) {
+//       return Promise.resolve(this.config)
+//     }
+//     return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
+//   }
 
   getCurrentLocation = () => {
     return this.type
