@@ -168,8 +168,6 @@ export declare interface IInitializationData {
     WIDGET: ISidebarInitData;
     DASHBOARD: IDashboardInitData;
     RTE_EXTENSION_WIDGET: IRTEInitData;
-    APP_CONFIG_WIDGET: IAppConfigInitData;
-    FULL_SCREEN_WIDGET: IFullScreenInitData;
 }
-export declare type ILocation = "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET";
+export declare type ILocation = "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET";
 //# sourceMappingURL=types.d.ts.map
