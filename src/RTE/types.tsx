@@ -117,7 +117,7 @@ export declare interface IRteParam {
     ) => void;
     deleteNode: (optons: {
         at?: Location;
-        distance?: number | undefined;
+        distance?: number;
         unit?: "character" | "word" | "line" | "block";
         reverse?: boolean;
         hanging?: boolean;
@@ -133,7 +133,6 @@ export declare interface IRteParam {
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
-Transforms.wrapNodes;
 
 export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 
