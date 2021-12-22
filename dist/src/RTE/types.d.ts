@@ -75,7 +75,7 @@ export declare interface IRteParam {
     }) => void;
     deleteNode: (optons: {
         at?: Location;
-        distance?: number | undefined;
+        distance?: number;
         unit?: "character" | "word" | "line" | "block";
         reverse?: boolean;
         hanging?: boolean;
