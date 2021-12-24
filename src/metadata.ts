@@ -29,6 +29,7 @@ class Metadata {
             payload: {
                 metadata: {
                     type,
+                    uid,
                     ...otherMetaData,
                 },
             },
@@ -52,6 +53,7 @@ class Metadata {
             payload: {
                 metadata: {
                     type,
+                    uid,
                     locale,
                     _content_type_uid,
                 },
@@ -75,6 +77,7 @@ class Metadata {
             payload: {
                 metadata: {
                     type,
+                    uid,
                     ...otherMetaData,
                 },
             },
@@ -94,6 +97,7 @@ class Metadata {
             payload: {
                 metadata: {
                     type,
+                    uid,
                     locale,
                     _content_type_uid,
                 },
