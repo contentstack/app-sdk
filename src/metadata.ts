@@ -1,6 +1,8 @@
 export declare interface IMetadata {
     uid: string;
     type: "asset" | "entry";
+    _content_type_uid?: string;
+    locale?: string;
     [key: string]: any;
 }
 
@@ -15,10 +17,11 @@ class Metadata {
     constructor(private _connection: any) {}
 
     createMetaData(metadataConfig: IMetadata) {
-        const { uid, type, ...otherMetaData } = metadataConfig;
+        const { uid, type = "asset", ...otherMetaData } = metadataConfig;
 
         if (!uid) throw new Error("uid is required");
-        if (!type) throw new Error("type is required");
+
+        // _content_type_uid is required for entry
 
         const data = {
             uid,
@@ -34,11 +37,28 @@ class Metadata {
         return this._connection.sendToParent("stackQuery", data);
     }
 
-    retrieveMetaData(type: "asset" | "entry" = "asset") {
-        return this._connection.sendToParent(
-            metadataTypes.retrieveMetadata,
-            type
-        );
+    retrieveMetaData(metadataConfig: IMetadata) {
+        const {
+            uid,
+            type = "asset",
+            locale,
+            _content_type_uid,
+        } = metadataConfig;
+        if (!uid) throw new Error("uid is required");
+
+        const data = {
+            uid,
+            action: metadataTypes.retrieveMetadata,
+            payload: {
+                metadata: {
+                    type,
+                    locale,
+                    _content_type_uid,
+                },
+            },
+        };
+
+        return this._connection.sendToParent("stackQuery", data);
     }
 
     updateMetaData(metadataConfig: IMetadata) {
@@ -63,9 +83,23 @@ class Metadata {
         return this._connection.sendToParent("stackQuery", data);
     }
 
-    deleteMetaData() {
-        //
-        return this._connection.sendToParent(metadataTypes.deleteMetadata);
+    deleteMetaData(metadataConfig: IMetadata) {
+        const { uid, type, locale, _content_type_uid } = metadataConfig;
+        if (!uid) throw new Error("uid is required");
+        if (!type) throw new Error("type is required");
+
+        const data = {
+            uid,
+            action: metadataTypes.deleteMetadata,
+            payload: {
+                metadata: {
+                    type,
+                    locale,
+                    _content_type_uid,
+                },
+            },
+        };
+        return this._connection.sendToParent("stackQuery", data);
     }
 }
 export default Metadata;
