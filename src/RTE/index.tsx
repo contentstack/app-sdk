@@ -43,6 +43,7 @@ export class RTEPlugin {
 
     constructor(id: string, private configCallback: IConfigCallback) {
         this.pluginMetaData.meta.id = id;
+        this.pluginMetaData.registry.iconName = configCallback()['iconName'];
     }
 
     addPlugins = (...plugins: RTEPlugin[]) => {
@@ -61,7 +62,7 @@ export class RTEPlugin {
             }
 
             plugin.pluginMetaData.registry.category =
-                this.pluginMetaData.registry;
+                this.pluginMetaData.meta.id;
             this.containerMetaData.meta.dependentPlugins.push(plugin);
             plugin.pluginMetaData.meta.isDependent = true;
         });
@@ -88,8 +89,7 @@ export class RTEPlugin {
             }
 
             case "keydown": {
-                this.pluginMetaData.meta.editorCallbacks["keydown"] =
-                    callback;
+                this.pluginMetaData.meta.editorCallbacks["keydown"] = callback;
                 break;
             }
 
@@ -105,7 +105,7 @@ export class RTEPlugin {
         }
     };
 
-    get = (rte: IRteParam) => {
+    get = (rte: IRteParam | void) => {
         const config = this.configCallback(rte);
 
         Object.entries(config).forEach(
@@ -116,8 +116,9 @@ export class RTEPlugin {
                         this.pluginMetaData.registry.title = value;
                         break;
                     }
-                    case "iconName": {
+                    case "icon": {
                         this.pluginMetaData.registry.iconName = value;
+                        this.containerMetaData.registry.iconName = value;
                         break;
                     }
                     case "displayOn": {
@@ -219,15 +220,20 @@ export class RTEPlugin {
                     }
 
                     case "render": {
-                        this.pluginMetaData.registry.render = value;
+                        this.pluginMetaData.registry.Component = value;
                         break;
+                    }
+                    case "renderProps": {
+                        this.pluginMetaData.registry.IngressComponent = value;
                     }
                 }
             }
         );
 
+        const containerMeta = this.containerMetaData.meta;
         this.containerMetaData = {
             registry: {
+                ...this.containerMetaData.registry,
                 id: this.pluginMetaData.meta.id,
                 title: this.pluginMetaData.registry.title,
                 rootCategory: false,
@@ -236,8 +242,8 @@ export class RTEPlugin {
                 },
             },
             meta: {
+                ...containerMeta,
                 id: this.pluginMetaData.meta.id,
-                dependentPlugins: [],
             },
         };
 
