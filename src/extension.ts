@@ -164,6 +164,13 @@ class Extension {
                         //@ts-ignore
                         this.postRobot.sendToParent("syncAsset");
                     },
+                    updateWidth: (width: number) => {
+                        if (typeof width !== 'number') {
+                            throw new Error('Width must be a number');
+                        }
+                        //@ts-ignore
+                        this.postRobot.sendToParent("updateAssetSidebarWidth", width);
+                    }
                 };
                 break;
             }
