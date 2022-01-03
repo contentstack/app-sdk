@@ -98,7 +98,7 @@ export declare interface IRTEInitData {
         app_id: string;
         installation_uid: string;
         stack: ICurrentStack;
-        type: "RTE_EXTENSION_WIDGET";
+        type: "RTE";
         user: IUser;
         config?: {
             [key: string]: any;
@@ -186,10 +186,10 @@ export declare interface IInitializationData {
     FIELD: IFieldConfig;
     WIDGET: ISidebarInitData;
     DASHBOARD: IDashboardInitData;
-    RTE_EXTENSION_WIDGET: IRTEInitData;
+    RTE: IRTEInitData;
     APP_CONFIG_WIDGET: IAppConfigInitData;
     FULL_SCREEN_WIDGET: IFullScreenInitData;
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
-export declare type ILocation = "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET" | "ASSET_SIDEBAR_WIDGET";
+export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET" | "ASSET_SIDEBAR_WIDGET";
 //# sourceMappingURL=types.d.ts.map
