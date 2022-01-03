@@ -88,7 +88,7 @@ class Extension {
         this.currentUser = initializationData.data.user;
 
         /**
-         * location of extension, "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
+         * location of extension, "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
          * @type {string}
          */
         this.type = initializationData.data.type;
@@ -165,12 +165,15 @@ class Extension {
                         this.postRobot.sendToParent("syncAsset");
                     },
                     updateWidth: (width: number) => {
-                        if (typeof width !== 'number') {
-                            throw new Error('Width must be a number');
+                        if (typeof width !== "number") {
+                            throw new Error("Width must be a number");
                         }
                         //@ts-ignore
-                        this.postRobot.sendToParent("updateAssetSidebarWidth", width);
-                    }
+                        this.postRobot.sendToParent(
+                            "updateAssetSidebarWidth",
+                            width
+                        );
+                    },
                 };
                 break;
             }
@@ -179,7 +182,7 @@ class Extension {
                 break;
             }
 
-            case "RTE_EXTENSION_WIDGET": {
+            case "RTE": {
                 import("./RTE").then(({ rtePluginInitializer }) => {
                     this.location.RTEPlugin = rtePluginInitializer;
                 });
