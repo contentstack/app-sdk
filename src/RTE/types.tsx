@@ -135,7 +135,7 @@ export declare interface IRteParam {
 }
 Transforms.wrapNodes;
 
-export declare type IConfigCallback = (rte: IRteParam) => Partial<IConfig>;
+export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 
 export declare type IOnFunction = {
     exec: () => {};
@@ -177,11 +177,11 @@ export declare interface IDnd {
 
 export declare interface IConfig {
     title: string;
-    iconName: React.ReactElement;
+    iconName: React.ReactElement | null;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
-    render?: (...params: any) => ReactElement;
+    Component?: (...params: any) => ReactElement;
 }
 
 export declare interface IRegistryDnd {
@@ -195,8 +195,8 @@ export declare interface IRegistryDnd {
 
 export declare interface IRegistry {
     title: string;
-    iconName?: React.ReactElement;
-    category?: object;
+    iconName?: React.ReactElement | null;
+    category?: string;
     toolbar: {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
@@ -206,12 +206,13 @@ export declare interface IRegistry {
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
     handleMouseDown?: (...params: any) => any;
-    render?: (
+    Component?: (
         element: React.ReactElement,
         attrs: { [key: string]: any },
         path: number[],
         rte: IRteParam
     ) => React.ReactElement;
+    IngressComponent?: React.Component | null
 }
 
 export declare interface IMeta {
@@ -231,6 +232,7 @@ export declare interface IPluginMetaData {
 export declare interface IContainerRegistry {
     id: string;
     title: string;
+    iconName?: React.ReactElement | null;
     rootCategory: false;
     toolbar: {
         inMainToolbar: boolean;
