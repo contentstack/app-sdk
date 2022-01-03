@@ -10,7 +10,7 @@
         "build": "webpack",
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/**/*.test.ts'",
         "dev": "webpack --watch --mode development",
-        "postinstall": "npm run build"
+        "install": "npm run build"
     },
     "publishConfig": {
         "registry": "https://npm.pkg.github.com/@contentstack"
