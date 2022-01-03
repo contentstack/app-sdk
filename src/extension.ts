@@ -77,7 +77,7 @@ class Extension {
     this.currentUser = initializationData.data.user;
 
     /**
-     * location of extension, "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
+     * location of extension, "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
      * @type {string}
      */
     this.type = initializationData.data.type;
@@ -146,7 +146,7 @@ class Extension {
         break
       }
 
-      case 'RTE_EXTENSION_WIDGET': 
+      case 'RTE': 
       default:{
         import('./RTE').then(({ rtePluginInitializer }) => {
           this.location.RTEPlugin = rtePluginInitializer
