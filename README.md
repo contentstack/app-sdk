@@ -1,4 +1,4 @@
-# App Framework SDK
+# Contentstack App SDK
 
 The **JSON Rich Text Editor Plugins** lets you add/create custom plugins to extend the functionality of your [JSON Rich Text Editor](https://www.contentstack.com/docs/developers/json-rich-text-editor/about-json-rich-text-editor/) as per your needs. You can use the prebuilt JSON RTE plugins by modifying the code to suit your requirement.
 
