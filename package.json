@@ -11,11 +11,8 @@
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/**/*.test.ts'",
         "dev": "webpack --watch --mode development"
     },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com/@contentstack"
-    },
     "keywords": [],
-    "author": "Deepak Kharah",
+    "author": "Contentstack",
     "license": "MIT",
     "devDependencies": {
         "@babel/core": "^7.2.2",
@@ -40,5 +37,8 @@
     "dependencies": {
         "post-robot": "8.0.29",
         "wolfy87-eventemitter": "5.2.4"
-    }
+    },
+    "files": [
+        "dist"
+    ]
 }

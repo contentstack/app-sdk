@@ -176,7 +176,7 @@ export declare interface IDnd {
 
 export declare interface IConfig {
     title: string;
-    iconName: React.ReactElement | null;
+    icon: React.ReactElement | null;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
