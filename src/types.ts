@@ -97,7 +97,7 @@ export declare interface IFieldInitData {
         field_config: IFieldConfig;
         config?: { [key: string]: any };
         stack: ICurrentStack;
-        self: boolean
+        self: boolean;
         type: "FIELD";
     };
 }
@@ -109,7 +109,7 @@ export declare interface IRTEInitData {
         stack: ICurrentStack;
         type: "RTE";
         user: IUser;
-        config?: {[key: string]: any};    
+        config?: { [key: string]: any };
     };
 }
 
@@ -179,7 +179,7 @@ export declare interface IInitializationData {
     WIDGET: ISidebarInitData;
     DASHBOARD: IDashboardInitData;
     RTE: IRTEInitData;
-    // APP_CONFIG_WIDGET: IAppConfigInitData;
+    APP_CONFIG_WIDGET: IAppConfigInitData;
     // FULL_SCREEN_WIDGET: IFullScreenInitData;
 }
 
@@ -188,5 +188,5 @@ export declare type ILocation =
     | "FIELD"
     | "DASHBOARD"
     | "WIDGET"
-    // | "APP_CONFIG_WIDGET"
+    | "APP_CONFIG_WIDGET"
     // | "FULL_SCREEN_WIDGET";
