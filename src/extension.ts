@@ -6,6 +6,7 @@ import Entry from './entry';
 import Store from './store';
 import EventEmitter from 'wolfy87-eventemitter';
 import { 
+  IAppConfigInitData,
    IAppConfigWidget, 
    ICustomField, 
    IDashboardInitData, 
@@ -18,8 +19,8 @@ import {
    ISidebarWidget, 
    IUser, } from './types'
 import { IRTEPluginInitializer } from './RTE/types';
-// import { onData, onError } from "./utils";
-// import { AppConfig } from "./appConfig";
+import { AppConfig } from './appConfig';
+import { onData, onError } from './utils';
 
 const emitter = new EventEmitter();
 
@@ -52,7 +53,7 @@ class Extension {
     | IDashboardInitData 
     | IFieldInitData 
     | ISidebarInitData 
-    // | IAppConfigInitData 
+    | IAppConfigInitData 
     // | IFullScreenInitData
     ) {
     const initializationData = initData;
@@ -124,10 +125,10 @@ class Extension {
         break
       }
 
-      // case "APP_CONFIG_WIDGET": {        
-      //   this.location.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
-      //   break
-      // }
+      case "APP_CONFIG_WIDGET": {        
+        this.location.AppConfigWidget = new AppConfig(initializationData, postRobot, emitter)
+        break
+      }
 
       // case "FULL_SCREEN_WIDGET": {
       //   break
@@ -190,12 +191,12 @@ class Extension {
     }
   }
   
-  // getConfig = () : Promise<{[key: string]: any}> => {
-  //   if (!this.installationUID) {
-  //     return Promise.resolve(this.config)
-  //   }
-  //   return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
-  // }
+  getConfig = () : Promise<{[key: string]: any}> => {
+    if (!this.installationUID) {
+      return Promise.resolve(this.config)
+    }
+    return this.postRobot.sendToParent('getConfig').then(onData).catch(onError)
+  }
 
   getCurrentLocation = () => {
     return this.type
