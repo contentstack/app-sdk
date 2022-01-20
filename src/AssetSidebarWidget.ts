@@ -23,12 +23,6 @@ class AssetSidebarWidget {
          * @type {Object}
          */
 
-        console.log(
-            "AssetSidebarWidget",
-            initializationData,
-            connection,
-            emitter
-        );
         this.currentAsset = initializationData.data.currentAsset;
 
         this._emitter = emitter;
@@ -51,11 +45,14 @@ class AssetSidebarWidget {
             }
         );
 
-
         this.getData = this.getData.bind(this);
         this.setData = this.setData.bind(this);
         this.syncAsset = this.syncAsset.bind(this);
         this.updateWidth = this.updateWidth.bind(this);
+        this.onSave = this.onSave.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onPublish = this.onPublish.bind(this);
+        this.onUnPublish = this.onUnPublish.bind(this);
     }
 
     getData() {
@@ -67,7 +64,6 @@ class AssetSidebarWidget {
     }
 
     syncAsset() {
-        console.log("AssetSidebarWidget syncAsset", this);
         this._connection.sendToParent("syncAsset");
     }
 
