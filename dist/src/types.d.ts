@@ -7,9 +7,6 @@ export declare interface ICustomField {
 export declare interface ISidebarWidget {
     [key: string]: any;
 }
-export declare interface IAssetSidebarWidget {
-    [key: string]: any;
-}
 export declare interface IRTE {
     [key: string]: any;
 }
