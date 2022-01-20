@@ -10,7 +10,6 @@ import {
     IAppConfigInitData,
     IAppConfigWidget,
     IAssetSidebarInitData,
-    IAssetSidebarWidget,
     ICustomField,
     IDashboardInitData,
     IDashboardWidget,
@@ -26,6 +25,7 @@ import {
 import { IRTEPluginInitializer } from "./RTE/types";
 import { onData, onError } from "./utils";
 import { AppConfig } from "./appConfig";
+import AssetSidebarWidget from "./AssetSidebarWidget";
 
 const emitter = new EventEmitter();
 
@@ -53,7 +53,7 @@ class Extension {
         RTEPlugin: IRTEPluginInitializer | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
-        AssetSidebarWidget: IAssetSidebarWidget | null;
+        AssetSidebarWidget: AssetSidebarWidget | null;
     };
 
     constructor(
@@ -154,27 +154,12 @@ class Extension {
             }
 
             case "ASSET_SIDEBAR_WIDGET": {
-                this.location.AssetSidebarWidget = {
-                    currentAsset: initializationData.data.currentAsset,
-                    setData: (asset: Partial<IAssetSidebarInitData>) => {
-                        //@ts-ignore
-                        this.postRobot.sendToParent("setData", asset);
-                    },
-                    syncAsset: () => {
-                        //@ts-ignore
-                        this.postRobot.sendToParent("syncAsset");
-                    },
-                    updateWidth: (width: number) => {
-                        if (typeof width !== "number") {
-                            throw new Error("Width must be a number");
-                        }
-                        //@ts-ignore
-                        this.postRobot.sendToParent(
-                            "updateAssetSidebarWidth",
-                            width
-                        );
-                    },
-                };
+                this.location.AssetSidebarWidget = new AssetSidebarWidget(
+                    initializationData as IAssetSidebarInitData,
+                    postRobot,
+                    emitter
+                );
+
                 break;
             }
 
@@ -236,6 +221,31 @@ class Extension {
 
                 if (event.data.name === "entryUnPublish") {
                     emitter.emitEvent("entryUnPublish", [
+                        { data: event.data.data },
+                    ]);
+                }
+
+                if (event.data.name === "assetSave") {
+                    emitter.emitEvent("assetSave", [{ data: event.data.data }]);
+                    emitter.emitEvent("updateFields", [
+                        { data: event.data.data },
+                    ]);
+                }
+
+                if (event.data.name === "assetChange") {
+                    emitter.emitEvent("assetChange", [
+                        { data: event.data.data },
+                    ]);
+                }
+
+                if (event.data.name === "assetPublish") {
+                    emitter.emitEvent("assetPublish", [
+                        { data: event.data.data },
+                    ]);
+                }
+
+                if (event.data.name === "assetUnPublish") {
+                    emitter.emitEvent("assetUnPublish", [
                         { data: event.data.data },
                     ]);
                 }
