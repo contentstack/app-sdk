@@ -59,19 +59,19 @@ class AssetSidebarWidget {
         return this.currentAsset;
     }
 
-    setData(asset: Partial<IAssetSidebarInitData>) {
-        this._connection.sendToParent("setData", asset);
+    setData(asset: Partial<IAssetSidebarInitData>): Promise<any> {
+        return this._connection.sendToParent("setData", asset);
     }
 
-    syncAsset() {
-        this._connection.sendToParent("syncAsset");
+    syncAsset(): Promise<any> {
+        return this._connection.sendToParent("syncAsset");
     }
 
-    updateWidth(width: number) {
+    updateWidth(width: number): Promise<any> {
         if (typeof width !== "number") {
             throw new Error("Width must be a number");
         }
-        this._connection.sendToParent("updateAssetSidebarWidth", width);
+        return this._connection.sendToParent("updateAssetSidebarWidth", width);
     }
 
     /**
