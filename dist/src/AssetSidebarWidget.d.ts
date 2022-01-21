@@ -17,9 +17,9 @@ declare class AssetSidebarWidget {
     getData(): {
         [key: string]: any;
     };
-    setData(asset: Partial<IAssetSidebarInitData>): void;
-    syncAsset(): void;
-    updateWidth(width: number): void;
+    setData(asset: Partial<IAssetSidebarInitData>): Promise<any>;
+    syncAsset(): Promise<any>;
+    updateWidth(width: number): Promise<any>;
     /**
      * This function executes the callback function every time an asset is saved.
      * @param {function} callback The function to be called when an asset is saved.
