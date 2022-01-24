@@ -154,7 +154,6 @@ export declare interface IAssetSidebarInitData {
 export declare interface setAssetDto {
     title: string;
     description: string;
-    permanent_url: string;
     tags: string[];
 }
 
