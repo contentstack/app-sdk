@@ -115,7 +115,7 @@ export declare interface IRteParam {
         node: Node,
         options: Omit<TransformOptions, "split"> & { select?: boolean }
     ) => void;
-    deleteNode: (optons: {
+    deleteNode: (options: {
         at?: Location;
         distance?: number;
         unit?: "character" | "word" | "line" | "block";
