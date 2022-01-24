@@ -59,15 +59,15 @@ class AssetSidebarWidget {
         return this.currentAsset;
     }
 
-    setData(asset: Partial<IAssetSidebarInitData>): Promise<any> {
+    async setData(asset: Partial<IAssetSidebarInitData>): Promise<any> {
         return this._connection.sendToParent("setData", asset);
     }
 
-    syncAsset(): Promise<any> {
+    async syncAsset(): Promise<any> {
         return this._connection.sendToParent("syncAsset");
     }
 
-    updateWidth(width: number): Promise<any> {
+    async updateWidth(width: number): Promise<any> {
         if (typeof width !== "number") {
             throw new Error("Width must be a number");
         }
