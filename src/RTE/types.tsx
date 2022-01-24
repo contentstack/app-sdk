@@ -179,7 +179,6 @@ export declare interface IConfig {
     icon: React.ReactElement | null;
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
-    dnd: IDnd;
     render?: (...params: any) => ReactElement;
 }
 
@@ -200,7 +199,6 @@ export declare interface IRegistry {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
     };
-    dndOptions: Partial<IRegistryDnd>;
     isContentstackElement: boolean;
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;

@@ -15,7 +15,6 @@ export class RTEPlugin {
                 inMainToolbar: true,
                 inHoveringToolbar: true,
             },
-            dndOptions: {},
             isContentstackElement: true,
         },
         meta: {
@@ -166,66 +165,9 @@ export class RTEPlugin {
                         break;
                     }
 
-                    case "dnd": {
-                        if (
-                            typeof value === "object" &&
-                            !Array.isArray(value)
-                        ) {
-                            if (
-                                typeof this.pluginMetaData.registry
-                                    .dndOptions === "undefined"
-                            ) {
-                                this.pluginMetaData.registry.dndOptions = {
-                                    DisableDND: false,
-                                };
-                            }
-                            Object.entries(value).forEach(
-                                ([option, val]: [option: string, val: any]) => {
-                                    switch (option) {
-                                        case "disable": {
-                                            this.pluginMetaData.registry.dndOptions.DisableDND =
-                                                val;
-                                            break;
-                                        }
-
-                                        case "hideSelectionBackground": {
-                                            this.pluginMetaData.registry.dndOptions.DisableSelectionHalo =
-                                                val;
-                                            break;
-                                        }
-                                        case "icon": {
-                                            this.pluginMetaData.registry.dndOptions.CustomDndIcon =
-                                                val;
-                                            break;
-                                        }
-                                        case "className": {
-                                            this.pluginMetaData.registry.dndOptions.ContainerClassName =
-                                                val;
-                                            break;
-                                        }
-                                        case "droppableContainer": {
-                                            this.pluginMetaData.registry.dndOptions.getDroppableContainer =
-                                                val;
-                                            break;
-                                        }
-                                        case "disableColumnLayout": {
-                                            this.pluginMetaData.registry.dndOptions.DisableGridDnd =
-                                                val;
-                                            break;
-                                        }
-                                    }
-                                }
-                            );
-                        }
-                        break;
-                    }
-
                     case "render": {
                         this.pluginMetaData.registry.Component = value;
                         break;
-                    }
-                    case 'renderProps': {
-                        this.pluginMetaData.registry.IngressComponent = value;
                     }
                 }
             }
