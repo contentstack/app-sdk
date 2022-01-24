@@ -14,7 +14,6 @@ class ContentType extends Base {
      * @constructor
      * @hideconstructor
      * @name Stack#ContentType#Entry
-     * @version 2.2.0
      * @desc An entry is the actual piece of content created using one of the defined content types
      * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#entries| Entries}
      */
