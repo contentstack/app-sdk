@@ -1,4 +1,3 @@
-//@ts-nocheck
 
 export function transform(type) {
   return function () {
@@ -64,6 +63,7 @@ export function mergeDeep(oldTarget, oldSource) {
 export function _type(val) {
   let __typeof = typeof val;
   if (__typeof === 'object' && Array.isArray(val)) {
+    //@ts-ignore
     __typeof = 'array';
   }
   return __typeof;

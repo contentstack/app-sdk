@@ -1,9 +1,8 @@
-//@ts-nocheck
 
 import Base from '../base';
 import { getReferences, language, environment } from '../../utils';
 
-let connection = {};
+let connection: any = {};
 
 /**
  * @summary Creates an instance of `Asset`.
@@ -24,6 +23,8 @@ function onError(error) {
 }
 
 class Asset extends Base {
+  getReferences: any
+  environment: any
   constructor(uid) {
     super(uid);
     this.getReferences = getReferences;
@@ -234,6 +235,7 @@ export default (uiConnection) => {
   connection = uiConnection;
   return new Proxy(Asset, {
     apply(Target, thisArg, argumentsList) {
+      //@ts-ignore
       return new Target(...argumentsList);
     }
   });

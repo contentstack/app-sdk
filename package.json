@@ -12,7 +12,10 @@
         "dev": "webpack --watch --mode development"
     },
     "keywords": [],
-    "author": "Contentstack",
+    "author": {
+        "name": "Contentstack",
+        "url": "https://www.contentstack.com/"
+    },
     "license": "MIT",
     "devDependencies": {
         "@babel/core": "^7.2.2",
