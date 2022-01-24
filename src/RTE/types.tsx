@@ -177,10 +177,10 @@ export declare interface IDnd {
 export declare interface IConfig {
     title: string;
     icon: React.ReactElement | null;
-    displayOn: IDisplayOnOptions | IDisplayOnOptions[];
+    display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
-    Component?: (...params: any) => ReactElement;
+    render?: (...params: any) => ReactElement;
 }
 
 export declare interface IRegistryDnd {
