@@ -43,7 +43,7 @@ export class RTEPlugin {
 
     constructor(id: string, private configCallback: IConfigCallback) {
         this.pluginMetaData.meta.id = id;
-        //this.pluginMetaData.registry.iconName = configCallback()['iconName'];
+        // this.pluginMetaData.registry.iconName = configCallback()['iconName'];
     }
 
     addPlugins = (...plugins: RTEPlugin[]) => {
@@ -122,7 +122,7 @@ export class RTEPlugin {
                         this.containerMetaData.registry.iconName = value
                         break;
                     }
-                    case "displayOn": {
+                    case "display": {
                         // make every other options false
                         this.pluginMetaData.registry.toolbar = {
                             inHoveringToolbar: false,

@@ -6,13 +6,13 @@ const createDropdown = () => {
     const DropDown = new RTEPlugin('Parent', () => {
         return ({
             title: 'Dropdown',
-            icon: React.createElement('p')
+            iconName: React.createElement('p')
         })
     });
     const Child = new RTEPlugin('Child', () => {
         return ({
             title: 'Child',
-            icon: React.createElement('span')
+            iconName: React.createElement('span')
         })
     });
     DropDown.addPlugins(Child);
@@ -33,6 +33,6 @@ it('Dropdown get() has dependent plugin', () => {
 })
 
 it('Dropdown icon without get()', () => {
-    const dropdown:any = createDropdown().get();
-    expect(stringify(dropdown.registry.iconName)).to.equal(stringify(React.createElement('p')));
+    const dropdown:any = createDropdown();
+    expect(stringify(dropdown.pluginMetaData.registry.iconName)).to.equal(stringify(React.createElement('p')));
 })
