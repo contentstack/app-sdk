@@ -1,5 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
-import { IAssetSidebarInitData } from "./types";
+import { IAssetSidebarInitData, setAssetDto } from "./types";
 /** Class representing an asset Extension from Contentstack UI.  */
 declare class AssetSidebarWidget {
     /**
@@ -17,7 +17,7 @@ declare class AssetSidebarWidget {
     getData(): {
         [key: string]: any;
     };
-    setData(asset: Partial<IAssetSidebarInitData>): Promise<any>;
+    setData(asset: Partial<setAssetDto>): Promise<any>;
     syncAsset(): Promise<any>;
     updateWidth(width: number): Promise<any>;
     /**
