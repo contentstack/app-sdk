@@ -29,7 +29,7 @@ export function transform(type) {
 
 
 // merge two objects
-export function merge(target, source) {
+export function merge(target: { [key: string]: any }, source: { [key: string]: any }) {
   const newTraget = target;
   if (target && source) {
     Object.keys(source).forEach((key) => {
@@ -40,7 +40,7 @@ export function merge(target, source) {
 }
 
 // merge two objects
-export function mergeDeep(oldTarget, oldSource) {
+export function mergeDeep(oldTarget: { [key: string]: any }, oldSource: { [key: string]: any }) {
   const newTarget = oldTarget;
   const self = this;
   const _mergeRecursive = (anotherTarget, source) => {
