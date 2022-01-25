@@ -81,60 +81,6 @@ describe("Window", () => {
         });
     });
 
-    // it("enableAutoResizing", (done) => {
-    //     const btn = document.createElement("BUTTON"); // Create a <button> element
-    //     const text = document.createTextNode("Sample Button");
-    //     btn.appendChild(text);
-    //     console.error("hahahaha", document);
-
-    //     const beforeHeight = Math.ceil(
-    //         document.documentElement.getBoundingClientRect().height
-    //     );
-    //     expect(windowObj._autoResizingEnabled).toEqual(false);
-    //     windowObj.enableAutoResizing();
-    //     window.document.body.appendChild(btn); // append element to mutate height
-    //     expect(windowObj._autoResizingEnabled).toEqual(true);
-    //     windowObj.enableAutoResizing(); // called twice to check if observer is not called twice
-    //     expect(windowObj._autoResizingEnabled).toEqual(true);
-    //     setTimeout(() => {
-    //         expect(beforeHeight).not.toEqual(
-    //             document.documentElement.getBoundingClientRect().height
-    //         );
-    //         expect(connection.sendToParent).toHaveBeenCalledTimes(1); // must be called just once, only one observer must be set
-    //         expect(connection.sendToParent).toHaveBeenCalledWith(
-    //             "resize",
-    //             Math.ceil(
-    //                 document.documentElement.getBoundingClientRect().height
-    //             )
-    //         );
-    //         window.document.body.removeChild(btn);
-    //         done();
-    //     }, 100);
-    // });
-
-    // it("disableAutoResizing", (done) => {
-    //     const btn = document.createElement("BUTTON"); // Create a <button> element
-    //     const text = document.createTextNode("Sample Button");
-    //     btn.appendChild(text);
-    //     const beforeHeight = Math.ceil(
-    //         document.documentElement.getBoundingClientRect().height
-    //     );
-    //     windowObj.enableAutoResizing();
-    //     expect(windowObj._autoResizingEnabled).toEqual(true);
-    //     windowObj.disableAutoResizing();
-    //     window.document.body.appendChild(btn);
-    //     expect(windowObj._autoResizingEnabled).toEqual(false);
-    //     windowObj.disableAutoResizing(); // called twice to check if observer is not disconnected twice
-    //     window.document.body.appendChild(window.document.createElement("p")); // append element to mutate height
-    //     setTimeout(() => {
-    //         expect(beforeHeight).not.toEqual(
-    //             document.documentElement.getBoundingClientRect().height
-    //         );
-    //         expect(connection.sendToParent).toHaveBeenCalledTimes(0); // must be fired 0 times, since observer was disconnected
-    //         window.document.body.removeChild(btn);
-    //         done();
-    //     }, 300);
-    // });
 
     it("onDashboardResize Callback must be a function", function () {
         windowObj.type = "DASHBOARD";
