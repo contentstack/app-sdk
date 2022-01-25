@@ -38,7 +38,7 @@ const createPlugin = () => {
 
 const stringify = (j:any):string => JSON.stringify(Object(j));
 
-describe.only('RTE Plugin', () => {
+describe('RTE Plugin', () => {
     it('Contains all RTE Callback properties in get', () => {
         const [plugin, inputPluginProps] = createPlugin();
         const pluginProps = plugin.get();

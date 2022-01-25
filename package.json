@@ -10,7 +10,7 @@
         "build": "webpack",
         "test": "jest",
         "test:watch": "jest --watchAll",
-        "test:coverage": "jest src --coverage --watchAll --coverageDirectory=\"coverage\"",
+        "test:coverage": "jest --coverage --coverageDirectory=\"coverage\"",
         "dev": "webpack --watch --mode development"
     },
     "keywords": [],
