@@ -27,7 +27,9 @@ export declare interface IPageWidget {
 }
 
 // initialization data
-export declare interface IUser {}
+export declare interface IUser {
+    [key: string]: any
+}
 
 export declare interface ICurrentStack {
     [key: string]: any;
