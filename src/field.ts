@@ -55,7 +55,7 @@ class Field {
     this.schema = fieldDataObject.data.schema;
     this._emitter = emitter;
 
-    let separatedData = separateResolvedData(this, fieldDataObject.data.value);
+    const separatedData = separateResolvedData(this, fieldDataObject.data.value);
 
     this._data = separatedData.unResolvedData;
 
