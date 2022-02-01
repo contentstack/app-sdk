@@ -230,7 +230,7 @@ class Asset extends Base {
     return this.fetch('unpublishAsset', payload);
   }
 
-  static upload(_files) {
+  static async handleUpload(_files, type) {
     if (!_files || !_files.length) {
       return Promise.reject(new Error('Kindly provide valid parameters'));
     }
@@ -245,6 +245,7 @@ class Asset extends Base {
         const uploadReadyListener = postRobot.on(`uploadReady_${uid}`, function(){
           window.parent.postMessage({ 
             type: `upload_${uid}`,
+            upload_type: type,
             files
           }, '*');
       
@@ -260,6 +261,14 @@ class Asset extends Base {
         return Promise.reject(err);
       }
     })();
+  }
+
+  static async replaceAsset(file) {
+    return Asset.handleUpload([file], 'replace');
+  }
+
+  static uploadAsset(files) {
+    return Asset.handleUpload(files, 'upload');
   }
 }
 
