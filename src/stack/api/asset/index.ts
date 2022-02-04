@@ -263,10 +263,6 @@ class Asset extends Base {
     })();
   }
 
-  static async replaceAsset(file) {
-    return Asset.handleUpload([file], 'replace');
-  }
-
   static uploadAsset(files) {
     return Asset.handleUpload(files, 'upload');
   }

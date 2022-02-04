@@ -1,14 +1,6 @@
 import Asset from './api/asset/index';
 import ContentType from './api/content-type/index';
-
-function onData(data: { [key: string]: any }) {
-  if (typeof (data.data) === 'string') { return Promise.reject(data.data); }
-  return Promise.resolve(data.data);
-}
-
-function onError(error: Error) {
-  return Promise.reject(error);
-}
+import { onData, onError } from "../utils";
 
 
 /**

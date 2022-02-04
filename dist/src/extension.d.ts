@@ -1,30 +1,37 @@
-import Stack from './stack';
-import Store from './store';
-import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, IAssetSidebarWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IStackConfgWidget, IStackConfigInitData, IUser } from './types';
-import { IRTEPluginInitializer } from './RTE/types';
+import Stack from "./stack";
+import Store from "./store";
+import Metadata from "./metadata";
+import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
+import { IRTEPluginInitializer } from "./RTE/types";
+import AssetSidebarWidget from "./AssetSidebarWidget";
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
      * @hideconstructor
      */
-    app_id: string;
+    appUID: string;
+    installationUID: string;
     currentUser: IUser;
-    location: ILocation;
+    private type;
+    private config;
     postRobot: any;
     stack: Stack;
     store: Store;
-    Extension: {
+    metadata: Metadata;
+    location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
         CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
-        StackConfigWidget: IStackConfgWidget | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
-        AssetSidebarWidget: IAssetSidebarWidget | null;
+        AssetSidebarWidget: AssetSidebarWidget | null;
     };
-    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IStackConfigInitData | IAppConfigInitData | IFullScreenInitData | IAssetSidebarInitData);
-    getConfig: () => void;
+    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IFullScreenInitData | IAssetSidebarInitData);
+    getConfig: () => Promise<{
+        [key: string]: any;
+    }>;
+    getCurrentLocation: () => ILocation;
     static initialize(version: string): any;
     setReady(): any;
 }
