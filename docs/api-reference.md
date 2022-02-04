@@ -22,14 +22,14 @@ The above command will install the **app-sdk** library in your project which con
 
 Below we have listed some of the top-level objects used in the App SDK.
 
--   [\*\*Location](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#supported-locations): It's an object that represents all locations from the Contentstack UI.
--   [\*\*Store](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Store): It refers to a class that is used by a location to store your data in the [local storage](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_localStorage).
--   [\*\*Stack](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Stack): It's a class representing the current stack in the Contentstack UI.
--   [\*\*Window Frame](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Frame): It refers to a class that represents an iframe window from the Contentstack UI.
+-   [Location](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#supported-locations): It's an object that represents all locations from the Contentstack UI.
+-   [Store](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Store): It refers to a class that is used by a location to store your data in the [local storage](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_localStorage).
+-   [Stack](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Stack): It's a class representing the current stack in the Contentstack UI.
+-   [Window Frame](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Frame): It refers to a class that represents an iframe window from the Contentstack UI.
 
     **Note**: This class is not available for Custom Widgets.
 
--   [\*\*Entry](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Entry): It's a class that represents an entry from the Contentstack UI.
+-   [Entry](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Entry): It's a class that represents an entry from the Contentstack UI.
 
     > **Note**: It's not available for the Dashboard Widget extension.
 
@@ -37,15 +37,15 @@ Below we have listed some of the top-level objects used in the App SDK.
 
 Locations refers to the position or the placement of the app (sidebar widget, custom field, etc). As of now, the following locations are supported:
 
--   [\*\*CustomField](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#CustomField): It's an object representing the current Custom field reference in the Contentstack UI.
--   [\*\*DashboardWidget](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#DashboardWidget): It's an object representing the Dashboard widget reference in the Contentstack UI.
--   [\*\*SidebarWidget](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#SidebarWidget): It's an object representing the current Sidebar widget reference in the Contentstack UI.
--   [\*\*AppConfigWidget](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#AppConfigWidget): It's an object representing the current App configuration for the current App in the Contentstack UI.
+-   [CustomField](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#CustomField): It's an object representing the current Custom field reference in the Contentstack UI.
+-   [DashboardWidget](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#DashboardWidget): It's an object representing the Dashboard widget reference in the Contentstack UI.
+-   [SidebarWidget](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#SidebarWidget): It's an object representing the current Sidebar widget reference in the Contentstack UI.
+-   [AppConfigWidget](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#AppConfigWidget): It's an object representing the current App configuration for the current App in the Contentstack UI.
 
 # **External**
 
--   [\*\*Promise](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_Promise): The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.
--   [\*\*localStorage](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_localStorage): The read-only localStorage property allows you to access a Storage object for the Document's origin; the stored data is saved across browser sessions.
+-   [Promise](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_Promise): The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.
+-   [localStorage](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_localStorage): The read-only localStorage property allows you to access a Storage object for the Document's origin; the stored data is saved across browser sessions.
 
 # **Using the Contentstack App SDK**
 
@@ -73,7 +73,6 @@ To start using the APP SDK, you first need to include the Contentstack UI App SD
 **Example** _(App Config Widget)_
 
 ```js
-// javascript
 ContentstackAppSdk.init().then(function (appSdk) {
     // Get AppConfigWidget object
     // this is only initialized on the App configuration page.
@@ -101,7 +100,6 @@ ContentstackAppSdk.init().then(function (appSdk) {
 **Example** _(Custom Field)_
 
 ```js
-// javascript
 ContentstackAppSdk.init().then(function (appSdk) {
     // Get CustomField object
     // this is only initialized on the Entry create/edit page.
@@ -119,7 +117,6 @@ ContentstackAppSdk.init().then(function (appSdk) {
 **Example** _(Sidebar Widget)_
 
 ```js
-// javascript
 ContentstackAppSdk.init().then(function (location) {
     // Get SidebarWidget object
     // this is only initialized on the Entry edit page.
@@ -137,7 +134,6 @@ ContentstackAppSdk.init().then(function (location) {
 **Example** _(Dashboard Widget)_
 
 ```js
-// javascript
 ContentstackAppSdk.init().then(function (location) {
     // Get SidebarWidget object
     // this is only initialized on the Entry edit page.
@@ -392,8 +388,6 @@ It is a class representing the current stack in Contentstack UI.
 
 **See**: [ContentType](https://www.contentstack.com/docs/apis/content-management-api/#content-types)
 
-**Version**: 2.0.0
-
 [.ContentType](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Stack+ContentType)
 
 -   [new this.ContentType(uid)](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#new_Stack+ContentType_new)
@@ -440,8 +434,6 @@ extension.stack.ContentType('content_type_uid')
 **Kind**: instance class of [ContentType](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Stack+ContentType)
 
 **See**: [Entries](https://www.contentstack.com/docs/apis/content-management-api/#entries)
-
-**Version**: 2.0.0
 
 -   [.Entry](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Stack+ContentType+Entry)
     -   [new Entry()](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#new_Stack+ContentType+Entry_new)
@@ -588,7 +580,7 @@ This method fetches all the entries in which the current entry is referenced.
 
 **Returns**: [Promise](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_Promise) - Required data if resolved successfully
 
-**Additional Resource**:\*\* Learn more about [Entry references](https://www.contentstack.com/docs/apis/content-management-api/#get-all-references-of-an-entry%7C%20Entry%20References)
+**Additional Resource**: Learn more about [Entry references](https://www.contentstack.com/docs/apis/content-management-api/#get-all-references-of-an-entry%7C%20Entry%20References)
 
 **Example**
 
@@ -857,7 +849,7 @@ extension.stack.ContentType('contenttype_uid').Entry('bltsomething123').unpublis
   }).then(...).catch(...);
 ```
 
-##### entry.setWorkflowStage(payload) ⇒ [\*\*Promise](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_Promise)
+##### entry.setWorkflowStage(payload) ⇒ [Promise](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#external_Promise)
 
 This method allows you to either set a particular workflow stage or update the workflow stage details of an entry.
 
@@ -959,8 +951,6 @@ extension.stack.ContentType('content_type_uid').Entry.create({
 **Kind**: instance class of [Stack](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Stack)
 
 **See**: [Asset](https://www.contentstack.com/docs/apis/content-management-api/#assets)
-
-**Version**: 2.0.0
 
 [.Asset](https://github.com/contentstack/app-sdk/blob/main/docs/api.md#Stack+Asset)
 
