@@ -1,6 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import { IAssetSidebarInitData, setAssetDto } from "./types";
-import Stack from './stack'
+import Asset from './stack/api/asset'
 
 /** Class representing an asset Extension from Contentstack UI.  */
 
@@ -77,7 +77,7 @@ class AssetSidebarWidget {
     }
 
     async replaceAsset(file: File): Promise<any> {
-        const asset = new Stack({}, this._emitter).Asset;
+        const asset = Asset(this._emitter);
         return asset.handleUpload([file], 'replace');
     }
 
