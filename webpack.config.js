@@ -5,7 +5,7 @@ module.exports = {
     entry: path.resolve(__dirname, "src", "index.ts"),
     output: {
         globalObject: "this",
-        library: "AppFrameworkSDK",
+        library: "ContentstackAppSDK",
         libraryTarget: "umd",
         path: path.resolve(__dirname, "dist"),
         filename: "index.js",

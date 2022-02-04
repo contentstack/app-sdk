@@ -1,10 +1,100 @@
 import React, { ReactElement } from "react";
+import { Location, NodeEntry, Path, Point, Node, ElementEntry, Transforms, Editor, Span } from "slate";
 import { RTEPlugin } from "./index";
-export declare interface IRteParam {
-    [key: string]: any;
+declare interface TransformOptions {
+    at?: Location;
+    match?: (node: Node) => boolean;
+    mode?: "highest" | "lowest" | "all";
+    hanging?: boolean;
+    split?: boolean;
+    voids?: boolean;
 }
+export declare interface IRteParam {
+    selection: {
+        get: () => Range | null;
+        set: (selection: Location) => void;
+        isSelected: () => boolean;
+        isFocused: () => boolean;
+        getEnd: () => Point;
+        before: (at: Location, options?: {
+            distance?: number;
+            unit?: "character" | "word" | "line" | "block" | "offset";
+        }) => Point | undefined;
+        after: (at: Location, options?: {
+            distance?: number;
+            unit?: "offset" | "character" | "word" | "line" | "block";
+            voids?: boolean;
+        }) => Point | undefined;
+        isPointEqual: (point: Point, another: Point) => boolean;
+    };
+    generators: {
+        elements: (root?: Node, options?: {
+            from?: Path;
+            to?: Path;
+            reverse?: boolean;
+            pass?: (node: NodeEntry<Node>) => boolean;
+        }) => Generator<ElementEntry, void, undefined>;
+        nodes: (options?: {
+            at?: Location | Span;
+            match?: Node;
+            mode?: "all" | "highest" | "lowest";
+            universal?: boolean;
+            reverse?: boolean;
+            voids?: boolean;
+        }) => Generator<Node, void, undefined>;
+    };
+    _adv: {
+        editor: Editor;
+        Transforms: typeof Transforms;
+        Editor: Editor;
+    };
+    getPath: (node: Node) => Path;
+    setAttrs: (props: Partial<Node> & {
+        attrs?: {
+            [key: string]: any;
+        };
+    }, options?: TransformOptions) => void;
+    isNodeOfType: (type: string) => boolean;
+    getNode: (at: Location, options?: {
+        depth?: number;
+        edge?: "start" | "end";
+    }) => NodeEntry;
+    string: (at: Location) => string;
+    addMark: (key: string, value: any) => void;
+    removeMark: (key: string) => void;
+    hasMark: (key: string) => boolean;
+    insertText: (text: string, at: Location) => void;
+    getText: () => string;
+    deleteText: () => void;
+    updateNode: (type: string, attrs: {
+        [key: string]: any;
+    }, options: TransformOptions) => void;
+    unsetNode: (options: TransformOptions) => void;
+    insertNode: (node: Node, options: Omit<TransformOptions, "split"> & {
+        select?: boolean;
+    }) => void;
+    deleteNode: (optons: {
+        at?: Location;
+        distance?: number | undefined;
+        unit?: "character" | "word" | "line" | "block";
+        reverse?: boolean;
+        hanging?: boolean;
+        voids?: boolean;
+    }) => void;
+    removeNode: (node: Node) => void;
+    wrapNode: (node: Node, options: Omit<TransformOptions, "hanging">) => void;
+    unwrapNode: (options: Omit<TransformOptions, "hanging">) => void;
+    mergeNodes: (options: Omit<TransformOptions, "split">) => void;
+    getEmbeddedItems: () => {
+        [key: string]: any;
+    };
+    getVariable: <T = unknown>(name: string, defaultValue: any) => T;
+    setVariable: <T = unknown>(name: string, value: T) => void;
+}
+export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 export declare type IOnFunction = {
     exec: () => {};
+    keydown: (rte: IRteParam) => void;
     normalize: (rte: IRteParam) => {};
     insertBreak: (rte: IRteParam) => {};
     deleteBackward: (rte: IRteParam) => {};
@@ -25,7 +115,8 @@ export declare interface IDnd {
     disableColumnLayout: boolean;
 }
 export declare interface IConfig {
-    iconName: React.ReactElement;
+    title: string;
+    iconName: React.ReactElement | null;
     displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
     dnd: IDnd;
@@ -41,8 +132,8 @@ export declare interface IRegistryDnd {
 }
 export declare interface IRegistry {
     title: string;
-    iconName?: React.ReactElement;
-    category?: object;
+    iconName?: React.ReactElement | null;
+    category?: string;
     toolbar: {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
@@ -55,6 +146,7 @@ export declare interface IRegistry {
     Component?: (element: React.ReactElement, attrs: {
         [key: string]: any;
     }, path: number[], rte: IRteParam) => React.ReactElement;
+    IngressComponent?: React.Component | null;
 }
 export declare interface IMeta {
     id: string;
@@ -71,6 +163,7 @@ export declare interface IPluginMetaData {
 export declare interface IContainerRegistry {
     id: string;
     title: string;
+    iconName?: React.ReactElement | null;
     rootCategory: false;
     toolbar: {
         inMainToolbar: boolean;
@@ -85,5 +178,6 @@ export declare interface IContainerMetaData {
     registry: IContainerRegistry;
     meta: IContainerMeta;
 }
-export declare type IRTEPluginInitializer = (id: string, title: string, config: Partial<IConfig>) => RTEPlugin;
+export declare type IRTEPluginInitializer = (id: string, config: IConfigCallback) => RTEPlugin;
+export {};
 //# sourceMappingURL=types.d.ts.map

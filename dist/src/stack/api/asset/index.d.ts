@@ -152,7 +152,6 @@ declare class Asset extends Base {
      */
     unpublish(payload: any): any;
     static handleUpload(_files: any, type: any): Promise<any>;
-    static replaceAsset(file: any): Promise<any>;
     static uploadAsset(files: any): Promise<any>;
 }
 declare const _default: (uiConnection: any) => typeof Asset;
