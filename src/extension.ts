@@ -7,6 +7,7 @@ import Store from "./store";
 import Metadata from "./metadata";
 import EventEmitter from "wolfy87-eventemitter";
 import {
+    anyObjectType,
     IAppConfigInitData,
     IAppConfigWidget,
     IAssetSidebarInitData,
@@ -40,11 +41,12 @@ class Extension {
     installationUID: string;
     currentUser: IUser;
     private type: ILocation;
-    private config: { [key: string]: any };
+    private config: anyObjectType;
     postRobot: any;
     stack: Stack;
     store: Store;
     metadata: Metadata;
+    locationUID: string;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -69,12 +71,18 @@ class Extension {
         const initializationData = initData;
 
         this.postRobot = postRobot;
-        /**
-         * This method gives you the configuration parameters. Check out our {@link https://www.contentstack.com/docs/guide/extensions|UI Extension documentation} .
-         * @type {Object}
-         */
 
+        /**
+         * This value represents the current App's unique ID. One App may contain multiple locations
+         * @type {string}
+         */
         this.appUID = initializationData.data.app_id;
+
+        /**
+         *  This value represents the current location's unique ID. One App may contain multiple locations
+         * @type {string}
+         */
+        this.locationUID = initializationData.data.extension_uid;
 
         /**
          * This object holds details of the app initialization user.
