@@ -55,7 +55,7 @@ class Field {
     this.schema = fieldDataObject.data.schema;
     this._emitter = emitter;
 
-    let separatedData = separateResolvedData(this, fieldDataObject.data.value);
+    const separatedData = separateResolvedData(this, fieldDataObject.data.value);
 
     this._data = separatedData.unResolvedData;
 
@@ -88,7 +88,7 @@ class Field {
    * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
    */
 
-  setData(data: { [key: string]: any }) {
+  setData(data: any): Promise<Field> {
     const currentFieldObj = this;
     const dataObj = { data, uid: currentFieldObj.uid, self: currentFieldObj._self };
 
@@ -99,7 +99,7 @@ class Field {
     return this._connection.sendToParent('setData', dataObj).then(() => {
       this._data = data;
       return Promise.resolve(currentFieldObj);
-    }).catch((e: Error) => Promise.reject(e));
+    }).catch((e: Error) => {return Promise.reject(e)});
   }
 
   /**

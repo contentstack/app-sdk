@@ -15,7 +15,6 @@ import {
     IDashboardInitData,
     IDashboardWidget,
     IFieldInitData,
-    IFullScreenInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
@@ -65,7 +64,6 @@ class Extension {
             | IFieldInitData
             | ISidebarInitData
             | IAppConfigInitData
-            | IFullScreenInitData
             | IAssetSidebarInitData
     ) {
         const initializationData = initData;
@@ -168,10 +166,6 @@ class Extension {
                     emitter
                 );
 
-                break;
-            }
-
-            case "FULL_SCREEN_WIDGET": {
                 break;
             }
 

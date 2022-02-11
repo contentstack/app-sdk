@@ -25,7 +25,6 @@ class Stack {
     /**
      * @constructor
      * @hideconstructor
-     * @version 2.2.0
      * @desc Content type defines the structure or schema of a page or a section of your web or mobile property
      * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#content-types| ContentType}
      * @param {string} uid - Uid of contenttype.
@@ -34,7 +33,6 @@ class Stack {
     this.ContentType = ContentType(connection);
     /**
      * @constructor
-     * @version 2.2.0
      * @hideconstructor
      * @desc An initializer is responsible for creating an Asset object.
      * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#assets| Asset}
@@ -61,7 +59,7 @@ class Stack {
    * @param {Object} params Optional parameters for the GET call
    * @return {Object} A promise object which will be resolved with content type details.
    */
-  getContentType(uid: string, params = {}) {
+  getContentType(uid: string, params = {}): Promise<{ [key: string]: any }> {
     if (!uid) {
       return Promise.reject(new Error('uid is required'));
     }
@@ -75,7 +73,7 @@ class Stack {
    * @param {Object} params Optional parameters for the GET call
    * @return {Object} A promise object which will be resolved with details of the content type.
    */
-  getContentTypes(query = {}, params: { [key: string]: any } = {}) {
+  getContentTypes(query = {}, params: { [key: string]: any } = {}): Promise<{ [key: string]: any }> {
     const optionParams = params;
     optionParams.query = query;
     const options = { params: optionParams, action: 'getContentTypes' };
