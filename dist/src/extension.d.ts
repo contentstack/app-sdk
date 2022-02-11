@@ -18,6 +18,7 @@ declare class Extension {
     stack: Stack;
     store: Store;
     metadata: Metadata;
+    locationUID: string;
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;

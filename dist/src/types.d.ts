@@ -1,3 +1,6 @@
+export declare interface anyObjectType {
+    [key: string]: any;
+}
 export declare interface IDashboardWidget {
     [key: string]: any;
 }
@@ -40,102 +43,69 @@ export declare interface ISchema {
 export declare interface IFieldConfig {
     [key: string]: any;
 }
+declare interface ICommonInitData {
+    app_id: string;
+    installation_uid: string;
+    extension_uid: string;
+    stack: ICurrentStack;
+    user: IUser;
+}
 export declare interface IDashboardInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
+    data: ICommonInitData & {
         dashboard_width: "full_width" | "half_width";
-        stack: ICurrentStack;
-        config?: {
-            [key: string]: any;
-        };
+        config?: anyObjectType;
         type: "DASHBOARD";
-        user: IUser;
     };
 }
 export declare interface ISidebarInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
+    data: ICommonInitData & {
         app_config: IConfig;
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
         locale: string;
-        stack: ICurrentStack;
-        config?: {
-            [key: string]: any;
-        };
+        config?: anyObjectType;
         type: "WIDGET";
-        user: IUser;
     };
 }
 export declare interface IFieldInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
+    data: ICommonInitData & {
         entry: ICurrentEntry;
         content_type: ICurrentContentType;
         locale: string;
-        user: IUser;
         uid: string;
         schema: ISchema;
         app_config: IConfig;
         value: any;
         field_config: IFieldConfig;
-        config?: {
-            [key: string]: any;
-        };
-        stack: ICurrentStack;
+        config?: anyObjectType;
         self: boolean;
         type: "FIELD";
     };
 }
 export declare interface IRTEInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
-        stack: ICurrentStack;
+    data: ICommonInitData & {
         type: "RTE";
-        user: IUser;
-        config?: {
-            [key: string]: any;
-        };
+        config?: anyObjectType;
     };
 }
 export declare interface IAppConfigInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
-        stack: ICurrentStack;
+    data: ICommonInitData & {
         type: "APP_CONFIG_WIDGET";
-        user: IUser;
-        config?: {
-            [key: string]: any;
-        };
+        config?: anyObjectType;
     };
 }
 export declare interface IFullScreenInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
-        stack: ICurrentStack;
-        config?: {
-            [key: string]: any;
-        };
+    data: ICommonInitData & {
         type: "FULL_SCREEN_WIDGET";
-        user: IUser;
+        config?: anyObjectType;
     };
 }
 export declare interface ICurrentAsset {
     [key: string]: any;
 }
 export declare interface IAssetSidebarInitData {
-    data: {
-        installation_uid: string;
-        app_id: string;
-        stack: ICurrentStack;
+    data: ICommonInitData & {
         type: "ASSET_SIDEBAR_WIDGET";
-        user: IUser;
         currentAsset: ICurrentAsset;
         config: {
             [key: string]: any;
@@ -194,4 +164,5 @@ export declare interface IInitializationData {
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
 export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET" | "ASSET_SIDEBAR_WIDGET";
+export {};
 //# sourceMappingURL=types.d.ts.map
