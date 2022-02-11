@@ -101,7 +101,7 @@ class Entry {
           value = value[path[index + 1]];
           skipNext = true;
         } else if (schema.data_type === 'blocks' && path.length !== (index + 1)) {
-          let blockId = Object.keys(value[path[index + 1]])[0];
+          const blockId = Object.keys(value[path[index + 1]])[0];
           schema = schema.blocks.find((block: { uid: string; }) => block.uid === blockId);
           if (path.length === index + 2) { // complete block value with uid
             value = value[path[index + 1]];

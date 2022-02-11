@@ -115,9 +115,9 @@ export declare interface IRteParam {
         node: Node,
         options: Omit<TransformOptions, "split"> & { select?: boolean }
     ) => void;
-    deleteNode: (optons: {
+    deleteNode: (options: {
         at?: Location;
-        distance?: number | undefined;
+        distance?: number;
         unit?: "character" | "word" | "line" | "block";
         reverse?: boolean;
         hanging?: boolean;
@@ -133,7 +133,6 @@ export declare interface IRteParam {
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
-Transforms.wrapNodes;
 
 export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 
@@ -177,11 +176,10 @@ export declare interface IDnd {
 
 export declare interface IConfig {
     title: string;
-    iconName: React.ReactElement | null;
-    displayOn: IDisplayOnOptions | IDisplayOnOptions[];
+    icon: React.ReactElement | null;
+    display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
-    dnd: IDnd;
-    Component?: (...params: any) => ReactElement;
+    render?: (...params: any) => ReactElement;
 }
 
 export declare interface IRegistryDnd {
@@ -201,7 +199,6 @@ export declare interface IRegistry {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
     };
-    dndOptions: Partial<IRegistryDnd>;
     isContentstackElement: boolean;
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;

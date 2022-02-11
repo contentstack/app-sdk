@@ -31,7 +31,9 @@ export declare interface IPageWidget {
 }
 
 // initialization data
-export declare interface IUser {}
+export declare interface IUser {
+    [key: string]: any;
+}
 
 export declare interface ICurrentStack {
     [key: string]: any;
@@ -116,13 +118,6 @@ export declare interface IAppConfigInitData {
     };
 }
 
-export declare interface IFullScreenInitData {
-    data: ICommonInitData & {
-        type: "FULL_SCREEN_WIDGET";
-        config?: anyObjectType;
-    };
-}
-
 export declare interface ICurrentAsset {
     [key: string]: any;
 }
@@ -186,7 +181,6 @@ export declare interface IInitializationData {
     DASHBOARD: IDashboardInitData;
     RTE: IRTEInitData;
     APP_CONFIG_WIDGET: IAppConfigInitData;
-    FULL_SCREEN_WIDGET: IFullScreenInitData;
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
 
@@ -196,5 +190,4 @@ export declare type ILocation =
     | "DASHBOARD"
     | "WIDGET"
     | "APP_CONFIG_WIDGET"
-    | "FULL_SCREEN_WIDGET"
     | "ASSET_SIDEBAR_WIDGET";
