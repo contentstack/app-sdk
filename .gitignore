@@ -128,7 +128,7 @@ storybook-static
 tmp/
 temp/
 
-dist/
+# dist/
 
 ### vscode ###
 .vscode/*
