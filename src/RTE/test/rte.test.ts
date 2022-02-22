@@ -84,7 +84,7 @@ describe('RTE Plugin', () => {
         expect(fnc.mock.calls.length).to.eq(events.length);
     })
 
-    it('Check if callbacks under register is registered under plugin', () => {
+    it('Check if callbacks under register is registered under plugin', async () => {
         const [plugin, details] = createPlugin();
         const fnc = jest.fn(() => {});
         const events = [
@@ -104,14 +104,14 @@ describe('RTE Plugin', () => {
         expect(fnc.mock.calls.length).to.eq(callbackEventName.length);
     })
 
-    it('Dropdown get() has icon', () => {
-        const dropdown = createDropdown().get();
+    it('Dropdown get() has icon', async () => {
+        const dropdown = await createDropdown().get();
         expect(dropdown.registry).to.have.property('iconName');
         expect(stringify(dropdown.registry.iconName)).to.equal(stringify(React.createElement('p')));
     });
     
-    it('Dropdown get() has dependent plugin', () => {
-        const dropdown:any = createDropdown().get();
+    it('Dropdown get() has dependent plugin', async () => {
+        const dropdown:any = await createDropdown().get();
         expect(dropdown.meta.dependentPlugins).to.have.length(1);
     })
 })

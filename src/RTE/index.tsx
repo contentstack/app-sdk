@@ -104,8 +104,8 @@ export class RTEPlugin {
         }
     };
 
-    get = (rte: IRteParam | void) => {
-        const config = this.configCallback(rte);
+    get = async (rte: IRteParam | void) => {
+        const config = await this.configCallback(rte);
 
         Object.entries(config).forEach(
             //@ts-ignore

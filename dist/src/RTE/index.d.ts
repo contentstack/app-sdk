@@ -7,7 +7,7 @@ export declare class RTEPlugin {
     constructor(id: string, configCallback: IConfigCallback);
     addPlugins: (...plugins: RTEPlugin[]) => void;
     on: <Type extends keyof IOnFunction>(type: Type, callback: IOnFunction[Type]) => void;
-    get: (rte: IRteParam | void) => IPluginMetaData | IContainerMetaData;
+    get: (rte: IRteParam | void) => Promise<IPluginMetaData | IContainerMetaData>;
 }
 export declare const rtePluginInitializer: (id: string, configCallback: IConfigCallback) => RTEPlugin;
 //# sourceMappingURL=index.d.ts.map
