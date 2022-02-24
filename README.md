@@ -1,44 +1,65 @@
-# Contentstack App SDK
+# App Framework SDK
 
-The Extensions SDK allows you to extend Contentstack’s UI by helping you create Custom Fields, Custom Widgets, Dashboard Widgets, App Configuration, and JSON RTE Plugins.
+## JSON Rich text editor plugin
 
-**Custom Fields** enable users to introduce simpler interface controls, such as color picker, code editor, video selector, and more, or maybe complex micro web applications such as Shopify or Snipkart. Because of their dissociated nature, custom fields can be reused multiple times.
+The **JSON Rich Text Editor Plugins** lets you add/create custom plugins to extend the functionality of your [JSON Rich Text Editor](https://www.contentstack.com/docs/developers/json-rich-text-editor/about-json-rich-text-editor/) as per your needs. You can use the prebuilt JSON RTE plugins by modifying the code to suit your requirement.
 
-**Custom Widgets** are like micro content-processing apps that help you analyze the entry content and provide recommendations. Some of the useful widgets you can create using this type of extension are text intelligence, SEO recommendations, language translation, grammar checker and more.
+Some of the examples of the prebuilt JSON Rich Text Editor plugins are:
 
-**Dashboard Widgets** let you add powerful widgets to the stack’s dashboard that let users do more from a centralized location. Some examples of this type of extension include personal notes, recently published content, notification center, and stack usage summary.
+-   Highlight: Allows you to highlight certain parts of your content, such as a whole line of text or a paragraph.
 
-The **JSON Rich Text Editor Plugins** lets you add/create custom plugins to extend the functionality of your [JSON Rich Text Editor](https://www.contentstack.com/docs/developers/json-rich-text-editor/about-json-rich-text-editor/) as per your needs. You can use the prebuilt JSON RTE plugins by modifying the code to suit your requirement. Some of the basic prebuilt plugins include Highlight, Info Panel, and Word Count.
+-   Info Panel: Allows you to place important content inside a colored panel to make it stand out.
 
-**App Configuration** lets you add configuration data related to the extensions after they have been installed from Marketplace.
+-   Word Count: Allows you to track the word count for your JSON Rich Text Editor content.
 
-This SDK overview document introduces you to the concept of custom extensions.
+You can create JSON Rich Text Editor Plugins using the Contentstack App SDK. For more information, read our [documentation](https://www.contentstack.com/docs/developers/json-rich-text-editor-plugins/about-json-rte-plugins/).
 
-## **Getting started**
+## Asset Sidebar Extension
 
-You can install the app-sdk from npm using the following code
+**Asset Sidebar Extensions** enable you to customize and enhance your **asset editing experience**. Using customized extensions, you can tailor your images on Contentstack according to your branding requirements..
 
-```sh
-npm install @contentstack/app-sdk
-```
+You can create Asset Sidebar Extensions using the Contentstack App SDK. For more information, read our documentation.
 
-Include the compiled version of the extension client library by adding the following line to your application.
+### AssetSidebarWidget Reference
 
-```html
-<script src="https://unpkg.com/@contentstack/app-sdk@1.1.0/dist/index.js"></script>
-```
+It is an object representing the current Asset Sidebar Widget reference in the Contentstack UI.
 
-## **Extensions examples**
+**getData()**
 
-### **JSON Rich Text Editor Plugins**
+This method returns the object representing the current asset.
 
-Some of the examples of the JSON Rich Text Editor plugins are:
+**setData(asset: Partial<AssetData>)**
 
--   [Highlight](https://github.com/contentstack/extensions/tree/master/highlight): Allows you to highlight certain parts of your content, such as a whole line of text or a paragraph.
--   [Info Panel](https://github.com/contentstack/extensions/tree/master/info-panel): Allows you to place important content inside a colored panel to make it stand out.
--   [Word Count](https://github.com/contentstack/extensions/tree/master/word-count): Allows you to track the word count for your JSON Rich Text Editor content.
+This method modifies the properties of the current asset.
 
-## Additional resources
+**syncAsset()**
 
--   Marketplace Get started
--   [App SDK API reference](./docs/api-reference.md)
+If your asset has been modified externally, you can use this method to load the new asset and sync its settings with the current asset.
+
+**updateWidth(width: number)**
+
+This method is used to modify the width of the asset sidebar panel. Using this method, you can resize the panel depending on the resolution of your content.
+
+**replaceAsset(file: File)**
+
+This method is used to replace the current asset with a new file. Unlike setData(), where you can only modify the properties, you can use this method to replace the actual file.
+
+**onSave(callback: anyFunction)**
+
+This is a callback function that runs after you save the asset settings.
+
+**onChange(callback: anyFunction)**
+
+This is a callback function that runs every time the user modifies the asset data.
+
+**onPublish(callback: anyFunction)**
+
+This is a callback function that is executed after a user publishes an asset.
+
+**onUnPublish(callback: anyFunction)**
+
+This is a callback function that is executed after you unpublish an asset.
+
+**AssetData**
+
+It is the property that you can modify using the setData() method.
