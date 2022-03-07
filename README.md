@@ -63,3 +63,30 @@ This is a callback function that is executed after you unpublish an asset.
 **AssetData**
 
 It is the property that you can modify using the setData() method.
+
+## Metadata SDK Reference
+
+**IMetadata**
+This object represents the structure of the metadata.
+
+```ts
+{
+    uid: string;
+    type: "asset" | "entry";
+    _content_type_uid?: string;
+    locale?: string;
+    [key: string]: any;
+}
+```
+
+**createMetaData(metadataConfig: IMetadata)**
+This method adds new metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object and other data you need for your app.
+
+**retrieveMetaData(metadataConfig: IMetadata)**
+This method retrieves metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object you want to retrieve.
+
+**updateMetaData(metadataConfig: IMetadata)**
+This method updates existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object and other data you want to update.
+
+**deleteMetaData(metadataConfig: IMetadata)**
+This method deletes existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object you want to delete.
