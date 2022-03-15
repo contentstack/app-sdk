@@ -5,13 +5,26 @@ export declare interface IMetadata {
     locale?: string;
     [key: string]: any;
 }
+export declare interface IMetadataCreateDto extends Omit<Partial<IMetadata>, "uid"> {
+    entity_uid: string;
+}
+export declare interface IMetadataUpdateDto {
+    uid: string;
+    [key: string]: any;
+}
+export declare interface IMetadataRetrieveDto {
+    uid: string;
+}
+export declare interface IMetadataDeleteDto {
+    uid: string;
+}
 declare class Metadata {
     private _connection;
     constructor(_connection: any);
-    createMetaData(metadataConfig: IMetadata): any;
-    retrieveMetaData(metadataConfig: IMetadata): any;
-    updateMetaData(metadataConfig: IMetadata): any;
-    deleteMetaData(metadataConfig: IMetadata): any;
+    createMetaData(metadataConfig: IMetadataCreateDto): any;
+    retrieveMetaData(metadataConfig: IMetadataRetrieveDto): any;
+    updateMetaData(metadataConfig: IMetadataUpdateDto): any;
+    deleteMetaData(metadataConfig: IMetadataDeleteDto): any;
 }
 export default Metadata;
 //# sourceMappingURL=metadata.d.ts.map
