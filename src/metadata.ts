@@ -6,6 +6,24 @@ export declare interface IMetadata {
     [key: string]: any;
 }
 
+export declare interface IMetadataCreateDto
+    extends Omit<Partial<IMetadata>, "uid"> {
+    entity_uid: string;
+}
+
+export declare interface IMetadataUpdateDto {
+    uid: string;
+    [key: string]: any;
+}
+
+export declare interface IMetadataRetrieveDto {
+    uid: string;
+}
+
+export declare interface IMetadataDeleteDto {
+    uid: string;
+}
+
 const metadataTypes = {
     creteMetadata: "createMetadata",
     retrieveMetadata: "retrieveMetadata",
@@ -16,20 +34,15 @@ const metadataTypes = {
 class Metadata {
     constructor(private _connection: any) {}
 
-    createMetaData(metadataConfig: IMetadata) {
-        const { uid, type = "asset", ...otherMetaData } = metadataConfig;
-
-        if (!uid) throw new Error("uid is required");
-
-        // _content_type_uid is required for entry
+    createMetaData(metadataConfig: IMetadataCreateDto) {
+        const { entity_uid, type = "asset", ...otherMetaData } = metadataConfig;
 
         const data = {
-            uid,
             action: metadataTypes.creteMetadata,
             payload: {
                 metadata: {
+                    entity_uid,
                     type,
-                    uid,
                     ...otherMetaData,
                 },
             },
@@ -38,24 +51,15 @@ class Metadata {
         return this._connection.sendToParent("stackQuery", data);
     }
 
-    retrieveMetaData(metadataConfig: IMetadata) {
-        const {
-            uid,
-            type = "asset",
-            locale,
-            _content_type_uid,
-        } = metadataConfig;
-        if (!uid) throw new Error("uid is required");
+    retrieveMetaData(metadataConfig: IMetadataRetrieveDto) {
+        const { uid } = metadataConfig;
 
         const data = {
             uid,
             action: metadataTypes.retrieveMetadata,
             payload: {
                 metadata: {
-                    type,
                     uid,
-                    locale,
-                    _content_type_uid,
                 },
             },
         };
@@ -63,20 +67,14 @@ class Metadata {
         return this._connection.sendToParent("stackQuery", data);
     }
 
-    updateMetaData(metadataConfig: IMetadata) {
-        const { uid, type, _content_type_uid, ...otherMetaData } =
-            metadataConfig;
-
-        if (!uid) throw new Error("uid is required");
-        if (!type) throw new Error("type is required");
-        // type is entry and uid !== stackApiKey:  _content_type_uid is required
+    updateMetaData(metadataConfig: IMetadataUpdateDto) {
+        const { uid, ...otherMetaData } = metadataConfig;
 
         const data = {
             uid,
             action: metadataTypes.updateMetadata,
             payload: {
                 metadata: {
-                    type,
                     uid,
                     ...otherMetaData,
                 },
@@ -86,20 +84,15 @@ class Metadata {
         return this._connection.sendToParent("stackQuery", data);
     }
 
-    deleteMetaData(metadataConfig: IMetadata) {
-        const { uid, type, locale, _content_type_uid } = metadataConfig;
-        if (!uid) throw new Error("uid is required");
-        if (!type) throw new Error("type is required");
+    deleteMetaData(metadataConfig: IMetadataDeleteDto) {
+        const { uid } = metadataConfig;
 
         const data = {
             uid,
             action: metadataTypes.deleteMetadata,
             payload: {
                 metadata: {
-                    type,
                     uid,
-                    locale,
-                    _content_type_uid,
                 },
             },
         };
