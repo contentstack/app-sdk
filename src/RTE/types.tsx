@@ -137,7 +137,7 @@ export declare interface IRteParam {
 export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 
 export declare type IOnFunction = {
-    exec: () => {};
+    exec: (rte: IRteParam) => void;
     keydown: (rte: IRteParam) => void;
 
     normalize: (rte: IRteParam) => {};
