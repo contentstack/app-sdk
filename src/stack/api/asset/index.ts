@@ -231,7 +231,7 @@ class Asset extends Base {
     return this.fetch('unpublishAsset', payload);
   }
 
-  static async handleUpload(_files, type) {
+  static async handleUpload(_files, type, options?: {parentFolderUid?: string}) {
     if (!_files || !_files.length) {
       return Promise.reject(new Error('Kindly provide valid parameters'));
     }
@@ -252,6 +252,8 @@ class Asset extends Base {
                           type: `upload_${uid}`,
                           upload_type: type,
                           files,
+                          parentFolderUid: options?.parentFolderUid
+
                       },
                       "*"
                   );
@@ -273,8 +275,8 @@ class Asset extends Base {
     })();
   }
 
-  static uploadAsset(files) {
-    return Asset.handleUpload(files, 'upload');
+  static uploadAsset(files, options?: {parentFolderUid?: string}) {
+    return Asset.handleUpload(files, 'upload', options);
   }
 }
 
