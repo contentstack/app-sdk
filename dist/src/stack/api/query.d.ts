@@ -1,9 +1,45 @@
+import * as Utils from '../utils';
+declare const _extend: {
+    compare(type: any): (key: any, value: any) => any;
+    contained(bool: any): (key: any, value: any) => any;
+    exists(bool: any): (key: any) => any;
+    logical(type: any): () => any;
+    sort(type: any): (key: any) => any;
+    pagination(type: any): (value: any) => any;
+};
 /**
  * Creates an instance of the query
- * @version 2.2.0
  * @hideconstructor
  */
 declare class Query {
+    module: any;
+    _connection: any;
+    _query: {
+        [key: string]: any;
+    };
+    contentTypeUid: string;
+    only: any;
+    except: any;
+    addQuery: any;
+    lessThan: any;
+    lessThanOrEqualTo: any;
+    greaterThan: any;
+    greaterThanOrEqualTo: any;
+    notEqualTo: any;
+    containedIn: any;
+    notContainedIn: any;
+    exists: any;
+    notExists: any;
+    ascending: ReturnType<typeof _extend.sort>;
+    descending: ReturnType<typeof _extend.sort>;
+    beforeUid: ReturnType<typeof _extend.sort>;
+    afterUid: ReturnType<typeof _extend.sort>;
+    skip: ReturnType<typeof _extend.pagination>;
+    limit: ReturnType<typeof _extend.pagination>;
+    or: ReturnType<typeof _extend.logical>;
+    and: ReturnType<typeof _extend.logical>;
+    addParam: ReturnType<typeof Utils.addParam>;
+    singleEntry: any;
     constructor(connection: any, module: any, contentTypeUid: any);
     /**
      * @function

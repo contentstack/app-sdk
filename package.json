@@ -1,6 +1,6 @@
 {
     "name": "@contentstack/app-sdk",
-    "version": "0.0.5",
+    "version": "1.0.1",
     "types": "dist/src/index.d.ts",
     "description": "This SDK helps connect to the development server of the Contentstack and sync the data.",
     "main": "dist/index.js",
@@ -8,31 +8,56 @@
     "scripts": {
         "prepublish": "npm run build",
         "build": "webpack",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "webpack --watch --mode development"
-    },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com/@contentstack"
+        "test": "jest",
+        "test:watch": "jest --watchAll",
+        "test:coverage": "jest --coverage --coverageDirectory=\"coverage\"",
+        "dev": "webpack --watch --mode development",
+        "lint": "eslint . --ext .ts"
     },
     "keywords": [],
-    "author": "Deepak Kharah",
+    "author": {
+        "name": "Contentstack",
+        "url": "https://www.contentstack.com/"
+    },
+    "maintainers": [
+        {
+            "name": "Deepak Kharah",
+            "email": "deepak.kharah@contentstack.com"
+        }
+    ],
     "license": "MIT",
     "devDependencies": {
         "@babel/core": "^7.2.2",
         "@babel/preset-env": "^7.3.1",
+        "@testing-library/jest-dom": "^5.14.1",
+        "@types/chai": "^4.2.22",
+        "@types/jest": "^27.0.2",
+        "@types/mocha": "^9.0.0",
         "@types/post-robot": "^10.0.3",
         "@types/react": "^17.0.18",
+        "@typescript-eslint/eslint-plugin": "^5.10.1",
+        "@typescript-eslint/parser": "^5.10.1",
         "babel-loader": "^8.0.5",
+        "chai": "^4.3.4",
         "css-loader": "^5.2.2",
-        "slate": "^0.66.5",
+        "eslint": "^8.7.0",
+        "jest": "^27.3.1",
+        "mocha": "^9.2.0",
+        "react": "^17.0.2",
+        "slate": "^0.72.3",
+        "ts-jest": "^27.0.7",
         "ts-loader": "^8.1.0",
-        "typescript": "^4.2.4",
-        "webpack": "^4.29.0",
-        "webpack-cli": "^3.2.1",
-        "webpack-dev-server": "^3.11.2"
+        "ts-node": "^10.3.0",
+        "typescript": "^4.4.4",
+        "webpack": "^5.65.0",
+        "webpack-cli": "^4.9.1",
+        "webpack-dev-server": "^4.7.3"
     },
     "dependencies": {
         "post-robot": "8.0.29",
         "wolfy87-eventemitter": "5.2.4"
-    }
+    },
+    "files": [
+        "dist"
+    ]
 }

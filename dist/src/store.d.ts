@@ -27,9 +27,7 @@ declare class Store {
        * @example extension.store.set('key', 'value').then((success) => console.log(success)) // will log ‘true’ when value is set
        * @return {external:Promise}
        */
-    set(key: string, value: {
-        [key: string]: any;
-    }): any;
+    set(key: string, value: string): any;
     /**
        * Removes the value of a key
        * @param  {string} key  Key of the data to be removed from the store
