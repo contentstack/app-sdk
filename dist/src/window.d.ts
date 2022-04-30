@@ -31,7 +31,7 @@ declare class Window {
      * @param {string|number} height Desired height of the iframe window
      * @return {external:Promise}  A promise object which will be resolved when Contentstack UI sends an acknowledgement stating that the height has been updated.
      */
-    updateHeight(height?: number): any;
+    updateHeight(height: number): any;
     /**
      * This method enables auto resizing of the extension height.
      * @return {Window}.

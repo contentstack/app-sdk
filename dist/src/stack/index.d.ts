@@ -27,9 +27,7 @@ declare class Stack {
      * @param {Object} params Optional parameters for the GET call
      * @return {Object} A promise object which will be resolved with content type details.
      */
-    getContentType(uid: string, params?: {}): Promise<{
-        [key: string]: any;
-    }>;
+    getContentType(uid: string, params?: {}): any;
     /**
      * This API allows you to retrieve data of a content types of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-all-content-types| Content Types API} requests. This method returns a Promise object.
      * @param {Object} query Query for the GET call
@@ -38,9 +36,7 @@ declare class Stack {
      */
     getContentTypes(query?: {}, params?: {
         [key: string]: any;
-    }): Promise<{
-        [key: string]: any;
-    }>;
+    }): any;
     /**
      * This API allows you to retrieve environment details of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-environment| Environment API} requests. This method returns a Promise object.
      * @param {string} name Name of the desired environment

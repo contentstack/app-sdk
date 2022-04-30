@@ -128,8 +128,6 @@ storybook-static
 tmp/
 temp/
 
-# dist/
-
 ### vscode ###
 .vscode/*
 !.vscode/settings.json

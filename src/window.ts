@@ -68,7 +68,7 @@ class Window {
    * @param {string|number} height Desired height of the iframe window
    * @return {external:Promise}  A promise object which will be resolved when Contentstack UI sends an acknowledgement stating that the height has been updated.
    */
-  updateHeight(height?: number) {
+  updateHeight(height: number) {
     if (this.type === 'DASHBOARD' && this.state === 'half_width') { return Promise.resolve(); }
     if (!height || isNaN(height)) {
       this._height = Math.ceil(document.documentElement.getBoundingClientRect().height);

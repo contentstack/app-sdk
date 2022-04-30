@@ -115,9 +115,9 @@ export declare interface IRteParam {
         node: Node,
         options: Omit<TransformOptions, "split"> & { select?: boolean }
     ) => void;
-    deleteNode: (options: {
+    deleteNode: (optons: {
         at?: Location;
-        distance?: number;
+        distance?: number | undefined;
         unit?: "character" | "word" | "line" | "block";
         reverse?: boolean;
         hanging?: boolean;
@@ -133,11 +133,12 @@ export declare interface IRteParam {
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
+Transforms.wrapNodes;
 
-export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
+export declare type IConfigCallback = (rte: IRteParam) => Partial<IConfig>;
 
 export declare type IOnFunction = {
-    exec: (rte: IRteParam) => void;
+    exec: () => {};
     keydown: (rte: IRteParam) => void;
 
     normalize: (rte: IRteParam) => {};
@@ -176,9 +177,10 @@ export declare interface IDnd {
 
 export declare interface IConfig {
     title: string;
-    icon: React.ReactElement | null;
-    display: IDisplayOnOptions | IDisplayOnOptions[];
+    iconName: React.ReactElement;
+    displayOn: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[];
+    dnd: IDnd;
     render?: (...params: any) => ReactElement;
 }
 
@@ -193,23 +195,23 @@ export declare interface IRegistryDnd {
 
 export declare interface IRegistry {
     title: string;
-    iconName?: React.ReactElement | null;
+    iconName?: React.ReactElement;
     category?: string;
     toolbar: {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
     };
+    dndOptions: Partial<IRegistryDnd>;
     isContentstackElement: boolean;
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
     handleMouseDown?: (...params: any) => any;
-    Component?: (
+    render?: (
         element: React.ReactElement,
         attrs: { [key: string]: any },
         path: number[],
         rte: IRteParam
     ) => React.ReactElement;
-    IngressComponent?: React.Component | null
 }
 
 export declare interface IMeta {
@@ -229,7 +231,6 @@ export declare interface IPluginMetaData {
 export declare interface IContainerRegistry {
     id: string;
     title: string;
-    iconName?: React.ReactElement | null;
     rootCategory: false;
     toolbar: {
         inMainToolbar: boolean;

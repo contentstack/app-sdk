@@ -1,7 +1,5 @@
 import Base from '../base';
 declare class Asset extends Base {
-    getReferences: any;
-    environment: any;
     constructor(uid: any);
     /**
      * @function
@@ -14,7 +12,7 @@ declare class Asset extends Base {
      */
     static Query(): import("../query").default;
     static module(plural?: boolean): "Assets" | "Asset";
-    static get connection(): any;
+    static get connection(): {};
     /**
      * @function
      * @name Stack#Asset.getRteAssets
@@ -153,12 +151,6 @@ declare class Asset extends Base {
      * @return {external:Promise}
      */
     unpublish(payload: any): any;
-    static handleUpload(_files: any, type: any, options?: {
-        parentFolderUid?: string;
-    }): Promise<any>;
-    static uploadAsset(files: any, options?: {
-        parentFolderUid?: string;
-    }): Promise<any>;
 }
 declare const _default: (uiConnection: any) => typeof Asset;
 export default _default;

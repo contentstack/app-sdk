@@ -1,9 +1,7 @@
-import Stack from "./stack";
-import Store from "./store";
-import Metadata from "./metadata";
-import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
-import { IRTEPluginInitializer } from "./RTE/types";
-import AssetSidebarWidget from "./AssetSidebarWidget";
+import Stack from './stack';
+import Store from './store';
+import { IAppConfigInitData, IAppConfigWidget, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFullScreenInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from './types';
+import { IRTEPluginInitializer } from './RTE/types';
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -17,8 +15,6 @@ declare class Extension {
     postRobot: any;
     stack: Stack;
     store: Store;
-    metadata: Metadata;
-    locationUID: string;
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
@@ -26,9 +22,8 @@ declare class Extension {
         RTEPlugin: IRTEPluginInitializer | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
-        AssetSidebarWidget: AssetSidebarWidget | null;
     };
-    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData);
+    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IFullScreenInitData);
     getConfig: () => Promise<{
         [key: string]: any;
     }>;

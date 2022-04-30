@@ -15,6 +15,7 @@ export class RTEPlugin {
                 inMainToolbar: true,
                 inHoveringToolbar: true,
             },
+            dndOptions: {},
             isContentstackElement: true,
         },
         meta: {
@@ -42,7 +43,6 @@ export class RTEPlugin {
 
     constructor(id: string, private configCallback: IConfigCallback) {
         this.pluginMetaData.meta.id = id;
-        // this.pluginMetaData.registry.iconName = configCallback()['iconName'];
     }
 
     addPlugins = (...plugins: RTEPlugin[]) => {
@@ -88,7 +88,8 @@ export class RTEPlugin {
             }
 
             case "keydown": {
-                this.pluginMetaData.meta.editorCallbacks["keydown"] = callback;
+                this.pluginMetaData.meta.editorCallbacks["keydown"] =
+                    callback;
                 break;
             }
 
@@ -104,8 +105,8 @@ export class RTEPlugin {
         }
     };
 
-    get = async (rte: IRteParam | void) => {
-        const config = await this.configCallback(rte);
+    get = (rte: IRteParam) => {
+        const config = this.configCallback(rte);
 
         Object.entries(config).forEach(
             //@ts-ignore
@@ -115,12 +116,11 @@ export class RTEPlugin {
                         this.pluginMetaData.registry.title = value;
                         break;
                     }
-                    case "icon": {
+                    case "iconName": {
                         this.pluginMetaData.registry.iconName = value;
-                        this.containerMetaData.registry.iconName = value;
                         break;
                     }
-                    case "display": {
+                    case "displayOn": {
                         // make every other options false
                         this.pluginMetaData.registry.toolbar = {
                             inHoveringToolbar: false,
@@ -164,18 +164,70 @@ export class RTEPlugin {
                         break;
                     }
 
+                    case "dnd": {
+                        if (
+                            typeof value === "object" &&
+                            !Array.isArray(value)
+                        ) {
+                            if (
+                                typeof this.pluginMetaData.registry
+                                    .dndOptions === "undefined"
+                            ) {
+                                this.pluginMetaData.registry.dndOptions = {
+                                    DisableDND: false,
+                                };
+                            }
+                            Object.entries(value).forEach(
+                                ([option, val]: [option: string, val: any]) => {
+                                    switch (option) {
+                                        case "disable": {
+                                            this.pluginMetaData.registry.dndOptions.DisableDND =
+                                                val;
+                                            break;
+                                        }
+
+                                        case "hideSelectionBackground": {
+                                            this.pluginMetaData.registry.dndOptions.DisableSelectionHalo =
+                                                val;
+                                            break;
+                                        }
+                                        case "icon": {
+                                            this.pluginMetaData.registry.dndOptions.CustomDndIcon =
+                                                val;
+                                            break;
+                                        }
+                                        case "className": {
+                                            this.pluginMetaData.registry.dndOptions.ContainerClassName =
+                                                val;
+                                            break;
+                                        }
+                                        case "droppableContainer": {
+                                            this.pluginMetaData.registry.dndOptions.getDroppableContainer =
+                                                val;
+                                            break;
+                                        }
+                                        case "disableColumnLayout": {
+                                            this.pluginMetaData.registry.dndOptions.DisableGridDnd =
+                                                val;
+                                            break;
+                                        }
+                                    }
+                                }
+                            );
+                        }
+                        break;
+                    }
+
                     case "render": {
-                        this.pluginMetaData.registry.Component = value;
+                        this.pluginMetaData.registry.render = value;
                         break;
                     }
                 }
             }
         );
 
-        const containerMeta = this.containerMetaData.meta;
         this.containerMetaData = {
             registry: {
-                ...this.containerMetaData.registry,
                 id: this.pluginMetaData.meta.id,
                 title: this.pluginMetaData.registry.title,
                 rootCategory: false,
@@ -184,8 +236,8 @@ export class RTEPlugin {
                 },
             },
             meta: {
-                ...containerMeta,
                 id: this.pluginMetaData.meta.id,
+                dependentPlugins: [],
             },
         };
 

@@ -1,9 +1,9 @@
+//@ts-nocheck
 
 import Base from '../base';
 import { getReferences, language, environment } from '../../utils';
-import postRobot from 'post-robot';
 
-let connection: any = {};
+let connection = {};
 
 /**
  * @summary Creates an instance of `Asset`.
@@ -24,8 +24,6 @@ function onError(error) {
 }
 
 class Asset extends Base {
-  getReferences: any
-  environment: any
   constructor(uid) {
     super(uid);
     this.getReferences = getReferences;
@@ -230,61 +228,12 @@ class Asset extends Base {
     }
     return this.fetch('unpublishAsset', payload);
   }
-
-  static async handleUpload(_files, type, options?: {parentFolderUid?: string}) {
-    if (!_files || !_files.length) {
-      return Promise.reject(new Error('Kindly provide valid parameters'));
-    }
-    const files: File[] = [];
-    Array.from(_files).forEach(_ => {
-      // @ts-ignore
-      const file = new File([_], _.name, { type: _.type });
-      files.push(file);
-    })
-    const uid = new Date().getUTCMilliseconds();
-    return (async function() {
-      try {
-          const uploadReadyListener = postRobot.on(
-              `uploadReady_${uid}`,
-              function () {
-                  window.parent.postMessage(
-                      {
-                          type: `upload_${uid}`,
-                          upload_type: type,
-                          files,
-                          parentFolderUid: options?.parentFolderUid
-
-                      },
-                      "*"
-                  );
-
-                  uploadReadyListener.cancel();
-                  return Promise.resolve({});
-              }
-          );
-          //@ts-ignore
-          await postRobot.sendToParent("stackOptionsQuery", {
-              action: `upload_${uid}`,
-              uid,
-          });
-          //@ts-ignore
-          return postRobot.sendToParent(`upload_${uid}`, {});
-      } catch(err) {
-        return Promise.reject(err);
-      }
-    })();
-  }
-
-  static uploadAsset(files, options?: {parentFolderUid?: string}) {
-    return Asset.handleUpload(files, 'upload', options);
-  }
 }
 
 export default (uiConnection) => {
   connection = uiConnection;
   return new Proxy(Asset, {
     apply(Target, thisArg, argumentsList) {
-      //@ts-ignore
       return new Target(...argumentsList);
     }
   });

@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import * as Utils from '../utils';
 
 
@@ -45,7 +47,7 @@ const _extend = {
   },
   logical(type) {
     return function () {
-      const _query: any[] = [];
+      const _query = [];
       for (let i = 0, _i = arguments.length; i < _i; i += 1) {
         if (arguments[i] instanceof Query && arguments[i]._query.query) {
           _query.push(arguments[i]._query.query);
@@ -83,43 +85,16 @@ const _extend = {
 
 /**
  * Creates an instance of the query
+ * @version 2.2.0
  * @hideconstructor
  */
 class Query {
-  module: any
-  _connection: any
-  _query: {[key: string]: any}
-  contentTypeUid: string
-  only: any
-  except: any
-  addQuery: any
-  lessThan: any
-  lessThanOrEqualTo: any
-  greaterThan: any
-  greaterThanOrEqualTo: any
-  notEqualTo: any
-  containedIn: any
-  notContainedIn: any
-  exists: any
-  notExists: any
-  ascending: ReturnType<typeof _extend.sort>
-  descending: ReturnType<typeof _extend.sort>
-  beforeUid: ReturnType<typeof _extend.sort>
-  afterUid: ReturnType<typeof _extend.sort>
-  skip: ReturnType<typeof _extend.pagination>
-  limit: ReturnType<typeof _extend.pagination>
-  or: ReturnType<typeof _extend.logical>
-  and: ReturnType<typeof _extend.logical>
-  addParam: ReturnType<typeof Utils.addParam>
-  singleEntry: any
-
   constructor(connection, module, contentTypeUid) {
     this.module = module;
     this._connection = connection;
     this._query = {};
     this._query.query = this._query.query || {};
     this.contentTypeUid = contentTypeUid;
-
     /**
       * @name Query#only
       * @function
