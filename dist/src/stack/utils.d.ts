@@ -1,6 +1,18 @@
 export declare function transform(type: any): () => any;
-export declare function merge(target: any, source: any): any;
-export declare function mergeDeep(oldTarget: any, oldSource: any): any;
+export declare function merge(target: {
+    [key: string]: any;
+}, source: {
+    [key: string]: any;
+}): {
+    [key: string]: any;
+};
+export declare function mergeDeep(oldTarget: {
+    [key: string]: any;
+}, oldSource: {
+    [key: string]: any;
+}): {
+    [key: string]: any;
+};
 export declare function _type(val: any): "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
 export declare function addParam(key: any, value: any): any;
 export declare function addQuery(key: any, value: any): any;

@@ -25,9 +25,7 @@ declare class Field {
      * @param {Object|string|number} data Data to be set on the field
      * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
      */
-    setData(data: {
-        [key: string]: any;
-    }): any;
+    setData(data: any): Promise<Field>;
     /**
       * Gets the data of the current field
       * @param  {Object} options Options object for get Data method.

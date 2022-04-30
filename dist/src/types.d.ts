@@ -1,3 +1,6 @@
+export declare interface anyObjectType {
+    [key: string]: any;
+}
 export declare interface IDashboardWidget {
     [key: string]: any;
 }
@@ -21,6 +24,7 @@ export declare interface IPageWidget {
     [key: string]: any;
 }
 export declare interface IUser {
+    [key: string]: any;
 }
 export declare interface ICurrentStack {
     [key: string]: any;
@@ -40,91 +44,73 @@ export declare interface ISchema {
 export declare interface IFieldConfig {
     [key: string]: any;
 }
+declare interface ICommonInitData {
+    app_id: string;
+    installation_uid: string;
+    extension_uid: string;
+    stack: ICurrentStack;
+    user: IUser;
+}
 export declare interface IDashboardInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
+    data: ICommonInitData & {
         dashboard_width: "full_width" | "half_width";
-        stack: ICurrentStack;
-        config?: {
-            [key: string]: any;
-        };
+        config?: anyObjectType;
         type: "DASHBOARD";
-        user: IUser;
     };
 }
 export declare interface ISidebarInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
+    data: ICommonInitData & {
         app_config: IConfig;
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
         locale: string;
-        stack: ICurrentStack;
-        config?: {
-            [key: string]: any;
-        };
+        config?: anyObjectType;
         type: "WIDGET";
-        user: IUser;
     };
 }
 export declare interface IFieldInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
+    data: ICommonInitData & {
         entry: ICurrentEntry;
         content_type: ICurrentContentType;
         locale: string;
-        user: IUser;
         uid: string;
         schema: ISchema;
         app_config: IConfig;
         value: any;
         field_config: IFieldConfig;
-        config?: {
-            [key: string]: any;
-        };
-        stack: ICurrentStack;
+        config?: anyObjectType;
         self: boolean;
         type: "FIELD";
     };
 }
 export declare interface IRTEInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
-        stack: ICurrentStack;
-        type: "RTE_EXTENSION_WIDGET";
-        user: IUser;
-        config?: {
-            [key: string]: any;
-        };
+    data: ICommonInitData & {
+        type: "RTE";
+        config?: anyObjectType;
     };
 }
 export declare interface IAppConfigInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
-        stack: ICurrentStack;
+    data: ICommonInitData & {
         type: "APP_CONFIG_WIDGET";
-        user: IUser;
-        config?: {
+        config?: anyObjectType;
+    };
+}
+export declare interface ICurrentAsset {
+    [key: string]: any;
+}
+export declare interface IAssetSidebarInitData {
+    data: ICommonInitData & {
+        type: "ASSET_SIDEBAR_WIDGET";
+        currentAsset: ICurrentAsset;
+        config: {
             [key: string]: any;
         };
     };
 }
-export declare interface IFullScreenInitData {
-    data: {
-        app_id: string;
-        installation_uid: string;
-        stack: ICurrentStack;
-        config?: {
-            [key: string]: any;
-        };
-        type: "FULL_SCREEN_WIDGET";
-        user: IUser;
-    };
+export declare interface setAssetDto {
+    title: string;
+    description: string;
+    tags: string[];
 }
 export declare enum StackLocation {
     STACK_CONFIG = "cs.cm.stack.config",
@@ -167,9 +153,10 @@ export declare interface IInitializationData {
     FIELD: IFieldConfig;
     WIDGET: ISidebarInitData;
     DASHBOARD: IDashboardInitData;
-    RTE_EXTENSION_WIDGET: IRTEInitData;
+    RTE: IRTEInitData;
     APP_CONFIG_WIDGET: IAppConfigInitData;
-    FULL_SCREEN_WIDGET: IFullScreenInitData;
+    ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
-export declare type ILocation = "RTE_EXTENSION_WIDGET" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET";
+export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET";
+export {};
 //# sourceMappingURL=types.d.ts.map
