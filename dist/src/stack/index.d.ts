@@ -69,6 +69,20 @@ declare class Stack {
      * @return {Object} A Promise object which will be resolved with details of the locales.
      */
     getLocales(query?: {}, params?: {}): any;
+    /**
+     * This API allows you to retrive a workflow of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-workflow| Language API} requests. Method returns a Promise object.
+     * @param {string} code Code of the desired locale
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with locale details.
+     */
+    getWorkflow(uid: string, params?: {}): any;
+    /**
+     * This API allows you to retrive the locales of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-all-content-types| Languages API} requests. Method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A Promise object which will be resolved with details of the locales.
+     */
+    getWorkflows(query?: {}, params?: {}): any;
 }
 export default Stack;
 //# sourceMappingURL=index.d.ts.map
