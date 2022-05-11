@@ -150,14 +150,13 @@ class Extension {
                 break;
             }
 
-            case "APP_CONFIG_WIDGET": {
-                this.location.AppConfigWidget = new AppConfig(
-                    initializationData,
-                    postRobot,
-                    emitter
-                );
-                break;
-            }
+            case "APP_CONFIG_WIDGET": {        
+        this.location.AppConfigWidget = {
+          installation: new AppConfig(initializationData, postRobot, emitter),
+          stack: new Stack(initializationData.data.stack, postRobot),
+        }
+        break
+      }
 
             case "ASSET_SIDEBAR_WIDGET": {
                 this.location.AssetSidebarWidget = new AssetSidebarWidget(

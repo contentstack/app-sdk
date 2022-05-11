@@ -1,3 +1,4 @@
+import Stack from "../stack";
 import { IInstallationData } from "../types";
 import { onData, onError } from "../utils";
 
@@ -14,6 +15,10 @@ export class AppConfig {
         this._data = data;
         this._connection = connection;
         this._emitter = emitter;
+    }
+
+    stack = () => {
+        return new Stack(this._data.stack, this._connection)
     }
 
     setInstallationData = (installationData: IInstallationData): Promise<{ [key: string]: any }> => {
