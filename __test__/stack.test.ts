@@ -202,13 +202,17 @@ describe("Stack", () => {
                         uid: "xys",
                         content_type_uid: "newblog",
                         params: {
-                            only: {
-                                BASE: ["title", "title", "deatials", "sample"],
-                            },
+                            "only[BASE]": [
+                                "title",
+                                "title",
+                                "deatials",
+                                "sample",
+                            ],
                         },
                         action: "getEntry",
                     }
                 );
+
                 done();
             });
             done();
@@ -227,14 +231,13 @@ describe("Stack", () => {
                         uid: "xys",
                         content_type_uid: "newblog",
                         params: {
-                            except: {
-                                title: [],
-                                BASE: ["title", "deatials", "sample"],
-                            },
+                            "except[title]": [],
+                            "except[BASE]": ["title", "deatials", "sample"],
                         },
                         action: "getEntry",
                     }
                 );
+
                 done();
             });
             done();
