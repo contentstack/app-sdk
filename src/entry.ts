@@ -56,7 +56,7 @@ class Entry {
 
 
   /**
-   * Gets the field object which allows you to interact with the field.
+   * Gets the field object for the saved data, which allows you to interact with the field.
    * This object will have all the same methods and properties of extension.field.
    * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and extension of data type text, number, boolean, and date.
    * @example
@@ -73,6 +73,12 @@ class Entry {
     const path = uid.split('.');
     let value = this._data;
     let schema = this.content_type.schema;
+
+     const isDataEmpty = Object.keys(value).length === 0;
+
+     if (isDataEmpty) {
+         throw new Error("getField cannot fetch data from unsaved entry");
+     }
 
     try {
       let skipNext = false;
