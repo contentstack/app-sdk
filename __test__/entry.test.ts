@@ -138,6 +138,16 @@ describe("Entry", () => {
         );
     });
 
+    it.only("getField within Create page", function () {
+        const dataWithoutEntry = JSON.parse(JSON.stringify(testData));
+        dataWithoutEntry.entry = {};
+        // @ts-ignore
+        entry = new Entry({ data: dataWithoutEntry }, connection, emitter);
+        expect(() => entry.getField("invaliduid")).toThrowError(
+            "getField cannot fetch data from unsaved entry"
+        );
+    });
+
     it("onSave Callback must be a function", function () {
         // @ts-ignore
         expect(() => entry.onSave()).toThrow("Callback must be a function");
