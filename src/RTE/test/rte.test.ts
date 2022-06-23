@@ -43,9 +43,6 @@ describe("RTE Plugin", () => {
         const [plugin, inputPluginProps] = createPlugin();
         const pluginProps = await plugin.get();
         const registry = pluginProps.registry;
-        console.log("mayhem ", createPlugin(), {
-            pluginProps,
-        });
         const basicDetails = {
             title: inputPluginProps.title,
             toolbar: {
