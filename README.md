@@ -64,29 +64,54 @@ This is a callback function that is executed after you unpublish an asset.
 
 It is the property that you can modify using the setData() method.
 
-## Metadata SDK Reference
+## Metadata
 
-**IMetadata**
-This object represents the structure of the metadata.
+Metadata is a piece of information that lets you describe or classify an asset/entry. You can manage your digital entities effectively and enable improved accessibility with additional metadata. This object manages all the CRUD operations you can perform with metadata, e.g., adding, updating, or deleting additional metadata.
+
+
+> Note: The Metadata feature allows users to update their asset metadata or entry metadata without incrementing the asset or entry version.
+
+### createMetadata(metadataConfig: IMetadataCreate)
 
 ```ts
-{
-    uid: string;
-    type: "asset" | "entry";
+IMetadataCreate {
+    entity_uid: string;
+    type?: "asset" | "entry"; // default: "asset"
     _content_type_uid?: string;
     locale?: string;
-    [key: string]: any;
+    [key: string]: any; // other fields you want to add
 }
 ```
 
-**createMetaData(metadataConfig: IMetadata)**
-This method adds new metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object and other data you need for your app.
+This method adds new metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object and other data you need for your app.
 
-**retrieveMetaData(metadataConfig: IMetadata)**
-This method retrieves metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object you want to retrieve.
+### retrieveMetadata(metadataConfig: IMetadataRetrieve)
 
-**updateMetaData(metadataConfig: IMetadata)**
-This method updates existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object and other data you want to update.
+```ts
+IMetadateRetrieve {
+    uid: string;
+}
+```
 
-**deleteMetaData(metadataConfig: IMetadata)**
-This method deletes existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the `metadata` object you want to delete.
+This method retrieves metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object you want to retrieve.
+
+### updateMetadata(metadataConfig: IMetadataUpdate)
+
+```ts
+IMetadataUpdate {
+    uid: string;
+    [key: string]: any; // other fields you want to update
+}
+```
+
+This method updates existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object and other data you want to update.
+
+### deleteMetadata(metadataConfig: IMetadataDelete)
+
+```ts
+IMetadateDelete {
+    uid: string;
+}
+```
+
+This method deletes existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object you want to delete.
