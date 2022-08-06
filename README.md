@@ -76,7 +76,8 @@ Metadata is a piece of information that lets you describe or classify an asset/e
 ```ts
 IMetadataCreate {
     entity_uid: string;
-    type?: "asset" | "entry"; // default: "asset"
+    type?: "asset" | "entry"; // default: "asset";
+    extension_uid: string;
     _content_type_uid?: string;
     locale?: string;
     [key: string]: any; // other fields you want to add
