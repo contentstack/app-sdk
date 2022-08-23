@@ -109,4 +109,26 @@ describe("Window", () => {
             done();
         });
     });
+
+    it("should send dashboardEnableTopPadding on enablePaddingTop", (done) => {
+        windowObj.type = "DASHBOARD";
+        windowObj.enablePaddingTop().then(() => {
+            expect(connection.sendToParent).toHaveBeenCalledWith("window", {
+                action: "dashboardEnableTopPadding",
+            });
+            done();
+        });
+    });
+
+    it("should send dashboardDisableTopPadding on disablePaddingTop", (done) => {
+        windowObj.type = "DASHBOARD";
+        windowObj.disablePaddingTop().then(() => {
+            expect(connection.sendToParent).toHaveBeenCalledWith("window", {
+                action: "dashboardDisableTopPadding",
+            });
+            done();
+        });
+    });
+
+
 });
