@@ -283,8 +283,11 @@ class Extension {
     };
 
     static initialize(version: string) {
+        const meta = {
+            sdkType: "app-sdk"
+        }
         //@ts-ignore
-        return postRobot.sendToParent("init", { version });
+        return postRobot.sendToParent("init", { version, meta });
     }
 
     setReady() {

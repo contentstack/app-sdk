@@ -114,11 +114,24 @@ export declare interface IDnd {
     droppableContainer: (elementType: string, path: number[]) => string;
     disableColumnLayout: boolean;
 }
+export declare interface IAnyObject {
+    [key: string]: any;
+}
+export declare interface IRteTextType {
+    text: string;
+}
+export declare interface IRteElementType {
+    uid: string;
+    type: string;
+    attrs: IAnyObject;
+    children: Array<IRteElementType | IRteTextType>;
+}
+declare type IDynamicFunction = ((element: IRteElementType) => Exclude<IElementTypeOptions, "text"> | Exclude<IElementTypeOptions, "text">[]);
 export declare interface IConfig {
     title: string;
     icon: React.ReactElement | null;
     display: IDisplayOnOptions | IDisplayOnOptions[];
-    elementType: IElementTypeOptions | IElementTypeOptions[];
+    elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
     render?: (...params: any) => ReactElement;
 }
 export declare interface IRegistryDnd {
@@ -148,7 +161,7 @@ export declare interface IRegistry {
 }
 export declare interface IMeta {
     id: string;
-    elementType: null | IElementTypeOptions | IElementTypeOptions[];
+    elementType: null | IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
     editorCallbacks: {
         [key: string]: any;
     };
