@@ -9,6 +9,7 @@ import {
     Transforms,
     Editor,
     Span,
+    NodeMatch,
 } from "slate";
 
 import { RTEPlugin } from "./index";
@@ -94,6 +95,13 @@ export declare interface IRteParam {
         }
     ) => NodeEntry;
 
+    getNodes: <T extends Node> (
+        options?: {
+            at?: Location,
+            match?: NodeMatch<T>
+        }
+    ) => Generator<NodeEntry<T>, void, undefined>
+
     string: (at: Location) => string;
 
     addMark: (key: string, value: any) => void;
@@ -140,14 +148,14 @@ export declare type IOnFunction = {
     exec: (rte: IRteParam) => void;
     keydown: (rte: IRteParam) => void;
 
-    normalize: (rte: IRteParam) => {};
+    normalize: (rte: IRteParam) => void;
 
-    insertBreak: (rte: IRteParam) => {};
-    deleteBackward: (rte: IRteParam) => {};
-    deleteForward: (rte: IRteParam) => {};
+    insertBreak: (rte: IRteParam) => void;
+    deleteBackward: (rte: IRteParam) => void;
+    deleteForward: (rte: IRteParam) => void;
 
-    beforeRender: (rte: IRteParam) => {};
-    beforeChildRender: () => {};
+    beforeRender: (rte: IRteParam) => void;
+    beforeChildRender: (rte: IRteParam) => void;
 
     copy: (rte: IRteParam) => void;
 };
@@ -161,7 +169,6 @@ export declare type IOnType =
     | "beforeRender"
     | "beforeChildRender"
     | "copy"
-    | "paste";
 
 export declare type IDisplayOnOptions = "toolbar" | "hoveringToolbar";
 export declare type IElementTypeOptions = "inline" | "void" | "block" | "text";
