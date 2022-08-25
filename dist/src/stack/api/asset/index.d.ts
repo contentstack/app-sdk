@@ -1,4 +1,5 @@
 import Base from '../base';
+import { IAnyObject } from '../../../RTE/types';
 declare class Asset extends Base {
     getReferences: any;
     environment: any;
@@ -155,6 +156,7 @@ declare class Asset extends Base {
     unpublish(payload: any): any;
     static handleUpload(_files: any, type: any, options?: {
         parentFolderUid?: string;
+        customUploadHandler?: IAnyObject;
     }): Promise<any>;
     static uploadAsset(files: any, options?: {
         parentFolderUid?: string;
