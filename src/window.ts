@@ -107,6 +107,15 @@ class Window {
     observer.disconnect();
     return this;
   }
+
+  enablePaddingTop() {
+    return this._connection.sendToParent('window', { action: 'dashboardEnableTopPadding' });
+  }
+
+  disablePaddingTop() {
+    return this._connection.sendToParent('window', { action: 'dashboardDisableTopPadding' });
+  }
+  
 }
 
 export default Window;
