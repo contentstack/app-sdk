@@ -133,6 +133,7 @@ export declare interface IConfig {
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
     render?: (...params: any) => ReactElement;
+    shouldOverride?: (element: IRteElementType) => Boolean;
 }
 export declare interface IRegistryDnd {
     DisableDND: boolean;
@@ -158,6 +159,7 @@ export declare interface IRegistry {
         [key: string]: any;
     }, path: number[], rte: IRteParam) => React.ReactElement;
     IngressComponent?: React.Component | null;
+    shouldOverride?: (element: IRteElementType) => Boolean;
 }
 export declare interface IMeta {
     id: string;
