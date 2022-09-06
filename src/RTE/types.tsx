@@ -142,17 +142,26 @@ export declare interface IRteParam {
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
 
+export declare type IRteParamWithPreventDefault = {
+    rte: IRteParam;
+    preventDefault: () => void;
+    [key:string]: any;
+}
+
 export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 
 export declare type IOnFunction = {
     exec: (rte: IRteParam) => void;
-    keydown: (rte: IRteParam) => void;
+    keydown: (params: {
+        event: React.KeyboardEvent,
+        rte: IRteParam
+    }) => void;
 
-    normalize: (rte: IRteParam) => void;
+    normalize: (params: IRteParamWithPreventDefault) => void;
 
-    insertBreak: (rte: IRteParam) => void;
-    deleteBackward: (rte: IRteParam) => void;
-    deleteForward: (rte: IRteParam) => void;
+    insertBreak: (params: IRteParamWithPreventDefault) => void;
+    deleteBackward: (params: IRteParamWithPreventDefault) => void;
+    deleteForward: (params: IRteParamWithPreventDefault) => void;
 
     beforeRender: (rte: IRteParam) => void;
     beforeChildRender: (rte: IRteParam) => void;
