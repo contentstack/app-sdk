@@ -167,6 +167,10 @@ export class RTEPlugin {
                         this.pluginMetaData.registry.Component = value;
                         break;
                     }
+
+                    case "shouldOverride" : {
+                        this.pluginMetaData.registry.shouldOverride = value
+                    }
                 }
             }
         );
