@@ -9,6 +9,7 @@ import {
     Transforms,
     Editor,
     Span,
+    NodeMatch,
 } from "slate";
 
 import { RTEPlugin } from "./index";
@@ -94,6 +95,13 @@ export declare interface IRteParam {
         }
     ) => NodeEntry;
 
+    getNodes: <T extends Node> (
+        options?: {
+            at?: Location,
+            match?: NodeMatch<T>
+        }
+    ) => Generator<NodeEntry<T>, void, undefined>
+
     string: (at: Location) => string;
 
     addMark: (key: string, value: any) => void;
@@ -134,20 +142,29 @@ export declare interface IRteParam {
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
 
+export declare type IRteParamWithPreventDefault = {
+    rte: IRteParam;
+    preventDefault: () => void;
+    [key:string]: any;
+}
+
 export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 
 export declare type IOnFunction = {
     exec: (rte: IRteParam) => void;
-    keydown: (rte: IRteParam) => void;
+    keydown: (params: {
+        event: React.KeyboardEvent,
+        rte: IRteParam
+    }) => void;
 
-    normalize: (rte: IRteParam) => {};
+    normalize: (params: IRteParamWithPreventDefault) => void;
 
-    insertBreak: (rte: IRteParam) => {};
-    deleteBackward: (rte: IRteParam) => {};
-    deleteForward: (rte: IRteParam) => {};
+    insertBreak: (params: IRteParamWithPreventDefault) => void;
+    deleteBackward: (params: IRteParamWithPreventDefault) => void;
+    deleteForward: (params: IRteParamWithPreventDefault) => void;
 
-    beforeRender: (rte: IRteParam) => {};
-    beforeChildRender: () => {};
+    beforeRender: (rte: IRteParam) => void;
+    beforeChildRender: (rte: IRteParam) => void;
 
     copy: (rte: IRteParam) => void;
 };
@@ -161,7 +178,6 @@ export declare type IOnType =
     | "beforeRender"
     | "beforeChildRender"
     | "copy"
-    | "paste";
 
 export declare type IDisplayOnOptions = "toolbar" | "hoveringToolbar";
 export declare type IElementTypeOptions = "inline" | "void" | "block" | "text";
@@ -193,7 +209,7 @@ export declare interface IConfig {
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
     render?: (...params: any) => ReactElement;
-    shouldOverride?: (element: IRteElementType) => Boolean
+    shouldOverride?: (element: IRteElementType) => boolean
 }
 
 export declare interface IRegistryDnd {
@@ -224,7 +240,7 @@ export declare interface IRegistry {
         rte: IRteParam
     ) => React.ReactElement;
     IngressComponent?: React.Component | null;
-    shouldOverride?: ( element: IRteElementType) => Boolean
+    shouldOverride?: ( element: IRteElementType) => boolean
 }
 
 export declare interface IMeta {

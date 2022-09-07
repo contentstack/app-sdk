@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Location, NodeEntry, Path, Point, Node, ElementEntry, Transforms, Editor, Span } from "slate";
+import { Location, NodeEntry, Path, Point, Node, ElementEntry, Transforms, Editor, Span, NodeMatch } from "slate";
 import { RTEPlugin } from "./index";
 declare interface TransformOptions {
     at?: Location;
@@ -59,6 +59,10 @@ export declare interface IRteParam {
         depth?: number;
         edge?: "start" | "end";
     }) => NodeEntry;
+    getNodes: <T extends Node>(options?: {
+        at?: Location;
+        match?: NodeMatch<T>;
+    }) => Generator<NodeEntry<T>, void, undefined>;
     string: (at: Location) => string;
     addMark: (key: string, value: any) => void;
     removeMark: (key: string) => void;
@@ -91,19 +95,27 @@ export declare interface IRteParam {
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
+export declare type IRteParamWithPreventDefault = {
+    rte: IRteParam;
+    preventDefault: () => void;
+    [key: string]: any;
+};
 export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 export declare type IOnFunction = {
     exec: (rte: IRteParam) => void;
-    keydown: (rte: IRteParam) => void;
-    normalize: (rte: IRteParam) => {};
-    insertBreak: (rte: IRteParam) => {};
-    deleteBackward: (rte: IRteParam) => {};
-    deleteForward: (rte: IRteParam) => {};
-    beforeRender: (rte: IRteParam) => {};
-    beforeChildRender: () => {};
+    keydown: (params: {
+        event: React.KeyboardEvent;
+        rte: IRteParam;
+    }) => void;
+    normalize: (params: IRteParamWithPreventDefault) => void;
+    insertBreak: (params: IRteParamWithPreventDefault) => void;
+    deleteBackward: (params: IRteParamWithPreventDefault) => void;
+    deleteForward: (params: IRteParamWithPreventDefault) => void;
+    beforeRender: (rte: IRteParam) => void;
+    beforeChildRender: (rte: IRteParam) => void;
     copy: (rte: IRteParam) => void;
 };
-export declare type IOnType = "exec" | "normalize" | "deleteBackwards" | "deleteForwards" | "insertBreak" | "beforeRender" | "beforeChildRender" | "copy" | "paste";
+export declare type IOnType = "exec" | "normalize" | "deleteBackwards" | "deleteForwards" | "insertBreak" | "beforeRender" | "beforeChildRender" | "copy";
 export declare type IDisplayOnOptions = "toolbar" | "hoveringToolbar";
 export declare type IElementTypeOptions = "inline" | "void" | "block" | "text";
 export declare interface IDnd {
@@ -133,7 +145,7 @@ export declare interface IConfig {
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
     render?: (...params: any) => ReactElement;
-    shouldOverride?: (element: IRteElementType) => Boolean;
+    shouldOverride?: (element: IRteElementType) => boolean;
 }
 export declare interface IRegistryDnd {
     DisableDND: boolean;
@@ -159,7 +171,7 @@ export declare interface IRegistry {
         [key: string]: any;
     }, path: number[], rte: IRteParam) => React.ReactElement;
     IngressComponent?: React.Component | null;
-    shouldOverride?: (element: IRteElementType) => Boolean;
+    shouldOverride?: (element: IRteElementType) => boolean;
 }
 export declare interface IMeta {
     id: string;

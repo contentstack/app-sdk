@@ -42,7 +42,6 @@ export class RTEPlugin {
 
     constructor(id: string, private configCallback: IConfigCallback) {
         this.pluginMetaData.meta.id = id;
-        // this.pluginMetaData.registry.iconName = configCallback()['iconName'];
     }
 
     addPlugins = (...plugins: RTEPlugin[]) => {
@@ -201,7 +200,7 @@ export const rtePluginInitializer = (
     id: string,
     configCallback: IConfigCallback
 ) => {
-    if (!(id && configCallback)) throw Error("i am an error");
+    if (!(id && configCallback)) throw Error('Please provide value "id" and "configCallback"');
 
     return new RTEPlugin(id, configCallback);
 };
