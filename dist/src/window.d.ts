@@ -42,6 +42,8 @@ declare class Window {
      * @return {Window}.
      */
     disableAutoResizing(): this;
+    enablePaddingTop(): any;
+    disablePaddingTop(): any;
 }
 export default Window;
 //# sourceMappingURL=window.d.ts.map

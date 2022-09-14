@@ -19,7 +19,7 @@ const createDropdown = () => {
     return DropDown;
 };
 
-const createPlugin = () => {
+const createPlugin = (options = {}) => {
     const detail: any = {
         id: "plugin",
         title: "Plugin",
@@ -29,6 +29,7 @@ const createPlugin = () => {
         },
         display: ["hoveringToolbar", "toolbar"],
         elementType: ["inline", "void", "block", "text"],
+        ...options
     };
     const Plugin = new RTEPlugin(detail.id, () => {
         return detail;
@@ -114,4 +115,17 @@ describe("RTE Plugin", () => {
         const dropdown: any = await createDropdown().get();
         expect(dropdown.meta.dependentPlugins).to.have.length(1);
     });
+
+    it("Check if `shouldOverride` is register on registry", async () => {
+        let options = {
+            shouldOverride: (element) => {
+                return false
+            }
+        }
+        const [plugin, inputPluginProps] = createPlugin(options);
+        const pluginProps = await plugin.get();
+        const registry = pluginProps.registry;
+        expect(registry).to.haveOwnProperty('shouldOverride')
+        expect(registry).to.contain({...options})
+    })
 });
