@@ -1,5 +1,14 @@
 import EventEmitter from "wolfy87-eventemitter";
 import Window from "../src/window";
+import postRobot from "post-robot";
+
+jest.mock("post-robot", () => ({
+    __esModule: true,
+    default: {
+        on: jest.fn(),
+        sendToParent: jest.fn().mockReturnValue(Promise.resolve()),
+    },
+}));
 
 describe("Window", () => {
     let windowObj: Window;
@@ -81,7 +90,6 @@ describe("Window", () => {
         });
     });
 
-
     it("onDashboardResize Callback must be a function", function () {
         windowObj.type = "DASHBOARD";
         //@ts-ignore
@@ -113,9 +121,12 @@ describe("Window", () => {
     it("should send dashboardEnableTopPadding on enablePaddingTop", (done) => {
         windowObj.type = "DASHBOARD";
         windowObj.enablePaddingTop().then(() => {
-            expect(connection.sendToParent).toHaveBeenCalledWith("window", {
-                action: "dashboardEnableTopPadding",
-            });
+            expect((postRobot as any).sendToParent).toHaveBeenCalledWith(
+                "window",
+                {
+                    action: "dashboardEnableTopPadding",
+                }
+            );
             done();
         });
     });
@@ -123,12 +134,13 @@ describe("Window", () => {
     it("should send dashboardDisableTopPadding on disablePaddingTop", (done) => {
         windowObj.type = "DASHBOARD";
         windowObj.disablePaddingTop().then(() => {
-            expect(connection.sendToParent).toHaveBeenCalledWith("window", {
-                action: "dashboardDisableTopPadding",
-            });
+            expect((postRobot as any).sendToParent).toHaveBeenCalledWith(
+                "window",
+                {
+                    action: "dashboardDisableTopPadding",
+                }
+            );
             done();
         });
     });
-
-
 });

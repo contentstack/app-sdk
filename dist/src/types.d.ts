@@ -25,9 +25,6 @@ export declare interface IAppConfigWidget {
         [key: string]: any;
     };
 }
-export declare interface IInitialConfig extends anyObjectType {
-    applyDashboardPaddingTop?: boolean;
-}
 export declare interface IPageWidget {
     [key: string]: any;
 }
