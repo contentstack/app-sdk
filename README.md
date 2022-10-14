@@ -1,118 +1,95 @@
-# App Framework SDK
+# Contentstack App SDK Readme
 
-## JSON Rich text editor plugin
+The Contentstack App SDK allows you to customize your applications. This document will help you integrate the App SDK with your application.
 
-The **JSON Rich Text Editor Plugins** lets you add/create custom plugins to extend the functionality of your [JSON Rich Text Editor](https://www.contentstack.com/docs/developers/json-rich-text-editor/about-json-rich-text-editor/) as per your needs. You can use the prebuilt JSON RTE plugins by modifying the code to suit your requirement.
+## Getting started
 
-Some of the examples of the prebuilt JSON Rich Text Editor plugins are:
+To include the App SDK in your project, you need to run the following command:
 
--   Highlight: Allows you to highlight certain parts of your content, such as a whole line of text or a paragraph.
-
--   Info Panel: Allows you to place important content inside a colored panel to make it stand out.
-
--   Word Count: Allows you to track the word count for your JSON Rich Text Editor content.
-
-You can create JSON Rich Text Editor Plugins using the Contentstack App SDK. For more information, read our [documentation](https://www.contentstack.com/docs/developers/json-rich-text-editor-plugins/about-json-rte-plugins/).
-
-## Asset Sidebar Extension
-
-**Asset Sidebar Extensions** enable you to customize and enhance your **asset editing experience**. Using customized extensions, you can tailor your images on Contentstack according to your branding requirements..
-
-You can create Asset Sidebar Extensions using the Contentstack App SDK. For more information, read our documentation.
-
-### AssetSidebarWidget Reference
-
-It is an object representing the current Asset Sidebar Widget reference in the Contentstack UI.
-
-**getData()**
-
-This method returns the object representing the current asset.
-
-**setData(asset: Partial<AssetData>)**
-
-This method modifies the properties of the current asset.
-
-**syncAsset()**
-
-If your asset has been modified externally, you can use this method to load the new asset and sync its settings with the current asset.
-
-**updateWidth(width: number)**
-
-This method is used to modify the width of the asset sidebar panel. Using this method, you can resize the panel depending on the resolution of your content.
-
-**replaceAsset(file: File)**
-
-This method is used to replace the current asset with a new file. Unlike setData(), where you can only modify the properties, you can use this method to replace the actual file.
-
-**onSave(callback: anyFunction)**
-
-This is a callback function that runs after you save the asset settings.
-
-**onChange(callback: anyFunction)**
-
-This is a callback function that runs every time the user modifies the asset data.
-
-**onPublish(callback: anyFunction)**
-
-This is a callback function that is executed after a user publishes an asset.
-
-**onUnPublish(callback: anyFunction)**
-
-This is a callback function that is executed after you unpublish an asset.
-
-**AssetData**
-
-It is the property that you can modify using the setData() method.
-
-## Metadata
-
-Metadata is a piece of information that lets you describe or classify an asset/entry. You can manage your digital entities effectively and enable improved accessibility with additional metadata. This object manages all the CRUD operations you can perform with metadata, e.g., adding, updating, or deleting additional metadata.
-
-
-> Note: The Metadata feature allows users to update their asset metadata or entry metadata without incrementing the asset or entry version.
-
-### createMetadata(metadataConfig: IMetadataCreate)
-
-```ts
-IMetadataCreate {
-    entity_uid: string;
-    type?: "asset" | "entry"; // default: "asset";
-    extension_uid: string;
-    _content_type_uid?: string;
-    locale?: string;
-    [key: string]: any; // other fields you want to add
-}
+```sh
+npm install @contentstack/app-sdk
 ```
 
-This method adds new metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object and other data you need for your app.
+Alternatively, you can use the following command within the script tag to install the App SDK:
 
-### retrieveMetadata(metadataConfig: IMetadataRetrieve)
-
-```ts
-IMetadateRetrieve {
-    uid: string;
-}
+```html
+<script src="https://unpkg.com/@contentstack/app-sdk@^1.2/dist/index.js"></script>
 ```
 
-This method retrieves metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object you want to retrieve.
+### Initializing the App SDK
 
-### updateMetadata(metadataConfig: IMetadataUpdate)
+To Initialize the App SDK you need to run the following command:
 
-```ts
-IMetadataUpdate {
-    uid: string;
-    [key: string]: any; // other fields you want to update
-}
+```js
+ContentstackAppSdk.init().then(function (appSdk) {
+    // add code here
+});
 ```
 
-This method updates existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object and other data you want to update.
+For more information, please refer to our [App SDK API Reference](https://github.com/contentstack/app-sdk-docs#contentstack-app-sdk-api-reference) document.
 
-### deleteMetadata(metadataConfig: IMetadataDelete)
+## Download the Boilerplate
 
-```ts
-IMetadateDelete {
-    uid: string;
-}
+You can extend or customize the functionality of Contentstack CMS with Marketplace apps. To simplify and speed up the building process, boilerplates describe repetitive elements in a project. This boilerplate will help you build custom applications for your organization or stack.
+
+Download the [boilerplate](https://assets.contentstack.io/v3/assets/blt23180bf2502c7444/blt2bccdd28a2d44d1b/62fcb522da3c526fe6314886/app-boilerplate.zip?disposition=download).
+
+## UI Locations and Examples
+
+UI Locations allow you to extend Contentstack's functionality. Through these UI locations, you can customize Contentstack's default behavior and UI. Integration of third-party applications is possible using different UI locations.
+
+The Contentstack App SDK currently supports the following UI Locations:
+
+-   [Custom Field Location](https://www.contentstack.com/docs/developers/developer-hub/custom-field-location)
+-   [Dashboard Location](https://www.contentstack.com/docs/developers/developer-hub/dashboard-location)
+-   [Asset Sidebar Location](https://www.contentstack.com/docs/developers/developer-hub/asset-sidebar-location)
+-   [App Config Location](https://www.contentstack.com/docs/developers/developer-hub/app-config-location)
+-   [RTE Location](https://www.contentstack.com/docs/developers/developer-hub/rte-location)
+-   [Sidebar Location](https://www.contentstack.com/docs/developers/developer-hub/sidebar-location)
+
+### Custom Field Location
+
+Custom Field Location allows you to create custom fields that can be used in your content types. You can integrate with various business applications, such as [Bynder](https://www.contentstack.com/docs/developers/marketplace-apps/bynder), [Cloudinary](https://www.contentstack.com/docs/developers/marketplace-apps/cloudinary), [Shopify](https://www.contentstack.com/docs/developers/marketplace-apps/shopify), by adding them as a custom field to your stack's content type.
+
+### Dashboard Location
+
+With the Dashboard Location, you can create widgets for your stack dashboard. Integration with [Google Analytics](https://www.contentstack.com/docs/developers/marketplace-apps/google-analytics/) provides meaningful insights about your website.
+
+### Asset Sidebar Location
+
+Using the Asset Sidebar Location, you can create customized sidebar widgets to extend the functionality of your assets.
+
+Manage, transform, and optimize your stack's assets efficiently using the [Image Preset Builder](https://www.contentstack.com/docs/developers/marketplace-apps/image-preset-builder).
+
+### App Config Location
+
+App Config UI Location allows you to manage all the app settings centrally. Once configured, all other locations (where the app is installed) can access these settings.
+
+### RTE Location
+
+The RTE Location allows you to create custom plugins to expand the functionality of your JSON Rich Text Editor. Using the Audience and Variables plugin, you can tailor your content as per your requirements.
+
+### Sidebar Location
+
+The Sidebar Location provides powerful tools for analyzing and recommending ideas for your entry. Use the [Smartling](https://help.smartling.com/hc/en-us/articles/4865477629083) sidebar location to help translate your content.
+
+## Using Contentstack styles
+
+Install the Venus UI library package to style your app according to the Contentstack UI:
+
+```sh
+npm i @contentstack/venus-components --save
 ```
 
-This method deletes existing metadata for an asset or entry. It accepts metadata configuration as required arguments. This config contains basic details that you need to identify the metadata object you want to delete.
+For more information on styling your application, refer to our [style guide](https://www.contentstack.com/docs/developers/venus-component-library/).
+
+## More information
+
+-   [App SDK API Reference](https://github.com/contentstack/app-sdk-docs#readme)
+-   [Marketplace Platform Guides](https://www.contentstack.com/docs/developers/marketplace-platform-guides/)
+-   [Marketplace Apps](https://www.contentstack.com/docs/developers/marketplace-apps/)
+-   [Contentstack App Development](https://www.contentstack.com/docs/developers/developer-hub/)
+
+## License
+
+Licensed under [MIT](https://opensource.org/licenses/MIT).
