@@ -1,4 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
 
 const config = { attributes: true, childList: true, subtree: true };
 let observer: MutationObserver;
@@ -20,7 +21,7 @@ class Window {
   _height?: number
 
   constructor(connection: any, type: 'DASHBOARD' | 'FIELD', emitter: EventEmitter, state: 'half_width' | 'full_width' = 'half_width') {
-    this._connection = connection;
+    this._connection = connection || postRobot;
     this._autoResizingEnabled = false;
     this._resizingEnabled = false;
     this.type = type;
@@ -107,6 +108,21 @@ class Window {
     observer.disconnect();
     return this;
   }
+
+  enablePaddingTop(): Promise<any> {
+    // @ts-ignore
+    return postRobot.sendToParent("window", {
+      action: "dashboardEnableTopPadding",
+    });
+  }
+
+  disablePaddingTop(): Promise<any> {
+    // @ts-ignore
+    return postRobot.sendToParent('window', {
+      action: 'dashboardDisableTopPadding' 
+    });
+  }
+  
 }
 
 export default Window;

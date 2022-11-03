@@ -134,5 +134,18 @@ describe("RTE Plugin", () => {
         });
         registry = (await plugin.get()).registry;
         expect(registry['dndOptions']).to.be.undefined;
+    });
+    
+    it("Check if `shouldOverride` is register on registry", async () => {
+        const options = {
+            shouldOverride: (element) => {
+                return false
+            }
+        }
+        const [plugin, inputPluginProps] = createPlugin(options);
+        const pluginProps = await plugin.get();
+        const registry = pluginProps.registry;
+        expect(registry).to.haveOwnProperty('shouldOverride')
+        expect(registry).to.contain({...options})
     })
 });
