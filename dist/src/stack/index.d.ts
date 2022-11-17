@@ -1,3 +1,6 @@
+import Asset from './api/asset/index';
+import ContentType from './api/content-type/index';
+import { BranchDetail, StackAdditionalData, StackDetail } from '../types/stack.types';
 /**
  * Class representing the current stack in Contentstack UI.
  */
@@ -6,21 +9,16 @@ declare class Stack {
      * @hideconstructor
      */
     _connection: any;
-    _data: {
-        [key: string]: any;
-    };
-    ContentType: any;
-    Asset: any;
-    constructor(data: {
-        [key: string]: any;
-    }, connection: any);
+    _data: StackDetail;
+    ContentType: typeof ContentType;
+    Asset: typeof Asset;
+    private _currentBranch;
+    constructor(data: StackDetail | undefined, connection: any, additionalData: StackAdditionalData);
     /**
      * This method returns the data of the current stack.
      * @return {Object} Returns stack data.
      */
-    getData(): {
-        [key: string]: any;
-    };
+    getData(): StackDetail;
     /**
      * This API allows you to retrieve data of a content type of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-content-type| Content Type API} requests. This method returns a Promise object.
      * @param {string} uid Uid of the desired content type
@@ -83,6 +81,16 @@ declare class Stack {
      * @return {Object} A Promise object which will be resolved with details of the locales.
      */
     getWorkflows(query?: {}, params?: {}): any;
+    /**
+     * This API allows you to retrieve all the branches in the current stack
+     * @returns All branches of the current stack
+     */
+    getAllBranches(): BranchDetail[];
+    /**
+     * Returns the details of the current branch of the stack if available
+     * @returns current branch of the current stack if available
+     */
+    getCurrentBranch(): BranchDetail | null;
 }
 export default Stack;
 //# sourceMappingURL=index.d.ts.map

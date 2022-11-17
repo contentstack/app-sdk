@@ -1,6 +1,7 @@
 import Asset from './api/asset/index';
 import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils";
+import { BranchDetail, StackAdditionalData, StackDetail } from '../types/stack.types';
 
 
 /**
@@ -13,13 +14,13 @@ class Stack {
    */
 
   _connection: any
-  _data: { [key: string]: any }
-  ContentType: any //!change it
-  Asset: any //!change it
+  _data: StackDetail
+  ContentType: any // TODO: change it
+  Asset: any // TODO: change it
+  private _currentBranch: BranchDetail | null = null;
 
 
-
-  constructor(data: { [key: string]: any }, connection: any) {
+  constructor(data: StackDetail = {} as StackDetail, connection: any, additionalData: StackAdditionalData) {
     this._connection = connection;
     this._data = data;
     /**
@@ -40,6 +41,16 @@ class Stack {
      * @example extension.stack.Asset('asset_uid')
      * */
     this.Asset = Asset(connection);
+
+    const currentBranch = additionalData.currentBranch || ""
+
+    if (currentBranch) {
+      this._currentBranch =
+        (data.branches || []).find(
+            (branch) => branch.uid === additionalData.currentBranch
+        ) || null;
+    }
+
   }
 
 
@@ -140,7 +151,7 @@ class Stack {
    * @param {Object} params Optional parameters for the GET call
    * @return {Object} A promise object which will be resolved with locale details.
    */
-     getWorkflow(uid: string, params = {}) {
+    getWorkflow(uid: string, params = {}) {
       if (!uid) {
         return Promise.reject(new Error('workflow uid is required'));
       }
@@ -154,11 +165,27 @@ class Stack {
      * @param {Object} params Optional parameters for the GET call
      * @return {Object} A Promise object which will be resolved with details of the locales.
      */
-     getWorkflows(query = {}, params = {}) {
+    getWorkflows(query = {}, params = {}) {
       const optionParams: { [key: string]: any } = params;
       optionParams.query = query;
       const options = { params: optionParams, action: 'getWorkflows' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    }
+
+    /**
+     * This API allows you to retrieve all the branches in the current stack
+     * @returns All branches of the current stack
+     */
+    getAllBranches(): BranchDetail[] {
+      return this._data.branches || [];
+    }
+
+    /**
+     * Returns the details of the current branch of the stack if available
+     * @returns current branch of the current stack if available
+     */
+    getCurrentBranch(): BranchDetail | null {
+      return this._currentBranch;
     }
 }
 
