@@ -65,6 +65,21 @@ class Stack {
 
 
   /**
+   * This method returns all the stacks in the current organization.
+   * @returns Stacks within current organization
+   */
+  getAllStacks(): Promise<StackDetail[]> {
+    const options = { action: "getAllStacks", org_uid: this._data.org_uid };
+    return this._connection
+      .sendToParent("stackQuery", options)
+      .then(onData)
+      .then((data) => data.stacks || [])
+      .catch(onError);
+
+  }
+
+
+  /**
    * This API allows you to retrieve data of a content type of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-content-type| Content Type API} requests. This method returns a Promise object.
    * @param {string} uid Uid of the desired content type
    * @param {Object} params Optional parameters for the GET call

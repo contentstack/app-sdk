@@ -51,6 +51,17 @@ describe("Stack", () => {
             });
         });
 
+        it("getAllStacks", (done) => {
+            stack.getAllStacks().then((data) => {
+                expect(data.length).toBe(0);
+                expect(connection.sendToParent).toHaveBeenCalledWith(
+                    "stackQuery",
+                    { org_uid: getStack().org_uid, action: "getAllStacks" }
+                );
+                done();
+            });
+        });
+
         it("getContentType uid is required", async () => {
             //@ts-ignore
             await expect(() => stack.getContentType()).rejects.toThrow(

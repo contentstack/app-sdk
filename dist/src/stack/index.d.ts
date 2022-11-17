@@ -1,5 +1,3 @@
-import Asset from './api/asset/index';
-import ContentType from './api/content-type/index';
 import { BranchDetail, StackAdditionalData, StackDetail } from '../types/stack.types';
 /**
  * Class representing the current stack in Contentstack UI.
@@ -10,8 +8,8 @@ declare class Stack {
      */
     _connection: any;
     _data: StackDetail;
-    ContentType: typeof ContentType;
-    Asset: typeof Asset;
+    ContentType: any;
+    Asset: any;
     private _currentBranch;
     constructor(data: StackDetail | undefined, connection: any, additionalData: StackAdditionalData);
     /**
@@ -19,6 +17,11 @@ declare class Stack {
      * @return {Object} Returns stack data.
      */
     getData(): StackDetail;
+    /**
+     * This method returns all the stacks in the current organization.
+     * @returns Stacks within current organization
+     */
+    getAllStacks(): Promise<StackDetail[]>;
     /**
      * This API allows you to retrieve data of a content type of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-content-type| Content Type API} requests. This method returns a Promise object.
      * @param {string} uid Uid of the desired content type
