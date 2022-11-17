@@ -282,7 +282,7 @@ class Extension {
                 }
             });
         } catch (err) {
-            console.log("extension Event", err);
+            console.error("extension Event", err);
         }
     }
 

@@ -1,4 +1,4 @@
-import { BranchDetail, StackAdditionalData, StackDetail } from '../types/stack.types';
+import { BranchDetail, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 /**
  * Class representing the current stack in Contentstack UI.
  */
@@ -22,6 +22,13 @@ declare class Stack {
      * @returns Stacks within current organization
      */
     getAllStacks(): Promise<StackDetail[]>;
+    /**
+     * Gets the results of the search based on user query
+     * @param queries Array of key value pair of query parameters
+     * @param apiKey API key of the stack
+     * @returns Result of the query
+     */
+    searchStack(queries: StackSearchQuery, apiKey?: string): any;
     /**
      * This API allows you to retrieve data of a content type of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-content-type| Content Type API} requests. This method returns a Promise object.
      * @param {string} uid Uid of the desired content type
