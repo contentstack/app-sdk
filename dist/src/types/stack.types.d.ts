@@ -11,22 +11,22 @@ export declare interface StackDetail {
     owner_uid: string;
     user_uids: string[];
     settings: {
-        version: string;
-        rte_version: number;
-        blockAuthQueryParams: boolean;
-        allowedCDNTokens: ["access_token"];
-        branches: boolean;
-        localesOptimization: boolean;
-        webhook_enabled: boolean;
+        version?: string;
+        rte_version?: number;
+        blockAuthQueryParams?: boolean;
+        allowedCDNTokens?: ["access_token"];
+        branches?: boolean;
+        localesOptimization?: boolean;
+        webhook_enabled?: boolean;
         live_preview?: Partial<{
             enabled: boolean;
             "default-env": string;
             "default-url": string;
         }>;
-        language_fallback: boolean;
+        language_fallback?: boolean;
     };
-    master_key: string;
-    collaborators: {
+    master_key?: string;
+    collaborators?: {
         uid: string;
         created_at: string;
         updated_at: string;
@@ -48,15 +48,15 @@ export declare interface StackDetail {
         invited_at: string;
         invited_by: string;
     }[];
-    stack_variables: AnyObject;
-    discrete_variables: {
+    stack_variables?: AnyObject;
+    discrete_variables?: {
         cms: boolean;
         _version: number;
         secret_key: string;
     };
-    global_search: boolean;
+    global_search?: boolean;
     branches?: BranchDetail[];
-    usage: {
+    usage?: {
         content_types: number;
         entries: number;
         assets: number;

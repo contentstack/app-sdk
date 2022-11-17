@@ -14,15 +14,11 @@ export declare interface IRTE {
 }
 export declare interface IAppConfigWidget {
     installation: {
-        setInstallationData: (installationData: IInstallationData) => Promise<{
-            [key: string]: any;
-        }>;
+        setInstallationData: (installationData: IInstallationData) => Promise<AnyObject>;
         getInstallationData: () => Promise<IInstallationData>;
         [key: string]: any;
     };
-    stack: {
-        [key: string]: any;
-    };
+    stack: AnyObject;
 }
 export declare interface IPageWidget {
     [key: string]: any;
