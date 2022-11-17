@@ -62,6 +62,37 @@ describe("Stack", () => {
             });
         });
 
+        it("searchStack", (done) => {
+            const query = [{ key: "value" }];
+            stack.searchStack(query).then(() => {
+                expect(connection.sendToParent).toHaveBeenCalledWith(
+                    "stackQuery",
+                    {
+                        api_key: getStack().api_key,
+                        action: "searchStack",
+                        query,
+                    }
+                );
+                done();
+            });
+        });
+
+        it("searchStack should make query to other stack if api key is provided", (done) => {
+            const query = [{ key: "value" }];
+            const apiKey = "sample_api_key";
+            stack.searchStack(query, apiKey).then(() => {
+                expect(connection.sendToParent).toHaveBeenCalledWith(
+                    "stackQuery",
+                    {
+                        api_key: apiKey,
+                        action: "searchStack",
+                        query,
+                    }
+                );
+                done();
+            });
+        });
+
         it("getContentType uid is required", async () => {
             //@ts-ignore
             await expect(() => stack.getContentType()).rejects.toThrow(
