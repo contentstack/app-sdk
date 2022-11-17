@@ -1,10 +1,15 @@
 import Stack from "../src/stack";
 import testData from "./data/testData.json";
 
+function getStack() {
+    return { ...testData.stack };
+}
+
 describe("Stack", () => {
     let connection: { sendToParent: (...props: any[]) => any };
     let sendToParent: (...props: any[]) => any;
     let stack: Stack;
+    let currentBranch: string;
 
     let sendToParentError = function () {
         return Promise.reject(new Error("sample error"));
@@ -21,12 +26,15 @@ describe("Stack", () => {
 
         connection = { sendToParent: sendToParent };
         jest.spyOn(connection, "sendToParent");
-        stack = new Stack(testData.stack, connection);
+        currentBranch = "main_branch";
+        stack = new Stack(getStack(), connection, {
+            currentBranch: currentBranch,
+        });
     });
 
     describe("Stack Methods", () => {
         it("getData", () => {
-            expect(testData.stack).toEqual(stack.getData());
+            expect(getStack()).toMatchObject(stack.getData());
         });
     });
 
@@ -52,8 +60,9 @@ describe("Stack", () => {
 
         it("getContentType error case", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentError }
+                getStack(),
+                { sendToParent: sendToParentError },
+                { currentBranch: currentBranch }
             );
 
             await expect(() => newStack.getContentType("uid")).rejects.toThrow(
@@ -63,8 +72,9 @@ describe("Stack", () => {
 
         it("getContentType ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
 
             await expect(() => newStack.getContentType("uid")).rejects.toThrow(
@@ -88,8 +98,9 @@ describe("Stack", () => {
 
         it("getContentTypes error case", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentError }
+                getStack(),
+                { sendToParent: sendToParentError },
+                { currentBranch: currentBranch }
             );
             await expect(() => newStack.getContentTypes()).rejects.toThrow(
                 "sample error"
@@ -98,8 +109,9 @@ describe("Stack", () => {
 
         it("getContentTypes ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
 
             await expect(() => newStack.getContentTypes()).rejects.toThrow(
@@ -720,9 +732,11 @@ describe("Stack", () => {
 
         it("query find ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
+
             await expect(() =>
                 newStack.ContentType("blog").Entry.Query().find()
             ).rejects.toThrow("ajax error");
@@ -730,8 +744,9 @@ describe("Stack", () => {
 
         it("get entry with uid ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
             await expect(() =>
                 newStack.ContentType("blog").Entry("uid").fetch()
@@ -919,8 +934,9 @@ describe("Stack", () => {
 
         it("getEnvironment error case", async () => {
             let stack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentError }
+                getStack(),
+                { sendToParent: sendToParentError },
+                { currentBranch: currentBranch }
             );
 
             await expect(stack.getEnvironment("uid")).rejects.toThrow(
@@ -930,8 +946,9 @@ describe("Stack", () => {
 
         it("getEnvironment ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
             await expect(newStack.getEnvironment("uid")).rejects.toThrow(
                 "ajax error"
@@ -954,8 +971,9 @@ describe("Stack", () => {
 
         it("getEnvironments error case", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentError }
+                getStack(),
+                { sendToParent: sendToParentError },
+                { currentBranch: currentBranch }
             );
             await expect(newStack.getEnvironments()).rejects.toThrow(
                 "sample error"
@@ -964,8 +982,9 @@ describe("Stack", () => {
 
         it("getEnvironments ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
             await expect(newStack.getEnvironments()).rejects.toThrow(
                 "ajax error"
@@ -1002,8 +1021,9 @@ describe("Stack", () => {
 
         it("getAssets ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
             await expect(newStack.Asset("bltasssss").fetch()).rejects.toThrow(
                 "ajax error"
@@ -1292,8 +1312,9 @@ describe("Stack", () => {
 
         it("getAssetsOfSpecificTypes error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
             await expect(() =>
                 newStack.Asset.getAssetsOfSpecificTypes("uid")
@@ -1426,8 +1447,9 @@ describe("Stack", () => {
 
         it("getLocale error case", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentError }
+                getStack(),
+                { sendToParent: sendToParentError },
+                { currentBranch: currentBranch }
             );
 
             await expect(newStack.getLocale("uid")).rejects.toThrow(
@@ -1437,8 +1459,9 @@ describe("Stack", () => {
 
         it("getLocale ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
 
             await expect(newStack.getLocale("uid")).rejects.toThrow(
@@ -1462,8 +1485,9 @@ describe("Stack", () => {
 
         it("getLocales error case", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentError }
+                getStack(),
+                { sendToParent: sendToParentError },
+                { currentBranch: currentBranch }
             );
 
             await expect(newStack.getLocales()).rejects.toThrow("sample error");
@@ -1471,11 +1495,57 @@ describe("Stack", () => {
 
         it("getLocales ajax error", async () => {
             let newStack = new Stack(
-                { data: testData },
-                { sendToParent: sendToParentAjaxCallError }
+                getStack(),
+                { sendToParent: sendToParentAjaxCallError },
+                { currentBranch: currentBranch }
             );
 
             await expect(newStack.getLocales()).rejects.toThrow("ajax error");
+        });
+    });
+
+    describe("Branch calls", () => {
+        test("it should return list of branches if available", async () => {
+            const branches = stack.getAllBranches();
+            const actualBranches = getStack().branches;
+
+            expect(branches).not.toBeUndefined();
+            expect(branches.length).toBeGreaterThanOrEqual(1);
+
+            expect(branches).toMatchObject(actualBranches);
+        });
+        test("it should return empty array if branches are not available", () => {
+            const stackData = getStack();
+            // @ts-ignore
+            delete stackData.branches;
+
+            stack = new Stack(stackData, connection, {
+                currentBranch: "",
+            });
+
+            const branches = stack.getAllBranches();
+
+            expect(branches).not.toBeUndefined();
+            expect(branches.length).toBe(0);
+        });
+        test("it should return detail on current branch if available", () => {
+            const branch = stack.getCurrentBranch();
+
+            expect(branch).not.toBeUndefined();
+            expect(branch).toMatchObject(getStack().branches[0]);
+        });
+        test("it should return null if current branch is not available", () => {
+            const stackData = getStack();
+            // @ts-ignore
+            delete stackData.branches;
+
+            stack = new Stack(stackData, connection, {
+                currentBranch: "random_branch",
+            });
+
+            const branch = stack.getCurrentBranch();
+
+            expect(branch).toBeNull();
         });
     });
 });

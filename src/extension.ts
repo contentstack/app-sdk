@@ -7,7 +7,6 @@ import Store from "./store";
 import Metadata from "./metadata";
 import EventEmitter from "wolfy87-eventemitter";
 import {
-    anyObjectType,
     IAppConfigInitData,
     IAppConfigWidget,
     IAssetSidebarInitData,
@@ -26,6 +25,7 @@ import { IRTEPluginInitializer } from "./RTE/types";
 import { onData, onError } from "./utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
+import { AnyObject } from "./types/common.types";
 
 const emitter = new EventEmitter();
 
@@ -40,7 +40,7 @@ class Extension {
     installationUID: string;
     currentUser: IUser;
     private type: ILocation;
-    private config: anyObjectType;
+    private config: AnyObject;
     postRobot: any;
     stack: Stack;
     store: Store;
@@ -110,7 +110,9 @@ class Extension {
          * This method returns stack object which allows users to read and manipulate a range of objects in a stack.
          * @type {Stack}
          */
-        this.stack = new Stack(initializationData.data.stack, postRobot);
+        this.stack = new Stack(initializationData.data.stack, postRobot, {
+            currentBranch: initializationData.data.currentBranch,
+        });
         this.metadata = new Metadata(postRobot);
 
         this.config = initializationData.data.config ?? {};
@@ -134,7 +136,9 @@ class Extension {
                         emitter,
                         initializationData.data.dashboard_width
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot),
+                    stack: new Stack(initializationData.data.stack, postRobot, {
+                        currentBranch: initializationData.data.currentBranch,
+                    }),
                 };
                 break;
             }
@@ -145,18 +149,30 @@ class Extension {
                         postRobot,
                         emitter
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot),
+                    stack: new Stack(initializationData.data.stack, postRobot, {
+                        currentBranch: initializationData.data.currentBranch,
+                    }),
                 };
                 break;
             }
 
-            case "APP_CONFIG_WIDGET": {        
-        this.location.AppConfigWidget = {
-          installation: new AppConfig(initializationData, postRobot, emitter),
-          stack: new Stack(initializationData.data.stack, postRobot),
-        }
-        break
-      }
+            case "APP_CONFIG_WIDGET": {
+                this.location.AppConfigWidget = {
+                    installation: new AppConfig(
+                        initializationData,
+                        postRobot,
+                        emitter,
+                        {
+                            currentBranch:
+                                initializationData.data.currentBranch,
+                        }
+                    ),
+                    stack: new Stack(initializationData.data.stack, postRobot, {
+                        currentBranch: initializationData.data.currentBranch,
+                    }),
+                };
+                break;
+            }
 
             case "ASSET_SIDEBAR_WIDGET": {
                 this.location.AssetSidebarWidget = new AssetSidebarWidget(
@@ -190,7 +206,9 @@ class Extension {
                         postRobot,
                         emitter
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot),
+                    stack: new Stack(initializationData.data.stack, postRobot, {
+                        currentBranch: initializationData.data.currentBranch,
+                    }),
                     frame: new Window(postRobot, this.type as "FIELD", emitter),
                 };
 
@@ -284,8 +302,8 @@ class Extension {
 
     static initialize(version: string) {
         const meta = {
-            sdkType: "app-sdk"
-        }
+            sdkType: "app-sdk",
+        };
         //@ts-ignore
         return postRobot.sendToParent("init", { version, meta });
     }
