@@ -79,7 +79,7 @@ describe("Stack", () => {
         });
 
         it("searchStack should make query to other stack if api key is provided", (done) => {
-            const query = [{ key: "value" }];
+            const query: StackSearchQuery = { type: "entries" };
             const apiKey = "sample_api_key";
             stack.searchStack(query, apiKey).then(() => {
                 expect(connection.sendToParent).toHaveBeenCalledWith(
@@ -87,7 +87,7 @@ describe("Stack", () => {
                     {
                         api_key: apiKey,
                         action: "searchStack",
-                        query,
+                        params: query,
                     }
                 );
                 done();
