@@ -1,3 +1,5 @@
+import { AnyObject } from "./types/common.types";
+
 export declare interface IMetadata {
     uid: string;
     type: "asset" | "entry";
@@ -26,7 +28,8 @@ export declare interface IMetadataDeleteDto {
 
 const metadataTypes = {
     creteMetadata: "createMetadata",
-    retrieveMetadata: "retrieveMetadata",
+    retrieveMetadata: "getMetadata",
+    retrieveAllMetadata: "getAllMetadata",
     updateMetadata: "updateMetadata",
     deleteMetadata: "deleteMetadata",
 } as const;
@@ -61,6 +64,17 @@ class Metadata {
                 metadata: {
                     uid,
                 },
+            },
+        };
+
+        return this._connection.sendToParent("stackQuery", data);
+    }
+
+    retrieveAllMetaData(metadataConfig: AnyObject) {
+        const data = {
+            action: metadataTypes.retrieveAllMetadata,
+            payload: {
+                ...metadataConfig
             },
         };
 
