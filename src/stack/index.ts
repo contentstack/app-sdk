@@ -78,6 +78,20 @@ class Stack {
 
   }
 
+  /**
+   * Gets the results of the search based on user query
+   * @param query Array of key value pair of query parameters
+   * @param apiKey API key of the stack
+   * @returns Result of the query
+   */
+  searchStack(query: Record<string, string>[], apiKey = this._data.api_key) {
+    const options = { query, api_key: apiKey, action: "searchStack" };
+    return this._connection
+      .sendToParent("stackQuery", options)
+      .then(onData)
+      .catch(onError);
+  }
+
 
   /**
    * This API allows you to retrieve data of a content type of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-content-type| Content Type API} requests. This method returns a Promise object.
