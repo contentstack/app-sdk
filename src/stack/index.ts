@@ -1,7 +1,7 @@
 import Asset from './api/asset/index';
 import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils";
-import { BranchDetail, StackAdditionalData, StackDetail } from '../types/stack.types';
+import { BranchDetail, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 
 
 /**
@@ -80,12 +80,12 @@ class Stack {
 
   /**
    * Gets the results of the search based on user query
-   * @param query Array of key value pair of query parameters
+   * @param queries Array of key value pair of query parameters
    * @param apiKey API key of the stack
    * @returns Result of the query
    */
-  searchStack(query: Record<string, string>[], apiKey = this._data.api_key) {
-    const options = { query, api_key: apiKey, action: "searchStack" };
+  searchStack(queries: StackSearchQuery, apiKey = this._data.api_key) {
+    const options = { params: queries, api_key: apiKey, action: "searchStack" };
     return this._connection
       .sendToParent("stackQuery", options)
       .then(onData)

@@ -84,4 +84,19 @@ export declare interface BranchDetail {
 export declare interface StackAdditionalData {
     currentBranch: string;
 }
+export declare interface StackSearchQuery {
+    type: "entries" | "assets";
+    skip?: number;
+    limit?: number;
+    include_publish_details?: boolean;
+    include_unpublished?: boolean;
+    include_workflow?: boolean;
+    include_fields?: boolean;
+    include_rules?: boolean;
+    include_title_field_uid?: boolean;
+    query?: AnyObject;
+    search?: string;
+    save_recent_search?: boolean;
+    desc?: string;
+}
 //# sourceMappingURL=stack.types.d.ts.map

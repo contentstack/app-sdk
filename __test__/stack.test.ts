@@ -1,4 +1,5 @@
 import Stack from "../src/stack";
+import { StackSearchQuery } from "../src/types/stack.types";
 import testData from "./data/testData.json";
 
 function getStack() {
@@ -63,14 +64,14 @@ describe("Stack", () => {
         });
 
         it("searchStack", (done) => {
-            const query = [{ key: "value" }];
+            const query: StackSearchQuery = { type: "entries" };
             stack.searchStack(query).then(() => {
                 expect(connection.sendToParent).toHaveBeenCalledWith(
                     "stackQuery",
                     {
                         api_key: getStack().api_key,
                         action: "searchStack",
-                        query,
+                        params: query,
                     }
                 );
                 done();
