@@ -28,13 +28,11 @@ describe("Metadata", () => {
 
     test("should retrieve all metadata", async () => {
         const metadata = new Metadata(connection);
-        const metadataConfig = { some: "config" };
-        await metadata.retrieveAllMetaData(metadataConfig);
+        const metadataParams = { some: "config" };
+        await metadata.retrieveAllMetaData(metadataParams);
         expect(connection.sendToParent).toHaveBeenCalledWith("stackQuery", {
             action: "getAllMetadata",
-            payload: {
-                ...metadataConfig,
-            },
+            params: metadataParams,
         });
     });
 

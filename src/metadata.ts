@@ -70,12 +70,10 @@ class Metadata {
         return this._connection.sendToParent("stackQuery", data);
     }
 
-    retrieveAllMetaData(metadataConfig: AnyObject) {
+    retrieveAllMetaData(params: AnyObject = {}) {
         const data = {
             action: metadataTypes.retrieveAllMetadata,
-            payload: {
-                ...metadataConfig
-            },
+            params,
         };
 
         return this._connection.sendToParent("stackQuery", data);
