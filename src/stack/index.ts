@@ -1,7 +1,7 @@
 import Asset from './api/asset/index';
 import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils";
-import { BranchDetail, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
+import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 
 
 /**
@@ -66,10 +66,24 @@ class Stack {
 
   /**
    * This method returns all the stacks in the current organization.
+   * @param query asks for organization UID and query params to get all stacks
    * @returns Stacks within current organization
    */
-  getAllStacks(): Promise<StackDetail[]> {
-    const options = { action: "getAllStacks", org_uid: this._data.org_uid };
+  async getAllStacks({orgUid = "", params = {}}: GetAllStacksOptions = {}): Promise<StackDetail[]> {
+
+    console.log("getAllStacks", orgUid, typeof orgUid);
+    
+    // validation
+    if (typeof orgUid !== 'string') {
+      throw new TypeError('orgUid must be a string');
+    }
+
+    const options = {
+        action: "getStacks",
+        headers: { organization_uid: orgUid || this._data.org_uid },
+        skip_api_key: true,
+        params
+    };
     return this._connection
       .sendToParent("stackQuery", options)
       .then(onData)

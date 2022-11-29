@@ -52,12 +52,58 @@ describe("Stack", () => {
             });
         });
 
-        it("getAllStacks", (done) => {
+        it("getAllStacks should get called with default org Uid when not provided", (done) => {
             stack.getAllStacks().then((data) => {
                 expect(data.length).toBe(0);
                 expect(connection.sendToParent).toHaveBeenCalledWith(
                     "stackQuery",
-                    { org_uid: getStack().org_uid, action: "getAllStacks" }
+                    {
+                        headers: { organization_uid: getStack().org_uid },
+                        action: "getStacks",
+                        params: {},
+                        skip_api_key: true,
+                    }
+                );
+                done();
+            });
+        });
+
+        it("getAllStacks should get called with provided org Uid", (done) => {
+            let orgUid = "some-org-uid";
+            stack.getAllStacks({ orgUid }).then((data) => {
+                expect(data.length).toBe(0);
+                expect(connection.sendToParent).toHaveBeenCalledWith(
+                    "stackQuery",
+                    {
+                        headers: { organization_uid: orgUid },
+                        action: "getStacks",
+                        params: {},
+                        skip_api_key: true,
+                    }
+                );
+                done();
+            });
+        });
+
+        it("getAllStacks should throw error when uid is not string", async () => {
+            let orgUid = 123 as any;
+            await expect(stack.getAllStacks({ orgUid })).rejects.toThrowError(
+                "orgUid must be a string"
+            );
+        });
+
+        it("getAllStacks should send query params", (done) => {
+            let params = { sample: "parameter" };
+            stack.getAllStacks({ params }).then((data) => {
+                expect(data.length).toBe(0);
+                expect(connection.sendToParent).toHaveBeenCalledWith(
+                    "stackQuery",
+                    {
+                        headers: { organization_uid: getStack().org_uid },
+                        action: "getStacks",
+                        params,
+                        skip_api_key: true,
+                    }
                 );
                 done();
             });
