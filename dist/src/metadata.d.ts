@@ -24,7 +24,7 @@ declare class Metadata {
     constructor(_connection: any);
     createMetaData(metadataConfig: IMetadataCreateDto): any;
     retrieveMetaData(metadataConfig: IMetadataRetrieveDto): any;
-    retrieveAllMetaData(metadataConfig: AnyObject): any;
+    retrieveAllMetaData(params?: AnyObject): any;
     updateMetaData(metadataConfig: IMetadataUpdateDto): any;
     deleteMetaData(metadataConfig: IMetadataDeleteDto): any;
 }
