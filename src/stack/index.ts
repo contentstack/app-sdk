@@ -56,10 +56,10 @@ class Stack {
 
   /**
    * This method returns the data of the current stack.
-   * @return {Object} Returns stack data.
+   * @return Returns stack data.
    */
 
-  getData() {
+  getData(): StackDetail {
     return this._data;
   }
 
@@ -70,8 +70,6 @@ class Stack {
    * @returns Stacks within current organization
    */
   async getAllStacks({orgUid = "", params = {}}: GetAllStacksOptions = {}): Promise<StackDetail[]> {
-
-    console.log("getAllStacks", orgUid, typeof orgUid);
     
     // validation
     if (typeof orgUid !== 'string') {
@@ -98,8 +96,8 @@ class Stack {
    * @param apiKey API key of the stack
    * @returns Result of the query
    */
-  searchStack(queries: StackSearchQuery, apiKey = this._data.api_key) {
-    const options = { params: queries, api_key: apiKey, action: "searchStack" };
+  search(queries: StackSearchQuery, apiKey: string | null = this._data.api_key) {
+    const options = { params: queries, api_key: apiKey, action: "search" };
     return this._connection
       .sendToParent("stackQuery", options)
       .then(onData)
