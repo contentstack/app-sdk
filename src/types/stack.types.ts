@@ -103,3 +103,8 @@ export declare interface StackSearchQuery {
     save_recent_search?: boolean;
     desc?: string;
 }
+
+export declare interface GetAllStacksOptions {
+    orgUid?: string;
+    params?: AnyObject;
+}
