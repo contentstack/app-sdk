@@ -109,14 +109,14 @@ describe("Stack", () => {
             });
         });
 
-        it("searchStack", (done) => {
+        it("search", (done) => {
             const query: StackSearchQuery = { type: "entries" };
-            stack.searchStack(query).then(() => {
+            stack.search(query).then(() => {
                 expect(connection.sendToParent).toHaveBeenCalledWith(
                     "stackQuery",
                     {
                         api_key: getStack().api_key,
-                        action: "searchStack",
+                        action: "search",
                         params: query,
                     }
                 );
@@ -124,15 +124,15 @@ describe("Stack", () => {
             });
         });
 
-        it("searchStack should make query to other stack if api key is provided", (done) => {
+        it("search should make query to other stack if api key is provided", (done) => {
             const query: StackSearchQuery = { type: "entries" };
             const apiKey = "sample_api_key";
-            stack.searchStack(query, apiKey).then(() => {
+            stack.search(query, apiKey).then(() => {
                 expect(connection.sendToParent).toHaveBeenCalledWith(
                     "stackQuery",
                     {
                         api_key: apiKey,
-                        action: "searchStack",
+                        action: "search",
                         params: query,
                     }
                 );
