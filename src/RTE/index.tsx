@@ -159,6 +159,19 @@ export class RTEPlugin {
                     }
 
                     case "elementType": {
+                        const isInline = (
+                            typeof value === 'string' && value === 'inline' ||
+                            Array.isArray(value) && value.includes('inline')
+                        )
+                        if(isInline) {
+                            let dndOptions = this.pluginMetaData['registry']['dndOptions'];
+                            if(!dndOptions) {
+                                this.pluginMetaData['registry']['dndOptions'] = {};
+                                dndOptions = this.pluginMetaData['registry']['dndOptions']
+                            }
+                            dndOptions['DisableDND'] = true;
+                            dndOptions['DisableSelectionHalo'] = true;
+                        }
                         this.pluginMetaData.meta.elementType = value;
                         break;
                     }
