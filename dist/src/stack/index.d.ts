@@ -1,3 +1,4 @@
+import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 /**
  * Class representing the current stack in Contentstack UI.
  */
@@ -6,21 +7,29 @@ declare class Stack {
      * @hideconstructor
      */
     _connection: any;
-    _data: {
-        [key: string]: any;
-    };
+    _data: StackDetail;
     ContentType: any;
     Asset: any;
-    constructor(data: {
-        [key: string]: any;
-    }, connection: any);
+    private _currentBranch;
+    constructor(data: StackDetail | undefined, connection: any, additionalData: StackAdditionalData);
     /**
      * This method returns the data of the current stack.
-     * @return {Object} Returns stack data.
+     * @return Returns stack data.
      */
-    getData(): {
-        [key: string]: any;
-    };
+    getData(): StackDetail;
+    /**
+     * This method returns all the stacks in the current organization.
+     * @param query asks for organization UID and query params to get all stacks
+     * @returns Stacks within current organization
+     */
+    getAllStacks({ orgUid, params }?: GetAllStacksOptions): Promise<StackDetail[]>;
+    /**
+     * Gets the results of the search based on user query
+     * @param queries Array of key value pair of query parameters
+     * @param apiKey API key of the stack
+     * @returns Result of the query
+     */
+    search(queries: StackSearchQuery, apiKey?: string | null): any;
     /**
      * This API allows you to retrieve data of a content type of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-single-content-type| Content Type API} requests. This method returns a Promise object.
      * @param {string} uid Uid of the desired content type
@@ -83,6 +92,16 @@ declare class Stack {
      * @return {Object} A Promise object which will be resolved with details of the locales.
      */
     getWorkflows(query?: {}, params?: {}): any;
+    /**
+     * This API allows you to retrieve all the branches in the current stack
+     * @returns All branches of the current stack
+     */
+    getAllBranches(): BranchDetail[];
+    /**
+     * Returns the details of the current branch of the stack if available
+     * @returns current branch of the current stack if available
+     */
+    getCurrentBranch(): BranchDetail | null;
 }
 export default Stack;
 //# sourceMappingURL=index.d.ts.map
