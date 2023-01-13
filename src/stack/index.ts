@@ -1,7 +1,6 @@
-import Asset from './api/asset/index';
-import ContentType from './api/content-type/index';
-import { onData, onError } from "../utils";
-
+import Asset from "./api/asset/index";
+import ContentType from "./api/content-type/index";
+import { onData, onError } from "../utils/utils";
 
 /**
  * Class representing the current stack in Contentstack UI.
