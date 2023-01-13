@@ -15,6 +15,8 @@ export class AppConfig {
         this._data = data;
         this._connection = connection;
         this._emitter = emitter;
+
+        this.setValidationState = this.setValidationState.bind(this);
     }
 
     stack = () => {
@@ -27,5 +29,29 @@ export class AppConfig {
 
     getInstallationData = (): Promise<IInstallationData> => {
         return this._connection.sendToParent('getInstallationData').then(onData).catch(onError);
+    }
+
+    /**
+     *  Set the validation state of the app. If the validation is false, the Contentstack will
+     * not allow to save the configuration. The message will be displayed if provided.
+     * @param isValidated set the validation state of the app
+     * @param message the message to be displayed in the UI
+     * @returns  returns a promise with the data sent from the parent
+     */
+    async setValidationState(isValidated: boolean, message?: string): Promise<Record<string, any>> {
+
+        if (typeof isValidated !== 'boolean') {
+            throw new TypeError('isValidated should be a boolean');
+        }
+
+        if (typeof message !== "undefined" && typeof message !== 'string') {
+            throw new TypeError('message should be a string');
+        }
+
+        return this._connection.sendToParent('setValidationState', {
+            isValidated: isValidated,
+            message: message
+
+        }).then(onData).catch(onError);
     }
 }
