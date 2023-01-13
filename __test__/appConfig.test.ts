@@ -1,5 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import { AppConfig } from "../src/appConfig";
+import { ERROR_MESSAGES } from "../src/utils/errorMessages";
 
 describe("app config", () => {
     const mockConnection = {
@@ -47,7 +48,8 @@ describe("app config", () => {
         it("should throw error if isValidated is not a boolean", async () => {
             // @ts-ignore
             await expect(appConfig.setValidationState("true")).rejects.toThrow(
-                "isValidated should be a boolean"
+                ERROR_MESSAGES.configPage.setValidationState
+                    .isValidatedTypeBoolean
             );
         });
 
@@ -55,7 +57,9 @@ describe("app config", () => {
             await expect(
                 // @ts-ignore
                 appConfig.setValidationState(true, 123)
-            ).rejects.toThrow("message should be a string");
+            ).rejects.toThrow(
+                ERROR_MESSAGES.configPage.setValidationState.messageTypeString
+            );
         });
 
         it("should send undefined message if not provided", async () => {
