@@ -23,7 +23,7 @@ import {
     IUser,
 } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
-import { onData, onError } from "./utils";
+import { onData, onError } from "./utils/utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 
@@ -150,13 +150,17 @@ class Extension {
                 break;
             }
 
-            case "APP_CONFIG_WIDGET": {        
-        this.location.AppConfigWidget = {
-          installation: new AppConfig(initializationData, postRobot, emitter),
-          stack: new Stack(initializationData.data.stack, postRobot),
-        }
-        break
-      }
+            case "APP_CONFIG_WIDGET": {
+                this.location.AppConfigWidget = {
+                    installation: new AppConfig(
+                        initializationData,
+                        postRobot,
+                        emitter
+                    ),
+                    stack: new Stack(initializationData.data.stack, postRobot),
+                };
+                break;
+            }
 
             case "ASSET_SIDEBAR_WIDGET": {
                 this.location.AssetSidebarWidget = new AssetSidebarWidget(
@@ -284,8 +288,8 @@ class Extension {
 
     static initialize(version: string) {
         const meta = {
-            sdkType: "app-sdk"
-        }
+            sdkType: "app-sdk",
+        };
         //@ts-ignore
         return postRobot.sendToParent("init", { version, meta });
     }
