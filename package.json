@@ -12,8 +12,13 @@
         "test:watch": "jest --watchAll",
         "test:coverage": "jest --coverage --coverageDirectory=\"coverage\"",
         "dev": "webpack --watch --mode development",
-        "lint": "eslint . --ext .ts",
-        "docs": "typedoc --out doc --entryPointStrategy expand ./src"
+        "docs": "typedoc --out doc --entryPointStrategy expand ./src",
+        "prettier": "npx prettier src --check",
+        "prettier:fix": "npx prettier src --write",
+        "lint": "eslint src",
+        "lint:fix": "eslint --fix",
+        "prepare": "npm run build && husky install",
+        "format": "npm run prettier:fix && npm run lint:fix"
     },
     "keywords": [],
     "author": {
@@ -41,7 +46,9 @@
         "chai": "^4.3.4",
         "css-loader": "^5.2.2",
         "eslint": "^8.7.0",
+        "husky": "^8.0.0",
         "jest": "^27.3.1",
+        "lint-staged": "^13.1.0",
         "react": "^17.0.2",
         "slate": "^0.72.3",
         "ts-jest": "^27.0.7",
@@ -59,5 +66,11 @@
     },
     "files": [
         "dist"
-    ]
+    ],
+    "lint-staged": {
+        "src/**/*.{ts,css,md}": [
+            "npm run prettier:fix ",
+            "npm run lint:fix"
+        ]
+    }
 }
