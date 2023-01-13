@@ -1,6 +1,7 @@
 import Stack from "../stack";
 import { IInstallationData } from "../types";
-import { onData, onError } from "../utils";
+import generateErrorMessages, { ERROR_MESSAGES } from "../utils/errorMessages";
+import { onData, onError } from "../utils/utils";
 
 /**
  * Class representing the current stack in Contentstack UI.
@@ -40,12 +41,22 @@ export class AppConfig {
      */
     async setValidationState(isValidated: boolean, message?: string): Promise<Record<string, any>> {
 
-        if (typeof isValidated !== 'boolean') {
-            throw new TypeError('isValidated should be a boolean');
+        if (typeof isValidated !== "boolean") {
+            throw new TypeError(
+                generateErrorMessages(
+                    ERROR_MESSAGES.configPage.setValidationState
+                        .isValidatedTypeBoolean
+                )
+            );
         }
 
-        if (typeof message !== "undefined" && typeof message !== 'string') {
-            throw new TypeError('message should be a string');
+        if (typeof message !== "undefined" && typeof message !== "string") {
+            throw new TypeError(
+                generateErrorMessages(
+                    ERROR_MESSAGES.configPage.setValidationState
+                        .messageTypeString
+                )
+            );
         }
 
         return this._connection.sendToParent('setValidationState', {
