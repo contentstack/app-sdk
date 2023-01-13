@@ -15,7 +15,7 @@ describe("app config", () => {
         mockConnection,
         mockEmitter
     );
-    ``;
+
     afterEach(() => {
         jest.clearAllMocks();
     });
