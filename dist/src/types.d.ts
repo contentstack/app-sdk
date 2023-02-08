@@ -1,6 +1,5 @@
-export declare interface anyObjectType {
-    [key: string]: any;
-}
+import { AnyObject } from "./types/common.types";
+import { StackDetail } from "./types/stack.types";
 export declare interface IDashboardWidget {
     [key: string]: any;
 }
@@ -15,23 +14,16 @@ export declare interface IRTE {
 }
 export declare interface IAppConfigWidget {
     installation: {
-        setInstallationData: (installationData: IInstallationData) => Promise<{
-            [key: string]: any;
-        }>;
+        setInstallationData: (installationData: IInstallationData) => Promise<AnyObject>;
         getInstallationData: () => Promise<IInstallationData>;
         [key: string]: any;
     };
-    stack: {
-        [key: string]: any;
-    };
+    stack: AnyObject;
 }
 export declare interface IPageWidget {
     [key: string]: any;
 }
 export declare interface IUser {
-    [key: string]: any;
-}
-export declare interface ICurrentStack {
     [key: string]: any;
 }
 export declare interface ICurrentEntry {
@@ -53,13 +45,14 @@ declare interface ICommonInitData {
     app_id: string;
     installation_uid: string;
     extension_uid: string;
-    stack: ICurrentStack;
+    stack: StackDetail;
     user: IUser;
+    currentBranch: string;
 }
 export declare interface IDashboardInitData {
     data: ICommonInitData & {
         dashboard_width: "full_width" | "half_width";
-        config?: anyObjectType;
+        config?: AnyObject;
         type: "DASHBOARD";
     };
 }
@@ -69,7 +62,7 @@ export declare interface ISidebarInitData {
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
         locale: string;
-        config?: anyObjectType;
+        config?: AnyObject;
         type: "WIDGET";
     };
 }
@@ -83,7 +76,7 @@ export declare interface IFieldInitData {
         app_config: IConfig;
         value: any;
         field_config: IFieldConfig;
-        config?: anyObjectType;
+        config?: AnyObject;
         self: boolean;
         type: "FIELD";
     };
@@ -91,13 +84,13 @@ export declare interface IFieldInitData {
 export declare interface IRTEInitData {
     data: ICommonInitData & {
         type: "RTE";
-        config?: anyObjectType;
+        config?: AnyObject;
     };
 }
 export declare interface IAppConfigInitData {
     data: ICommonInitData & {
         type: "APP_CONFIG_WIDGET";
-        config?: anyObjectType;
+        config?: AnyObject;
     };
 }
 export declare interface ICurrentAsset {
