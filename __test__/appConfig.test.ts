@@ -13,7 +13,8 @@ describe("app config", () => {
     const appConfig: AppConfig = new AppConfig(
         mockData,
         mockConnection,
-        mockEmitter
+        mockEmitter,
+        { currentBranch: "master" }
     );
 
     afterEach(() => {
