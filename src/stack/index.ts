@@ -160,6 +160,32 @@ class Stack {
   }
 
   /**
+   * This API allows you to retrieve details of releases of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases| Releases API} requests. This method returns a Promise object.
+   * @param {Object} query Query for the GET call
+   * @param {Object} params Optional parameters for the GET call
+   * @return {Object} A Promise object which will be resolved with details of the releases.
+   */
+  getReleases(query = {}, params = {}) {
+    const optionParams: { [key: string]: any } = params;
+    optionParams.query = query;
+    const options = { params: optionParams, action: 'getReleases' };
+    return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+  }
+
+  /**
+   * This API allows you to retrieve details of publish queue of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue| Publish Queue API} requests. This method returns a Promise object.
+   * @param {Object} query Query for the GET call
+   * @param {Object} params Optional parameters for the GET call
+   * @return {Object} A Promise object which will be resolved with details of the publish queue.
+   */
+  getPublishes(query = {}, params = {}) {
+    const optionParams: { [key: string]: any } = params;
+    optionParams.query = query;
+    const options = { params: optionParams, action: 'getPublishes' };
+    return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+  }
+
+  /**
    * This API allows you to retrive a locale of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-language| Language API} requests. Method returns a Promise object.
    * @param {string} code Code of the desired locale
    * @param {Object} params Optional parameters for the GET call
