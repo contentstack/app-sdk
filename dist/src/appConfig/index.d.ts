@@ -21,5 +21,13 @@ export declare class AppConfig {
         [key: string]: any;
     }>;
     getInstallationData: () => Promise<IInstallationData>;
+    /**
+     *  Set the validation state of the app. If the validation is false, the Contentstack will
+     * not allow to save the configuration. The message will be displayed if provided.
+     * @param isValidated set the validation state of the app
+     * @param message the message to be displayed in the UI
+     * @returns  returns a promise with the data sent from the parent
+     */
+    setValidationState(isValidated: boolean, message?: string): Promise<Record<string, any>>;
 }
 //# sourceMappingURL=index.d.ts.map
