@@ -19,7 +19,7 @@ const createDropdown = () => {
     return DropDown;
 };
 
-const createPlugin = (options = {}) => {
+const createPlugin = (config = {}) => {
     const detail: any = {
         id: "plugin",
         title: "Plugin",
@@ -29,7 +29,7 @@ const createPlugin = (options = {}) => {
         },
         display: ["hoveringToolbar", "toolbar"],
         elementType: ["inline", "void", "block", "text"],
-        ...options
+        ...config
     };
     const Plugin = new RTEPlugin(detail.id, () => {
         return detail;
@@ -116,8 +116,28 @@ describe("RTE Plugin", () => {
         expect(dropdown.meta.dependentPlugins).to.have.length(1);
     });
 
+    it('Test inline with DND Options disable', async () => {
+        const [plugin, details] = createPlugin();
+        const registry = (await plugin.get()).registry;
+        expect(registry['dndOptions']['DisableDND']).to.be.eq(true);
+        expect(registry['dndOptions']['DisableSelectionHalo']).to.be.eq(true);
+    })
+
+    it('Test DND Options undefined', async () => {
+        let [plugin, details] = createPlugin({
+            elementType: 'block'
+        });
+        let registry = (await plugin.get()).registry;
+        expect(registry['dndOptions']).to.be.undefined;
+        [plugin, details] = createPlugin({
+            elementType: ['block']
+        });
+        registry = (await plugin.get()).registry;
+        expect(registry['dndOptions']).to.be.undefined;
+    });
+    
     it("Check if `shouldOverride` is register on registry", async () => {
-        let options = {
+        const options = {
             shouldOverride: (element) => {
                 return false
             }

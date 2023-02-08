@@ -1,6 +1,8 @@
-import Asset from "./api/asset/index";
-import ContentType from "./api/content-type/index";
+import Asset from './api/asset/index';
+import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils/utils";
+import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
+
 
 /**
  * Class representing the current stack in Contentstack UI.
@@ -12,13 +14,13 @@ class Stack {
    */
 
   _connection: any
-  _data: { [key: string]: any }
-  ContentType: any //!change it
-  Asset: any //!change it
+  _data: StackDetail
+  ContentType: any // TODO: change it
+  Asset: any // TODO: change it
+  private _currentBranch: BranchDetail | null = null;
 
 
-
-  constructor(data: { [key: string]: any }, connection: any) {
+  constructor(data: StackDetail = {} as StackDetail, connection: any, additionalData: StackAdditionalData) {
     this._connection = connection;
     this._data = data;
     /**
@@ -39,16 +41,67 @@ class Stack {
      * @example extension.stack.Asset('asset_uid')
      * */
     this.Asset = Asset(connection);
+
+    const currentBranch = additionalData.currentBranch || ""
+
+    if (currentBranch) {
+      this._currentBranch =
+        (data.branches || []).find(
+            (branch) => branch.uid === additionalData.currentBranch
+        ) || null;
+    }
+
   }
 
 
   /**
    * This method returns the data of the current stack.
-   * @return {Object} Returns stack data.
+   * @return Returns stack data.
    */
 
-  getData() {
+  getData(): StackDetail {
     return this._data;
+  }
+
+
+  /**
+   * This method returns all the stacks in the current organization.
+   * @param query asks for organization UID and query params to get all stacks
+   * @returns Stacks within current organization
+   */
+  async getAllStacks({orgUid = "", params = {}}: GetAllStacksOptions = {}): Promise<StackDetail[]> {
+    
+    // validation
+    if (typeof orgUid !== 'string') {
+      throw new TypeError('orgUid must be a string');
+    }
+
+    const options = {
+        action: "getStacks",
+        headers: { organization_uid: orgUid || this._data.org_uid },
+        skip_api_key: true,
+        params
+    };
+    return this._connection
+      .sendToParent("stackQuery", options)
+      .then(onData)
+      .then((data) => data.stacks || [])
+      .catch(onError);
+
+  }
+
+  /**
+   * Gets the results of the search based on user query
+   * @param queries Array of key value pair of query parameters
+   * @param apiKey API key of the stack
+   * @returns Result of the query
+   */
+  search(queries: StackSearchQuery, apiKey: string | null = this._data.api_key) {
+    const options = { params: queries, api_key: apiKey, action: "search" };
+    return this._connection
+      .sendToParent("stackQuery", options)
+      .then(onData)
+      .catch(onError);
   }
 
 
@@ -107,6 +160,32 @@ class Stack {
   }
 
   /**
+   * This API allows you to retrieve details of releases of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases| Releases API} requests. This method returns a Promise object.
+   * @param {Object} query Query for the GET call
+   * @param {Object} params Optional parameters for the GET call
+   * @return {Object} A Promise object which will be resolved with details of the releases.
+   */
+  getReleases(query = {}, params = {}) {
+    const optionParams: { [key: string]: any } = params;
+    optionParams.query = query;
+    const options = { params: optionParams, action: 'getReleases' };
+    return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+  }
+
+  /**
+   * This API allows you to retrieve details of publish queue of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue| Publish Queue API} requests. This method returns a Promise object.
+   * @param {Object} query Query for the GET call
+   * @param {Object} params Optional parameters for the GET call
+   * @return {Object} A Promise object which will be resolved with details of the publish queue.
+   */
+  getPublishes(query = {}, params = {}) {
+    const optionParams: { [key: string]: any } = params;
+    optionParams.query = query;
+    const options = { params: optionParams, action: 'getPublishes' };
+    return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+  }
+
+  /**
    * This API allows you to retrive a locale of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-language| Language API} requests. Method returns a Promise object.
    * @param {string} code Code of the desired locale
    * @param {Object} params Optional parameters for the GET call
@@ -139,7 +218,7 @@ class Stack {
    * @param {Object} params Optional parameters for the GET call
    * @return {Object} A promise object which will be resolved with locale details.
    */
-     getWorkflow(uid: string, params = {}) {
+    getWorkflow(uid: string, params = {}) {
       if (!uid) {
         return Promise.reject(new Error('workflow uid is required'));
       }
@@ -153,11 +232,27 @@ class Stack {
      * @param {Object} params Optional parameters for the GET call
      * @return {Object} A Promise object which will be resolved with details of the locales.
      */
-     getWorkflows(query = {}, params = {}) {
+    getWorkflows(query = {}, params = {}) {
       const optionParams: { [key: string]: any } = params;
       optionParams.query = query;
       const options = { params: optionParams, action: 'getWorkflows' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    }
+
+    /**
+     * This API allows you to retrieve all the branches in the current stack
+     * @returns All branches of the current stack
+     */
+    getAllBranches(): BranchDetail[] {
+      return this._data.branches || [];
+    }
+
+    /**
+     * Returns the details of the current branch of the stack if available
+     * @returns current branch of the current stack if available
+     */
+    getCurrentBranch(): BranchDetail | null {
+      return this._currentBranch;
     }
 }
 
