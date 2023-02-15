@@ -2,6 +2,7 @@ import Asset from './api/asset/index';
 import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
+import { IManagementTokenDetails } from '../types';
 
 
 /**
@@ -88,6 +89,23 @@ class Stack {
       .then((data) => data.stacks || [])
       .catch(onError);
 
+  }
+
+  /**
+   * Get the details of all the management tokens of the stack.
+   * Note: This API does not return the token value.
+   * @see {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens | Get all management tokens}
+   * @returns Details of all the management token of the stack
+   */
+  async getManagementTokens(): Promise<IManagementTokenDetails[]> {
+    const options = { action: "getManagementTokens" };
+    return this._connection
+        .sendToParent("stackQuery", options)
+        .then(async (response) => {
+            const data = await onData<{tokens: IManagementTokenDetails[]}>(response);
+            return data.tokens || [];
+        })
+        .catch(onError);
   }
 
   /**
