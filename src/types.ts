@@ -190,3 +190,8 @@ export declare type ILocation =
     | "WIDGET"
     | "APP_CONFIG_WIDGET"
     | "ASSET_SIDEBAR_WIDGET";
+
+export declare interface IManagementTokenDetails {
+    uid: string;
+    name: string;
+}
