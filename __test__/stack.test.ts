@@ -136,7 +136,7 @@ describe("Stack", () => {
 
         it("getManagementTokens should get management token details", async () => {
             const data = await stack.getManagementTokens();
-            expect(data).toEqual({});
+            expect(data).toEqual([]);
             expect(connection.sendToParent).toHaveBeenCalledWith("stackQuery", {
                 action: "getManagementTokens",
             });
