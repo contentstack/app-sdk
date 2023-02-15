@@ -1,64 +1,46 @@
 import { AnyObject } from "./types/common.types";
 import { StackDetail } from "./types/stack.types";
-
 export declare interface IDashboardWidget {
     [key: string]: any;
 }
-
 export declare interface ICustomField {
     [key: string]: any;
 }
-
 export declare interface ISidebarWidget {
     [key: string]: any;
 }
-
 export declare interface IRTE {
     [key: string]: any;
 }
-
 export declare interface IAppConfigWidget {
     installation: {
-        setInstallationData: (
-            installationData: IInstallationData
-        ) => Promise<AnyObject>;
+        setInstallationData: (installationData: IInstallationData) => Promise<AnyObject>;
         getInstallationData: () => Promise<IInstallationData>;
         [key: string]: any;
     };
     stack: AnyObject;
 }
-
 export declare interface IPageWidget {
     [key: string]: any;
 }
-
-// initialization data
 export declare interface IUser {
     [key: string]: any;
 }
-
 export declare interface ICurrentEntry {
     [key: string]: any;
 }
-
 export declare interface ICurrentContentType {
     [key: string]: any;
 }
-
 export declare interface IConfig {
     [key: string]: any;
 }
-
 export declare interface ISchema {
     [key: string]: any;
 }
-
 export declare interface IFieldConfig {
     [key: string]: any;
 }
-
-// Init data
-
 declare interface ICommonInitData {
     app_id: string;
     installation_uid: string;
@@ -67,7 +49,6 @@ declare interface ICommonInitData {
     user: IUser;
     currentBranch: string;
 }
-
 export declare interface IDashboardInitData {
     data: ICommonInitData & {
         dashboard_width: "full_width" | "half_width";
@@ -75,7 +56,6 @@ export declare interface IDashboardInitData {
         type: "DASHBOARD";
     };
 }
-
 export declare interface ISidebarInitData {
     data: ICommonInitData & {
         app_config: IConfig;
@@ -86,7 +66,6 @@ export declare interface ISidebarInitData {
         type: "WIDGET";
     };
 }
-
 export declare interface IFieldInitData {
     data: ICommonInitData & {
         entry: ICurrentEntry;
@@ -102,63 +81,59 @@ export declare interface IFieldInitData {
         type: "FIELD";
     };
 }
-
 export declare interface IRTEInitData {
     data: ICommonInitData & {
         type: "RTE";
         config?: AnyObject;
     };
 }
-
 export declare interface IAppConfigInitData {
     data: ICommonInitData & {
         type: "APP_CONFIG_WIDGET";
         config?: AnyObject;
     };
 }
-
 export declare interface ICurrentAsset {
     [key: string]: any;
 }
-
 export declare interface IAssetSidebarInitData {
     data: ICommonInitData & {
         type: "ASSET_SIDEBAR_WIDGET";
         currentAsset: ICurrentAsset;
-        config: { [key: string]: any };
+        config: {
+            [key: string]: any;
+        };
     };
 }
-
 export declare interface setAssetDto {
     title: string;
     description: string;
     tags: string[];
 }
-
-export enum StackLocation {
+export declare enum StackLocation {
     STACK_CONFIG = "cs.cm.stack.config",
     DASHBOARD = "cs.cm.stack.dashboard",
     SIDEBAR = "cs.cm.stack.sidebar",
     CUSTOM_FIELD = "cs.cm.stack.custom_field",
-    RTE = "cs.cm.stack.rte",
+    RTE = "cs.cm.stack.rte"
 }
-
-export enum OrganizationLocation {
-    ORG_CONFIG = "cs.org.config",
+export declare enum OrganizationLocation {
+    ORG_CONFIG = "cs.org.config"
 }
-
-export type AppLocation = StackLocation | OrganizationLocation;
-
+export declare type AppLocation = StackLocation | OrganizationLocation;
 export interface Scope {
     content_types: string[];
 }
-
 /**
  * installation details API response
  */
 export interface IInstallationData {
-    configuration: { [key: string]: any };
-    serverConfiguration: { [key: string]: any };
+    configuration: {
+        [key: string]: any;
+    };
+    serverConfiguration: {
+        [key: string]: any;
+    };
     webhooks?: {
         channels: string[];
     }[];
@@ -172,8 +147,6 @@ export interface IInstallationData {
         }[];
     }[];
 }
-// End of Init data
-
 export declare interface IInitializationData {
     FIELD: IFieldConfig;
     WIDGET: ISidebarInitData;
@@ -182,11 +155,6 @@ export declare interface IInitializationData {
     APP_CONFIG_WIDGET: IAppConfigInitData;
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
-
-export declare type ILocation =
-    | "RTE"
-    | "FIELD"
-    | "DASHBOARD"
-    | "WIDGET"
-    | "APP_CONFIG_WIDGET"
-    | "ASSET_SIDEBAR_WIDGET";
+export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET";
+export {};
+//# sourceMappingURL=types.d.ts.map

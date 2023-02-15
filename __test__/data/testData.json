@@ -74,12 +74,26 @@
         "name": "Extension Demo",
         "org_uid": "xxxxxx",
         "api_key": "xxxxxx",
+        "master_locale": "en-us",
+        "is_asset_download_public": true,
         "owner_uid": "xxxxxxx",
-        "enable_presence": true,
+        "user_uids": ["xxxxxxx"],
         "settings": {
             "version": "2017-10-14",
             "webhook_enabled": true
         },
+        "branches": [
+            {
+                "api_key": "xxxxxx",
+                "uid": "main_branch",
+                "source": "",
+                "alias": [
+                    {
+                        "uid": "branch_alias"
+                    }
+                ]
+            }
+        ],
         "SYS_ACL": {
             "others": {
                 "invite": false,
