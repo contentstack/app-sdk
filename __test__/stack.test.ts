@@ -37,6 +37,110 @@ describe("Stack", () => {
         it("getData", () => {
             expect(getStack()).toMatchObject(stack.getData());
         });
+
+        describe("getAllStacks", () => {
+            it("should get called with default org Uid when not provided", (done) => {
+                stack.getAllStacks().then((data) => {
+                    expect(data.length).toBe(0);
+                    expect(connection.sendToParent).toHaveBeenCalledWith(
+                        "stackQuery",
+                        {
+                            headers: {
+                                organization_uid: getStack().org_uid,
+                            },
+                            action: "getStacks",
+                            params: {},
+                            skip_api_key: true,
+                        }
+                    );
+                    done();
+                });
+            });
+
+            it("should get called with provided org Uid", (done) => {
+                let orgUid = "some-org-uid";
+                stack.getAllStacks({ orgUid }).then((data) => {
+                    expect(data.length).toBe(0);
+                    expect(connection.sendToParent).toHaveBeenCalledWith(
+                        "stackQuery",
+                        {
+                            headers: { organization_uid: orgUid },
+                            action: "getStacks",
+                            params: {},
+                            skip_api_key: true,
+                        }
+                    );
+                    done();
+                });
+            });
+
+            it("should throw error when uid is not string", async () => {
+                let orgUid = 123 as any;
+                await expect(
+                    stack.getAllStacks({ orgUid })
+                ).rejects.toThrowError("orgUid must be a string");
+            });
+
+            it("should send query params", (done) => {
+                let params = { sample: "parameter" };
+                stack.getAllStacks({ params }).then((data) => {
+                    expect(data.length).toBe(0);
+                    expect(connection.sendToParent).toHaveBeenCalledWith(
+                        "stackQuery",
+                        {
+                            headers: {
+                                organization_uid: getStack().org_uid,
+                            },
+                            action: "getStacks",
+                            params,
+                            skip_api_key: true,
+                        }
+                    );
+                    done();
+                });
+            });
+        });
+
+        describe("search", () => {
+            it("should ask parent for entries", (done) => {
+                const query: StackSearchQuery = { type: "entries" };
+                stack.search(query).then(() => {
+                    expect(connection.sendToParent).toHaveBeenCalledWith(
+                        "stackQuery",
+                        {
+                            api_key: getStack().api_key,
+                            action: "search",
+                            params: query,
+                        }
+                    );
+                    done();
+                });
+            });
+
+            it("should make query to other stack if api key is provided", (done) => {
+                const query: StackSearchQuery = { type: "entries" };
+                const apiKey = "sample_api_key";
+                stack.search(query, apiKey).then(() => {
+                    expect(connection.sendToParent).toHaveBeenCalledWith(
+                        "stackQuery",
+                        {
+                            api_key: apiKey,
+                            action: "search",
+                            params: query,
+                        }
+                    );
+                    done();
+                });
+            });
+        });
+
+        it("getManagementTokens should get management token details", async () => {
+            const data = await stack.getManagementTokens();
+            expect(data).toEqual([]);
+            expect(connection.sendToParent).toHaveBeenCalledWith("stackQuery", {
+                action: "getManagementTokens",
+            });
+        });
     });
 
     describe("ContentType Calls", () => {
@@ -47,94 +151,6 @@ describe("Stack", () => {
                 expect(connection.sendToParent).toHaveBeenCalledWith(
                     "stackQuery",
                     { uid: "uid", params, action: "getContentType" }
-                );
-                done();
-            });
-        });
-
-        it("getAllStacks should get called with default org Uid when not provided", (done) => {
-            stack.getAllStacks().then((data) => {
-                expect(data.length).toBe(0);
-                expect(connection.sendToParent).toHaveBeenCalledWith(
-                    "stackQuery",
-                    {
-                        headers: { organization_uid: getStack().org_uid },
-                        action: "getStacks",
-                        params: {},
-                        skip_api_key: true,
-                    }
-                );
-                done();
-            });
-        });
-
-        it("getAllStacks should get called with provided org Uid", (done) => {
-            let orgUid = "some-org-uid";
-            stack.getAllStacks({ orgUid }).then((data) => {
-                expect(data.length).toBe(0);
-                expect(connection.sendToParent).toHaveBeenCalledWith(
-                    "stackQuery",
-                    {
-                        headers: { organization_uid: orgUid },
-                        action: "getStacks",
-                        params: {},
-                        skip_api_key: true,
-                    }
-                );
-                done();
-            });
-        });
-
-        it("getAllStacks should throw error when uid is not string", async () => {
-            let orgUid = 123 as any;
-            await expect(stack.getAllStacks({ orgUid })).rejects.toThrowError(
-                "orgUid must be a string"
-            );
-        });
-
-        it("getAllStacks should send query params", (done) => {
-            let params = { sample: "parameter" };
-            stack.getAllStacks({ params }).then((data) => {
-                expect(data.length).toBe(0);
-                expect(connection.sendToParent).toHaveBeenCalledWith(
-                    "stackQuery",
-                    {
-                        headers: { organization_uid: getStack().org_uid },
-                        action: "getStacks",
-                        params,
-                        skip_api_key: true,
-                    }
-                );
-                done();
-            });
-        });
-
-        it("search", (done) => {
-            const query: StackSearchQuery = { type: "entries" };
-            stack.search(query).then(() => {
-                expect(connection.sendToParent).toHaveBeenCalledWith(
-                    "stackQuery",
-                    {
-                        api_key: getStack().api_key,
-                        action: "search",
-                        params: query,
-                    }
-                );
-                done();
-            });
-        });
-
-        it("search should make query to other stack if api key is provided", (done) => {
-            const query: StackSearchQuery = { type: "entries" };
-            const apiKey = "sample_api_key";
-            stack.search(query, apiKey).then(() => {
-                expect(connection.sendToParent).toHaveBeenCalledWith(
-                    "stackQuery",
-                    {
-                        api_key: apiKey,
-                        action: "search",
-                        params: query,
-                    }
                 );
                 done();
             });
