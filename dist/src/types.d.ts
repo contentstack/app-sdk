@@ -156,5 +156,9 @@ export declare interface IInitializationData {
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
 export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET";
+export declare interface IManagementTokenDetails {
+    uid: string;
+    name: string;
+}
 export {};
 //# sourceMappingURL=types.d.ts.map
