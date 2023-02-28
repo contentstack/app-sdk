@@ -2502,6 +2502,7 @@ var Extension = /** @class */ (function () {
             case "FIELD_LOCATION": {
                 // update height and width automatically
                 var observer = new MutationObserver(function (mutations) {
+                    console.log("mayhem the observer ran");
                     var height = Math.ceil(document.documentElement.getBoundingClientRect().height);
                     var width = Math.ceil(document.documentElement.getBoundingClientRect().width);
                     _this.postRobot.sendToParent("resize", {
@@ -2509,6 +2510,7 @@ var Extension = /** @class */ (function () {
                         width: width,
                     });
                 });
+                console.log("new code");
                 observer.observe(document.body, {
                     attributes: true,
                     childList: true,
