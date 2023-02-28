@@ -197,6 +197,28 @@ class Extension {
             }
 
             case "FIELD_LOCATION": {
+                // update height and width automatically
+                const observer = new MutationObserver((mutations) => {
+                    const height = Math.ceil(
+                        document.documentElement.getBoundingClientRect().height
+                    );
+
+                    const width = Math.ceil(
+                        document.documentElement.getBoundingClientRect().width
+                    );
+
+                    this.postRobot.sendToParent("resize", {
+                        height,
+                        width,
+                    });
+                });
+
+                observer.observe(document.body, {
+                    attributes: true,
+                    childList: true,
+                    subtree: true,
+                });
+
                 this.location.FieldLocation = {
                     entry: new Entry(
                         initializationData as IFieldLocationInitData,
