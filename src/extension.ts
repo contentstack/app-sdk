@@ -208,7 +208,8 @@ class Extension {
                         document.documentElement.getBoundingClientRect().width
                     );
 
-                    this.postRobot.sendToParent("resize", {
+                    //@ts-ignore
+                    postRobot.sendToParent("resize", {
                         height,
                         width,
                     });

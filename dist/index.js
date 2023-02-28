@@ -2505,7 +2505,8 @@ var Extension = /** @class */ (function () {
                     console.log("mayhem the observer ran");
                     var height = Math.ceil(document.documentElement.getBoundingClientRect().height);
                     var width = Math.ceil(document.documentElement.getBoundingClientRect().width);
-                    _this.postRobot.sendToParent("resize", {
+                    //@ts-ignore
+                    post_robot_1.default.sendToParent("resize", {
                         height: height,
                         width: width,
                     });
