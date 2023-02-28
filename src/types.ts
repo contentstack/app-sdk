@@ -17,6 +17,10 @@ export declare interface IRTE {
     [key: string]: any;
 }
 
+export declare interface IFieldLocation {
+    [key: string]: any;
+}
+
 export declare interface IAppConfigWidget {
     installation: {
         setInstallationData: (
@@ -129,6 +133,16 @@ export declare interface IAssetSidebarInitData {
     };
 }
 
+export declare interface IFieldLocationInitData {
+    data: ICommonInitData & {
+        type: "FIELD_LOCATION";
+        config?: Record<string, any>;
+        content_type: ICurrentContentType;
+        entry: ICurrentEntry;
+        locale: string;
+    };
+}
+
 export declare interface setAssetDto {
     title: string;
     description: string;
@@ -189,4 +203,5 @@ export declare type ILocation =
     | "DASHBOARD"
     | "WIDGET"
     | "APP_CONFIG_WIDGET"
-    | "ASSET_SIDEBAR_WIDGET";
+    | "ASSET_SIDEBAR_WIDGET"
+    | "FIELD_LOCATION";

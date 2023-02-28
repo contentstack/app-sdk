@@ -14,6 +14,8 @@ import {
     IDashboardInitData,
     IDashboardWidget,
     IFieldInitData,
+    IFieldLocation,
+    IFieldLocationInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
@@ -55,6 +57,7 @@ class Extension {
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
+        FieldLocation: IFieldLocation | null;
     };
 
     constructor(
@@ -65,6 +68,7 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
+            | IFieldLocationInitData
     ) {
         const initializationData = initData;
 
@@ -125,6 +129,7 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
+            FieldLocation: null,
         };
 
         switch (initializationData.data.type) {
@@ -188,6 +193,20 @@ class Extension {
                 import("./RTE").then(({ rtePluginInitializer }) => {
                     this.location.RTEPlugin = rtePluginInitializer;
                 });
+                break;
+            }
+
+            case "FIELD_LOCATION": {
+                this.location.FieldLocation = {
+                    entry: new Entry(
+                        initializationData as IFieldLocationInitData,
+                        postRobot,
+                        emitter
+                    ),
+                    stack: new Stack(initializationData.data.stack, postRobot, {
+                        currentBranch: initializationData.data.currentBranch,
+                    }),
+                };
                 break;
             }
 
