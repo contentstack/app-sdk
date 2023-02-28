@@ -199,6 +199,7 @@ class Extension {
             case "FIELD_LOCATION": {
                 // update height and width automatically
                 const observer = new MutationObserver((mutations) => {
+                    console.log("mayhem the observer ran")
                     const height = Math.ceil(
                         document.documentElement.getBoundingClientRect().height
                     );
@@ -213,6 +214,7 @@ class Extension {
                     });
                 });
 
+                console.log("new code")
                 observer.observe(document.body, {
                     attributes: true,
                     childList: true,
