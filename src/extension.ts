@@ -216,7 +216,7 @@ class Extension {
                     });
                 });
 
-                console.log("new code")
+                console.log("new code 2")
                 observer.observe(document.body, {
                     attributes: true,
                     childList: true,
