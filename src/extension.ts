@@ -28,6 +28,7 @@ import { onData, onError } from "./utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
+import FieldLocationField from "./fieldLocation/field";
 
 const emitter = new EventEmitter();
 
@@ -231,6 +232,11 @@ class Extension {
                     stack: new Stack(initializationData.data.stack, postRobot, {
                         currentBranch: initializationData.data.currentBranch,
                     }),
+                    field: new FieldLocationField(
+                        initializationData as IFieldInitData,
+                        postRobot,
+                        emitter
+                    ),
                 };
                 break;
             }
