@@ -115,6 +115,10 @@ export declare interface IFieldLocationInitData {
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
         locale: string;
+        uid: string;
+        schema: ISchema;
+        value: any;
+        self: boolean;
     };
 }
 export declare interface setAssetDto {
