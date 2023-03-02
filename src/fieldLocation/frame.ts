@@ -14,6 +14,8 @@ class FieldLocationFrame {
     _autoResizingEnabled = false;
     _emitter: EventEmitter;
     _height?: number;
+    _width?: number;
+
     private observer: MutationObserver | undefined;
 
     constructor(connection: any, emitter: EventEmitter) {
@@ -21,7 +23,7 @@ class FieldLocationFrame {
         this._autoResizingEnabled = false;
         this._emitter = emitter;
 
-        this.updateHeight = this.updateHeight.bind(this);
+        this.updateDimension = this.updateDimension.bind(this);
         this.enableAutoResizing = this.enableAutoResizing.bind(this);
         this.disableAutoResizing = this.disableAutoResizing.bind(this);
 
@@ -36,17 +38,37 @@ class FieldLocationFrame {
      * If the ‘height’ argument is not passed, it will calculate the scroll height and set the height of extension window accordingly.
      * @param {string|number} height Desired height of the iframe window
      */
-    updateHeight(height?: number) {
-        if (!height) {
+    updateDimension(dimension?: { height?: number; width?: number }) {
+        const { height, width } = dimension || {};
+
+        if (height === undefined && width === undefined) {
             this._height = Math.ceil(
                 document.documentElement.getBoundingClientRect().height
             );
-        } else if (this._height === height) {
+
+            this._width = Math.ceil(
+                document.documentElement.getBoundingClientRect().width
+            );
+
+            this._connection.sendToParent("resize", { height: this._height });
             return;
         }
 
-        this._height = height;
-        this._connection.sendToParent("resize", this._height);
+        const dimensionBody = {};
+
+        if (typeof height === "number" && this._height !== height) {
+            this._height = height;
+            dimensionBody["height"] = this._height;
+        }
+
+        if (typeof width === "number" && this._width !== width) {
+            this._width = width;
+            dimensionBody["width"] = this._width;
+        }
+
+        if (Object.keys(dimensionBody).length === 0) {
+            this._connection.sendToParent("resize", dimensionBody);
+        }
     }
 
     /**
@@ -59,7 +81,7 @@ class FieldLocationFrame {
         }
         this._autoResizingEnabled = true;
 
-        this.observer = new MutationObserver(() => this.updateHeight());
+        this.observer = new MutationObserver(() => this.updateDimension());
 
         const mutationObserverConfig = {
             attributes: true,
