@@ -29,6 +29,7 @@ import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
 import FieldLocationField from "./fieldLocation/field";
+import FieldLocationFrame from "./fieldLocation/frame";
 
 const emitter = new EventEmitter();
 
@@ -198,31 +199,6 @@ class Extension {
             }
 
             case "FIELD_LOCATION": {
-                // update height and width automatically
-                const observer = new MutationObserver((mutations) => {
-                    console.log("mayhem the observer ran")
-                    const height = Math.ceil(
-                        document.documentElement.getBoundingClientRect().height
-                    );
-
-                    const width = Math.ceil(
-                        document.documentElement.getBoundingClientRect().width
-                    );
-
-                    //@ts-ignore
-                    postRobot.sendToParent("resize", {
-                        height,
-                        width,
-                    });
-                });
-
-                console.log("new code 2")
-                observer.observe(document.body, {
-                    attributes: true,
-                    childList: true,
-                    subtree: true,
-                });
-
                 this.location.FieldLocation = {
                     entry: new Entry(
                         initializationData as IFieldLocationInitData,
@@ -237,6 +213,7 @@ class Extension {
                         postRobot,
                         emitter
                     ),
+                    frame: new FieldLocationFrame(postRobot, emitter),
                 };
                 break;
             }
