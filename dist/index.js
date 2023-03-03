@@ -2171,7 +2171,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var field_1 = __importDefault(__webpack_require__(/*! ./field */ "./src/field.ts"));
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 var Entry = /** @class */ (function () {
-    function Entry(initializationData, connection, emitter) {
+    function Entry(initializationData, connection, emitter, options) {
         /**
          * Gets the content type of the current entry.
          * @type {Object}
@@ -2185,6 +2185,7 @@ var Entry = /** @class */ (function () {
         this.locale = initializationData.data.locale;
         this._connection = connection;
         this._emitter = emitter;
+        this._options = options || {};
         var thisEntry = this;
         this._emitter.on('entrySave', function (event) {
             thisEntry._data = event.data;
@@ -2210,11 +2211,14 @@ var Entry = /** @class */ (function () {
      * var fieldUid = field.uid;
      * var fieldData = field.getData();
      * @param {string} uid Unique ID of the field
+     * @param {boolean} options.useUnsavedSchema If set to true, the field will get the unsaved field
      * @return {Object} Field object
     */
-    Entry.prototype.getField = function (uid) {
+    Entry.prototype.getField = function (uid, options) {
+        var _a = (options || {}).useUnsavedSchema, useUnsavedSchema = _a === void 0 ? false : _a;
+        var _b = (this._options._internalFlags || {}).FieldInstance, FieldInstance = _b === void 0 ? field_1.default : _b;
         var path = uid.split('.');
-        var value = this._data;
+        var value = useUnsavedSchema ? this._data : this._changedData || this._data;
         var schema = this.content_type.schema;
         var isDataEmpty = Object.keys(value).length === 0;
         if (isDataEmpty) {
@@ -2275,7 +2279,7 @@ var Entry = /** @class */ (function () {
             }
         };
         //@ts-ignore
-        var fieldObject = new field_1.default(fieldIntilaizationDataObject, this._connection, this._emitter);
+        var fieldObject = new FieldInstance(fieldIntilaizationDataObject, this._connection, this._emitter);
         delete fieldObject.onChange;
         return fieldObject;
     };
@@ -2761,10 +2765,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 var entry_1 = __importDefault(__webpack_require__(/*! ../entry */ "./src/entry.ts"));
+var field_1 = __importDefault(__webpack_require__(/*! ./field */ "./src/fieldLocation/field.ts"));
 var FieldLocationEntry = /** @class */ (function (_super) {
     __extends(FieldLocationEntry, _super);
     function FieldLocationEntry(initializationData, connection, emitter) {
-        return _super.call(this, initializationData, connection, emitter) || this;
+        return _super.call(this, initializationData, connection, emitter, {
+            _internalFlags: {
+                FieldInstance: field_1.default,
+            },
+        }) || this;
     }
     /**
      * Returns the value of the tags associated with the entry.
