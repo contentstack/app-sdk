@@ -34,8 +34,9 @@ class FieldLocationFrame {
     }
 
     /**
-     * This method updates the extension height on Contentstack UI.
-     * If the ‘height’ argument is not passed, it will calculate the scroll height and set the height of extension window accordingly.
+     * This method updates the extension height and width on Contentstack UI.
+     * If the value is not passed, it will update the height and width of the
+     * extension with the current height and width of the extension.
      * @param {string|number} height Desired height of the iframe window
      */
     updateDimension(dimension?: { height?: number; width?: number }) {
