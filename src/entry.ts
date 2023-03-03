@@ -80,7 +80,7 @@ class Entry {
     const { FieldInstance  = Field} = this._options._internalFlags || {};
 
     const path = uid.split('.');
-    let value = useUnsavedSchema ? this._data : this._changedData || this._data;
+    let value = useUnsavedSchema ? ( this._changedData || this._data ) : this._data;
     let schema = this.content_type.schema;
 
      const isDataEmpty = Object.keys(value).length === 0;
