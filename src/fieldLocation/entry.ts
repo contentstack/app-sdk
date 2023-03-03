@@ -1,5 +1,6 @@
 import Entry from "../entry";
 import { IFieldLocationInitData } from "../types";
+import Field from "./field";
 
 class FieldLocationEntry extends Entry {
     constructor(
@@ -7,7 +8,11 @@ class FieldLocationEntry extends Entry {
         connection: any,
         emitter: EventEmitter
     ) {
-        super(initializationData, connection, emitter);
+        super(initializationData, connection, emitter, {
+            _internalFlags: {
+                FieldInstance: Field as any,
+            },
+        });
     }
 
     /**
