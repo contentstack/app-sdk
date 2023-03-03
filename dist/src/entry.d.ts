@@ -1,6 +1,7 @@
 import EventEmitter from 'wolfy87-eventemitter';
 import Field from './field';
 import { ICurrentContentType, IFieldInitData, IFieldLocationInitData, ISidebarInitData } from './types';
+import { IEntryOptions, IGetFieldOptions } from './types/entry.types';
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 declare class Entry {
     /**
@@ -16,7 +17,8 @@ declare class Entry {
     _changedData?: {
         [key: string]: any;
     };
-    constructor(initializationData: IFieldInitData | ISidebarInitData | IFieldLocationInitData, connection: any, emitter: EventEmitter);
+    _options: IEntryOptions;
+    constructor(initializationData: IFieldInitData | ISidebarInitData | IFieldLocationInitData, connection: any, emitter: EventEmitter, options?: IEntryOptions);
     /**
      * Gets data of the current entry.
      * @return {Object} Returns entry data.
@@ -34,9 +36,10 @@ declare class Entry {
      * var fieldUid = field.uid;
      * var fieldData = field.getData();
      * @param {string} uid Unique ID of the field
+     * @param {boolean} options.useUnsavedSchema If set to true, the field will get the unsaved field
      * @return {Object} Field object
     */
-    getField(uid: string): Field;
+    getField(uid: string, options?: IGetFieldOptions): Field;
     /**
      * This function executes the callback function every time an entry is saved.
      * @param {function} callback The function to be called when an entry is saved.
