@@ -30,6 +30,7 @@ import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
 import FieldLocationField from "./fieldLocation/field";
 import FieldLocationFrame from "./fieldLocation/frame";
+import FieldLocationEntry from "./fieldLocation/entry";
 
 const emitter = new EventEmitter();
 
@@ -200,7 +201,7 @@ class Extension {
 
             case "FIELD_LOCATION": {
                 this.location.FieldLocation = {
-                    entry: new Entry(
+                    entry: new FieldLocationEntry(
                         initializationData as IFieldLocationInitData,
                         postRobot,
                         emitter
