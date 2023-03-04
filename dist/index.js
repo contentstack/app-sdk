@@ -2974,7 +2974,7 @@ var FieldLocationFrame = /** @class */ (function () {
         if (height === undefined && width === undefined) {
             this._height = Math.ceil(document.documentElement.getBoundingClientRect().height);
             this._width = Math.ceil(document.documentElement.getBoundingClientRect().width);
-            this._connection.sendToParent("resize", { height: this._height });
+            this._connection.sendToParent("resize", { height: this._height, width: this._width });
             return;
         }
         var dimensionBody = {};
