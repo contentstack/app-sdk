@@ -51,7 +51,7 @@ class FieldLocationFrame {
                 document.documentElement.getBoundingClientRect().width
             );
 
-            this._connection.sendToParent("resize", { height: this._height });
+            this._connection.sendToParent("resize", { height: this._height, width: this._width });
             return;
         }
 
