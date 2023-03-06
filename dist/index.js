@@ -2986,7 +2986,7 @@ var FieldLocationFrame = /** @class */ (function () {
             this._width = width;
             dimensionBody["width"] = this._width;
         }
-        if (Object.keys(dimensionBody).length === 0) {
+        if (Object.keys(dimensionBody).length !== 0) {
             this._connection.sendToParent("resize", dimensionBody);
         }
     };
