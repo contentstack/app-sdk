@@ -87,7 +87,6 @@ class Entry {
 
     const path = uid.split('.');
     let value = useUnsavedSchema ? ( this._changedData || this._data ) : this._data;
-    console.log("value", value, options)
     let schema = this.content_type.schema;
 
      const isDataEmpty = Object.keys(value).length === 0;

@@ -14,6 +14,7 @@ class FieldLocationEntry extends Entry {
                 FieldInstance: Field as any,
             },
         });
+
     }
 
     /**
@@ -35,7 +36,7 @@ class FieldLocationEntry extends Entry {
      * @param tags tags to be set on the entry
      * @returns {string[]} Returns an array of tags associated with the entry.
      */
-    setTags(tags: Array<string>): Array<string> {
+    async setTags(tags: Array<string>): Promise<Array<string>> {
         /**
          * Validate if the tags are array of strings
          * @param {Array<string>} tags
@@ -52,7 +53,14 @@ class FieldLocationEntry extends Entry {
             throw new Error("Tags should be an array of strings");
         }
 
-        this._connection.sendToParent("setTags", { tags });
+        await this._connection.sendToParent("setTags", { tags });
+
+        if (!this._changedData) {
+            this._changedData = {};
+        }
+        
+        this._changedData.tags = tags
+
         return tags;
     }
 }
