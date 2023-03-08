@@ -2222,6 +2222,7 @@ var Entry = /** @class */ (function () {
         var _b = (this._options._internalFlags || {}).FieldInstance, FieldInstance = _b === void 0 ? field_1.default : _b;
         var path = uid.split('.');
         var value = useUnsavedSchema ? (this._changedData || this._data) : this._data;
+        console.log("value", value, options);
         var schema = this.content_type.schema;
         var isDataEmpty = Object.keys(value).length === 0;
         if (isDataEmpty) {
