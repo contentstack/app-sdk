@@ -16,4 +16,11 @@ export declare interface IEntryInternalFlags {
 export declare interface IEntryOptions {
     _internalFlags?: IEntryInternalFlags;
 }
+export declare interface IGetTagsOptions {
+    /**
+     * By default, getFields will return a field if has been saved.
+     * If you want to get a field that has not been saved, set this to true.
+     */
+    useUnsavedSchema?: boolean;
+}
 //# sourceMappingURL=entry.types.d.ts.map
