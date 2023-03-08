@@ -2178,6 +2178,9 @@ var Entry = /** @class */ (function () {
          */
         this.content_type = initializationData.data.content_type;
         this._data = initializationData.data.entry;
+        if (initializationData.data.changedData) {
+            this._changedData = initializationData.data.changedData;
+        }
         /**
          * Gets the locale of the current entry.
          * @type {string}
@@ -2779,8 +2782,15 @@ var FieldLocationEntry = /** @class */ (function (_super) {
      * Returns the value of the tags associated with the entry.
      * @returns {string[]} Returns an array of tags associated with the entry.
      */
-    FieldLocationEntry.prototype.getTags = function () {
-        return this._data.tags;
+    FieldLocationEntry.prototype.getTags = function (options) {
+        var _a;
+        var _b = (options || {}).useUnsavedSchema, useUnsavedSchema = _b === void 0 ? false : _b;
+        if (useUnsavedSchema) {
+            return ((_a = this._changedData) === null || _a === void 0 ? void 0 : _a.tags) || this._data.tags;
+        }
+        else {
+            return this._data.tags;
+        }
     };
     /**
      * Sets the tags on the entry.

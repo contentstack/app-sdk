@@ -66,6 +66,7 @@ export declare interface ISidebarInitData {
         entry: ICurrentEntry;
         locale: string;
         config?: AnyObject;
+        changedData: ICurrentEntry;
         type: "WIDGET";
     };
 }
@@ -80,6 +81,7 @@ export declare interface IFieldInitData {
         value: any;
         field_config: IFieldConfig;
         config?: AnyObject;
+        changedData: ICurrentEntry;
         self: boolean;
         type: "FIELD";
     };
@@ -119,6 +121,7 @@ export declare interface IFieldLocationInitData {
         schema: ISchema;
         value: any;
         self: boolean;
+        changedData: ICurrentEntry;
     };
 }
 export declare interface setAssetDto {
