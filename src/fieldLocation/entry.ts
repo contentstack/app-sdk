@@ -1,5 +1,6 @@
 import Entry from "../entry";
 import { IFieldLocationInitData } from "../types";
+import { IGetTagsOptions } from "../types/entry.types";
 import Field from "./field";
 
 class FieldLocationEntry extends Entry {
@@ -19,8 +20,14 @@ class FieldLocationEntry extends Entry {
      * Returns the value of the tags associated with the entry.
      * @returns {string[]} Returns an array of tags associated with the entry.
      */
-    getTags(): Array<string> {
-        return this._data.tags;
+    getTags(options?: IGetTagsOptions): Array<string> {
+        const { useUnsavedSchema = false } = options || {};
+
+        if (useUnsavedSchema) {
+            return this._changedData?.tags || this._data.tags;
+        } else {
+            return this._data.tags;
+        }
     }
 
     /**

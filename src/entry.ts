@@ -27,6 +27,12 @@ class Entry {
     this.content_type = initializationData.data.content_type;
 
     this._data = initializationData.data.entry;
+
+
+    if ( initializationData.data.changedData ) {
+      this._changedData = initializationData.data.changedData;
+    }
+
     /**
      * Gets the locale of the current entry.
      * @type {string}
