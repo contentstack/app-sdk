@@ -12,7 +12,7 @@ export declare interface ISidebarWidget {
 export declare interface IRTE {
     [key: string]: any;
 }
-export declare interface IFieldLocation {
+export declare interface IEntryFieldLocation {
     [key: string]: any;
 }
 export declare interface IAppConfigWidget {
@@ -110,9 +110,9 @@ export declare interface IAssetSidebarInitData {
         };
     };
 }
-export declare interface IFieldLocationInitData {
+export declare interface IEntryFieldLocationInitData {
     data: ICommonInitData & {
-        type: "FIELD_LOCATION";
+        type: "ENTRY_FIELD_LOCATION";
         config?: Record<string, any>;
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
@@ -174,6 +174,6 @@ export declare interface IInitializationData {
     APP_CONFIG_WIDGET: IAppConfigInitData;
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
-export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET" | "FIELD_LOCATION";
+export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET" | "ENTRY_FIELD_LOCATION";
 export {};
 //# sourceMappingURL=types.d.ts.map
