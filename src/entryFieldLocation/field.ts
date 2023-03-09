@@ -1,5 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
-import { IFieldInitData, IFieldLocationInitData } from "../types";
+import { IFieldInitData, IEntryFieldLocationInitData } from "../types";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -9,7 +9,10 @@ const excludedDataTypesForSetField = [
     "global_field",
 ];
 
-function separateResolvedData(field: FieldLocationField, value: { [key: string]: any }) {
+function separateResolvedData(
+    field: EntryFieldLocationField,
+    value: { [key: string]: any }
+) {
     let resolvedData = value;
     let unResolvedData = value;
     if (field.data_type === "file") {
@@ -28,7 +31,7 @@ function separateResolvedData(field: FieldLocationField, value: { [key: string]:
 }
 
 /** Class representing a field from Contentstack UI. Only available for Custom Field extension */
-class FieldLocationField {
+class EntryFieldLocationField {
     /**
      * @hideconstructor
      */
@@ -43,7 +46,7 @@ class FieldLocationField {
     _connection: any;
 
     constructor(
-        fieldDataObject: IFieldInitData | IFieldLocationInitData,
+        fieldDataObject: IFieldInitData | IEntryFieldLocationInitData,
         connection: any,
         emitter: EventEmitter
     ) {
@@ -101,7 +104,7 @@ class FieldLocationField {
      * @param {Object|string|number} data Data to be set on the field
      * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
      */
-    setData(data: any): Promise<FieldLocationField> {
+    setData(data: any): Promise<EntryFieldLocationField> {
         const currentFieldObj = this;
         const dataObj = {
             data,
@@ -142,8 +145,8 @@ class FieldLocationField {
     }
 
     getDelta() {
-        return this.schema?.value
+        return this.schema?.value;
     }
 }
 
-export default FieldLocationField;
+export default EntryFieldLocationField;

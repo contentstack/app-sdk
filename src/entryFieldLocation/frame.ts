@@ -5,7 +5,7 @@ import postRobot from "post-robot";
  * Class representing an iframe window from Contentstack UI. Not available for Custom Widgets.
  */
 
-class FieldLocationFrame {
+class EntryFieldLocationFrame {
     /**
      * @hideconstructor
      */
@@ -51,7 +51,10 @@ class FieldLocationFrame {
                 document.documentElement.getBoundingClientRect().width
             );
 
-            this._connection.sendToParent("resize", { height: this._height, width: this._width });
+            this._connection.sendToParent("resize", {
+                height: this._height,
+                width: this._width,
+            });
             return;
         }
 
@@ -74,9 +77,9 @@ class FieldLocationFrame {
 
     /**
      * This method enables auto resizing of the extension height.
-     * @return {FieldLocationFrame}.
+     * @return {EntryFieldLocationFrame}.
      */
-    enableAutoResizing(): FieldLocationFrame {
+    enableAutoResizing(): EntryFieldLocationFrame {
         if (this._autoResizingEnabled) {
             return this;
         }
@@ -96,9 +99,9 @@ class FieldLocationFrame {
 
     /**
      * This method disables auto resizing of the extension height.
-     * @return {FieldLocationFrame}.
+     * @return {EntryFieldLocationFrame}.
      */
-    disableAutoResizing(): FieldLocationFrame {
+    disableAutoResizing(): EntryFieldLocationFrame {
         if (!this._autoResizingEnabled) {
             return this;
         }
@@ -108,4 +111,4 @@ class FieldLocationFrame {
     }
 }
 
-export default FieldLocationFrame;
+export default EntryFieldLocationFrame;

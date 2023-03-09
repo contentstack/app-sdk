@@ -1,7 +1,7 @@
 import EventEmitter from 'wolfy87-eventemitter';
 
 import Field from './field';
-import { ICurrentContentType, IFieldInitData, IFieldLocationInitData, ISidebarInitData } from './types';
+import { ICurrentContentType, IFieldInitData, IEntryFieldLocationInitData, ISidebarInitData } from './types';
 import { IEntryOptions, IGetFieldOptions } from './types/entry.types';
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
@@ -19,7 +19,7 @@ class Entry {
   _changedData?: { [key: string]: any; }
   _options: IEntryOptions
 
-  constructor(initializationData: IFieldInitData | ISidebarInitData | IFieldLocationInitData, connection: any, emitter: EventEmitter, options?: IEntryOptions) {
+  constructor(initializationData: IFieldInitData | ISidebarInitData | IEntryFieldLocationInitData, connection: any, emitter: EventEmitter, options?: IEntryOptions) {
     /**
      * Gets the content type of the current entry.
      * @type {Object}
