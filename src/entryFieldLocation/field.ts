@@ -104,7 +104,7 @@ class EntryFieldLocationField {
      * @param {Object|string|number} data Data to be set on the field
      * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
      */
-    setData(data: any): Promise<EntryFieldLocationField> {
+    async setData(data: any): Promise<EntryFieldLocationField> {
         const currentFieldObj = this;
         const dataObj = {
             data,
@@ -140,12 +140,8 @@ class EntryFieldLocationField {
      * @param  {boolean} options.resolved If the resolved parameter is set to true for the File field, then the method will return a resolved asset object along with all the field metadata, e.g. 'field.getData({resolved:true})'.
      * @return {Object|string|number} Returns the field data.
      */
-    getData({ resolved = false } = {}) {
+    getData({ resolved = false }: { resolved?: boolean; } = {}): any {
         return resolved ? this._resolvedData : this._data;
-    }
-
-    getDelta() {
-        return this.schema?.value;
     }
 }
 
