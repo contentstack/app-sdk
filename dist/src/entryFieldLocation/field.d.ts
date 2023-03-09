@@ -33,11 +33,8 @@ declare class EntryFieldLocationField {
      * @return {Object|string|number} Returns the field data.
      */
     getData({ resolved }?: {
-        resolved?: boolean | undefined;
-    }): {
-        [key: string]: any;
-    };
-    getDelta(): any;
+        resolved?: boolean;
+    }): any;
 }
 export default EntryFieldLocationField;
 //# sourceMappingURL=field.d.ts.map
