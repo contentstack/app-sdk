@@ -1,11 +1,11 @@
 import Entry from "../entry";
-import { IFieldLocationInitData } from "../types";
+import { IEntryFieldLocationInitData } from "../types";
 import { IGetTagsOptions } from "../types/entry.types";
 import Field from "./field";
 
-class FieldLocationEntry extends Entry {
+class EntryFieldLocationEntry extends Entry {
     constructor(
-        initializationData: IFieldLocationInitData,
+        initializationData: IEntryFieldLocationInitData,
         connection: any,
         emitter: EventEmitter
     ) {
@@ -14,7 +14,6 @@ class FieldLocationEntry extends Entry {
                 FieldInstance: Field as any,
             },
         });
-
     }
 
     /**
@@ -58,11 +57,11 @@ class FieldLocationEntry extends Entry {
         if (!this._changedData) {
             this._changedData = {};
         }
-        
-        this._changedData.tags = tags
+
+        this._changedData.tags = tags;
 
         return tags;
     }
 }
 
-export default FieldLocationEntry;
+export default EntryFieldLocationEntry;

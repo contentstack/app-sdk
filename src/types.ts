@@ -17,7 +17,7 @@ export declare interface IRTE {
     [key: string]: any;
 }
 
-export declare interface IFieldLocation {
+export declare interface IEntryFieldLocation {
     [key: string]: any;
 }
 
@@ -103,7 +103,7 @@ export declare interface IFieldInitData {
         value: any;
         field_config: IFieldConfig;
         config?: AnyObject;
-        changedData: ICurrentEntry
+        changedData: ICurrentEntry;
         self: boolean;
         type: "FIELD";
     };
@@ -135,14 +135,14 @@ export declare interface IAssetSidebarInitData {
     };
 }
 
-export declare interface IFieldLocationInitData {
+export declare interface IEntryFieldLocationInitData {
     data: ICommonInitData & {
-        type: "FIELD_LOCATION";
+        type: "ENTRY_FIELD_LOCATION";
         config?: Record<string, any>;
         content_type: ICurrentContentType;
         entry: ICurrentEntry;
         locale: string;
-        uid: string
+        uid: string;
         schema: ISchema;
         value: any;
         self: boolean;
@@ -211,4 +211,4 @@ export declare type ILocation =
     | "WIDGET"
     | "APP_CONFIG_WIDGET"
     | "ASSET_SIDEBAR_WIDGET"
-    | "FIELD_LOCATION";
+    | "ENTRY_FIELD_LOCATION";

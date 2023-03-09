@@ -1,5 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
-import { IFieldInitData, IFieldLocationInitData } from "./types";
+import { IFieldInitData, IEntryFieldLocationInitData } from "./types";
 
 const excludedDataTypesForSetField = ['file', 'reference', 'blocks', 'group', 'global_field'];
 
@@ -36,7 +36,7 @@ class Field {
   _connection: any
 
 
-  constructor(fieldDataObject: IFieldInitData | IFieldLocationInitData, connection: any, emitter: EventEmitter) {
+  constructor(fieldDataObject: IFieldInitData | IEntryFieldLocationInitData, connection: any, emitter: EventEmitter) {
     /**
      * The UID of the current field is defined in the content type of the entry.
      * @type {string}
