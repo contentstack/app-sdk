@@ -1,7 +1,7 @@
 import Stack from "./stack";
 import Store from "./store";
 import Metadata from "./metadata";
-import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFieldLocation, IFieldLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
+import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IEntryFieldLocation, IEntryFieldLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 /** Class representing an extension from Contentstack App Framework SDK. */
@@ -27,9 +27,9 @@ declare class Extension {
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
-        FieldLocation: IFieldLocation | null;
+        EntryFieldLocation: IEntryFieldLocation | null;
     };
-    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData | IFieldLocationInitData);
+    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData | IEntryFieldLocationInitData);
     getConfig: () => Promise<{
         [key: string]: any;
     }>;
