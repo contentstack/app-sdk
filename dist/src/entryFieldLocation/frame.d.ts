@@ -22,7 +22,7 @@ declare class EntryFieldLocationFrame {
     updateDimension(dimension?: {
         height?: number;
         width?: number;
-    }): void;
+    }): Promise<void>;
     /**
      * This method enables auto resizing of the extension height.
      * @return {EntryFieldLocationFrame}.
