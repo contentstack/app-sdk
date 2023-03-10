@@ -1,6 +1,7 @@
 import Entry from "../entry";
 import { IEntryFieldLocationInitData } from "../types";
 import { IGetTagsOptions } from "../types/entry.types";
+import { errorMessage } from "../utils/errorMessages";
 import Field from "./field";
 
 class EntryFieldLocationEntry extends Entry {
@@ -48,8 +49,14 @@ class EntryFieldLocationEntry extends Entry {
             );
         }
 
+        if (tags === undefined) {
+            throw new Error(errorMessage.entryField.entry.tagsShouldNotBeBlank);
+        }
+
         if (!areTagsValid(tags)) {
-            throw new Error("Tags should be an array of strings");
+            throw new Error(
+                errorMessage.entryField.entry.tagsShouldBeArrayOfStrings
+            );
         }
 
         await this._connection.sendToParent("setTags", { tags });
