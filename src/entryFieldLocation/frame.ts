@@ -1,5 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
+import { errorMessage } from "../utils/errorMessages";
 
 /**
  * Class representing an iframe window from Contentstack UI. Not available for Custom Widgets.
@@ -39,7 +40,8 @@ class EntryFieldLocationFrame {
      * extension with the current height and width of the extension.
      * @param {string|number} height Desired height of the iframe window
      */
-    updateDimension(dimension?: { height?: number; width?: number }) {
+    async updateDimension(dimension?: { height?: number; width?: number }) {
+        
         const { height, width } = dimension || {};
 
         if (height === undefined && width === undefined) {
@@ -51,7 +53,7 @@ class EntryFieldLocationFrame {
                 document.documentElement.getBoundingClientRect().width
             );
 
-            this._connection.sendToParent("resize", {
+            await this._connection.sendToParent("resize", {
                 height: this._height,
                 width: this._width,
             });
@@ -60,18 +62,26 @@ class EntryFieldLocationFrame {
 
         const dimensionBody = {};
 
-        if (typeof height === "number" && this._height !== height) {
+        if (height !== undefined && typeof height !== "number") {
+            throw new Error(errorMessage.entryField.frame.dimensionHeightShouldBeNumber);
+        }
+
+        if (this._height !== height) {
             this._height = height;
             dimensionBody["height"] = this._height;
         }
 
-        if (typeof width === "number" && this._width !== width) {
+        if (width !== undefined && typeof width !== "number") {
+            throw new Error(errorMessage.entryField.frame.dimensionWidthShouldBeNumber);
+        }
+
+        if (this._width !== width) {
             this._width = width;
             dimensionBody["width"] = this._width;
         }
 
         if (Object.keys(dimensionBody).length !== 0) {
-            this._connection.sendToParent("resize", dimensionBody);
+            await this._connection.sendToParent("resize", dimensionBody);
         }
     }
 
@@ -85,7 +95,9 @@ class EntryFieldLocationFrame {
         }
         this._autoResizingEnabled = true;
 
-        this.observer = new MutationObserver(() => this.updateDimension());
+        this.observer = new MutationObserver(
+            async () => await this.updateDimension()
+        );
 
         const mutationObserverConfig = {
             attributes: true,
