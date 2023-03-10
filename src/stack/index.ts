@@ -2,6 +2,7 @@ import Asset from './api/asset/index';
 import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
+import { IManagementTokenDetails } from '../types';
 
 
 /**
@@ -91,6 +92,23 @@ class Stack {
   }
 
   /**
+   * Get the details of all the management tokens of the stack.
+   * Note: This API does not return the token value.
+   * @see {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens | Get all management tokens}
+   * @returns Details of all the management token of the stack
+   */
+  async getManagementTokens(): Promise<IManagementTokenDetails[]> {
+    const options = { action: "getManagementTokens" };
+    return this._connection
+        .sendToParent("stackQuery", options)
+        .then(async (response) => {
+            const data = await onData<{tokens: IManagementTokenDetails[]}>(response);
+            return data.tokens || [];
+        })
+        .catch(onError);
+  }
+
+  /**
    * Gets the results of the search based on user query
    * @param queries Array of key value pair of query parameters
    * @param apiKey API key of the stack
@@ -156,6 +174,32 @@ class Stack {
     const optionParams: { [key: string]: any } = params;
     optionParams.query = query;
     const options = { params: optionParams, action: 'getEnvironments' };
+    return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+  }
+
+  /**
+   * This API allows you to retrieve details of releases of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases| Releases API} requests. This method returns a Promise object.
+   * @param {Object} query Query for the GET call
+   * @param {Object} params Optional parameters for the GET call
+   * @return {Object} A Promise object which will be resolved with details of the releases.
+   */
+  getReleases(query = {}, params = {}) {
+    const optionParams: { [key: string]: any } = params;
+    optionParams.query = query;
+    const options = { params: optionParams, action: 'getReleases' };
+    return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+  }
+
+  /**
+   * This API allows you to retrieve details of publish queue of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue| Publish Queue API} requests. This method returns a Promise object.
+   * @param {Object} query Query for the GET call
+   * @param {Object} params Optional parameters for the GET call
+   * @return {Object} A Promise object which will be resolved with details of the publish queue.
+   */
+  getPublishes(query = {}, params = {}) {
+    const optionParams: { [key: string]: any } = params;
+    optionParams.query = query;
+    const options = { params: optionParams, action: 'getPublishes' };
     return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
   }
 

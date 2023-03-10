@@ -1,4 +1,5 @@
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
+import { IManagementTokenDetails } from '../types';
 /**
  * Class representing the current stack in Contentstack UI.
  */
@@ -23,6 +24,13 @@ declare class Stack {
      * @returns Stacks within current organization
      */
     getAllStacks({ orgUid, params }?: GetAllStacksOptions): Promise<StackDetail[]>;
+    /**
+     * Get the details of all the management tokens of the stack.
+     * Note: This API does not return the token value.
+     * @see {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens | Get all management tokens}
+     * @returns Details of all the management token of the stack
+     */
+    getManagementTokens(): Promise<IManagementTokenDetails[]>;
     /**
      * Gets the results of the search based on user query
      * @param queries Array of key value pair of query parameters
@@ -64,6 +72,20 @@ declare class Stack {
      * @return {Object} A Promise object which will be resolved with details of the environments.
      */
     getEnvironments(query?: {}, params?: {}): any;
+    /**
+     * This API allows you to retrieve details of releases of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-releases| Releases API} requests. This method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A Promise object which will be resolved with details of the releases.
+     */
+    getReleases(query?: {}, params?: {}): any;
+    /**
+     * This API allows you to retrieve details of publish queue of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-publish-queue| Publish Queue API} requests. This method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A Promise object which will be resolved with details of the publish queue.
+     */
+    getPublishes(query?: {}, params?: {}): any;
     /**
      * This API allows you to retrive a locale of a stack using the {@link https://www.contentstack.com/docs/apis/content-management-api/#get-a-language| Language API} requests. Method returns a Promise object.
      * @param {string} code Code of the desired locale

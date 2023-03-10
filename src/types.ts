@@ -212,3 +212,8 @@ export declare type ILocation =
     | "APP_CONFIG_WIDGET"
     | "ASSET_SIDEBAR_WIDGET"
     | "ENTRY_FIELD_LOCATION";
+
+export declare interface IManagementTokenDetails {
+    uid: string;
+    name: string;
+}
