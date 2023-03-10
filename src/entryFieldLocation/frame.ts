@@ -41,7 +41,6 @@ class EntryFieldLocationFrame {
      * @param {string|number} height Desired height of the iframe window
      */
     async updateDimension(dimension?: { height?: number; width?: number }) {
-        
         const { height, width } = dimension || {};
 
         if (height === undefined && width === undefined) {
@@ -63,7 +62,9 @@ class EntryFieldLocationFrame {
         const dimensionBody = {};
 
         if (height !== undefined && typeof height !== "number") {
-            throw new Error(errorMessage.entryField.frame.dimensionHeightShouldBeNumber);
+            throw new Error(
+                errorMessage.entryField.frame.dimensionHeightShouldBeNumber
+            );
         }
 
         if (this._height !== height) {
@@ -72,7 +73,9 @@ class EntryFieldLocationFrame {
         }
 
         if (width !== undefined && typeof width !== "number") {
-            throw new Error(errorMessage.entryField.frame.dimensionWidthShouldBeNumber);
+            throw new Error(
+                errorMessage.entryField.frame.dimensionWidthShouldBeNumber
+            );
         }
 
         if (this._width !== width) {
@@ -120,6 +123,14 @@ class EntryFieldLocationFrame {
         this._autoResizingEnabled = false;
         this.observer?.disconnect();
         return this;
+    }
+
+    /**
+     * It closes the app modal.
+     * @returns {Promise<void>}
+     */
+    async closeModal(): Promise<void> {
+        return await this._connection.sendToParent("closeModal");
     }
 }
 

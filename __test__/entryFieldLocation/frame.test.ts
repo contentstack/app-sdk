@@ -177,4 +177,12 @@ describe("EntryFieldLocationFrame", () => {
             window.MutationObserver = existingMutationObserver;
         });
     });
+
+    describe("closeModal", () => {
+        it("should close the modal", () => {
+            frameInstance.closeModal();
+
+            expect(sendToParent).toHaveBeenLastCalledWith("closeModal");
+        });
+    });
 });
