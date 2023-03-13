@@ -33,6 +33,11 @@ declare class EntryFieldLocationFrame {
      * @return {EntryFieldLocationFrame}.
      */
     disableAutoResizing(): EntryFieldLocationFrame;
+    /**
+     * It closes the app modal.
+     * @returns {Promise<void>}
+     */
+    closeModal(): Promise<void>;
 }
 export default EntryFieldLocationFrame;
 //# sourceMappingURL=frame.d.ts.map
