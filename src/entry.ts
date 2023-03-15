@@ -2,7 +2,7 @@ import EventEmitter from 'wolfy87-eventemitter';
 
 import Field from './field';
 import { ICurrentContentType, IFieldInitData, IEntryFieldLocationInitData, ISidebarInitData } from './types';
-import { IEntryOptions, IGetFieldOptions } from './types/entry.types';
+import { IEntryOptions, IGetFieldOptions, IOnEntryChangeCallback } from './types/entry.types';
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 
@@ -175,11 +175,11 @@ class Entry {
    */
 
 
-  onChange(callback: (arg0: any) => void) {
+  onChange(callback: IOnEntryChangeCallback) {
     const entryObj = this;
     if (callback && typeof (callback) === 'function') {
-      entryObj._emitter.on('entryChange', (event: { data: any; }) => {
-        callback(event.data);
+      entryObj._emitter.on('entryChange', (event: { data: any; resolvedData: Record<string, any> }) => {
+        callback(event.data, event.resolvedData);
       });
     } else {
       throw Error('Callback must be a function');
