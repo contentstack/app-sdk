@@ -27,6 +27,7 @@ class EntryFieldLocationFrame {
         this.updateDimension = this.updateDimension.bind(this);
         this.enableAutoResizing = this.enableAutoResizing.bind(this);
         this.disableAutoResizing = this.disableAutoResizing.bind(this);
+        this.closeModal = this.closeModal.bind(this);
 
         /**
          * The auto resizing should be enabled by default.
