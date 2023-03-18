@@ -25,8 +25,12 @@ describe("Entry", () => {
         };
 
         jest.spyOn(emitter, "on");
+
+        const changedData = JSON.parse(JSON.stringify(testData));
+        changedData.entry.title = "changed title";
+
         // @ts-ignore
-        entry = new Entry({ data: testData }, connection, emitter);
+        entry = new Entry({ data: testData, changedData }, connection, emitter);
     });
 
     it("init", (done) => {
@@ -50,69 +54,99 @@ describe("Entry", () => {
         expect(testData.entry).toEqual(entry.getData());
     });
 
-    it("getField undefined", function () {
-        const uid = "group1.group";
-        const schema = entry.content_type.schema[5].schema[0];
-        const field = entry.getField(uid);
+    describe("getField", () => {
+        it("getField undefined", function () {
+            const uid = "group1.group";
+            const schema = entry.content_type.schema[5].schema[0];
+            const field = entry.getField(uid);
 
-        expect(field.uid).toEqual(uid);
-        expect(field.data_type).toEqual(schema.data_type);
-        expect(field.schema).toEqual(schema);
-    });
+            expect(field.uid).toEqual(uid);
+            expect(field.data_type).toEqual(schema.data_type);
+            expect(field.schema).toEqual(schema);
+        });
 
-    it("getField modular blocks, get complete block", function () {
-        const uid = "modular_blocks.0";
-        const schema = entry.content_type.schema[6].blocks[2];
-        const field = entry.getField(uid);
-        expect(field.uid).toEqual(uid);
-        expect(field.data_type).toEqual(schema.data_type);
-        expect(field.schema).toEqual(schema);
-    });
+        it("getField modular blocks, get complete block", function () {
+            const uid = "modular_blocks.0";
+            const schema = entry.content_type.schema[6].blocks[2];
+            const field = entry.getField(uid);
+            expect(field.uid).toEqual(uid);
+            expect(field.data_type).toEqual(schema.data_type);
+            expect(field.schema).toEqual(schema);
+        });
 
-    it("getField modular blocks, get single block", function () {
-        const uid = "modular_blocks.0.banner";
-        const schema = entry.content_type.schema[6].blocks[2].schema;
-        const field = entry.getField(uid);
-        expect(field.uid).toEqual(uid);
-        expect(field.data_type).toEqual(schema.data_type);
-        expect(field.schema).toEqual(schema);
-    });
+        it("getField modular blocks, get single block", function () {
+            const uid = "modular_blocks.0.banner";
+            const schema = entry.content_type.schema[6].blocks[2].schema;
+            const field = entry.getField(uid);
+            expect(field.uid).toEqual(uid);
+            expect(field.data_type).toEqual(schema.data_type);
+            expect(field.schema).toEqual(schema);
+        });
 
-    it("getField modular blocks, get block field", function () {
-        const uid = "modular_blocks.0.banner.banner_image";
-        const schema = entry.content_type.schema[6].blocks[2].schema[0];
-        const field = entry.getField(uid);
-        expect(field.uid).toEqual(uid);
-        expect(field.data_type).toEqual(schema.data_type);
-        expect(field.schema).toEqual(schema);
-    });
+        it("getField modular blocks, get block field", function () {
+            const uid = "modular_blocks.0.banner.banner_image";
+            const schema = entry.content_type.schema[6].blocks[2].schema[0];
+            const field = entry.getField(uid);
+            expect(field.uid).toEqual(uid);
+            expect(field.data_type).toEqual(schema.data_type);
+            expect(field.schema).toEqual(schema);
+        });
 
-    it("getField global field", function () {
-        const uid = "global_field.single_line";
-        const schema = entry.content_type.schema[7].schema[0];
-        const field = entry.getField(uid);
-        expect(field.uid).toEqual(uid);
-        expect(field.data_type).toEqual(schema.data_type);
-        expect(field.schema).toEqual(schema);
-    });
+        it("getField global field", function () {
+            const uid = "global_field.single_line";
+            const schema = entry.content_type.schema[7].schema[0];
+            const field = entry.getField(uid);
+            expect(field.uid).toEqual(uid);
+            expect(field.data_type).toEqual(schema.data_type);
+            expect(field.schema).toEqual(schema);
+        });
 
-    it("getField multiple group", function () {
-        const uid = "group.group.group.0.single_line";
-        const schema =
-            entry.content_type.schema[4].schema[0].schema[0].schema[0];
-        const field = entry.getField(uid);
-        expect(field.uid).toEqual(uid);
-        expect(field.data_type).toEqual(schema.data_type);
-        expect(field.schema).toEqual(schema);
-    });
+        it("getField multiple group", function () {
+            const uid = "group.group.group.0.single_line";
+            const schema =
+                entry.content_type.schema[4].schema[0].schema[0].schema[0];
+            const field = entry.getField(uid);
+            expect(field.uid).toEqual(uid);
+            expect(field.data_type).toEqual(schema.data_type);
+            expect(field.schema).toEqual(schema);
+        });
 
-    it("getField group", function () {
-        const uid = "group.group.group";
-        const schema = entry.content_type.schema[4].schema[0].schema[0];
-        const field = entry.getField(uid);
-        expect(field.uid).toEqual(uid);
-        expect(field.data_type).toEqual(schema.data_type);
-        expect(field.schema).toEqual(schema);
+        it("getField group", function () {
+            const uid = "group.group.group";
+            const schema = entry.content_type.schema[4].schema[0].schema[0];
+            const field = entry.getField(uid);
+            expect(field.uid).toEqual(uid);
+            expect(field.data_type).toEqual(schema.data_type);
+            expect(field.schema).toEqual(schema);
+        });
+
+        it("should use unsaved schema if user set options.useUnsavedSchema = true", () => {
+            const uid = "title";
+            const field = entry.getField(uid, { useUnsavedSchema: true });
+            const schema = entry.content_type.schema[0];
+            expect(field.uid).toBe(uid);
+            expect(field.schema).toEqual(schema);
+            expect(field.data_type).toEqual(schema.data_type);
+
+        });
+        it("should use custom Field instance if internal flag is set", () => {
+            const fieldInstance = jest.fn();
+            entry = new Entry(
+                // @ts-ignore
+                { data: testData },
+                connection,
+                emitter,
+                {
+                    _internalFlags: {
+                        FieldInstance: fieldInstance,
+                    },
+                }
+            );
+
+            entry.getField("title");
+
+            expect(fieldInstance).toHaveBeenCalled();
+        });
     });
 
     it("set field data restriction", async () => {

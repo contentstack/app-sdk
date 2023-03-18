@@ -1,6 +1,8 @@
 import EventEmitter from 'wolfy87-eventemitter';
+
 import Field from './field';
-import { ICurrentContentType, IFieldInitData, ISidebarInitData } from './types';
+import { ICurrentContentType, IFieldInitData, IEntryFieldLocationInitData, ISidebarInitData } from './types';
+import { IEntryOptions, IGetFieldOptions } from './types/entry.types';
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 
@@ -15,8 +17,9 @@ class Entry {
   _connection: any
   _emitter: EventEmitter
   _changedData?: { [key: string]: any; }
+  _options: IEntryOptions
 
-  constructor(initializationData: IFieldInitData | ISidebarInitData, connection: any, emitter: EventEmitter) {
+  constructor(initializationData: IFieldInitData | ISidebarInitData | IEntryFieldLocationInitData, connection: any, emitter: EventEmitter, options?: IEntryOptions) {
     /**
      * Gets the content type of the current entry.
      * @type {Object}
@@ -24,6 +27,12 @@ class Entry {
     this.content_type = initializationData.data.content_type;
 
     this._data = initializationData.data.entry;
+
+
+    if ( initializationData.data.changedData ) {
+      this._changedData = initializationData.data.changedData;
+    }
+
     /**
      * Gets the locale of the current entry.
      * @type {string}
@@ -33,6 +42,8 @@ class Entry {
     this._connection = connection;
 
     this._emitter = emitter;
+
+    this._options = options || {};
 
     const thisEntry = this;
 
@@ -65,13 +76,17 @@ class Entry {
    * var fieldUid = field.uid;
    * var fieldData = field.getData();
    * @param {string} uid Unique ID of the field
+   * @param {boolean} options.useUnsavedSchema If set to true, the field will get the unsaved field
    * @return {Object} Field object
   */
 
 
-  getField(uid: string) {
+  getField(uid: string, options?: IGetFieldOptions): Field {
+    const { useUnsavedSchema = false } = options || {};
+    const { FieldInstance  = Field} = this._options._internalFlags || {};
+
     const path = uid.split('.');
-    let value = this._data;
+    let value = useUnsavedSchema ? ( this._changedData || this._data ) : this._data;
     let schema = this.content_type.schema;
 
      const isDataEmpty = Object.keys(value).length === 0;
@@ -132,7 +147,7 @@ class Entry {
     };
 
     //@ts-ignore
-    const fieldObject = new Field(fieldIntilaizationDataObject, this._connection, this._emitter);
+    const fieldObject = new FieldInstance(fieldIntilaizationDataObject, this._connection, this._emitter);
     delete fieldObject.onChange;
     return fieldObject;
   }

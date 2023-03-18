@@ -14,6 +14,8 @@ import {
     IDashboardInitData,
     IDashboardWidget,
     IFieldInitData,
+    IEntryFieldLocation,
+    IEntryFieldLocationInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
@@ -26,6 +28,9 @@ import { onData, onError } from "./utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
+import EntryFieldLocationField from "./entryFieldLocation/field";
+import EntryFieldLocationFrame from "./entryFieldLocation/frame";
+import EntryFieldLocationEntry from "./entryFieldLocation/entry";
 
 const emitter = new EventEmitter();
 
@@ -55,6 +60,7 @@ class Extension {
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
+        EntryFieldLocation: IEntryFieldLocation | null;
     };
 
     constructor(
@@ -65,6 +71,7 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
+            | IEntryFieldLocationInitData
     ) {
         const initializationData = initData;
 
@@ -125,6 +132,7 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
+            EntryFieldLocation: null,
         };
 
         switch (initializationData.data.type) {
@@ -188,6 +196,28 @@ class Extension {
                 import("./RTE").then(({ rtePluginInitializer }) => {
                     this.location.RTEPlugin = rtePluginInitializer;
                 });
+                break;
+            }
+
+            case "ENTRY_FIELD_LOCATION": {
+                // TODO: uncomment this line once the UI has the changes
+                // initializationData.data.self = true;
+                this.location.EntryFieldLocation = {
+                    entry: new EntryFieldLocationEntry(
+                        initializationData as IEntryFieldLocationInitData,
+                        postRobot,
+                        emitter
+                    ),
+                    stack: new Stack(initializationData.data.stack, postRobot, {
+                        currentBranch: initializationData.data.currentBranch,
+                    }),
+                    field: new EntryFieldLocationField(
+                        initializationData as IFieldInitData,
+                        postRobot,
+                        emitter
+                    ),
+                    frame: new EntryFieldLocationFrame(postRobot, emitter),
+                };
                 break;
             }
 
