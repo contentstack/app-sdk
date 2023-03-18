@@ -12,6 +12,9 @@ export declare interface ISidebarWidget {
 export declare interface IRTE {
     [key: string]: any;
 }
+export declare interface IEntryFieldLocation {
+    [key: string]: any;
+}
 export declare interface IAppConfigWidget {
     installation: {
         setInstallationData: (installationData: IInstallationData) => Promise<AnyObject>;
@@ -63,6 +66,7 @@ export declare interface ISidebarInitData {
         entry: ICurrentEntry;
         locale: string;
         config?: AnyObject;
+        changedData: ICurrentEntry;
         type: "WIDGET";
     };
 }
@@ -77,6 +81,7 @@ export declare interface IFieldInitData {
         value: any;
         field_config: IFieldConfig;
         config?: AnyObject;
+        changedData: ICurrentEntry;
         self: boolean;
         type: "FIELD";
     };
@@ -103,6 +108,20 @@ export declare interface IAssetSidebarInitData {
         config: {
             [key: string]: any;
         };
+    };
+}
+export declare interface IEntryFieldLocationInitData {
+    data: ICommonInitData & {
+        type: "ENTRY_FIELD_LOCATION";
+        config?: Record<string, any>;
+        content_type: ICurrentContentType;
+        entry: ICurrentEntry;
+        locale: string;
+        uid: string;
+        schema: ISchema;
+        value: any;
+        self: boolean;
+        changedData: ICurrentEntry;
     };
 }
 export declare interface setAssetDto {
@@ -155,6 +174,10 @@ export declare interface IInitializationData {
     APP_CONFIG_WIDGET: IAppConfigInitData;
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
-export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET";
+export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET" | "ENTRY_FIELD_LOCATION";
+export declare interface IManagementTokenDetails {
+    uid: string;
+    name: string;
+}
 export {};
 //# sourceMappingURL=types.d.ts.map
