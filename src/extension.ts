@@ -200,8 +200,7 @@ class Extension {
             }
 
             case "ENTRY_FIELD_LOCATION": {
-                // TODO: uncomment this line once the UI has the changes
-                // initializationData.data.self = true;
+                initializationData.data.self = true;
                 this.location.EntryFieldLocation = {
                     entry: new EntryFieldLocationEntry(
                         initializationData as IEntryFieldLocationInitData,
