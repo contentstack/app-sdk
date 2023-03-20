@@ -258,7 +258,10 @@ class Extension {
 
                 if (event.data.name === "entryChange") {
                     emitter.emitEvent("entryChange", [
-                        { data: event.data.data },
+                        {
+                            data: event.data.data,
+                            resolvedData: event.data.otherData.resolvedData,
+                        },
                     ]);
                 }
 
