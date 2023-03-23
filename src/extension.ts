@@ -316,6 +316,10 @@ class Extension {
         }
     }
 
+    pulse = (eventName: string, metadata: { [key: string]: any }) => {
+      this.postRobot.sendToParent("analytics", { eventName, metadata });
+    };
+
     getConfig = (): Promise<{ [key: string]: any }> => {
         if (!this.installationUID) {
             return Promise.resolve(this.config);
