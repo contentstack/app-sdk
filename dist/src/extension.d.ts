@@ -30,6 +30,9 @@ declare class Extension {
         EntryFieldLocation: IEntryFieldLocation | null;
     };
     constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData | IEntryFieldLocationInitData);
+    pulse: (eventName: string, metadata: {
+        [key: string]: any;
+    }) => void;
     getConfig: () => Promise<{
         [key: string]: any;
     }>;
