@@ -21,6 +21,10 @@ export declare interface IEntryFieldLocation {
     [key: string]: any;
 }
 
+export declare interface IFullPageLocation {
+    [key: string]: any;
+}
+
 export declare interface IAppConfigWidget {
     installation: {
         setInstallationData: (
@@ -106,6 +110,13 @@ export declare interface IFieldInitData {
         changedData: ICurrentEntry;
         self: boolean;
         type: "FIELD";
+    };
+}
+
+export declare interface IFullPageLocationInitData {
+    data: ICommonInitData & {
+        type: "FULL_PAGE";
+        config?: AnyObject;
     };
 }
 
@@ -211,6 +222,7 @@ export declare type ILocation =
     | "WIDGET"
     | "APP_CONFIG_WIDGET"
     | "ASSET_SIDEBAR_WIDGET"
+    | "FULL_PAGE"
     | "ENTRY_FIELD_LOCATION";
 
 export declare interface IManagementTokenDetails {

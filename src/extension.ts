@@ -22,6 +22,8 @@ import {
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    IFullPageLocationInitData,
+    IFullPageLocation,
 } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { onData, onError } from "./utils";
@@ -61,6 +63,7 @@ class Extension {
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
         EntryFieldLocation: IEntryFieldLocation | null;
+        FullPage: IFullPageLocation | null;
     };
 
     constructor(
@@ -71,6 +74,7 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
+            | IFullPageLocationInitData
             | IEntryFieldLocationInitData
     ) {
         const initializationData = initData;
@@ -132,8 +136,13 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
+            FullPage: null,
             EntryFieldLocation: null,
         };
+
+        const stack = new Stack(initializationData.data.stack, postRobot, {
+            currentBranch: initializationData.data.currentBranch,
+        });
 
         switch (initializationData.data.type) {
             case "DASHBOARD": {
@@ -217,6 +226,13 @@ class Extension {
                         emitter
                     ),
                     frame: new EntryFieldLocationFrame(postRobot, emitter),
+                };
+                break;
+            }
+
+            case "FULL_PAGE": {
+                this.location.FullPage = {
+                    stack: stack,
                 };
                 break;
             }
