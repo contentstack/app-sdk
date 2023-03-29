@@ -1,12 +1,12 @@
 import Entry from "../entry";
-import { IEntryFieldLocationInitData } from "../types";
+import { IFieldModifierLocationInitData } from "../types";
 import { IGetTagsOptions } from "../types/entry.types";
 import { errorMessage } from "../utils/errorMessages";
 import Field from "./field";
 
-class EntryFieldLocationEntry extends Entry {
+class FieldModifierLocationEntry extends Entry {
     constructor(
-        initializationData: IEntryFieldLocationInitData,
+        initializationData: IFieldModifierLocationInitData,
         connection: any,
         emitter: EventEmitter
     ) {
@@ -71,4 +71,4 @@ class EntryFieldLocationEntry extends Entry {
     }
 }
 
-export default EntryFieldLocationEntry;
+export default FieldModifierLocationEntry;
