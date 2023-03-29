@@ -1,4 +1,4 @@
-import Field from "../../src/entryFieldLocation/field";
+import Field from "../../src/fieldModifierLocation/field";
 import testData from "../data/testData.json";
 import fileFieldData from "../data/fileField.json";
 import helpers from "../helpers";
