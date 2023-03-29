@@ -14,8 +14,8 @@ import {
     IDashboardInitData,
     IDashboardWidget,
     IFieldInitData,
-    IEntryFieldLocation,
-    IEntryFieldLocationInitData,
+    IFieldModifierLocation,
+    IFieldModifierLocationInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
@@ -28,9 +28,9 @@ import { onData, onError } from "./utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
-import EntryFieldLocationField from "./entryFieldLocation/field";
-import EntryFieldLocationFrame from "./entryFieldLocation/frame";
-import EntryFieldLocationEntry from "./entryFieldLocation/entry";
+import FieldModifierLocationField from "./fieldModifierLocation/field";
+import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
+import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
 
 const emitter = new EventEmitter();
 
@@ -60,7 +60,7 @@ class Extension {
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
-        EntryFieldLocation: IEntryFieldLocation | null;
+        FieldModifierLocation: IFieldModifierLocation | null;
     };
 
     constructor(
@@ -71,7 +71,7 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
-            | IEntryFieldLocationInitData
+            | IFieldModifierLocationInitData
     ) {
         const initializationData = initData;
 
@@ -132,7 +132,7 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
-            EntryFieldLocation: null,
+            FieldModifierLocation: null,
         };
 
         switch (initializationData.data.type) {
@@ -199,23 +199,23 @@ class Extension {
                 break;
             }
 
-            case "ENTRY_FIELD_LOCATION": {
+            case "FIELD_MODIFIER_LOCATION": {
                 initializationData.data.self = true;
-                this.location.EntryFieldLocation = {
-                    entry: new EntryFieldLocationEntry(
-                        initializationData as IEntryFieldLocationInitData,
+                this.location.FieldModifierLocation = {
+                    entry: new FieldModifierLocationEntry(
+                        initializationData as IFieldModifierLocationInitData,
                         postRobot,
                         emitter
                     ),
                     stack: new Stack(initializationData.data.stack, postRobot, {
                         currentBranch: initializationData.data.currentBranch,
                     }),
-                    field: new EntryFieldLocationField(
+                    field: new FieldModifierLocationField(
                         initializationData as IFieldInitData,
                         postRobot,
                         emitter
                     ),
-                    frame: new EntryFieldLocationFrame(postRobot, emitter),
+                    frame: new FieldModifierLocationFrame(postRobot, emitter),
                 };
                 break;
             }
