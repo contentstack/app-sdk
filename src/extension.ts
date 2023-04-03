@@ -230,7 +230,7 @@ class Extension {
                 break;
             }
 
-            case "FULL_PAGE": {
+            case "FULL_PAGE_LOCATION": {
                 this.location.FullPage = {
                     stack: stack,
                 };
