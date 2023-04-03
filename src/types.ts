@@ -115,7 +115,7 @@ export declare interface IFieldInitData {
 
 export declare interface IFullPageLocationInitData {
     data: ICommonInitData & {
-        type: "FULL_PAGE";
+        type: "FULL_PAGE_LOCATION";
         config?: AnyObject;
     };
 }
@@ -222,7 +222,7 @@ export declare type ILocation =
     | "WIDGET"
     | "APP_CONFIG_WIDGET"
     | "ASSET_SIDEBAR_WIDGET"
-    | "FULL_PAGE"
+    | "FULL_PAGE_LOCATION"
     | "ENTRY_FIELD_LOCATION";
 
 export declare interface IManagementTokenDetails {
