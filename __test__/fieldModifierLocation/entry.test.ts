@@ -1,18 +1,18 @@
-import EntryFieldLocationEntry from "../../src/entryFieldLocation/entry";
+import FieldModifierLocationEntry from "../../src/fieldModifierLocation/entry";
 import testData from "../data/testData.json";
-import { IEntryFieldLocationInitData } from "../../src/types";
+import { IFieldModifierLocationInitData } from "../../src/types";
 import { errorMessage } from "../../src/utils/errorMessages";
 
-describe("EntryFieldLocationEntry", () => {
-    let entryInstance: EntryFieldLocationEntry;
+describe("FieldModifierLocationEntry", () => {
+    let entryInstance: FieldModifierLocationEntry;
     let sendToParent: any;
     let connection: { sendToParent: (...props: any[]) => any };
 
     let emitter: any;
-    function getEntryInitialData(): IEntryFieldLocationInitData {
+    function getEntryInitialData(): IFieldModifierLocationInitData {
         return {
             data: {
-                type: "ENTRY_FIELD_LOCATION",
+                type: "FIELD_MODIFIER_LOCATION",
                 config: {},
                 content_type: {},
                 entry: {
@@ -54,7 +54,8 @@ describe("EntryFieldLocationEntry", () => {
             },
         };
     }
-    const entryIntialData: IEntryFieldLocationInitData = getEntryInitialData();
+    const entryIntialData: IFieldModifierLocationInitData =
+        getEntryInitialData();
 
     beforeEach(() => {
         sendToParent = () => {};
@@ -73,7 +74,7 @@ describe("EntryFieldLocationEntry", () => {
         };
 
         jest.spyOn(emitter, "on");
-        entryInstance = new EntryFieldLocationEntry(
+        entryInstance = new FieldModifierLocationEntry(
             entryIntialData,
             connection,
             emitter

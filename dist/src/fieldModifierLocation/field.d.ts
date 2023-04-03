@@ -1,7 +1,7 @@
 import EventEmitter from "wolfy87-eventemitter";
-import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
+import { IFieldInitData, IFieldModifierLocationInitData } from "../types";
 /** Class representing a field from Contentstack UI. Only available for Custom Field extension */
-declare class Field {
+declare class FieldModifierLocationField {
     /**
      * @hideconstructor
      */
@@ -25,7 +25,7 @@ declare class Field {
      * @param {Object|string|number} data Data to be set on the field
      * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
      */
-    setData(data: any): Promise<Field>;
+    setData(data: any): Promise<FieldModifierLocationField>;
     /**
      * Gets the data of the current field
      * @param  {Object} options Options object for get Data method.
@@ -33,20 +33,8 @@ declare class Field {
      * @return {Object|string|number} Returns the field data.
      */
     getData({ resolved }?: {
-        resolved?: boolean | undefined;
-    }): {
-        [key: string]: any;
-    };
-    /**
-     * Sets the focus for a field when an extension is being used. This method shows user presence and highlights the extension field that the user is currently accessing in Contentstack UI.
-     * @return {Object} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
-     */
-    setFocus(): any;
-    /**
-     * This function is called when another extension programmatically changes data of this field using field.setData() function, only available for extension field, only support extensions of data type text, number, boolean or date.
-     * @param {function} callback The function to be called when an entry is published.
-     */
-    onChange?(callback: (data: any) => any): void;
+        resolved?: boolean;
+    }): any;
 }
-export default Field;
+export default FieldModifierLocationField;
 //# sourceMappingURL=field.d.ts.map
