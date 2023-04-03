@@ -22,6 +22,10 @@ import {
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    IFullPageLocationInitData,
+    IFullPageLocation,
+    IEntryFieldLocation,
+    IEntryFieldLocationInitData,
 } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { onData, onError } from "./utils";
@@ -60,6 +64,8 @@ class Extension {
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
+        EntryFieldLocation: IEntryFieldLocation | null;
+        FullPage: IFullPageLocation | null;
         FieldModifierLocation: IFieldModifierLocation | null;
     };
 
@@ -71,6 +77,8 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
+            | IFullPageLocationInitData
+            | IEntryFieldLocationInitData
             | IFieldModifierLocationInitData
     ) {
         const initializationData = initData;
@@ -132,8 +140,14 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
+            FullPage: null,
+            EntryFieldLocation: null,
             FieldModifierLocation: null,
         };
+
+        const stack = new Stack(initializationData.data.stack, postRobot, {
+            currentBranch: initializationData.data.currentBranch,
+        });
 
         switch (initializationData.data.type) {
             case "DASHBOARD": {
@@ -199,7 +213,8 @@ class Extension {
                 break;
             }
 
-            case "FIELD_MODIFIER_LOCATION": {
+            case "FIELD_MODIFIER_LOCATION":
+            case "ENTRY_FIELD_LOCATION": {
                 initializationData.data.self = true;
                 this.location.FieldModifierLocation = {
                     entry: new FieldModifierLocationEntry(
@@ -216,6 +231,13 @@ class Extension {
                         emitter
                     ),
                     frame: new FieldModifierLocationFrame(postRobot, emitter),
+                };
+                break;
+            }
+
+            case "FULL_PAGE_LOCATION": {
+                this.location.FullPage = {
+                    stack: stack,
                 };
                 break;
             }
