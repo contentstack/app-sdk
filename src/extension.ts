@@ -14,23 +14,27 @@ import {
     IDashboardInitData,
     IDashboardWidget,
     IFieldInitData,
-    IEntryFieldLocation,
-    IEntryFieldLocationInitData,
+    IFieldModifierLocation,
+    IFieldModifierLocationInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    IFullPageLocationInitData,
+    IFullPageLocation,
+    IEntryFieldLocation,
+    IEntryFieldLocationInitData,
 } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { onData, onError } from "./utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
-import EntryFieldLocationField from "./entryFieldLocation/field";
-import EntryFieldLocationFrame from "./entryFieldLocation/frame";
-import EntryFieldLocationEntry from "./entryFieldLocation/entry";
+import FieldModifierLocationField from "./fieldModifierLocation/field";
+import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
+import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
 
 const emitter = new EventEmitter();
 
@@ -61,6 +65,8 @@ class Extension {
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
         EntryFieldLocation: IEntryFieldLocation | null;
+        FullPage: IFullPageLocation | null;
+        FieldModifierLocation: IFieldModifierLocation | null;
     };
 
     constructor(
@@ -71,7 +77,9 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
+            | IFullPageLocationInitData
             | IEntryFieldLocationInitData
+            | IFieldModifierLocationInitData
     ) {
         const initializationData = initData;
 
@@ -132,8 +140,14 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
+            FullPage: null,
             EntryFieldLocation: null,
+            FieldModifierLocation: null,
         };
+
+        const stack = new Stack(initializationData.data.stack, postRobot, {
+            currentBranch: initializationData.data.currentBranch,
+        });
 
         switch (initializationData.data.type) {
             case "DASHBOARD": {
@@ -199,24 +213,31 @@ class Extension {
                 break;
             }
 
+            case "FIELD_MODIFIER_LOCATION":
             case "ENTRY_FIELD_LOCATION": {
-                // TODO: uncomment this line once the UI has the changes
-                // initializationData.data.self = true;
-                this.location.EntryFieldLocation = {
-                    entry: new EntryFieldLocationEntry(
-                        initializationData as IEntryFieldLocationInitData,
+                initializationData.data.self = true;
+                this.location.FieldModifierLocation = {
+                    entry: new FieldModifierLocationEntry(
+                        initializationData as IFieldModifierLocationInitData,
                         postRobot,
                         emitter
                     ),
                     stack: new Stack(initializationData.data.stack, postRobot, {
                         currentBranch: initializationData.data.currentBranch,
                     }),
-                    field: new EntryFieldLocationField(
+                    field: new FieldModifierLocationField(
                         initializationData as IFieldInitData,
                         postRobot,
                         emitter
                     ),
-                    frame: new EntryFieldLocationFrame(postRobot, emitter),
+                    frame: new FieldModifierLocationFrame(postRobot, emitter),
+                };
+                break;
+            }
+
+            case "FULL_PAGE_LOCATION": {
+                this.location.FullPage = {
+                    stack: stack,
                 };
                 break;
             }
@@ -258,7 +279,10 @@ class Extension {
 
                 if (event.data.name === "entryChange") {
                     emitter.emitEvent("entryChange", [
-                        { data: event.data.data },
+                        {
+                            data: event.data.data,
+                            resolvedData: event.data.otherData.resolvedData,
+                        },
                     ]);
                 }
 

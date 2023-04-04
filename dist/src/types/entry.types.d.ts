@@ -23,4 +23,13 @@ export declare interface IGetTagsOptions {
      */
     useUnsavedSchema?: boolean;
 }
+export declare type IOnEntryChangeCallback = (
+/**
+ * The new entry object.
+ */
+unresolvedEntry: Record<string, any>, 
+/**
+ * The new entry object with all the file fields resolved.
+ */
+resolvedEntry: Record<string, any>) => void;
 //# sourceMappingURL=entry.types.d.ts.map
