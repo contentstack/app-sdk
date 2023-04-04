@@ -1,9 +1,9 @@
-import EntryFieldLocationFrame from "../../src/entryFieldLocation/frame";
+import FieldModifierLocationFrame from "../../src/fieldModifierLocation/frame";
 import { errorMessage } from "../../src/utils/errorMessages";
 import testData from "../data/testData.json";
 
-describe("EntryFieldLocationFrame", () => {
-    let frameInstance: EntryFieldLocationFrame;
+describe("FieldModifierLocationFrame", () => {
+    let frameInstance: FieldModifierLocationFrame;
     let sendToParent: any;
     let connection: { sendToParent: (...props: any[]) => any };
 
@@ -26,7 +26,7 @@ describe("EntryFieldLocationFrame", () => {
         };
 
         jest.spyOn(emitter, "on");
-        frameInstance = new EntryFieldLocationFrame(connection, emitter);
+        frameInstance = new FieldModifierLocationFrame(connection, emitter);
     });
 
     afterEach(() => {
@@ -108,7 +108,7 @@ describe("EntryFieldLocationFrame", () => {
             //@ts-ignore
             global.MutationObserver = mutationObserverMock;
 
-            frameInstance = new EntryFieldLocationFrame(connection, emitter);
+            frameInstance = new FieldModifierLocationFrame(connection, emitter);
 
             const [observerInstance] = <void[] | [{ trigger: () => {} }]>(
                 mutationObserverMock.mock.instances
@@ -150,7 +150,7 @@ describe("EntryFieldLocationFrame", () => {
             //@ts-ignore
             global.MutationObserver = mutationObserverMock;
 
-            frameInstance = new EntryFieldLocationFrame(connection, emitter);
+            frameInstance = new FieldModifierLocationFrame(connection, emitter);
 
             frameInstance.disableAutoResizing();
 
