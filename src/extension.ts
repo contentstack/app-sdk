@@ -135,6 +135,11 @@ class Extension {
             EntryFieldLocation: null,
         };
 
+        window["postRobot"] = postRobot;
+        if (!Object.prototype.hasOwnProperty.call(window, "iframeRef")) {
+            window["iframeRef"] = document.body;
+        }
+
         switch (initializationData.data.type) {
             case "DASHBOARD": {
                 this.location.DashboardWidget = {
