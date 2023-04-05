@@ -31,7 +31,7 @@ const initData: IAppConfigInitData = {
 };
 
 describe("Main extension", () => {
-    describe("Properties in window object", () => {
+    describe("Properties in the window object", () => {
         it("should have postRobot property", () => {
             expect(window["postRobot"]).toBeUndefined();
             new Extension(initData);
@@ -43,13 +43,13 @@ describe("Main extension", () => {
             );
         });
 
-        it("should add body to iframeRef if user has not provided one", () => {
+        it("should add body to iframeRef if the user has not provided one", () => {
             new Extension(initData);
             expect(window["iframeRef"]).toBeDefined();
             expect(window["iframeRef"].tagName).toBe("BODY");
         });
 
-        it("should not add body to iframeRef if user has provided one", () => {
+        it("should not add body to iframeRef if the user has provided one", () => {
             const div = document.createElement("div");
             const innerText = "Hello world";
             div.innerText = innerText;
