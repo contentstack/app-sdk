@@ -1,7 +1,7 @@
 export declare const ERROR_MESSAGES: Readonly<{
     configPage: {
-        setValidationState: {
-            isValidatedTypeBoolean: string;
+        setValidity: {
+            isValidTypeBoolean: string;
             messageTypeString: string;
         };
     };
