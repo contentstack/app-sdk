@@ -32,6 +32,9 @@ declare class Extension {
         FieldModifierLocation: IFieldModifierLocation | null;
     };
     constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData | IFullPageLocationInitData | IEntryFieldLocationInitData | IFieldModifierLocationInitData);
+    pulse: (eventName: string, metadata: {
+        [key: string]: any;
+    }) => void;
     getConfig: () => Promise<{
         [key: string]: any;
     }>;
