@@ -45,54 +45,43 @@ describe("app config", () => {
         );
     });
 
-    describe("setValidationState", () => {
-        it("should throw error if isValidated is not a boolean", async () => {
-            // @ts-ignore
-            await expect(appConfig.setValidationState("true")).rejects.toThrow(
-                ERROR_MESSAGES.configPage.setValidationState
-                    .isValidatedTypeBoolean
+    describe("setValidity", () => {
+        it("should throw error if isValid is not a boolean", async () => {
+            await expect(appConfig.setValidity("true" as any)).rejects.toThrow(
+                ERROR_MESSAGES.configPage.setValidity.isValidTypeBoolean
             );
         });
 
         it("should throw error if message is not a string", async () => {
             await expect(
-                // @ts-ignore
-                appConfig.setValidationState(true, 123)
+                appConfig.setValidity(true, { message: 123 as any })
             ).rejects.toThrow(
-                ERROR_MESSAGES.configPage.setValidationState.messageTypeString
+                ERROR_MESSAGES.configPage.setValidity.messageTypeString
             );
         });
 
-        it("should send undefined message if not provided", async () => {
-            await appConfig.setValidationState(true);
+        it("should work when options parameter is not provided", async () => {
+            await appConfig.setValidity(true);
 
             expect(mockConnection.sendToParent).toHaveBeenLastCalledWith(
-                "setValidationState",
-                {
-                    isValidated: true,
-                }
+                "setValidity",
+                { isValid: true }
             );
         });
 
         it("should send data to parent", async () => {
-            await appConfig.setValidationState(true, "message");
+            await appConfig.setValidity(true);
 
             expect(mockConnection.sendToParent).toHaveBeenLastCalledWith(
-                "setValidationState",
-                {
-                    isValidated: true,
-                    message: "message",
-                }
+                "setValidity",
+                { isValid: true }
             );
 
-            await appConfig.setValidationState(false, "message");
+            await appConfig.setValidity(false, { message: "message" });
 
             expect(mockConnection.sendToParent).toHaveBeenLastCalledWith(
-                "setValidationState",
-                {
-                    isValidated: false,
-                    message: "message",
-                }
+                "setValidity",
+                { isValid: false, options: { message: "message" } }
             );
         });
     });

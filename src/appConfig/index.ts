@@ -1,5 +1,5 @@
 import Stack from "../stack";
-import { IInstallationData } from "../types";
+import { IInstallationData, ValidationOptions } from "../types";
 import generateErrorMessages, { ERROR_MESSAGES } from "../utils/errorMessages";
 import { onData, onError } from "../utils/utils";
 
@@ -27,7 +27,7 @@ export class AppConfig {
         this._connection = connection;
         this._emitter = emitter;
 
-        this.setValidationState = this.setValidationState.bind(this);
+        this.setValidity = this.setValidity.bind(this);
         this._additionalData = additionalData;
     }
 
@@ -47,40 +47,42 @@ export class AppConfig {
     };
 
     getInstallationData = (): Promise<IInstallationData> => {
-        return this._connection.sendToParent('getInstallationData').then(onData).catch(onError);
-    }
+        return this._connection
+            .sendToParent("getInstallationData")
+            .then(onData)
+            .catch(onError);
+    };
 
     /**
-     *  Set the validation state of the app. If the validation is false, the Contentstack will
-     * not allow to save the configuration. The message will be displayed if provided.
-     * @param isValidated set the validation state of the app
-     * @param message the message to be displayed in the UI
-     * @returns  returns a promise with the data sent from the parent
+     * Set the validation state of the app. If the validation is false, the Contentstack App Config
+     * will not allow to save the configuration. The message will be displayed if provided.
+     * @param isValid set the validation state of the app
+     * @param options additional options to be sent to the parent
+     * @returns returns a promise with the data sent from the parent
      */
-    async setValidationState(isValidated: boolean, message?: string): Promise<Record<string, any>> {
-
-        if (typeof isValidated !== "boolean") {
+    async setValidity(
+        isValid: boolean,
+        options?: ValidationOptions
+    ): Promise<Record<string, any>> {
+        if (typeof isValid !== "boolean") {
             throw new TypeError(
                 generateErrorMessages(
-                    ERROR_MESSAGES.configPage.setValidationState
-                        .isValidatedTypeBoolean
+                    ERROR_MESSAGES.configPage.setValidity.isValidTypeBoolean
                 )
             );
         }
 
-        if (typeof message !== "undefined" && typeof message !== "string") {
+        if (options?.message && typeof options.message !== "string") {
             throw new TypeError(
                 generateErrorMessages(
-                    ERROR_MESSAGES.configPage.setValidationState
-                        .messageTypeString
+                    ERROR_MESSAGES.configPage.setValidity.messageTypeString
                 )
             );
         }
 
-        return this._connection.sendToParent('setValidationState', {
-            isValidated: isValidated,
-            message: message
-
-        }).then(onData).catch(onError);
+        return this._connection
+            .sendToParent("setValidity", { isValid, options })
+            .then(onData)
+            .catch(onError);
     }
 }
