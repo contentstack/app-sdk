@@ -1,7 +1,7 @@
 export const ERROR_MESSAGES = Object.freeze({
     configPage: {
-        setValidationState: {
-            isValidatedTypeBoolean: "isValidated should be a boolean",
+        setValidity: {
+            isValidTypeBoolean: "isValid should be a boolean",
             messageTypeString: "message should be a string",
         },
     },
