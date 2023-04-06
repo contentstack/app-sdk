@@ -14,18 +14,27 @@ import {
     IDashboardInitData,
     IDashboardWidget,
     IFieldInitData,
+    IFieldModifierLocation,
+    IFieldModifierLocationInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    IFullPageLocationInitData,
+    IFullPageLocation,
+    IEntryFieldLocation,
+    IEntryFieldLocationInitData,
 } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { onData, onError } from "./utils/utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
+import FieldModifierLocationField from "./fieldModifierLocation/field";
+import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
+import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
 
 const emitter = new EventEmitter();
 
@@ -55,6 +64,9 @@ class Extension {
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
+        EntryFieldLocation: IEntryFieldLocation | null;
+        FullPage: IFullPageLocation | null;
+        FieldModifierLocation: IFieldModifierLocation | null;
     };
 
     constructor(
@@ -65,6 +77,9 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
+            | IFullPageLocationInitData
+            | IEntryFieldLocationInitData
+            | IFieldModifierLocationInitData
     ) {
         const initializationData = initData;
 
@@ -125,7 +140,14 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
+            FullPage: null,
+            EntryFieldLocation: null,
+            FieldModifierLocation: null,
         };
+
+        const stack = new Stack(initializationData.data.stack, postRobot, {
+            currentBranch: initializationData.data.currentBranch,
+        });
 
         switch (initializationData.data.type) {
             case "DASHBOARD": {
@@ -191,6 +213,35 @@ class Extension {
                 break;
             }
 
+            case "FIELD_MODIFIER_LOCATION":
+            case "ENTRY_FIELD_LOCATION": {
+                initializationData.data.self = true;
+                this.location.FieldModifierLocation = {
+                    entry: new FieldModifierLocationEntry(
+                        initializationData as IFieldModifierLocationInitData,
+                        postRobot,
+                        emitter
+                    ),
+                    stack: new Stack(initializationData.data.stack, postRobot, {
+                        currentBranch: initializationData.data.currentBranch,
+                    }),
+                    field: new FieldModifierLocationField(
+                        initializationData as IFieldInitData,
+                        postRobot,
+                        emitter
+                    ),
+                    frame: new FieldModifierLocationFrame(postRobot, emitter),
+                };
+                break;
+            }
+
+            case "FULL_PAGE_LOCATION": {
+                this.location.FullPage = {
+                    stack: stack,
+                };
+                break;
+            }
+
             case "FIELD":
             default: {
                 initializationData.data.self = true;
@@ -228,7 +279,10 @@ class Extension {
 
                 if (event.data.name === "entryChange") {
                     emitter.emitEvent("entryChange", [
-                        { data: event.data.data },
+                        {
+                            data: event.data.data,
+                            resolvedData: event.data.otherData.resolvedData,
+                        },
                     ]);
                 }
 
@@ -285,6 +339,10 @@ class Extension {
             console.error("extension Event", err);
         }
     }
+
+    pulse = (eventName: string, metadata: { [key: string]: any }) => {
+      this.postRobot.sendToParent("analytics", { eventName, metadata });
+    };
 
     getConfig = (): Promise<{ [key: string]: any }> => {
         if (!this.installationUID) {
