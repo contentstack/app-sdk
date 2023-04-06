@@ -1,4 +1,5 @@
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
+import { IManagementTokenDetails } from '../types';
 /**
  * Class representing the current stack in Contentstack UI.
  */
@@ -23,6 +24,13 @@ declare class Stack {
      * @returns Stacks within current organization
      */
     getAllStacks({ orgUid, params }?: GetAllStacksOptions): Promise<StackDetail[]>;
+    /**
+     * Get the details of all the management tokens of the stack.
+     * Note: This API does not return the token value.
+     * @see {@link https://www.contentstack.com/docs/developers/apis/content-management-api/#get-all-management-tokens | Get all management tokens}
+     * @returns Details of all the management token of the stack
+     */
+    getManagementTokens(): Promise<IManagementTokenDetails[]>;
     /**
      * Gets the results of the search based on user query
      * @param queries Array of key value pair of query parameters

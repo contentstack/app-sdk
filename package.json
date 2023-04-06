@@ -1,6 +1,6 @@
 {
     "name": "@contentstack/app-sdk",
-    "version": "1.2.2",
+    "version": "1.4.0-beta.0",
     "types": "dist/src/index.d.ts",
     "description": "This SDK helps connect to the development server of the Contentstack and sync the data.",
     "main": "dist/index.js",
@@ -12,10 +12,10 @@
         "test:watch": "jest --watchAll",
         "test:coverage": "jest --coverage --coverageDirectory=\"coverage\"",
         "dev": "webpack --watch --mode development",
+        "lint": "eslint . --ext .ts --max-warnings=0",
         "docs": "typedoc --out doc --entryPointStrategy expand ./src",
         "prettier": "npx prettier src --check",
         "prettier:fix": "npx prettier src --write",
-        "lint": "eslint src",
         "lint:fix": "eslint --fix",
         "prepare": "npm run build && husky install",
         "format": "npm run prettier:fix && npm run lint:fix"
@@ -46,6 +46,7 @@
         "chai": "^4.3.4",
         "css-loader": "^5.2.2",
         "eslint": "^8.7.0",
+        "eslint-plugin-only-warn": "^1.1.0",
         "husky": "^8.0.0",
         "jest": "^27.3.1",
         "lint-staged": "^13.1.0",
