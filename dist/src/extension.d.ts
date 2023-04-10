@@ -4,6 +4,7 @@ import Metadata from "./metadata";
 import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IEntryFieldLocation, IEntryFieldLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
 import AssetSidebarWidget from "./AssetSidebarWidget";
+import Modal from "./modal";
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -19,6 +20,7 @@ declare class Extension {
     store: Store;
     metadata: Metadata;
     locationUID: string;
+    modal: Modal;
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
