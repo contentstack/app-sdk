@@ -1,6 +1,6 @@
 import Asset from './api/asset/index';
 import ContentType from './api/content-type/index';
-import { onData, onError } from "../utils";
+import { onData, onError } from "../utils/utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 import { IManagementTokenDetails } from '../types';
 

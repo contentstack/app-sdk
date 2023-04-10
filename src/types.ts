@@ -246,6 +246,10 @@ export declare type ILocation =
     | "ENTRY_FIELD_LOCATION"
     | "FIELD_MODIFIER_LOCATION";
 
+export declare interface ValidationOptions {
+    message?: string;
+}
+
 export declare interface IManagementTokenDetails {
     uid: string;
     name: string;

@@ -201,6 +201,9 @@ export declare interface IInitializationData {
     ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
 }
 export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET" | "FULL_PAGE_LOCATION" | "ENTRY_FIELD_LOCATION" | "FIELD_MODIFIER_LOCATION";
+export declare interface ValidationOptions {
+    message?: string;
+}
 export declare interface IManagementTokenDetails {
     uid: string;
     name: string;
