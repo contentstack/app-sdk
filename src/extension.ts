@@ -31,6 +31,7 @@ import { AnyObject } from "./types/common.types";
 import EntryFieldLocationField from "./entryFieldLocation/field";
 import EntryFieldLocationFrame from "./entryFieldLocation/frame";
 import EntryFieldLocationEntry from "./entryFieldLocation/entry";
+import Modal from "./modal";
 
 const emitter = new EventEmitter();
 
@@ -51,6 +52,7 @@ class Extension {
     store: Store;
     metadata: Metadata;
     locationUID: string;
+    modal: Modal;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -136,9 +138,8 @@ class Extension {
         };
 
         window["postRobot"] = postRobot;
-        if (!Object.prototype.hasOwnProperty.call(window, "iframeRef")) {
-            window["iframeRef"] = document.body;
-        }
+
+        this.modal = new Modal();
 
         switch (initializationData.data.type) {
             case "DASHBOARD": {
