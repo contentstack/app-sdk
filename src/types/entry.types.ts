@@ -20,7 +20,6 @@ export declare interface IEntryOptions {
     _internalFlags?: IEntryInternalFlags;
 }
 
-
 export declare interface IGetTagsOptions {
     /**
      * By default, getFields will return a field if has been saved.
@@ -28,3 +27,14 @@ export declare interface IGetTagsOptions {
      */
     useUnsavedSchema?: boolean;
 }
+
+export declare type IOnEntryChangeCallback = (
+    /**
+     * The new entry object.
+     */
+    unresolvedEntry: Record<string, any>,
+    /**
+     * The new entry object with all the file fields resolved.
+     */
+    resolvedEntry: Record<string, any>
+) => void;

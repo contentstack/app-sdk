@@ -17,7 +17,16 @@ export declare interface IRTE {
     [key: string]: any;
 }
 
+export declare interface IFieldModifierLocation {
+    [key: string]: any;
+}
+
 export declare interface IEntryFieldLocation {
+    [key: string]: any;
+}
+
+
+export declare interface IFullPageLocation {
     [key: string]: any;
 }
 
@@ -109,6 +118,13 @@ export declare interface IFieldInitData {
     };
 }
 
+export declare interface IFullPageLocationInitData {
+    data: ICommonInitData & {
+        type: "FULL_PAGE_LOCATION";
+        config?: AnyObject;
+    };
+}
+
 export declare interface IRTEInitData {
     data: ICommonInitData & {
         type: "RTE";
@@ -132,6 +148,21 @@ export declare interface IAssetSidebarInitData {
         type: "ASSET_SIDEBAR_WIDGET";
         currentAsset: ICurrentAsset;
         config: { [key: string]: any };
+    };
+}
+
+export declare interface IFieldModifierLocationInitData {
+    data: ICommonInitData & {
+        type: "FIELD_MODIFIER_LOCATION";
+        config?: Record<string, any>;
+        content_type: ICurrentContentType;
+        entry: ICurrentEntry;
+        locale: string;
+        uid: string;
+        schema: ISchema;
+        value: any;
+        self: boolean;
+        changedData: ICurrentEntry;
     };
 }
 
@@ -211,7 +242,9 @@ export declare type ILocation =
     | "WIDGET"
     | "APP_CONFIG_WIDGET"
     | "ASSET_SIDEBAR_WIDGET"
-    | "ENTRY_FIELD_LOCATION";
+    | "FULL_PAGE_LOCATION"
+    | "ENTRY_FIELD_LOCATION"
+    | "FIELD_MODIFIER_LOCATION";
 
 export declare interface IManagementTokenDetails {
     uid: string;

@@ -1,10 +1,10 @@
+import AssetSidebarWidget from "./AssetSidebarWidget";
+import { IRTEPluginInitializer } from "./RTE/types";
+import Metadata from "./metadata";
+import Modal from "./modal";
 import Stack from "./stack";
 import Store from "./store";
-import Metadata from "./metadata";
-import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IEntryFieldLocation, IEntryFieldLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
-import { IRTEPluginInitializer } from "./RTE/types";
-import AssetSidebarWidget from "./AssetSidebarWidget";
-import Modal from "./modal";
+import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IEntryFieldLocation, IEntryFieldLocationInitData, IFieldInitData, IFieldModifierLocation, IFieldModifierLocationInitData, IFullPageLocation, IFullPageLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -30,8 +30,13 @@ declare class Extension {
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
         EntryFieldLocation: IEntryFieldLocation | null;
+        FullPage: IFullPageLocation | null;
+        FieldModifierLocation: IFieldModifierLocation | null;
     };
-    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData | IEntryFieldLocationInitData);
+    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData | IFullPageLocationInitData | IEntryFieldLocationInitData | IFieldModifierLocationInitData);
+    pulse: (eventName: string, metadata: {
+        [key: string]: any;
+    }) => void;
     getConfig: () => Promise<{
         [key: string]: any;
     }>;
