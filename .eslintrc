@@ -12,6 +12,11 @@
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
     ],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+
     "rules": {
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/prefer-const": 0,

@@ -1,6 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
-import { errorMessage } from "../utils/errorMessages";
+import { ERROR_MESSAGES } from "../utils/errorMessages";
 
 /**
  * Class representing an iframe window from Contentstack UI. Not available for Custom Widgets.
@@ -64,7 +64,7 @@ class FieldModifierLocationFrame {
 
         if (height !== undefined && typeof height !== "number") {
             throw new Error(
-                errorMessage.entryField.frame.dimensionHeightShouldBeNumber
+                ERROR_MESSAGES.entryField.frame.dimensionHeightShouldBeNumber
             );
         }
 
@@ -75,7 +75,7 @@ class FieldModifierLocationFrame {
 
         if (width !== undefined && typeof width !== "number") {
             throw new Error(
-                errorMessage.entryField.frame.dimensionWidthShouldBeNumber
+                ERROR_MESSAGES.entryField.frame.dimensionWidthShouldBeNumber
             );
         }
 

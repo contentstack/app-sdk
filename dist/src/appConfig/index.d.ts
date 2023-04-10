@@ -1,5 +1,5 @@
 import Stack from "../stack";
-import { IInstallationData } from "../types";
+import { IInstallationData, ValidationOptions } from "../types";
 export declare interface AppConfigAdditionalData {
     currentBranch: string;
 }
@@ -21,5 +21,13 @@ export declare class AppConfig {
         [key: string]: any;
     }>;
     getInstallationData: () => Promise<IInstallationData>;
+    /**
+     * Set the validation state of the app. If the validation is false, the Contentstack App Config
+     * will not allow to save the configuration. The message will be displayed if provided.
+     * @param isValid set the validation state of the app
+     * @param options additional options to be sent to the parent
+     * @returns returns a promise with the data sent from the parent
+     */
+    setValidity(isValid: boolean, options?: ValidationOptions): Promise<Record<string, any>>;
 }
 //# sourceMappingURL=index.d.ts.map

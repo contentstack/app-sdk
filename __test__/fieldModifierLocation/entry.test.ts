@@ -1,7 +1,7 @@
 import FieldModifierLocationEntry from "../../src/fieldModifierLocation/entry";
 import testData from "../data/testData.json";
 import { IFieldModifierLocationInitData } from "../../src/types";
-import { errorMessage } from "../../src/utils/errorMessages";
+import generateErrorMessages, { ERROR_MESSAGES } from "../../src/utils/errorMessages";
 
 describe("FieldModifierLocationEntry", () => {
     let entryInstance: FieldModifierLocationEntry;
@@ -132,19 +132,19 @@ describe("FieldModifierLocationEntry", () => {
         it("should throw an error when tags are not defined", async () => {
             // @ts-ignore
             await expect(entryInstance.setTags()).rejects.toThrow(
-                errorMessage.entryField.entry.tagsShouldNotBeBlank
+                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldNotBeBlank)
             );
         });
 
         it("should throw an error if tags is not an array of strings", async () => {
             // @ts-ignore
             await expect(entryInstance.setTags(["tag3", 4])).rejects.toThrow(
-                errorMessage.entryField.entry.tagsShouldBeArrayOfStrings
+                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings)
             );
 
             // @ts-ignore
             await expect(entryInstance.setTags("tag3")).rejects.toThrow(
-                errorMessage.entryField.entry.tagsShouldBeArrayOfStrings
+                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings)
             );
         });
 
