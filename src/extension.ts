@@ -1,11 +1,18 @@
 import postRobot from "post-robot";
-import Field from "./field";
-import Window from "./window";
-import Stack from "./stack";
-import Entry from "./entry";
-import Store from "./store";
-import Metadata from "./metadata";
 import EventEmitter from "wolfy87-eventemitter";
+
+import AssetSidebarWidget from "./AssetSidebarWidget";
+import { IRTEPluginInitializer } from "./RTE/types";
+import { AppConfig } from "./appConfig";
+import Entry from "./entry";
+import Field from "./field";
+import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
+import FieldModifierLocationField from "./fieldModifierLocation/field";
+import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
+import Metadata from "./metadata";
+import Modal from "./modal";
+import Stack from "./stack";
+import Store from "./store";
 import {
     IAppConfigInitData,
     IAppConfigWidget,
@@ -13,9 +20,13 @@ import {
     ICustomField,
     IDashboardInitData,
     IDashboardWidget,
-    IFieldInitData,
     IEntryFieldLocation,
     IEntryFieldLocationInitData,
+    IFieldInitData,
+    IFieldModifierLocation,
+    IFieldModifierLocationInitData,
+    IFullPageLocation,
+    IFullPageLocationInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
@@ -23,15 +34,9 @@ import {
     ISidebarWidget,
     IUser,
 } from "./types";
-import { IRTEPluginInitializer } from "./RTE/types";
-import { onData, onError } from "./utils";
-import { AppConfig } from "./appConfig";
-import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
-import EntryFieldLocationField from "./entryFieldLocation/field";
-import EntryFieldLocationFrame from "./entryFieldLocation/frame";
-import EntryFieldLocationEntry from "./entryFieldLocation/entry";
-import Modal from "./modal";
+import { onData, onError } from "./utils";
+import Window from "./window";
 
 const emitter = new EventEmitter();
 
@@ -63,6 +68,8 @@ class Extension {
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
         EntryFieldLocation: IEntryFieldLocation | null;
+        FullPage: IFullPageLocation | null;
+        FieldModifierLocation: IFieldModifierLocation | null;
     };
 
     constructor(
@@ -73,7 +80,9 @@ class Extension {
             | ISidebarInitData
             | IAppConfigInitData
             | IAssetSidebarInitData
+            | IFullPageLocationInitData
             | IEntryFieldLocationInitData
+            | IFieldModifierLocationInitData
     ) {
         const initializationData = initData;
 
@@ -134,12 +143,17 @@ class Extension {
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
+            FullPage: null,
             EntryFieldLocation: null,
+            FieldModifierLocation: null,
         };
 
         window["postRobot"] = postRobot;
 
         this.modal = new Modal();
+        const stack = new Stack(initializationData.data.stack, postRobot, {
+            currentBranch: initializationData.data.currentBranch,
+        });
 
         switch (initializationData.data.type) {
             case "DASHBOARD": {
@@ -205,24 +219,31 @@ class Extension {
                 break;
             }
 
+            case "FIELD_MODIFIER_LOCATION":
             case "ENTRY_FIELD_LOCATION": {
-                // TODO: uncomment this line once the UI has the changes
-                // initializationData.data.self = true;
-                this.location.EntryFieldLocation = {
-                    entry: new EntryFieldLocationEntry(
-                        initializationData as IEntryFieldLocationInitData,
+                initializationData.data.self = true;
+                this.location.FieldModifierLocation = {
+                    entry: new FieldModifierLocationEntry(
+                        initializationData as IFieldModifierLocationInitData,
                         postRobot,
                         emitter
                     ),
                     stack: new Stack(initializationData.data.stack, postRobot, {
                         currentBranch: initializationData.data.currentBranch,
                     }),
-                    field: new EntryFieldLocationField(
+                    field: new FieldModifierLocationField(
                         initializationData as IFieldInitData,
                         postRobot,
                         emitter
                     ),
-                    frame: new EntryFieldLocationFrame(postRobot, emitter),
+                    frame: new FieldModifierLocationFrame(postRobot, emitter),
+                };
+                break;
+            }
+
+            case "FULL_PAGE_LOCATION": {
+                this.location.FullPage = {
+                    stack: stack,
                 };
                 break;
             }
@@ -264,7 +285,10 @@ class Extension {
 
                 if (event.data.name === "entryChange") {
                     emitter.emitEvent("entryChange", [
-                        { data: event.data.data },
+                        {
+                            data: event.data.data,
+                            resolvedData: event.data.otherData.resolvedData,
+                        },
                     ]);
                 }
 
@@ -321,6 +345,10 @@ class Extension {
             console.error("extension Event", err);
         }
     }
+
+    pulse = (eventName: string, metadata: { [key: string]: any }) => {
+      this.postRobot.sendToParent("analytics", { eventName, metadata });
+    };
 
     getConfig = (): Promise<{ [key: string]: any }> => {
         if (!this.installationUID) {
