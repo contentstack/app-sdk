@@ -14,7 +14,11 @@
         "dev": "webpack --watch --mode development",
         "lint": "eslint . --ext .ts --max-warnings=0",
         "docs": "typedoc --out doc --entryPointStrategy expand ./src",
-        "prepare": "husky install"
+        "prettier": "npx prettier src --check",
+        "prettier:fix": "npx prettier src --write",
+        "lint:fix": "eslint --fix",
+        "prepare": "npm run build && husky install",
+        "format": "npm run prettier:fix && npm run lint:fix"
     },
     "keywords": [],
     "author": {
@@ -31,10 +35,9 @@
     "devDependencies": {
         "@babel/core": "^7.2.2",
         "@babel/preset-env": "^7.3.1",
-        "@testing-library/jest-dom": "^5.14.1",
+        "@testing-library/jest-dom": "^5.16.5",
         "@types/chai": "^4.2.22",
         "@types/jest": "^27.0.2",
-        "@types/mocha": "^9.0.0",
         "@types/post-robot": "^10.0.3",
         "@types/react": "^17.0.18",
         "@typescript-eslint/eslint-plugin": "^5.10.1",
@@ -46,7 +49,7 @@
         "eslint-plugin-only-warn": "^1.1.0",
         "husky": "^8.0.0",
         "jest": "^27.3.1",
-        "mocha": "^9.2.0",
+        "lint-staged": "^13.1.0",
         "react": "^17.0.2",
         "slate": "^0.72.3",
         "ts-jest": "^27.0.7",
@@ -65,5 +68,11 @@
     },
     "files": [
         "dist"
-    ]
+    ],
+    "lint-staged": {
+        "src/**/*.{ts,css,md}": [
+            "npm run prettier:fix ",
+            "npm run lint:fix"
+        ]
+    }
 }

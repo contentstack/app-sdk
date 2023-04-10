@@ -35,7 +35,7 @@ import {
     IUser,
 } from "./types";
 import { AnyObject } from "./types/common.types";
-import { onData, onError } from "./utils";
+import { onData, onError } from "./utils/utils";
 import Window from "./window";
 
 const emitter = new EventEmitter();
