@@ -1,5 +1,5 @@
 import FieldModifierLocationFrame from "../../src/fieldModifierLocation/frame";
-import { errorMessage } from "../../src/utils/errorMessages";
+import { ERROR_MESSAGES } from "../../src/utils/errorMessages";
 import testData from "../data/testData.json";
 
 describe("FieldModifierLocationFrame", () => {
@@ -76,7 +76,7 @@ describe("FieldModifierLocationFrame", () => {
                 // @ts-ignore
                 frameInstance.updateDimension({ height: "100" })
             ).rejects.toThrowError(
-                errorMessage.entryField.frame.dimensionHeightShouldBeNumber
+                ERROR_MESSAGES.entryField.frame.dimensionHeightShouldBeNumber
             );
         });
 
@@ -85,7 +85,7 @@ describe("FieldModifierLocationFrame", () => {
                 // @ts-ignore
                 frameInstance.updateDimension({ width: "100" })
             ).rejects.toThrowError(
-                errorMessage.entryField.frame.dimensionWidthShouldBeNumber
+                ERROR_MESSAGES.entryField.frame.dimensionWidthShouldBeNumber
             );
         });
     });

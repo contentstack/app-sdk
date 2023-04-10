@@ -28,7 +28,7 @@ import {
     IEntryFieldLocationInitData,
 } from "./types";
 import { IRTEPluginInitializer } from "./RTE/types";
-import { onData, onError } from "./utils";
+import { onData, onError } from "./utils/utils";
 import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
