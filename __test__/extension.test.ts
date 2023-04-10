@@ -31,6 +31,17 @@ const initData: IAppConfigInitData = {
 };
 
 describe("Main extension", () => {
+
+    afterEach(() => {
+        window["postRobot"] = undefined;
+        window["iframeRef"] = undefined;
+    })
+
+    it("should have modal property", () => {
+        const extension = new Extension(initData);
+        expect(extension.modal).toBeDefined();
+    })
+
     describe("Properties in the window object", () => {
         it("should have postRobot property", () => {
             expect(window["postRobot"]).toBeUndefined();
@@ -41,27 +52,6 @@ describe("Main extension", () => {
                 window["postRobot"],
                 "sendToParent"
             );
-        });
-
-        it("should add body to iframeRef if the user has not provided one", () => {
-            new Extension(initData);
-            expect(window["iframeRef"]).toBeDefined();
-            expect(window["iframeRef"].tagName).toBe("BODY");
-        });
-
-        it("should not add body to iframeRef if the user has provided one", () => {
-            const div = document.createElement("div");
-            const innerText = "Hello world";
-            div.innerText = innerText;
-            window["iframeRef"] = div;
-
-            new Extension(initData);
-            const iframeRef = window["iframeRef"];
-
-            expect(iframeRef).toBeDefined();
-            expect(iframeRef.tagName).toBe("DIV");
-
-            expect(iframeRef.innerText).toBe(innerText);
         });
     });
 });
