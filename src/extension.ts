@@ -1,11 +1,18 @@
 import postRobot from "post-robot";
-import Field from "./field";
-import Window from "./window";
-import Stack from "./stack";
-import Entry from "./entry";
-import Store from "./store";
-import Metadata from "./metadata";
 import EventEmitter from "wolfy87-eventemitter";
+
+import AssetSidebarWidget from "./AssetSidebarWidget";
+import { IRTEPluginInitializer } from "./RTE/types";
+import { AppConfig } from "./appConfig";
+import Entry from "./entry";
+import Field from "./field";
+import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
+import FieldModifierLocationField from "./fieldModifierLocation/field";
+import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
+import Metadata from "./metadata";
+import Modal from "./modal";
+import Stack from "./stack";
+import Store from "./store";
 import {
     IAppConfigInitData,
     IAppConfigWidget,
@@ -13,28 +20,23 @@ import {
     ICustomField,
     IDashboardInitData,
     IDashboardWidget,
+    IEntryFieldLocation,
+    IEntryFieldLocationInitData,
     IFieldInitData,
     IFieldModifierLocation,
     IFieldModifierLocationInitData,
+    IFullPageLocation,
+    IFullPageLocationInitData,
     ILocation,
     IPageWidget,
     IRTEInitData,
     ISidebarInitData,
     ISidebarWidget,
     IUser,
-    IFullPageLocationInitData,
-    IFullPageLocation,
-    IEntryFieldLocation,
-    IEntryFieldLocationInitData,
 } from "./types";
-import { IRTEPluginInitializer } from "./RTE/types";
-import { onData, onError } from "./utils/utils";
-import { AppConfig } from "./appConfig";
-import AssetSidebarWidget from "./AssetSidebarWidget";
 import { AnyObject } from "./types/common.types";
-import FieldModifierLocationField from "./fieldModifierLocation/field";
-import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
-import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
+import { onData, onError } from "./utils/utils";
+import Window from "./window";
 
 const emitter = new EventEmitter();
 
@@ -55,6 +57,7 @@ class Extension {
     store: Store;
     metadata: Metadata;
     locationUID: string;
+    modal: Modal;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -145,6 +148,9 @@ class Extension {
             FieldModifierLocation: null,
         };
 
+        window["postRobot"] = postRobot;
+
+        this.modal = new Modal();
         const stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,
         });

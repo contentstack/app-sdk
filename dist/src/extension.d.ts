@@ -1,9 +1,10 @@
+import AssetSidebarWidget from "./AssetSidebarWidget";
+import { IRTEPluginInitializer } from "./RTE/types";
+import Metadata from "./metadata";
+import Modal from "./modal";
 import Stack from "./stack";
 import Store from "./store";
-import Metadata from "./metadata";
-import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IFieldInitData, IFieldModifierLocation, IFieldModifierLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, IFullPageLocationInitData, IFullPageLocation, IEntryFieldLocation, IEntryFieldLocationInitData } from "./types";
-import { IRTEPluginInitializer } from "./RTE/types";
-import AssetSidebarWidget from "./AssetSidebarWidget";
+import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IEntryFieldLocation, IEntryFieldLocationInitData, IFieldInitData, IFieldModifierLocation, IFieldModifierLocationInitData, IFullPageLocation, IFullPageLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser } from "./types";
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -19,6 +20,7 @@ declare class Extension {
     store: Store;
     metadata: Metadata;
     locationUID: string;
+    modal: Modal;
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
