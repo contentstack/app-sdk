@@ -1,12 +1,12 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
-import { errorMessage } from "../utils/errorMessages";
+import { ERROR_MESSAGES } from "../utils/errorMessages";
 
 /**
  * Class representing an iframe window from Contentstack UI. Not available for Custom Widgets.
  */
 
-class EntryFieldLocationFrame {
+class FieldModifierLocationFrame {
     /**
      * @hideconstructor
      */
@@ -64,7 +64,7 @@ class EntryFieldLocationFrame {
 
         if (height !== undefined && typeof height !== "number") {
             throw new Error(
-                errorMessage.entryField.frame.dimensionHeightShouldBeNumber
+                ERROR_MESSAGES.entryField.frame.dimensionHeightShouldBeNumber
             );
         }
 
@@ -75,7 +75,7 @@ class EntryFieldLocationFrame {
 
         if (width !== undefined && typeof width !== "number") {
             throw new Error(
-                errorMessage.entryField.frame.dimensionWidthShouldBeNumber
+                ERROR_MESSAGES.entryField.frame.dimensionWidthShouldBeNumber
             );
         }
 
@@ -91,9 +91,9 @@ class EntryFieldLocationFrame {
 
     /**
      * This method enables auto resizing of the extension height.
-     * @return {EntryFieldLocationFrame}.
+     * @return {FieldModifierLocationFrame}.
      */
-    enableAutoResizing(): EntryFieldLocationFrame {
+    enableAutoResizing(): FieldModifierLocationFrame {
         if (this._autoResizingEnabled) {
             return this;
         }
@@ -115,9 +115,9 @@ class EntryFieldLocationFrame {
 
     /**
      * This method disables auto resizing of the extension height.
-     * @return {EntryFieldLocationFrame}.
+     * @return {FieldModifierLocationFrame}.
      */
-    disableAutoResizing(): EntryFieldLocationFrame {
+    disableAutoResizing(): FieldModifierLocationFrame {
         if (!this._autoResizingEnabled) {
             return this;
         }
@@ -135,4 +135,4 @@ class EntryFieldLocationFrame {
     }
 }
 
-export default EntryFieldLocationFrame;
+export default FieldModifierLocationFrame;

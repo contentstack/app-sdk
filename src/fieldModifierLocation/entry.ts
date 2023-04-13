@@ -1,12 +1,12 @@
 import Entry from "../entry";
-import { IEntryFieldLocationInitData } from "../types";
+import { IFieldModifierLocationInitData } from "../types";
 import { IGetTagsOptions } from "../types/entry.types";
-import { errorMessage } from "../utils/errorMessages";
+import generateErrorMessages, { ERROR_MESSAGES } from "../utils/errorMessages";
 import Field from "./field";
 
-class EntryFieldLocationEntry extends Entry {
+class FieldModifierLocationEntry extends Entry {
     constructor(
-        initializationData: IEntryFieldLocationInitData,
+        initializationData: IFieldModifierLocationInitData,
         connection: any,
         emitter: EventEmitter
     ) {
@@ -50,12 +50,12 @@ class EntryFieldLocationEntry extends Entry {
         }
 
         if (tags === undefined) {
-            throw new Error(errorMessage.entryField.entry.tagsShouldNotBeBlank);
+            throw new Error(generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldNotBeBlank));
         }
 
         if (!areTagsValid(tags)) {
             throw new Error(
-                errorMessage.entryField.entry.tagsShouldBeArrayOfStrings
+                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings)
             );
         }
 
@@ -71,4 +71,4 @@ class EntryFieldLocationEntry extends Entry {
     }
 }
 
-export default EntryFieldLocationEntry;
+export default FieldModifierLocationEntry;
