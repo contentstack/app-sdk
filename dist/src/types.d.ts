@@ -25,6 +25,7 @@ export declare interface IAppConfigWidget {
     installation: {
         setInstallationData: (installationData: IInstallationData) => Promise<AnyObject>;
         getInstallationData: () => Promise<IInstallationData>;
+        setValidity: (isValid: boolean, options?: ValidationOptions) => void;
         [key: string]: any;
     };
     stack: AnyObject;
