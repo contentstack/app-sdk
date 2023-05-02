@@ -33,6 +33,7 @@ import {
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    IRegion,
 } from "./types";
 import { AnyObject } from "./types/common.types";
 import { onData, onError } from "./utils/utils";
@@ -58,6 +59,7 @@ class Extension {
     metadata: Metadata;
     locationUID: string;
     modal: Modal;
+    region: IRegion;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -151,6 +153,9 @@ class Extension {
         window["postRobot"] = postRobot;
 
         this.modal = new Modal();
+
+        this.region = initializationData.data.region;
+
         const stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,
         });
@@ -347,7 +352,7 @@ class Extension {
     }
 
     pulse = (eventName: string, metadata: { [key: string]: any }) => {
-      this.postRobot.sendToParent("analytics", { eventName, metadata });
+        this.postRobot.sendToParent("analytics", { eventName, metadata });
     };
 
     getConfig = (): Promise<{ [key: string]: any }> => {

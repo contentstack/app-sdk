@@ -12,6 +12,7 @@ const initData: IAppConfigInitData = {
         app_id: "app_id",
         installation_uid: "installation_uid",
         extension_uid: "extension_uid",
+        region: "NA",
         stack: {
             created_at: "created_at",
             updated_at: "updated_at",
@@ -31,16 +32,15 @@ const initData: IAppConfigInitData = {
 };
 
 describe("Main extension", () => {
-
     afterEach(() => {
         window["postRobot"] = undefined;
         window["iframeRef"] = undefined;
-    })
+    });
 
     it("should have modal property", () => {
         const extension = new Extension(initData);
         expect(extension.modal).toBeDefined();
-    })
+    });
 
     describe("Properties in the window object", () => {
         it("should have postRobot property", () => {
