@@ -58,6 +58,7 @@ declare interface ICommonInitData {
     stack: StackDetail;
     user: IUser;
     currentBranch: string;
+    region: IRegion;
 }
 export declare interface IDashboardInitData {
     data: ICommonInitData & {
@@ -209,5 +210,6 @@ export declare interface IManagementTokenDetails {
     uid: string;
     name: string;
 }
+export declare type IRegion = "DEV_NA" | "STAG_NA" | "NA" | "EU" | "NA-AZURE";
 export {};
 //# sourceMappingURL=types.d.ts.map
