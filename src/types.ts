@@ -79,7 +79,7 @@ declare interface ICommonInitData {
     stack: StackDetail;
     user: IUser;
     currentBranch: string;
-    region: IRegion;
+    region: string;
 }
 
 export declare interface IDashboardInitData {
@@ -256,4 +256,10 @@ export declare interface IManagementTokenDetails {
     name: string;
 }
 
-export declare type IRegion = "DEV_NA" | "STAG_NA" | "NA" | "EU" | "NA-AZURE";
+export enum Region {
+    UNKNOWN = "unknown",
+    NA = "NA",
+    EU = "EU",
+    AZURE_NA = "AZURE_NA",
+    AZURE_EU = "AZURE_EU",
+}
