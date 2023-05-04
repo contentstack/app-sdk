@@ -33,10 +33,10 @@ import {
     ISidebarInitData,
     ISidebarWidget,
     IUser,
-    IRegion,
+    Region,
 } from "./types";
 import { AnyObject } from "./types/common.types";
-import { onData, onError } from "./utils/utils";
+import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 
 const emitter = new EventEmitter();
@@ -59,7 +59,7 @@ class Extension {
     metadata: Metadata;
     locationUID: string;
     modal: Modal;
-    region: IRegion;
+    region: Region;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -154,7 +154,7 @@ class Extension {
 
         this.modal = new Modal();
 
-        this.region = initializationData.data.region;
+        this.region = formatAppRegion(initializationData.data.region);
 
         const stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,

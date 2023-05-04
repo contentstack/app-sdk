@@ -4,7 +4,7 @@ import Metadata from "./metadata";
 import Modal from "./modal";
 import Stack from "./stack";
 import Store from "./store";
-import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IEntryFieldLocation, IEntryFieldLocationInitData, IFieldInitData, IFieldModifierLocation, IFieldModifierLocationInitData, IFullPageLocation, IFullPageLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, IRegion } from "./types";
+import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IEntryFieldLocation, IEntryFieldLocationInitData, IFieldInitData, IFieldModifierLocation, IFieldModifierLocationInitData, IFullPageLocation, IFullPageLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, Region } from "./types";
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -21,7 +21,7 @@ declare class Extension {
     metadata: Metadata;
     locationUID: string;
     modal: Modal;
-    region: IRegion;
+    region: Region;
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
