@@ -58,6 +58,7 @@ declare interface ICommonInitData {
     stack: StackDetail;
     user: IUser;
     currentBranch: string;
+    region: string;
 }
 export declare interface IDashboardInitData {
     data: ICommonInitData & {
@@ -208,6 +209,13 @@ export declare interface ValidationOptions {
 export declare interface IManagementTokenDetails {
     uid: string;
     name: string;
+}
+export declare enum Region {
+    UNKNOWN = "UNKNOWN",
+    NA = "NA",
+    EU = "EU",
+    AZURE_NA = "AZURE_NA",
+    AZURE_EU = "AZURE_EU"
 }
 export {};
 //# sourceMappingURL=types.d.ts.map
