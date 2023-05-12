@@ -21,7 +21,7 @@ declare class Extension {
     metadata: Metadata;
     locationUID: string;
     modal: Modal;
-    region: Region;
+    readonly region: Region;
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
