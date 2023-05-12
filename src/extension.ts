@@ -369,6 +369,10 @@ class Extension {
         return this.type;
     };
 
+    getCurrentRegion = () => {
+        return this.region;
+    };
+
     static initialize(version: string) {
         const meta = {
             sdkType: "app-sdk",
