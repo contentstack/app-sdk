@@ -30,6 +30,7 @@ describe("FieldModifierLocationEntry", () => {
                 currentBranch: "master",
                 extension_uid: "extension_uid",
                 installation_uid: "installation_uid",
+                region: 'NA',
                 stack: {
                     api_key: "api_key",
                     created_at: "created_at",

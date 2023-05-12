@@ -25,7 +25,6 @@ export declare interface IEntryFieldLocation {
     [key: string]: any;
 }
 
-
 export declare interface IFullPageLocation {
     [key: string]: any;
 }
@@ -80,6 +79,7 @@ declare interface ICommonInitData {
     stack: StackDetail;
     user: IUser;
     currentBranch: string;
+    region: string;
 }
 
 export declare interface IDashboardInitData {
@@ -254,4 +254,12 @@ export declare interface ValidationOptions {
 export declare interface IManagementTokenDetails {
     uid: string;
     name: string;
+}
+
+export enum Region {
+    UNKNOWN = "UNKNOWN",
+    NA = "NA",
+    EU = "EU",
+    AZURE_NA = "AZURE_NA",
+    AZURE_EU = "AZURE_EU",
 }

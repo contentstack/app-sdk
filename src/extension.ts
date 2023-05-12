@@ -33,9 +33,10 @@ import {
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    Region,
 } from "./types";
 import { AnyObject } from "./types/common.types";
-import { onData, onError } from "./utils/utils";
+import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 
 const emitter = new EventEmitter();
@@ -58,6 +59,7 @@ class Extension {
     metadata: Metadata;
     locationUID: string;
     modal: Modal;
+    readonly region: Region;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -151,6 +153,9 @@ class Extension {
         window["postRobot"] = postRobot;
 
         this.modal = new Modal();
+
+        this.region = formatAppRegion(initializationData.data.region);
+
         const stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,
         });
@@ -347,7 +352,7 @@ class Extension {
     }
 
     pulse = (eventName: string, metadata: { [key: string]: any }) => {
-      this.postRobot.sendToParent("analytics", { eventName, metadata });
+        this.postRobot.sendToParent("analytics", { eventName, metadata });
     };
 
     getConfig = (): Promise<{ [key: string]: any }> => {
@@ -362,6 +367,10 @@ class Extension {
 
     getCurrentLocation = () => {
         return this.type;
+    };
+
+    getCurrentRegion = () => {
+        return this.region;
     };
 
     static initialize(version: string) {

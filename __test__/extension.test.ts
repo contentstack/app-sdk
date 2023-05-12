@@ -1,5 +1,7 @@
+import postRobot from "post-robot";
+
 import Extension from "../src/extension";
-import { IAppConfigInitData } from "../src/types";
+import { IAppConfigInitData, Region } from "../src/types";
 
 jest.mock("post-robot", () => ({
     sendToParent: jest.fn(),
@@ -12,6 +14,7 @@ const initData: IAppConfigInitData = {
         app_id: "app_id",
         installation_uid: "installation_uid",
         extension_uid: "extension_uid",
+        region: "NA",
         stack: {
             created_at: "created_at",
             updated_at: "updated_at",
@@ -30,17 +33,11 @@ const initData: IAppConfigInitData = {
     },
 };
 
-describe("Main extension", () => {
-
+describe("Extension", () => {
     afterEach(() => {
         window["postRobot"] = undefined;
         window["iframeRef"] = undefined;
-    })
-
-    it("should have modal property", () => {
-        const extension = new Extension(initData);
-        expect(extension.modal).toBeDefined();
-    })
+    });
 
     describe("Properties in the window object", () => {
         it("should have postRobot property", () => {
@@ -52,6 +49,38 @@ describe("Main extension", () => {
                 window["postRobot"],
                 "sendToParent"
             );
+        });
+    });
+
+    it("should have modal property", () => {
+        const extension = new Extension(initData);
+        expect(extension.modal).toBeDefined();
+    });
+
+    it("pulse should invoke post robot method with type analytics", () => {
+        const extensionObj = new Extension(initData);
+        const eventName = "Sample Event";
+        const metadata = { foo: "bar" };
+        extensionObj.pulse(eventName, metadata);
+        expect((postRobot as any).sendToParent).toHaveBeenCalledWith(
+            "analytics",
+            {
+                eventName,
+                metadata,
+            }
+        );
+    });
+
+    describe("getCurrentRegion", () => {
+        it("should have getCurrentRegion method", () => {
+            const extensionObj = new Extension(initData);
+            expect(extensionObj.getCurrentLocation).toBeDefined();
+        });
+
+        it("should return a valid region", () => {
+            const extensionObj = new Extension(initData);
+            const region = extensionObj.getCurrentRegion();
+            expect(region).toBe(Region.NA);
         });
     });
 });
