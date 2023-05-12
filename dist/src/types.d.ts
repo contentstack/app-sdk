@@ -211,7 +211,7 @@ export declare interface IManagementTokenDetails {
     name: string;
 }
 export declare enum Region {
-    UNKNOWN = "unknown",
+    UNKNOWN = "UNKNOWN",
     NA = "NA",
     EU = "EU",
     AZURE_NA = "AZURE_NA",

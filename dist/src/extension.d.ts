@@ -42,6 +42,7 @@ declare class Extension {
         [key: string]: any;
     }>;
     getCurrentLocation: () => ILocation;
+    getCurrentRegion: () => Region;
     static initialize(version: string): any;
     setReady(): any;
 }
