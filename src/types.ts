@@ -92,8 +92,6 @@ export declare interface IDashboardInitData {
 
 export declare interface ISidebarInitData {
     data: ICommonInitData & {
-        app_config: IConfig;
-        changedData: Entry;
         config?: GenericObjectType;
         content_type: ContentType;
         entry: Entry;
@@ -104,8 +102,6 @@ export declare interface ISidebarInitData {
 
 export declare interface IFieldInitData {
     data: ICommonInitData & {
-        app_config: IConfig;
-        changedData: Entry;
         config?: GenericObjectType;
         content_type: ContentType;
         entry: Entry;

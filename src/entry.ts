@@ -45,8 +45,13 @@ class Entry {
 
         this._data = initializationData.data.entry;
 
-        if (initializationData.data.changedData) {
-            this._changedData = initializationData.data.changedData;
+        if (
+            (initializationData as IFieldModifierLocationInitData).data
+                .changedData
+        ) {
+            this._changedData = (
+                initializationData as IFieldModifierLocationInitData
+            ).data.changedData;
         }
 
         /**
