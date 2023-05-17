@@ -2,7 +2,6 @@ import EventEmitter from "wolfy87-eventemitter";
 
 import Field from "./field";
 import {
-    ICurrentContentType,
     IFieldInitData,
     IFieldModifierLocationInitData,
     ISidebarInitData,
@@ -12,6 +11,7 @@ import {
     IGetFieldOptions,
     IOnEntryChangeCallback,
 } from "./types/entry.types";
+import { ContentType, Schema } from "./types/stack.types";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 
@@ -20,7 +20,7 @@ class Entry {
      * @hideconstructor
      */
 
-    content_type: ICurrentContentType;
+    content_type: ContentType;
     _data: { [key: string]: any };
     locale: string;
     _connection: any;
@@ -109,7 +109,7 @@ class Entry {
         let value = useUnsavedSchema
             ? this._changedData || this._data
             : this._data;
-        let schema = this.content_type.schema;
+        let schema: Schema = this.content_type.schema as any;
 
         const isDataEmpty = Object.keys(value).length === 0;
 

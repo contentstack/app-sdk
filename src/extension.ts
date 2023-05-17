@@ -14,28 +14,24 @@ import Modal from "./modal";
 import Stack from "./stack";
 import Store from "./store";
 import {
-    IAppConfigInitData,
     IAppConfigWidget,
     IAssetSidebarInitData,
     ICustomField,
-    IDashboardInitData,
     IDashboardWidget,
     IEntryFieldLocation,
-    IEntryFieldLocationInitData,
     IFieldInitData,
     IFieldModifierLocation,
     IFieldModifierLocationInitData,
     IFullPageLocation,
-    IFullPageLocationInitData,
-    ILocation,
     IPageWidget,
-    IRTEInitData,
     ISidebarInitData,
     ISidebarWidget,
-    IUser,
+    InitializationData,
+    LocationType,
     Region,
 } from "./types";
-import { AnyObject } from "./types/common.types";
+import { GenericObjectType } from "./types/common.types";
+import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 
@@ -50,9 +46,9 @@ class Extension {
 
     appUID: string;
     installationUID: string;
-    currentUser: IUser;
-    private type: ILocation;
-    private config: AnyObject;
+    currentUser: User;
+    private type: LocationType;
+    private config: GenericObjectType;
     postRobot: any;
     stack: Stack;
     store: Store;
@@ -74,18 +70,7 @@ class Extension {
         FieldModifierLocation: IFieldModifierLocation | null;
     };
 
-    constructor(
-        initData:
-            | IRTEInitData
-            | IDashboardInitData
-            | IFieldInitData
-            | ISidebarInitData
-            | IAppConfigInitData
-            | IAssetSidebarInitData
-            | IFullPageLocationInitData
-            | IEntryFieldLocationInitData
-            | IFieldModifierLocationInitData
-    ) {
+    constructor(initData: InitializationData) {
         const initializationData = initData;
 
         this.postRobot = postRobot;
@@ -133,6 +118,7 @@ class Extension {
         this.stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,
         });
+
         this.metadata = new Metadata(postRobot);
 
         this.config = initializationData.data.config ?? {};
@@ -161,7 +147,7 @@ class Extension {
         });
 
         switch (initializationData.data.type) {
-            case "DASHBOARD": {
+            case LocationType.DASHBOARD: {
                 this.location.DashboardWidget = {
                     frame: new Window(
                         postRobot,
@@ -175,7 +161,7 @@ class Extension {
                 };
                 break;
             }
-            case "WIDGET": {
+            case LocationType.WIDGET: {
                 this.location.SidebarWidget = {
                     entry: new Entry(
                         initializationData as ISidebarInitData,
@@ -189,7 +175,7 @@ class Extension {
                 break;
             }
 
-            case "APP_CONFIG_WIDGET": {
+            case LocationType.APP_CONFIG_WIDGET: {
                 this.location.AppConfigWidget = {
                     installation: new AppConfig(
                         initializationData,
@@ -207,7 +193,7 @@ class Extension {
                 break;
             }
 
-            case "ASSET_SIDEBAR_WIDGET": {
+            case LocationType.ASSET_SIDEBAR_WIDGET: {
                 this.location.AssetSidebarWidget = new AssetSidebarWidget(
                     initializationData as IAssetSidebarInitData,
                     postRobot,
@@ -217,15 +203,14 @@ class Extension {
                 break;
             }
 
-            case "RTE": {
+            case LocationType.RTE: {
                 import("./RTE").then(({ rtePluginInitializer }) => {
                     this.location.RTEPlugin = rtePluginInitializer;
                 });
                 break;
             }
 
-            case "FIELD_MODIFIER_LOCATION":
-            case "ENTRY_FIELD_LOCATION": {
+            case LocationType.FIELD_MODIFIER_LOCATION: {
                 initializationData.data.self = true;
                 this.location.FieldModifierLocation = {
                     entry: new FieldModifierLocationEntry(
@@ -246,14 +231,14 @@ class Extension {
                 break;
             }
 
-            case "FULL_PAGE_LOCATION": {
+            case LocationType.FULL_PAGE_LOCATION: {
                 this.location.FullPage = {
                     stack: stack,
                 };
                 break;
             }
 
-            case "FIELD":
+            case LocationType.FIELD:
             default: {
                 initializationData.data.self = true;
                 this.location.CustomField = {
@@ -351,11 +336,11 @@ class Extension {
         }
     }
 
-    pulse = (eventName: string, metadata: { [key: string]: any }) => {
+    pulse = (eventName: string, metadata: { [key: string]: any }): void => {
         this.postRobot.sendToParent("analytics", { eventName, metadata });
     };
 
-    getConfig = (): Promise<{ [key: string]: any }> => {
+    getConfig = (): Promise<GenericObjectType> => {
         if (!this.installationUID) {
             return Promise.resolve(this.config);
         }
@@ -365,11 +350,11 @@ class Extension {
             .catch(onError);
     };
 
-    getCurrentLocation = () => {
+    getCurrentLocation = (): LocationType => {
         return this.type;
     };
 
-    getCurrentRegion = () => {
+    getCurrentRegion = (): Region => {
         return this.region;
     };
 

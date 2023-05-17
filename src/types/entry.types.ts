@@ -1,4 +1,5 @@
 import Field from "../field";
+import { AnyProperty } from "./common.types";
 
 export declare interface IGetFieldOptions {
     /**
@@ -38,3 +39,12 @@ export declare type IOnEntryChangeCallback = (
      */
     resolvedEntry: Record<string, any>
 ) => void;
+
+export interface EntryData extends AnyProperty {
+    title: string;
+    uid: string;
+    content_type_title: string;
+    publish_details: Array<any>;
+    locale: string;
+    url?: string;
+}

@@ -1,4 +1,4 @@
-import { AnyObject } from "./types/common.types";
+import { GenericObjectType } from "./types/common.types";
 
 export declare interface IMetadata {
     uid: string;
@@ -70,7 +70,7 @@ class Metadata {
         return this._connection.sendToParent("stackQuery", data);
     }
 
-    retrieveAllMetaData(params: AnyObject = {}) {
+    retrieveAllMetaData(params: GenericObjectType = {}) {
         const data = {
             action: metadataTypes.retrieveAllMetadata,
             params,
