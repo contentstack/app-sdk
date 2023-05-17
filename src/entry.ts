@@ -41,24 +41,23 @@ class Entry {
          * Gets the content type of the current entry.
          * @type {Object}
          */
-        this.content_type = initializationData.data.content_type;
+        this.content_type = initializationData.content_type;
 
-        this._data = initializationData.data.entry;
+        this._data = initializationData.entry;
 
         if (
-            (initializationData as IFieldModifierLocationInitData).data
-                .changedData
+            (initializationData as IFieldModifierLocationInitData).changedData
         ) {
             this._changedData = (
                 initializationData as IFieldModifierLocationInitData
-            ).data.changedData;
+            ).changedData;
         }
 
         /**
          * Gets the locale of the current entry.
          * @type {string}
          */
-        this.locale = initializationData.data.locale;
+        this.locale = initializationData.locale;
 
         this._connection = connection;
 

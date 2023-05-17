@@ -15,16 +15,12 @@ import Stack from "./stack";
 import Store from "./store";
 import {
     IAppConfigWidget,
-    IAssetSidebarInitData,
     ICustomField,
     IDashboardWidget,
     IEntryFieldLocation,
-    IFieldInitData,
     IFieldModifierLocation,
-    IFieldModifierLocationInitData,
     IFullPageLocation,
     IPageWidget,
-    ISidebarInitData,
     ISidebarWidget,
     InitializationData,
     LocationType,
@@ -49,7 +45,7 @@ class Extension {
     currentUser: User;
     private type: LocationType;
     private config: GenericObjectType;
-    postRobot: any;
+    postRobot: typeof postRobot;
     stack: Stack;
     store: Store;
     metadata: Metadata;
@@ -79,30 +75,30 @@ class Extension {
          * This value represents the current App's unique ID. One App may contain multiple locations
          * @type {string}
          */
-        this.appUID = initializationData.data.app_id;
+        this.appUID = initializationData.app_id;
 
         /**
          *  This value represents the current location's unique ID. One App may contain multiple locations
          * @type {string}
          */
-        this.locationUID = initializationData.data.extension_uid;
+        this.locationUID = initializationData.extension_uid;
 
         /**
          * This object holds details of the app initialization user.
          * @type {Object}
          */
-        this.installationUID = initializationData.data.installation_uid;
+        this.installationUID = initializationData.installation_uid;
         /**
          * This object holds details of the current user.
          * @type {Object}
          */
-        this.currentUser = initializationData.data.user;
+        this.currentUser = initializationData.user;
 
         /**
          * location of extension, "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
          * @type {string}
          */
-        this.type = initializationData.data.type;
+        this.type = initializationData.type;
 
         /**
          * Store to persist data for extension.
@@ -115,13 +111,13 @@ class Extension {
          * This method returns stack object which allows users to read and manipulate a range of objects in a stack.
          * @type {Stack}
          */
-        this.stack = new Stack(initializationData.data.stack, postRobot, {
-            currentBranch: initializationData.data.currentBranch,
+        this.stack = new Stack(initializationData.stack, postRobot, {
+            currentBranch: initializationData.currentBranch,
         });
 
         this.metadata = new Metadata(postRobot);
 
-        this.config = initializationData.data.config ?? {};
+        this.config = initializationData.config ?? {};
 
         this.location = {
             DashboardWidget: null,
@@ -140,36 +136,32 @@ class Extension {
 
         this.modal = new Modal();
 
-        this.region = formatAppRegion(initializationData.data.region);
+        this.region = formatAppRegion(initializationData.region);
 
-        const stack = new Stack(initializationData.data.stack, postRobot, {
-            currentBranch: initializationData.data.currentBranch,
+        const stack = new Stack(initializationData.stack, postRobot, {
+            currentBranch: initializationData.currentBranch,
         });
 
-        switch (initializationData.data.type) {
+        switch (initializationData.type) {
             case LocationType.DASHBOARD: {
                 this.location.DashboardWidget = {
                     frame: new Window(
                         postRobot,
                         this.type as "DASHBOARD",
                         emitter,
-                        initializationData.data.dashboard_width
+                        initializationData.dashboard_width
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                 };
                 break;
             }
             case LocationType.WIDGET: {
                 this.location.SidebarWidget = {
-                    entry: new Entry(
-                        initializationData as ISidebarInitData,
-                        postRobot,
-                        emitter
-                    ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    entry: new Entry(initializationData, postRobot, emitter),
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                 };
                 break;
@@ -182,12 +174,11 @@ class Extension {
                         postRobot,
                         emitter,
                         {
-                            currentBranch:
-                                initializationData.data.currentBranch,
+                            currentBranch: initializationData.currentBranch,
                         }
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                 };
                 break;
@@ -195,7 +186,7 @@ class Extension {
 
             case LocationType.ASSET_SIDEBAR_WIDGET: {
                 this.location.AssetSidebarWidget = new AssetSidebarWidget(
-                    initializationData as IAssetSidebarInitData,
+                    initializationData,
                     postRobot,
                     emitter
                 );
@@ -211,18 +202,18 @@ class Extension {
             }
 
             case LocationType.FIELD_MODIFIER_LOCATION: {
-                initializationData.data.self = true;
+                initializationData.self = true;
                 this.location.FieldModifierLocation = {
                     entry: new FieldModifierLocationEntry(
-                        initializationData as IFieldModifierLocationInitData,
+                        initializationData,
                         postRobot,
                         emitter
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                     field: new FieldModifierLocationField(
-                        initializationData as IFieldInitData,
+                        initializationData,
                         postRobot,
                         emitter
                     ),
@@ -240,21 +231,13 @@ class Extension {
 
             case LocationType.FIELD:
             default: {
-                initializationData.data.self = true;
+                initializationData.self = true;
                 this.location.CustomField = {
-                    field: new Field(
-                        initializationData as IFieldInitData,
-                        postRobot,
-                        emitter
-                    ),
-                    fieldConfig: initializationData.data.field_config,
-                    entry: new Entry(
-                        initializationData as IFieldInitData,
-                        postRobot,
-                        emitter
-                    ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    field: new Field(initializationData, postRobot, emitter),
+                    fieldConfig: initializationData.field_config,
+                    entry: new Entry(initializationData, postRobot, emitter),
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                     frame: new Window(postRobot, this.type as "FIELD", emitter),
                 };
@@ -264,8 +247,7 @@ class Extension {
         }
 
         try {
-            //@ts-ignore
-            postRobot.on("extensionEvent", (event) => {
+            postRobot.on("extensionEvent", async (event) => {
                 if (event.data.name === "entrySave") {
                     emitter.emitEvent("entrySave", [{ data: event.data.data }]);
                     emitter.emitEvent("updateFields", [
@@ -358,15 +340,18 @@ class Extension {
         return this.region;
     };
 
-    static initialize(version: string) {
+    static async initialize(version: string): Promise<InitializationData> {
         const meta = {
             sdkType: "app-sdk",
         };
-        //@ts-ignore
-        return postRobot.sendToParent("init", { version, meta });
+        const initData = await postRobot.sendToParent<InitializationData>(
+            "init",
+            { version, meta }
+        );
+        return initData.data;
     }
 
-    setReady() {
+    setReady(): Promise<ResponseMessageEvent> {
         return this.postRobot.sendToParent("ready");
     }
 }
