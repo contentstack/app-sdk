@@ -1,7 +1,9 @@
 import FieldModifierLocationEntry from "../../src/fieldModifierLocation/entry";
 import testData from "../data/testData.json";
-import { IFieldModifierLocationInitData } from "../../src/types";
-import generateErrorMessages, { ERROR_MESSAGES } from "../../src/utils/errorMessages";
+import { IFieldModifierLocationInitData, LocationType } from "../../src/types";
+import generateErrorMessages, {
+    ERROR_MESSAGES,
+} from "../../src/utils/errorMessages";
 
 describe("FieldModifierLocationEntry", () => {
     let entryInstance: FieldModifierLocationEntry;
@@ -12,25 +14,39 @@ describe("FieldModifierLocationEntry", () => {
     function getEntryInitialData(): IFieldModifierLocationInitData {
         return {
             data: {
-                type: "FIELD_MODIFIER_LOCATION",
+                type: LocationType.FIELD_MODIFIER_LOCATION,
                 config: {},
-                content_type: {},
+                content_type: {} as any,
                 entry: {
+                    title: "sample_entry_title",
+                    uid: "sample_entry_uid",
+                    content_type_title: "sample_ct",
+                    publish_details: [],
+                    locale: "en",
                     tags: ["tag1"],
                 },
                 locale: "en-us",
                 uid: "field_uid",
-                schema: {},
+                schema: {
+                    display_name: "sample_schema_name",
+                    uid: "sample_schema_uid",
+                    data_type: "text",
+                },
                 value: {},
                 self: false,
                 changedData: {
+                    title: "sample_entry_title",
+                    uid: "sample_entry_uid",
+                    content_type_title: "sample_ct",
+                    publish_details: [],
+                    locale: "en",
                     tags: ["tag1", "tag2"],
                 },
                 app_id: "app_id",
                 currentBranch: "master",
                 extension_uid: "extension_uid",
                 installation_uid: "installation_uid",
-                region: 'NA',
+                region: "NA",
                 stack: {
                     api_key: "api_key",
                     created_at: "created_at",
@@ -51,7 +67,7 @@ describe("FieldModifierLocationEntry", () => {
                         secret_key: "secret_key",
                     },
                 },
-                user: {},
+                user: {} as any,
             },
         };
     }
@@ -133,19 +149,25 @@ describe("FieldModifierLocationEntry", () => {
         it("should throw an error when tags are not defined", async () => {
             // @ts-ignore
             await expect(entryInstance.setTags()).rejects.toThrow(
-                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldNotBeBlank)
+                generateErrorMessages(
+                    ERROR_MESSAGES.entryField.entry.tagsShouldNotBeBlank
+                )
             );
         });
 
         it("should throw an error if tags is not an array of strings", async () => {
             // @ts-ignore
             await expect(entryInstance.setTags(["tag3", 4])).rejects.toThrow(
-                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings)
+                generateErrorMessages(
+                    ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings
+                )
             );
 
             // @ts-ignore
             await expect(entryInstance.setTags("tag3")).rejects.toThrow(
-                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings)
+                generateErrorMessages(
+                    ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings
+                )
             );
         });
 

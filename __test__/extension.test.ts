@@ -1,7 +1,7 @@
 import postRobot from "post-robot";
 
 import Extension from "../src/extension";
-import { IAppConfigInitData, Region } from "../src/types";
+import { IAppConfigInitData, LocationType, Region } from "../src/types";
 
 jest.mock("post-robot", () => ({
     sendToParent: jest.fn(),
@@ -10,7 +10,7 @@ jest.mock("post-robot", () => ({
 
 const initData: IAppConfigInitData = {
     data: {
-        type: "APP_CONFIG_WIDGET",
+        type: LocationType.APP_CONFIG_WIDGET,
         app_id: "app_id",
         installation_uid: "installation_uid",
         extension_uid: "extension_uid",
@@ -28,7 +28,7 @@ const initData: IAppConfigInitData = {
             settings: {},
             name: "name",
         },
-        user: {},
+        user: {} as any,
         currentBranch: "currentBranch",
     },
 };
