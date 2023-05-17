@@ -4,7 +4,6 @@ import Extension from "./extension";
 import { version } from "../package.json";
 import { InitializationData } from "./types";
 
-//@ts-ignore
 postRobot.CONFIG.LOG_LEVEL = "error";
 
 /** Class to initialize the plugin on Contentstack UI. */

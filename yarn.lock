@@ -1419,11 +1419,6 @@
   "resolved" "https://registry.npmjs.org/@types/node/-/node-16.11.1.tgz"
   "version" "16.11.1"
 
-"@types/post-robot@^10.0.3":
-  "integrity" "sha512-y8ysuxddaG8V/oA1Ay6Err7nSADRa9Bv1rl0ZQpJ0qgdIQ7ks3CHcOsYL4qE8w75+/XYDS94dBeXDs0xexm3tA=="
-  "resolved" "https://registry.npmjs.org/@types/post-robot/-/post-robot-10.0.3.tgz"
-  "version" "10.0.3"
-
 "@types/prettier@^2.1.5":
   "integrity" "sha512-ri0UmynRRvZiiUJdiz38MmIblKK+oH30MztdBVR95dv/Ubw6neWSb8u1XpRb72L4qsZOhz+L+z9JD40SJmfWow=="
   "resolved" "https://registry.npmjs.org/@types/prettier/-/prettier-2.7.1.tgz"

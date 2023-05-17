@@ -51,24 +51,21 @@ class Field {
          * The UID of the current field is defined in the content type of the entry.
          * @type {string}
          */
-        this.uid = fieldDataObject.data.uid;
+        this.uid = fieldDataObject.uid;
         /**
          * The data type of the current field is set using this method.
          * @type {string}
          */
-        this.data_type = fieldDataObject.data.schema.data_type;
+        this.data_type = fieldDataObject.schema.data_type;
         /**
          * The schema of the current field (schema of fields such as ‘Single Line Textbox’, ‘Number’,
          *  and so on) is set using this method.
          * @type {Object}
          */
-        this.schema = fieldDataObject.data.schema;
+        this.schema = fieldDataObject.schema;
         this._emitter = emitter;
 
-        const separatedData = separateResolvedData(
-            this,
-            fieldDataObject.data.value
-        );
+        const separatedData = separateResolvedData(this, fieldDataObject.value);
 
         this._data = separatedData.unResolvedData;
 
@@ -76,7 +73,7 @@ class Field {
 
         this._connection = connection;
 
-        this._self = fieldDataObject.data.self || false;
+        this._self = fieldDataObject.self || false;
 
         const fieldObj = this;
 

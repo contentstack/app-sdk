@@ -49,10 +49,6 @@ export declare interface IPageWidget {
 
 // initialization data
 
-export declare interface IConfig {
-    [key: string]: any;
-}
-
 export enum DashboardWidth {
     FULL_WIDTH = "full_width",
     HALF_WIDTH = "half_width",
@@ -82,81 +78,66 @@ declare interface ICommonInitData {
     user: User;
 }
 
-export declare interface IDashboardInitData {
-    data: ICommonInitData & {
-        dashboard_width: DashboardWidth;
-        config?: GenericObjectType;
-        type: LocationType.DASHBOARD;
-    };
+export declare interface IDashboardInitData extends ICommonInitData {
+    dashboard_width: DashboardWidth;
+    config?: GenericObjectType;
+    type: LocationType.DASHBOARD;
 }
 
-export declare interface ISidebarInitData {
-    data: ICommonInitData & {
-        config?: GenericObjectType;
-        content_type: ContentType;
-        entry: Entry;
-        locale: string;
-        type: LocationType.WIDGET;
-    };
+export declare interface ISidebarInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    content_type: ContentType;
+    entry: Entry;
+    locale: string;
+    type: LocationType.WIDGET;
 }
 
-export declare interface IFieldInitData {
-    data: ICommonInitData & {
-        config?: GenericObjectType;
-        content_type: ContentType;
-        entry: Entry;
-        field_config: GenericObjectType;
-        locale: string;
-        schema: Schema;
-        self: boolean;
-        type: LocationType.FIELD;
-        uid: string;
-        value: any;
-    };
+export declare interface IFieldInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    content_type: ContentType;
+    entry: Entry;
+    field_config: GenericObjectType;
+    locale: string;
+    schema: Schema;
+    self: boolean;
+    type: LocationType.FIELD;
+    uid: string;
+    value: any;
 }
 
-export declare interface IFullPageLocationInitData {
-    data: ICommonInitData & {
-        config?: GenericObjectType;
-        type: LocationType.FULL_PAGE_LOCATION;
-    };
+export declare interface IFullPageLocationInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    type: LocationType.FULL_PAGE_LOCATION;
 }
 
-export declare interface IRTEInitData {
-    data: ICommonInitData & {
-        config?: GenericObjectType;
-        type: LocationType.RTE;
-    };
+export declare interface IRTEInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    type: LocationType.RTE;
 }
 
-export declare interface IAppConfigInitData {
-    data: ICommonInitData & {
-        config?: GenericObjectType;
-        type: LocationType.APP_CONFIG_WIDGET;
-    };
+export declare interface IAppConfigInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    type: LocationType.APP_CONFIG_WIDGET;
 }
 
-export declare interface IAssetSidebarInitData {
-    data: ICommonInitData & {
-        config: GenericObjectType;
-        currentAsset: Asset;
-        type: LocationType.ASSET_SIDEBAR_WIDGET;
-    };
+export declare interface IAssetSidebarInitData extends ICommonInitData {
+    config: GenericObjectType;
+    currentAsset: Asset;
+    type: LocationType.ASSET_SIDEBAR_WIDGET;
 }
 
-export declare interface IFieldModifierLocationInitData {
-    data: ICommonInitData & {
-        changedData: Entry;
-        config?: GenericObjectType;
-        content_type: ContentType;
-        entry: Entry;
-        locale: string;
-        schema: Schema;
-        self: boolean;
-        value: any;
-        type: LocationType.FIELD_MODIFIER_LOCATION;
-        uid: string;
-    };
+export declare interface IFieldModifierLocationInitData
+    extends ICommonInitData {
+    changedData: Entry;
+    config?: GenericObjectType;
+    content_type: ContentType;
+    entry: Entry;
+    locale: string;
+    schema: Schema;
+    self: boolean;
+    value: any;
+    type: LocationType.FIELD_MODIFIER_LOCATION;
+    uid: string;
 }
 
 export declare interface setAssetDto {
