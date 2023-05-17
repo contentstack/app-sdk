@@ -13,62 +13,60 @@ describe("FieldModifierLocationEntry", () => {
     let emitter: any;
     function getEntryInitialData(): IFieldModifierLocationInitData {
         return {
-            data: {
-                type: LocationType.FIELD_MODIFIER_LOCATION,
-                config: {},
-                content_type: {} as any,
-                entry: {
-                    title: "sample_entry_title",
-                    uid: "sample_entry_uid",
-                    content_type_title: "sample_ct",
-                    publish_details: [],
-                    locale: "en",
-                    tags: ["tag1"],
-                },
-                locale: "en-us",
-                uid: "field_uid",
-                schema: {
-                    display_name: "sample_schema_name",
-                    uid: "sample_schema_uid",
-                    data_type: "text",
-                },
-                value: {},
-                self: false,
-                changedData: {
-                    title: "sample_entry_title",
-                    uid: "sample_entry_uid",
-                    content_type_title: "sample_ct",
-                    publish_details: [],
-                    locale: "en",
-                    tags: ["tag1", "tag2"],
-                },
-                app_id: "app_id",
-                currentBranch: "master",
-                extension_uid: "extension_uid",
-                installation_uid: "installation_uid",
-                region: "NA",
-                stack: {
-                    api_key: "api_key",
-                    created_at: "created_at",
-                    is_asset_download_public: true,
-                    name: "name",
-                    master_locale: "en-us",
-                    org_uid: "org_uid",
-                    owner_uid: "owner_uid",
-                    settings: {},
-                    uid: "uid",
-                    updated_at: "updated_at",
-                    user_uids: ["user_uids"],
-                    branches: [],
-                    collaborators: [],
-                    discrete_variables: {
-                        _version: 1,
-                        cms: true,
-                        secret_key: "secret_key",
-                    },
-                },
-                user: {} as any,
+            type: LocationType.FIELD_MODIFIER_LOCATION,
+            config: {},
+            content_type: {} as any,
+            entry: {
+                title: "sample_entry_title",
+                uid: "sample_entry_uid",
+                content_type_title: "sample_ct",
+                publish_details: [],
+                locale: "en",
+                tags: ["tag1"],
             },
+            locale: "en-us",
+            uid: "field_uid",
+            schema: {
+                display_name: "sample_schema_name",
+                uid: "sample_schema_uid",
+                data_type: "text",
+            },
+            value: {},
+            self: false,
+            changedData: {
+                title: "sample_entry_title",
+                uid: "sample_entry_uid",
+                content_type_title: "sample_ct",
+                publish_details: [],
+                locale: "en",
+                tags: ["tag1", "tag2"],
+            },
+            app_id: "app_id",
+            currentBranch: "master",
+            extension_uid: "extension_uid",
+            installation_uid: "installation_uid",
+            region: "NA",
+            stack: {
+                api_key: "api_key",
+                created_at: "created_at",
+                is_asset_download_public: true,
+                name: "name",
+                master_locale: "en-us",
+                org_uid: "org_uid",
+                owner_uid: "owner_uid",
+                settings: {},
+                uid: "uid",
+                updated_at: "updated_at",
+                user_uids: ["user_uids"],
+                branches: [],
+                collaborators: [],
+                discrete_variables: {
+                    _version: 1,
+                    cms: true,
+                    secret_key: "secret_key",
+                },
+            },
+            user: {} as any,
         };
     }
     const entryIntialData: IFieldModifierLocationInitData =
@@ -147,8 +145,7 @@ describe("FieldModifierLocationEntry", () => {
         });
 
         it("should throw an error when tags are not defined", async () => {
-            // @ts-ignore
-            await expect(entryInstance.setTags()).rejects.toThrow(
+            await expect((entryInstance as any).setTags()).rejects.toThrow(
                 generateErrorMessages(
                     ERROR_MESSAGES.entryField.entry.tagsShouldNotBeBlank
                 )
@@ -156,15 +153,15 @@ describe("FieldModifierLocationEntry", () => {
         });
 
         it("should throw an error if tags is not an array of strings", async () => {
-            // @ts-ignore
-            await expect(entryInstance.setTags(["tag3", 4])).rejects.toThrow(
+            await expect(
+                entryInstance.setTags(["tag3", 4 as any])
+            ).rejects.toThrow(
                 generateErrorMessages(
                     ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings
                 )
             );
 
-            // @ts-ignore
-            await expect(entryInstance.setTags("tag3")).rejects.toThrow(
+            await expect(entryInstance.setTags("tag3" as any)).rejects.toThrow(
                 generateErrorMessages(
                     ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings
                 )

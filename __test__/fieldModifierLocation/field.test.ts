@@ -29,10 +29,8 @@ describe("Field", () => {
             } as EventEmitter;
             jest.spyOn(connection, "sendToParent");
             jest.spyOn(emitter, "on");
-            //@ts-ignore
-            testData.self = true;
-            //@ts-ignore
-            field = new Field({ data: testData }, connection, emitter);
+            (testData as any).self = true;
+            field = new Field(testData as any, connection, emitter);
         });
 
         it("init", (done) => {
@@ -64,13 +62,13 @@ describe("Field", () => {
 
         it("setData Error Case", async () => {
             let newField = new Field(
-                //@ts-ignore
-                { data: testData },
+                testData as any,
                 { sendToParent: sendToParentError },
                 emitter
             );
-            //@ts-ignore
-            await expect(newField.setData()).rejects.toMatch("sample error");
+            await expect((newField as any).setData()).rejects.toMatch(
+                "sample error"
+            );
         });
     });
 
@@ -93,14 +91,12 @@ describe("Field", () => {
             jest.spyOn(connection, "sendToParent");
             jest.spyOn(emitter, "on");
             singleFileField = new Field(
-                //@ts-ignore
-                { data: fileFieldData.single },
+                fileFieldData.single as any,
                 connection,
                 emitter
             );
             multipleFileField = new Field(
-                //@ts-ignore
-                { data: fileFieldData.multiple },
+                fileFieldData.multiple as any,
                 connection,
                 emitter
             );
@@ -111,12 +107,12 @@ describe("Field", () => {
             delete clonedfileField.single.value;
             delete clonedfileField.multiple.value;
             let emptySingleFileField = new Field(
-                { data: clonedfileField.single },
+                clonedfileField.single,
                 connection,
                 emitter
             );
             let emptyMultipleFileField = new Field(
-                { data: clonedfileField.multiple },
+                clonedfileField.multiple,
                 connection,
                 emitter
             );

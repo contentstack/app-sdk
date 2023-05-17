@@ -184,12 +184,10 @@ class Entry {
             throw Error("Invalid uid, Field not found");
         }
         const fieldIntilaizationDataObject = {
-            data: {
-                uid,
-                value,
-                schema,
-                data_type: schema.data_type,
-            },
+            uid,
+            value,
+            schema,
+            data_type: schema.data_type,
         };
 
         //@ts-ignore
