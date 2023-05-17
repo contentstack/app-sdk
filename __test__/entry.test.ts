@@ -29,8 +29,11 @@ describe("Entry", () => {
         const changedData = JSON.parse(JSON.stringify(testData));
         changedData.entry.title = "changed title";
 
-        // @ts-ignore
-        entry = new Entry({ data: testData, changedData }, connection, emitter);
+        entry = new Entry(
+            { ...testData, changedData } as any,
+            connection,
+            emitter
+        );
     });
 
     it("init", (done) => {
@@ -127,21 +130,14 @@ describe("Entry", () => {
             expect(field.uid).toBe(uid);
             expect(field.schema).toEqual(schema);
             expect(field.data_type).toEqual(schema.data_type);
-
         });
         it("should use custom Field instance if internal flag is set", () => {
-            const fieldInstance = jest.fn();
-            entry = new Entry(
-                // @ts-ignore
-                { data: testData },
-                connection,
-                emitter,
-                {
-                    _internalFlags: {
-                        FieldInstance: fieldInstance,
-                    },
-                }
-            );
+            const fieldInstance: any = jest.fn();
+            entry = new Entry(testData as any, connection, emitter, {
+                _internalFlags: {
+                    FieldInstance: fieldInstance,
+                },
+            });
 
             entry.getField("title");
 
@@ -175,15 +171,15 @@ describe("Entry", () => {
     it("getField within Create page", function () {
         const dataWithoutEntry = JSON.parse(JSON.stringify(testData));
         dataWithoutEntry.entry = {};
-        // @ts-ignore
-        entry = new Entry({ data: dataWithoutEntry }, connection, emitter);
+        entry = new Entry(dataWithoutEntry, connection, emitter);
         expect(() => entry.getField("invaliduid")).toThrowError(
             "The data is unsaved. Save the data before requesting the field."
         );
     });
 
     it("onSave Callback must be a function", function () {
-        // @ts-ignore
-        expect(() => entry.onSave()).toThrow("Callback must be a function");
+        expect(() => (entry as any).onSave()).toThrow(
+            "Callback must be a function"
+        );
     });
 });
