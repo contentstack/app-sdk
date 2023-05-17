@@ -40,7 +40,7 @@ export declare type IOnEntryChangeCallback = (
     resolvedEntry: Record<string, any>
 ) => void;
 
-export interface EntryData extends AnyProperty {
+export interface Entry extends AnyProperty {
     title: string;
     uid: string;
     content_type_title: string;

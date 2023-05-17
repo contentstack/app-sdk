@@ -1,5 +1,5 @@
 import { GenericObjectType } from "./types/common.types";
-import { EntryData } from "./types/entry.types";
+import { Entry } from "./types/entry.types";
 import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
 import { User } from "./types/user.types";
 
@@ -73,7 +73,6 @@ export enum LocationType {
 
 declare interface ICommonInitData {
     app_id: string;
-    app_uid: string;
     currentBranch: string;
     extension_uid: string;
     installation_uid: string;
@@ -94,10 +93,10 @@ export declare interface IDashboardInitData {
 export declare interface ISidebarInitData {
     data: ICommonInitData & {
         app_config: IConfig;
-        changedData: EntryData;
+        changedData: Entry;
         config?: GenericObjectType;
         content_type: ContentType;
-        entry: EntryData;
+        entry: Entry;
         locale: string;
         type: LocationType.WIDGET;
     };
@@ -106,10 +105,10 @@ export declare interface ISidebarInitData {
 export declare interface IFieldInitData {
     data: ICommonInitData & {
         app_config: IConfig;
-        changedData: EntryData;
+        changedData: Entry;
         config?: GenericObjectType;
         content_type: ContentType;
-        entry: EntryData;
+        entry: Entry;
         field_config: GenericObjectType;
         locale: string;
         schema: Schema;
@@ -151,10 +150,10 @@ export declare interface IAssetSidebarInitData {
 
 export declare interface IFieldModifierLocationInitData {
     data: ICommonInitData & {
-        changedData: EntryData;
+        changedData: Entry;
         config?: GenericObjectType;
         content_type: ContentType;
-        entry: EntryData;
+        entry: Entry;
         locale: string;
         schema: Schema;
         self: boolean;
