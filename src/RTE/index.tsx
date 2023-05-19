@@ -1,10 +1,16 @@
+import React from "react";
+import ContentstackAppSDK from "..";
+import Extension from "../extension";
 import {
     IConfigCallback,
     IContainerMetaData,
     IOnFunction,
     IPluginMetaData,
     IRteParam,
-    IConfig
+    IConfig,
+    IDisplayOnOptions,
+    IElementTypeOptions,
+    IRteElementType,
 } from "./types";
 
 export class RTEPlugin {
@@ -159,18 +165,22 @@ export class RTEPlugin {
                     }
 
                     case "elementType": {
-                        const isInline = (
-                            typeof value === 'string' && value === 'inline' ||
-                            Array.isArray(value) && value.includes('inline')
-                        )
-                        if(isInline) {
-                            let dndOptions = this.pluginMetaData['registry']['dndOptions'];
-                            if(!dndOptions) {
-                                this.pluginMetaData['registry']['dndOptions'] = {};
-                                dndOptions = this.pluginMetaData['registry']['dndOptions']
+                        const isInline =
+                            (typeof value === "string" && value === "inline") ||
+                            (Array.isArray(value) && value.includes("inline"));
+                        if (isInline) {
+                            let dndOptions =
+                                this.pluginMetaData["registry"]["dndOptions"];
+                            if (!dndOptions) {
+                                this.pluginMetaData["registry"]["dndOptions"] =
+                                    {};
+                                dndOptions =
+                                    this.pluginMetaData["registry"][
+                                        "dndOptions"
+                                    ];
                             }
-                            dndOptions['DisableDND'] = true;
-                            dndOptions['DisableSelectionHalo'] = true;
+                            dndOptions["DisableDND"] = true;
+                            dndOptions["DisableSelectionHalo"] = true;
                         }
                         this.pluginMetaData.meta.elementType = value;
                         break;
@@ -181,8 +191,8 @@ export class RTEPlugin {
                         break;
                     }
 
-                    case "shouldOverride" : {
-                        this.pluginMetaData.registry.shouldOverride = value
+                    case "shouldOverride": {
+                        this.pluginMetaData.registry.shouldOverride = value;
                     }
                 }
             }
@@ -213,7 +223,48 @@ export const rtePluginInitializer = (
     id: string,
     configCallback: IConfigCallback
 ) => {
-    if (!(id && configCallback)) throw Error('Please provide value "id" and "configCallback"');
+    if (!(id && configCallback))
+        throw Error('Please provide value "id" and "configCallback"');
 
     return new RTEPlugin(id, configCallback);
+};
+
+interface RTEPluginOptions {
+    uid: string;
+    title: string;
+    icon?: React.ReactElement | null;
+    displayOn?: string[];
+    elementType: string[];
+    shouldOverride?: (element: IRteElementType) => boolean;
+}
+
+export declare type PluginBuilderCallback = (
+    appSDK: Extension,
+    rte?: IRteParam,
+    props?: any
+) => React.ReactElement;
+
+export const RTEPluginBuilder = async (
+    options: RTEPluginOptions,
+    callback: PluginBuilderCallback
+): Promise<RTEPlugin | null> => {
+    // 1. Initialize CS SDK with UID
+    // 2. Retrieve RTEPluginInitializer
+    // 3. Build RTEPlugin callback function
+    // 4. Call RTEPluginInitializer with callback
+    // 5. return RTEPlugin
+    const appSDK = await ContentstackAppSDK.init(options.uid);
+    console.log("KS APP: SDK RTE INIT", appSDK);
+    const rtePluginInitializer = appSDK.location.RTEPlugin;
+    if (rtePluginInitializer) {
+        const rtePlugin = rtePluginInitializer(options.uid, (rte) => ({
+            displayOn: options.displayOn,
+            elementType: options.elementType as any,
+            icon: options.icon,
+            render: (props) => callback(appSDK, rte as IRteParam, ...props),
+            title: options.title,
+        }));
+        return rtePlugin;
+    }
+    return null;
 };

@@ -5,6 +5,7 @@ import Modal from "./modal";
 import Stack from "./stack";
 import Store from "./store";
 import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IEntryFieldLocation, IEntryFieldLocationInitData, IFieldInitData, IFieldModifierLocation, IFieldModifierLocationInitData, IFullPageLocation, IFullPageLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, Region } from "./types";
+import { AnyObject } from "./types/common.types";
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -43,7 +44,7 @@ declare class Extension {
     }>;
     getCurrentLocation: () => ILocation;
     getCurrentRegion: () => Region;
-    static initialize(version: string): any;
+    static initialize(metadata: AnyObject): any;
     setReady(): any;
 }
 export default Extension;

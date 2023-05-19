@@ -373,12 +373,13 @@ class Extension {
         return this.region;
     };
 
-    static initialize(version: string) {
+    static initialize(metadata: AnyObject) {
         const meta = {
             sdkType: "app-sdk",
+            ...metadata,
         };
         //@ts-ignore
-        return postRobot.sendToParent("init", { version, meta });
+        return postRobot.sendToParent("init", { meta });
     }
 
     setReady() {
