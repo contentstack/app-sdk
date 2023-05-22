@@ -1,1 +1,1 @@
-{"version":3,"file":"modal.d.ts","sourceRoot":"","sources":["../../src/modal.ts"],"names":[],"mappings":"AAAA,cAAM,KAAK;;IAMP,oBAAoB,CAAC,OAAO,EAAE,WAAW;CAG5C;AAED,eAAe,KAAK,CAAC"}
+{"version":3,"file":"modal.d.ts","sourceRoot":"","sources":["../../src/modal.ts"],"names":[],"mappings":"AAEA,cAAM,KAAK;;IAYP;;;OAGG;IACH,oBAAoB,CAAC,OAAO,EAAE,WAAW;CAG5C;AAED,eAAe,KAAK,CAAC"}
