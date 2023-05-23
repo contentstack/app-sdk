@@ -60,6 +60,7 @@ class Extension {
     locationUID: string;
     modal: Modal;
     readonly region: Region;
+    version: number;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -155,6 +156,8 @@ class Extension {
         this.modal = new Modal();
 
         this.region = formatAppRegion(initializationData.data.region);
+
+        this.version = initializationData.data.manifest?.version || 0;
 
         const stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,
@@ -367,6 +370,10 @@ class Extension {
 
     getCurrentLocation = () => {
         return this.type;
+    };
+
+    getCurrentVersion = () => {
+        return this.version;
     };
 
     getCurrentRegion = () => {
