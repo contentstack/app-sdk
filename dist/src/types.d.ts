@@ -21,6 +21,21 @@ export declare interface IEntryFieldLocation {
 export declare interface IFullPageLocation {
     [key: string]: any;
 }
+export declare interface User {
+    uid: string;
+    first_name: string;
+    last_name: string;
+}
+export declare interface Manifest {
+    created_by: User;
+    icon: string;
+    name: string;
+    target_type: string;
+    uid: string;
+    updated_by: User;
+    version: number;
+    visibility: string;
+}
 export declare interface IAppConfigWidget {
     installation: {
         setInstallationData: (installationData: IInstallationData) => Promise<AnyObject>;
@@ -59,12 +74,14 @@ declare interface ICommonInitData {
     user: IUser;
     currentBranch: string;
     region: string;
+    manifest?: Manifest;
 }
 export declare interface IDashboardInitData {
     data: ICommonInitData & {
         dashboard_width: "full_width" | "half_width";
         config?: AnyObject;
         type: "DASHBOARD";
+        manifest: Manifest;
     };
 }
 export declare interface ISidebarInitData {
