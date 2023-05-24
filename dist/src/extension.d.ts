@@ -43,7 +43,11 @@ declare class Extension {
         [key: string]: any;
     }>;
     getCurrentLocation: () => ILocation;
-    getCurrentVersion: () => number | null;
+    /**
+     * Conditionally gets and returns the app version if not present already
+     * @returns version of the app currently running.
+     */
+    getAppVersion: () => Promise<number>;
     getCurrentRegion: () => Region;
     static initialize(version: string): any;
     setReady(): any;
