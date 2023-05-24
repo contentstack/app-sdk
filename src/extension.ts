@@ -60,7 +60,7 @@ class Extension {
     locationUID: string;
     modal: Modal;
     readonly region: Region;
-    version: number;
+    version: number | null;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -157,7 +157,7 @@ class Extension {
 
         this.region = formatAppRegion(initializationData.data.region);
 
-        this.version = initializationData.data.manifest?.version || 0;
+        this.version = initializationData.data.manifest?.version || null;
 
         const stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,

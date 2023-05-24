@@ -81,7 +81,6 @@ export declare interface IDashboardInitData {
         dashboard_width: "full_width" | "half_width";
         config?: AnyObject;
         type: "DASHBOARD";
-        manifest: Manifest;
     };
 }
 export declare interface ISidebarInitData {
