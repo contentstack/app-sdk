@@ -1,34 +1,41 @@
+import EntryClass from "./entry";
+import Field from "./field";
+import FieldModifierLocationField from "./fieldModifierLocation/field";
+import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
+import Stack from "./stack";
 import { GenericObjectType } from "./types/common.types";
 import { Entry } from "./types/entry.types";
 import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
 import { User } from "./types/user.types";
+import Window from "./window";
 
 export declare interface IDashboardWidget {
-    [key: string]: any;
+    frame: Window;
+    stack: Stack;
 }
 
 export declare interface ICustomField {
-    [key: string]: any;
+    entry: EntryClass;
+    field: Field;
+    fieldConfig: GenericObjectType;
+    frame: Window;
+    stack: Stack;
 }
 
 export declare interface ISidebarWidget {
-    [key: string]: any;
-}
-
-export declare interface IRTE {
-    [key: string]: any;
+    entry: EntryClass;
+    stack: Stack;
 }
 
 export declare interface IFieldModifierLocation {
-    [key: string]: any;
-}
-
-export declare interface IEntryFieldLocation {
-    [key: string]: any;
+    entry: EntryClass;
+    stack: Stack;
+    field: FieldModifierLocationField;
+    frame: FieldModifierLocationFrame;
 }
 
 export declare interface IFullPageLocation {
-    [key: string]: any;
+    stack: Stack;
 }
 
 export declare interface IAppConfigWidget {
@@ -40,14 +47,8 @@ export declare interface IAppConfigWidget {
         setValidity: (isValid: boolean, options?: ValidationOptions) => void;
         [key: string]: any;
     };
-    stack: GenericObjectType;
+    stack: Stack;
 }
-
-export declare interface IPageWidget {
-    [key: string]: any;
-}
-
-// initialization data
 
 export enum DashboardWidth {
     FULL_WIDTH = "full_width",

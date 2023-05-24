@@ -17,10 +17,8 @@ import {
     IAppConfigWidget,
     ICustomField,
     IDashboardWidget,
-    IEntryFieldLocation,
     IFieldModifierLocation,
     IFullPageLocation,
-    IPageWidget,
     ISidebarWidget,
     InitializationData,
     LocationType,
@@ -59,9 +57,7 @@ class Extension {
         CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
         AppConfigWidget: IAppConfigWidget | null;
-        FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
-        EntryFieldLocation: IEntryFieldLocation | null;
         FullPage: IFullPageLocation | null;
         FieldModifierLocation: IFieldModifierLocation | null;
     };
@@ -125,10 +121,8 @@ class Extension {
             SidebarWidget: null,
             RTEPlugin: null,
             AppConfigWidget: null,
-            FullscreenAppWidget: null,
             AssetSidebarWidget: null,
             FullPage: null,
-            EntryFieldLocation: null,
             FieldModifierLocation: null,
         };
 
@@ -190,7 +184,6 @@ class Extension {
                     postRobot,
                     emitter
                 );
-
                 break;
             }
 
@@ -322,6 +315,10 @@ class Extension {
         this.postRobot.sendToParent("analytics", { eventName, metadata });
     };
 
+    /**
+     *
+     * @returns The configuration set for the app.
+     */
     getConfig = (): Promise<GenericObjectType> => {
         if (!this.installationUID) {
             return Promise.resolve(this.config);
@@ -332,10 +329,18 @@ class Extension {
             .catch(onError);
     };
 
+    /**
+     *
+     * @returns the current UI location of the app that is running.
+     */
     getCurrentLocation = (): LocationType => {
         return this.type;
     };
 
+    /**
+     *
+     * @returns Contentstack Region on which the app is running.
+     */
     getCurrentRegion = (): Region => {
         return this.region;
     };
