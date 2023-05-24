@@ -35,14 +35,14 @@ export declare interface User {
     last_name: string;
 }
 export declare interface Manifest {
-    created_by: User
-    icon: string
-    name: string
-    target_type: string
-    uid: string
-    updated_by: User
-    version: number
-    visibility: string
+    created_by: User;
+    icon: string;
+    name: string;
+    target_type: string;
+    uid: string;
+    updated_by: User;
+    version: number;
+    visibility: string;
 }
 
 export declare interface IAppConfigWidget {
@@ -104,7 +104,6 @@ export declare interface IDashboardInitData {
         dashboard_width: "full_width" | "half_width";
         config?: AnyObject;
         type: "DASHBOARD";
-        manifest:Manifest;
     };
 }
 
