@@ -1,13 +1,14 @@
 import EventEmitter from "wolfy87-eventemitter";
 import Field from "./field";
-import { ICurrentContentType, IFieldInitData, IFieldModifierLocationInitData, ISidebarInitData } from "./types";
+import { IFieldInitData, IFieldModifierLocationInitData, ISidebarInitData } from "./types";
 import { IEntryOptions, IGetFieldOptions, IOnEntryChangeCallback } from "./types/entry.types";
+import { ContentType } from "./types/stack.types";
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 declare class Entry {
     /**
      * @hideconstructor
      */
-    content_type: ICurrentContentType;
+    content_type: ContentType;
     _data: {
         [key: string]: any;
     };

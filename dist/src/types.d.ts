@@ -1,156 +1,122 @@
-import { AnyObject } from "./types/common.types";
-import { StackDetail } from "./types/stack.types";
+import EntryClass from "./entry";
+import Field from "./field";
+import FieldModifierLocationField from "./fieldModifierLocation/field";
+import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
+import Stack from "./stack";
+import { GenericObjectType } from "./types/common.types";
+import { Entry } from "./types/entry.types";
+import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
+import { User } from "./types/user.types";
+import Window from "./window";
 export declare interface IDashboardWidget {
-    [key: string]: any;
+    frame: Window;
+    stack: Stack;
 }
 export declare interface ICustomField {
-    [key: string]: any;
+    entry: EntryClass;
+    field: Field;
+    fieldConfig: GenericObjectType;
+    frame: Window;
+    stack: Stack;
 }
 export declare interface ISidebarWidget {
-    [key: string]: any;
-}
-export declare interface IRTE {
-    [key: string]: any;
+    entry: EntryClass;
+    stack: Stack;
 }
 export declare interface IFieldModifierLocation {
-    [key: string]: any;
-}
-export declare interface IEntryFieldLocation {
-    [key: string]: any;
+    entry: EntryClass;
+    stack: Stack;
+    field: FieldModifierLocationField;
+    frame: FieldModifierLocationFrame;
 }
 export declare interface IFullPageLocation {
-    [key: string]: any;
+    stack: Stack;
 }
 export declare interface IAppConfigWidget {
     installation: {
-        setInstallationData: (installationData: IInstallationData) => Promise<AnyObject>;
+        setInstallationData: (installationData: IInstallationData) => Promise<GenericObjectType>;
         getInstallationData: () => Promise<IInstallationData>;
         setValidity: (isValid: boolean, options?: ValidationOptions) => void;
         [key: string]: any;
     };
-    stack: AnyObject;
+    stack: Stack;
 }
-export declare interface IPageWidget {
-    [key: string]: any;
+export declare enum DashboardWidth {
+    FULL_WIDTH = "full_width",
+    HALF_WIDTH = "half_width"
 }
-export declare interface IUser {
-    [key: string]: any;
-}
-export declare interface ICurrentEntry {
-    [key: string]: any;
-}
-export declare interface ICurrentContentType {
-    [key: string]: any;
-}
-export declare interface IConfig {
-    [key: string]: any;
-}
-export declare interface ISchema {
-    [key: string]: any;
-}
-export declare interface IFieldConfig {
-    [key: string]: any;
+export declare enum LocationType {
+    APP_CONFIG_WIDGET = "APP_CONFIG_WIDGET",
+    ASSET_SIDEBAR_WIDGET = "ASSET_SIDEBAR_WIDGET",
+    DASHBOARD = "DASHBOARD",
+    FIELD = "FIELD",
+    FIELD_MODIFIER_LOCATION = "FIELD_MODIFIER_LOCATION",
+    FULL_PAGE_LOCATION = "FULL_PAGE_LOCATION",
+    RTE = "RTE",
+    WIDGET = "WIDGET"
 }
 declare interface ICommonInitData {
     app_id: string;
-    installation_uid: string;
-    extension_uid: string;
-    stack: StackDetail;
-    user: IUser;
     currentBranch: string;
+    extension_uid: string;
+    installation_uid: string;
     region: string;
+    stack: StackDetail;
+    type: LocationType;
+    user: User;
 }
-export declare interface IDashboardInitData {
-    data: ICommonInitData & {
-        dashboard_width: "full_width" | "half_width";
-        config?: AnyObject;
-        type: "DASHBOARD";
-    };
+export declare interface IDashboardInitData extends ICommonInitData {
+    dashboard_width: DashboardWidth;
+    config?: GenericObjectType;
+    type: LocationType.DASHBOARD;
 }
-export declare interface ISidebarInitData {
-    data: ICommonInitData & {
-        app_config: IConfig;
-        content_type: ICurrentContentType;
-        entry: ICurrentEntry;
-        locale: string;
-        config?: AnyObject;
-        changedData: ICurrentEntry;
-        type: "WIDGET";
-    };
+export declare interface ISidebarInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    content_type: ContentType;
+    entry: Entry;
+    locale: string;
+    type: LocationType.WIDGET;
 }
-export declare interface IFieldInitData {
-    data: ICommonInitData & {
-        entry: ICurrentEntry;
-        content_type: ICurrentContentType;
-        locale: string;
-        uid: string;
-        schema: ISchema;
-        app_config: IConfig;
-        value: any;
-        field_config: IFieldConfig;
-        config?: AnyObject;
-        changedData: ICurrentEntry;
-        self: boolean;
-        type: "FIELD";
-    };
+export declare interface IFieldInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    content_type: ContentType;
+    entry: Entry;
+    field_config: GenericObjectType;
+    locale: string;
+    schema: Schema;
+    self: boolean;
+    type: LocationType.FIELD;
+    uid: string;
+    value: any;
 }
-export declare interface IFullPageLocationInitData {
-    data: ICommonInitData & {
-        type: "FULL_PAGE_LOCATION";
-        config?: AnyObject;
-    };
+export declare interface IFullPageLocationInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    type: LocationType.FULL_PAGE_LOCATION;
 }
-export declare interface IRTEInitData {
-    data: ICommonInitData & {
-        type: "RTE";
-        config?: AnyObject;
-    };
+export declare interface IRTEInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    type: LocationType.RTE;
 }
-export declare interface IAppConfigInitData {
-    data: ICommonInitData & {
-        type: "APP_CONFIG_WIDGET";
-        config?: AnyObject;
-    };
+export declare interface IAppConfigInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    type: LocationType.APP_CONFIG_WIDGET;
 }
-export declare interface ICurrentAsset {
-    [key: string]: any;
+export declare interface IAssetSidebarInitData extends ICommonInitData {
+    config: GenericObjectType;
+    currentAsset: Asset;
+    type: LocationType.ASSET_SIDEBAR_WIDGET;
 }
-export declare interface IAssetSidebarInitData {
-    data: ICommonInitData & {
-        type: "ASSET_SIDEBAR_WIDGET";
-        currentAsset: ICurrentAsset;
-        config: {
-            [key: string]: any;
-        };
-    };
-}
-export declare interface IFieldModifierLocationInitData {
-    data: ICommonInitData & {
-        type: "FIELD_MODIFIER_LOCATION";
-        config?: Record<string, any>;
-        content_type: ICurrentContentType;
-        entry: ICurrentEntry;
-        locale: string;
-        uid: string;
-        schema: ISchema;
-        value: any;
-        self: boolean;
-        changedData: ICurrentEntry;
-    };
-}
-export declare interface IEntryFieldLocationInitData {
-    data: ICommonInitData & {
-        type: "ENTRY_FIELD_LOCATION";
-        config?: Record<string, any>;
-        content_type: ICurrentContentType;
-        entry: ICurrentEntry;
-        locale: string;
-        uid: string;
-        schema: ISchema;
-        value: any;
-        self: boolean;
-        changedData: ICurrentEntry;
-    };
+export declare interface IFieldModifierLocationInitData extends ICommonInitData {
+    changedData: Entry;
+    config?: GenericObjectType;
+    content_type: ContentType;
+    entry: Entry;
+    locale: string;
+    schema: Schema;
+    self: boolean;
+    value: any;
+    type: LocationType.FIELD_MODIFIER_LOCATION;
+    uid: string;
 }
 export declare interface setAssetDto {
     title: string;
@@ -171,6 +137,7 @@ export declare type AppLocation = StackLocation | OrganizationLocation;
 export interface Scope {
     content_types: string[];
 }
+export declare type InitializationData = IAppConfigInitData | IAssetSidebarInitData | IDashboardInitData | IFieldInitData | IFieldModifierLocationInitData | IFullPageLocationInitData | IRTEInitData | ISidebarInitData;
 /**
  * installation details API response
  */
@@ -194,15 +161,6 @@ export interface IInstallationData {
         }[];
     }[];
 }
-export declare interface IInitializationData {
-    FIELD: IFieldConfig;
-    WIDGET: ISidebarInitData;
-    DASHBOARD: IDashboardInitData;
-    RTE: IRTEInitData;
-    APP_CONFIG_WIDGET: IAppConfigInitData;
-    ASSET_SIDEBAR_WIDGET: IAssetSidebarInitData;
-}
-export declare type ILocation = "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "ASSET_SIDEBAR_WIDGET" | "FULL_PAGE_LOCATION" | "ENTRY_FIELD_LOCATION" | "FIELD_MODIFIER_LOCATION";
 export declare interface ValidationOptions {
     message?: string;
 }
