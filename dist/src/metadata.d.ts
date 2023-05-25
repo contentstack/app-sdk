@@ -1,4 +1,4 @@
-import { AnyObject } from "./types/common.types";
+import { GenericObjectType } from "./types/common.types";
 export declare interface IMetadata {
     uid: string;
     type: "asset" | "entry";
@@ -24,7 +24,7 @@ declare class Metadata {
     constructor(_connection: any);
     createMetaData(metadataConfig: IMetadataCreateDto): any;
     retrieveMetaData(metadataConfig: IMetadataRetrieveDto): any;
-    retrieveAllMetaData(params?: AnyObject): any;
+    retrieveAllMetaData(params?: GenericObjectType): any;
     updateMetaData(metadataConfig: IMetadataUpdateDto): any;
     deleteMetaData(metadataConfig: IMetadataDeleteDto): any;
 }

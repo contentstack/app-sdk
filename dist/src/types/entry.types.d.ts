@@ -1,4 +1,5 @@
 import Field from "../field";
+import { AnyProperty } from "./common.types";
 export declare interface IGetFieldOptions {
     /**
      * By default, getFields will return a field if has been saved.
@@ -32,4 +33,12 @@ unresolvedEntry: Record<string, any>,
  * The new entry object with all the file fields resolved.
  */
 resolvedEntry: Record<string, any>) => void;
+export interface Entry extends AnyProperty {
+    title: string;
+    uid: string;
+    content_type_title: string;
+    publish_details: Array<any>;
+    locale: string;
+    url?: string;
+}
 //# sourceMappingURL=entry.types.d.ts.map

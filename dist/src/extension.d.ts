@@ -1,10 +1,13 @@
+import postRobot from "post-robot";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import { IRTEPluginInitializer } from "./RTE/types";
 import Metadata from "./metadata";
 import Modal from "./modal";
 import Stack from "./stack";
 import Store from "./store";
-import { IAppConfigInitData, IAppConfigWidget, IAssetSidebarInitData, ICustomField, IDashboardInitData, IDashboardWidget, IEntryFieldLocation, IEntryFieldLocationInitData, IFieldInitData, IFieldModifierLocation, IFieldModifierLocationInitData, IFullPageLocation, IFullPageLocationInitData, ILocation, IPageWidget, IRTEInitData, ISidebarInitData, ISidebarWidget, IUser, Region } from "./types";
+import { IAppConfigWidget, ICustomField, IDashboardWidget, IFieldModifierLocation, IFullPageLocation, ISidebarWidget, InitializationData, LocationType, Region } from "./types";
+import { GenericObjectType } from "./types/common.types";
+import { User } from "./types/user.types";
 /** Class representing an extension from Contentstack App Framework SDK. */
 declare class Extension {
     /**
@@ -12,10 +15,10 @@ declare class Extension {
      */
     appUID: string;
     installationUID: string;
-    currentUser: IUser;
+    currentUser: User;
     private type;
     private config;
-    postRobot: any;
+    postRobot: typeof postRobot;
     stack: Stack;
     store: Store;
     metadata: Metadata;
@@ -28,23 +31,31 @@ declare class Extension {
         CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
         AppConfigWidget: IAppConfigWidget | null;
-        FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
-        EntryFieldLocation: IEntryFieldLocation | null;
         FullPage: IFullPageLocation | null;
         FieldModifierLocation: IFieldModifierLocation | null;
     };
-    constructor(initData: IRTEInitData | IDashboardInitData | IFieldInitData | ISidebarInitData | IAppConfigInitData | IAssetSidebarInitData | IFullPageLocationInitData | IEntryFieldLocationInitData | IFieldModifierLocationInitData);
+    constructor(initData: InitializationData);
     pulse: (eventName: string, metadata: {
         [key: string]: any;
     }) => void;
-    getConfig: () => Promise<{
-        [key: string]: any;
-    }>;
-    getCurrentLocation: () => ILocation;
+    /**
+     *
+     * @returns The configuration set for the app.
+     */
+    getConfig: () => Promise<GenericObjectType>;
+    /**
+     *
+     * @returns the current UI location of the app that is running.
+     */
+    getCurrentLocation: () => LocationType;
+    /**
+     *
+     * @returns Contentstack Region on which the app is running.
+     */
     getCurrentRegion: () => Region;
-    static initialize(version: string): any;
-    setReady(): any;
+    static initialize(version: string): Promise<InitializationData>;
+    setReady(): Promise<ResponseMessageEvent>;
 }
 export default Extension;
 //# sourceMappingURL=extension.d.ts.map
