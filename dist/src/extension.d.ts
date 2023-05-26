@@ -47,7 +47,7 @@ declare class Extension {
      * Conditionally gets and returns the app version if not present already
      * @returns version of the app currently running.
      */
-    getAppVersion: () => Promise<number>;
+    getAppVersion: () => Promise<number | null>;
     getCurrentRegion: () => Region;
     static initialize(version: string): any;
     setReady(): any;

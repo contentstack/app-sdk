@@ -377,9 +377,12 @@ class Extension {
      * Conditionally gets and returns the app version if not present already
      * @returns version of the app currently running.
      */
-    getAppVersion = async (): Promise<number> => {
+    getAppVersion = async (): Promise<number | null> => {
         if (this.version) {
             return Promise.resolve(this.version);
+        }
+        if (!this.installationUID) {
+            return Promise.resolve(null);
         }
         const orgUid = this.stack._data.org_uid;
         const options = {
