@@ -31,26 +31,76 @@ import Window from "./window";
 
 const emitter = new EventEmitter();
 
-/** Class representing an extension from Contentstack App Framework SDK. */
+/**
+ * Class representing an extension from Contentstack App SDK.
+ * @hideconstructor
+ */
 
 class Extension {
     /**
-     * @hideconstructor
+     * This value represents the current app's unique ID.
      */
-
     appUID: string;
+
+    /**
+     * This holds the app's installation ID.
+     */
     installationUID: string;
+
+    /**
+     * This object holds details of the current user.
+     */
     currentUser: User;
+
+    /**
+     * The type of UI Location being rendered.
+     */
     private type: LocationType;
+
+    /**
+     * The configuration set for an app.
+     */
     private config: GenericObjectType;
+
+    /**
+     * This holds the instance of Cross-domain communication library for posting messages between windows.
+     */
     postRobot: typeof postRobot;
+
+    /**
+     * This holds the stack instance that allows users to read and manipulate a range of objects in a stack.
+     */
     stack: Stack;
+
+    /**
+     * Store to persist data for extension.
+     * Note: Data is stored in the browser's {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
+     */
     store: Store;
+
+    /**
+     * This holds the instance of the Metadata class used to manage metadata.
+     */
     metadata: Metadata;
+
+    /**
+     * This value represents the current location's unique ID. One App may contain multiple locations
+     */
     locationUID: string;
+
+    /**
+     * This holds the instance of a helper class used to open a modal from an App.
+     */
     modal: Modal;
+
+    /**
+     * The Contentstack Region on which the app is running.
+     */
     readonly region: Region;
 
+    /**
+     * This holds the information of the currently running location of an App.
+     */
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
@@ -67,46 +117,18 @@ class Extension {
 
         this.postRobot = postRobot;
 
-        /**
-         * This value represents the current App's unique ID. One App may contain multiple locations
-         * @type {string}
-         */
         this.appUID = initializationData.app_id;
 
-        /**
-         *  This value represents the current location's unique ID. One App may contain multiple locations
-         * @type {string}
-         */
         this.locationUID = initializationData.extension_uid;
 
-        /**
-         * This object holds details of the app initialization user.
-         * @type {Object}
-         */
         this.installationUID = initializationData.installation_uid;
-        /**
-         * This object holds details of the current user.
-         * @type {Object}
-         */
+
         this.currentUser = initializationData.user;
 
-        /**
-         * location of extension, "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
-         * @type {string}
-         */
         this.type = initializationData.type;
 
-        /**
-         * Store to persist data for extension.
-         * Note: Data is stored in the browser {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
-         * @type {Store}
-         */
         this.store = new Store(postRobot);
 
-        /**
-         * This method returns stack object which allows users to read and manipulate a range of objects in a stack.
-         * @type {Stack}
-         */
         this.stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
         });
@@ -311,13 +333,12 @@ class Extension {
         }
     }
 
-    pulse = (eventName: string, metadata: { [key: string]: any }): void => {
+    pulse = (eventName: string, metadata: GenericObjectType): void => {
         this.postRobot.sendToParent("analytics", { eventName, metadata });
     };
 
     /**
-     *
-     * @returns The configuration set for the app.
+     * Method used to retrieve the configuration set for an app.
      */
     getConfig = (): Promise<GenericObjectType> => {
         if (!this.installationUID) {
@@ -330,21 +351,23 @@ class Extension {
     };
 
     /**
-     *
-     * @returns the current UI location of the app that is running.
+     * Method used to get the type of currently running UI location of the app.
      */
     getCurrentLocation = (): LocationType => {
         return this.type;
     };
 
     /**
-     *
-     * @returns Contentstack Region on which the app is running.
+     * Method used to get the Contentstack Region on which the app is running.
      */
     getCurrentRegion = (): Region => {
         return this.region;
     };
 
+    /**
+     * Method used to initialize the App SDK.
+     * @param version - Version of the app SDK in use.
+     */
     static async initialize(version: string): Promise<InitializationData> {
         const meta = {
             sdkType: "app-sdk",

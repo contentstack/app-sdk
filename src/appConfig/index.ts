@@ -1,5 +1,6 @@
 import Stack from "../stack";
 import { IInstallationData, ValidationOptions } from "../types";
+import { GenericObjectType } from "../types/common.types";
 import generateErrorMessages, { ERROR_MESSAGES } from "../utils/errorMessages";
 import { onData, onError } from "../utils/utils";
 
@@ -39,7 +40,7 @@ export class AppConfig {
 
     setInstallationData = (
         installationData: IInstallationData
-    ): Promise<{ [key: string]: any }> => {
+    ): Promise<GenericObjectType> => {
         return this._connection
             .sendToParent("setInstallationData", installationData)
             .then(onData)
