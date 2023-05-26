@@ -6084,7 +6084,12 @@
   dependencies:
     "is-typedarray" "^1.0.0"
 
-"typedoc@^0.22.17":
+"typedoc-plugin-rename-defaults@^0.6.5":
+  "integrity" "sha512-DwkgwRMxgu3UrDR3VUAdnF9jYzM6p7rw6UcVIh4MD7yjEmFDR8WWyOlk6oYgELmRYHxTDx0f0GK6iSgoxSh/Qw=="
+  "resolved" "https://registry.npmjs.org/typedoc-plugin-rename-defaults/-/typedoc-plugin-rename-defaults-0.6.5.tgz"
+  "version" "0.6.5"
+
+"typedoc@^0.22.18", "typedoc@0.22.x || 0.23.x || 0.24.x":
   "integrity" "sha512-NK9RlLhRUGMvc6Rw5USEYgT4DVAUFk7IF7Q6MYfpJ88KnTZP7EneEa4RcP+tX1auAcz7QT1Iy0bUSZBYYHdoyA=="
   "resolved" "https://registry.npmjs.org/typedoc/-/typedoc-0.22.18.tgz"
   "version" "0.22.18"

@@ -29,7 +29,6 @@ class ContentstackAppSDK {
 
     /**
      * Initializes the App SDK and returns an instance of {@link Extension} class
-     * @returns {Promise<Extension>}
      */
     static init(): Promise<Extension> {
         if (this._extension) {
