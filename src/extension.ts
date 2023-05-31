@@ -33,6 +33,7 @@ import {
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    Manifest,
     Region,
 } from "./types";
 import { AnyObject } from "./types/common.types";
@@ -372,7 +373,29 @@ class Extension {
         return this.type;
     };
 
-    getCurrentVersion = () => {
+    /**
+     * Conditionally gets and returns the app version if not present already
+     * @returns version of the app currently running.
+     */
+    getAppVersion = async (): Promise<number | null> => {
+        if (this.version) {
+            return Promise.resolve(this.version);
+        }
+        if (!this.installationUID) {
+            return Promise.resolve(null);
+        }
+        const orgUid = this.stack._data.org_uid;
+        const options = {
+            uid: this.installationUID,
+            action: "getAppManifest",
+            headers: { organization_uid: orgUid },
+            skip_api_key: true,
+        };
+        const app: Manifest = await this.postRobot
+            .sendToParent("stackQuery", options)
+            .then(onData)
+            .catch(onError);
+        this.version = app.version;
         return this.version;
     };
 
