@@ -34,6 +34,7 @@ export declare interface User {
     first_name: string;
     last_name: string;
 }
+
 export declare interface Manifest {
     created_by: User;
     icon: string;
