@@ -161,19 +161,19 @@ describe("Extension", () => {
             expect(extensionObj.getAppVersion).toBeDefined();
         });
 
-        it("should return a app version", async () => {
+        it("should return an app version when invoked", async () => {
             const extensionObj = new Extension(initData);
             const version = await extensionObj.getAppVersion();
             expect(version).toBe(5);
         });
 
-        it("should return null for data without installation uid & manifest, this case is for jsonRte", async () => {
+        it("should return null when installation uid is not present", async () => {
             const extensionObj = new Extension(initDataJsonRte as any);
             const version = await extensionObj.getAppVersion();
             expect(version).toBe(null);
         });
 
-        it("should execute the function without errors which calls postRobo init, this case is for customField where we dont get the manifest", async () => {
+        it("should fetch the app version for parent using post robot", async () => {
             const extensionObj = new Extension(initDataWithoutManifest);
             const version = await extensionObj.getAppVersion();
             expect(version).toBe(90);
