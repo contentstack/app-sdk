@@ -8,6 +8,7 @@
     "scripts": {
         "prepublish": "npm run build",
         "build": "webpack",
+        "build:dev": "npm run build && cp -r dist/ ../CS-Marketplace-App/node_modules/@contentstack/app-sdk/dist/",
         "test": "jest",
         "test:watch": "jest --watchAll",
         "test:coverage": "jest --coverage --coverageDirectory=\"coverage\"",
