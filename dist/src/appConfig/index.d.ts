@@ -1,5 +1,6 @@
 import Stack from "../stack";
 import { IInstallationData, ValidationOptions } from "../types";
+import { GenericObjectType } from "../types/common.types";
 export declare interface AppConfigAdditionalData {
     currentBranch: string;
 }
@@ -17,9 +18,7 @@ export declare class AppConfig {
         [key: string]: any;
     }, connection: any, emitter: EventEmitter, additionalData: AppConfigAdditionalData);
     stack: () => Stack;
-    setInstallationData: (installationData: IInstallationData) => Promise<{
-        [key: string]: any;
-    }>;
+    setInstallationData: (installationData: IInstallationData) => Promise<GenericObjectType>;
     getInstallationData: () => Promise<IInstallationData>;
     /**
      * Set the validation state of the app. If the validation is false, the Contentstack App Config

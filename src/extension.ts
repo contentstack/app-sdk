@@ -89,7 +89,7 @@ class Extension {
     locationUID: string;
 
     /**
-     * This holds the instance of a helper class used to open a modal from an App.
+     * This holds the instance of a helper class used to manage modals in an App.
      */
     modal: Modal;
 
