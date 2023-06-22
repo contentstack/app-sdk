@@ -44,7 +44,7 @@ declare class Extension {
     }>;
     getCurrentLocation: () => ILocation;
     /**
-     * Conditionally gets and returns the app version if not present already
+     * Conditionally retrieves and returns the app version if not present already
      * @returns version of the app currently running.
      */
     getAppVersion: () => Promise<number | null>;
