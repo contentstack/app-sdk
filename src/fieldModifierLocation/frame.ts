@@ -36,6 +36,25 @@ class FieldModifierLocationFrame {
     }
 
     /**
+     * Prevent user from accidently closing the app by clicking outside the frame
+     *  if the app is performing some active task.
+     */
+    async preventFrameClose() {
+        await this._connection.sendToParent("setAllowAppClose", {
+            isAllowed: false,
+        });
+    }
+
+    /**
+     * Allow user from closing the app by clicking outside the frame.
+     */
+    async allowFrameClose() {
+        await this._connection.sendToParent("setAllowAppClose", {
+            isAllowed: true,
+        });
+    }
+
+    /**
      * This method updates the extension height and width on Contentstack UI.
      * If the value is not passed, it will update the height and width of the
      * extension with the current height and width of the extension.
