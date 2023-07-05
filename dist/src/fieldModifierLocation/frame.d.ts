@@ -24,6 +24,11 @@ declare class FieldModifierLocationFrame {
         width?: number;
     }): Promise<void>;
     /**
+     * Prevent user from accidently closing the app by clicking outside the frame
+     *  if the app is performing some active task.
+     */
+    setAllowAppClose(isAllowed: boolean): Promise<void>;
+    /**
      * This method enables auto resizing of the extension height.
      * @return {FieldModifierLocationFrame}.
      */
