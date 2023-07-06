@@ -187,19 +187,19 @@ describe("FieldModifierLocationFrame", () => {
     });
 
     describe("preventFrameClose", () => {
-        it("should not allow user from clicking background", async () => {
-            await frameInstance.setAllowAppClose(false);
+        it("should not allow user to close frame by clicking background", async () => {
+            await frameInstance.preventFrameClose(true);
             expect(sendToParent).toHaveBeenCalledTimes(1);
-            expect(sendToParent).toHaveBeenLastCalledWith("setAllowAppClose", {
-                isAllowed: false,
+            expect(sendToParent).toHaveBeenLastCalledWith("preventFrameClose", {
+                state: true,
             });
         });
 
-        it("should allow user from clicking background", async () => {
-            await frameInstance.setAllowAppClose(true);
+        it("should allow user to close frame by clicking background", async () => {
+            await frameInstance.preventFrameClose(false);
             expect(sendToParent).toHaveBeenCalledTimes(1);
-            expect(sendToParent).toHaveBeenLastCalledWith("setAllowAppClose", {
-                isAllowed: true,
+            expect(sendToParent).toHaveBeenLastCalledWith("preventFrameClose", {
+                state: false,
             });
         });
     });

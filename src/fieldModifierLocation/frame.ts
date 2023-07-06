@@ -93,9 +93,9 @@ class FieldModifierLocationFrame {
      * Prevent user from accidently closing the app by clicking outside the frame
      *  if the app is performing some active task.
      */
-    async setAllowAppClose(isAllowed: boolean) {
-        await this._connection.sendToParent("setAllowAppClose", {
-                    isAllowed,
+    async preventFrameClose(state: boolean) {
+        await this._connection.sendToParent("preventFrameClose", {
+            state,
         });
     }
 
