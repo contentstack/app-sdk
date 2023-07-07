@@ -33,6 +33,7 @@ import {
     ISidebarInitData,
     ISidebarWidget,
     IUser,
+    Manifest,
     Region,
 } from "./types";
 import { AnyObject } from "./types/common.types";
@@ -60,6 +61,7 @@ class Extension {
     locationUID: string;
     modal: Modal;
     readonly region: Region;
+    version: number | null;
 
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -155,6 +157,8 @@ class Extension {
         this.modal = new Modal();
 
         this.region = formatAppRegion(initializationData.data.region);
+
+        this.version = initializationData.data.manifest?.version || null;
 
         const stack = new Stack(initializationData.data.stack, postRobot, {
             currentBranch: initializationData.data.currentBranch,
@@ -367,6 +371,32 @@ class Extension {
 
     getCurrentLocation = () => {
         return this.type;
+    };
+
+    /**
+     * Conditionally retrieves and returns the app version if not present already
+     * @returns version of the app currently running.
+     */
+    getAppVersion = async (): Promise<number | null> => {
+        if (this.version) {
+            return Promise.resolve(this.version);
+        }
+        if (!this.installationUID) {
+            return Promise.resolve(null);
+        }
+        const orgUid = this.stack._data.org_uid;
+        const options = {
+            uid: this.installationUID,
+            action: "getAppManifest",
+            headers: { organization_uid: orgUid },
+            skip_api_key: true,
+        };
+        const app: Manifest = await this.postRobot
+            .sendToParent("stackQuery", options)
+            .then(onData)
+            .catch(onError);
+        this.version = app.version;
+        return this.version;
     };
 
     getCurrentRegion = () => {
