@@ -157,10 +157,10 @@ declare class Asset extends Base {
     static handleUpload(_files: any, type: any, options?: {
         parentFolderUid?: string;
         customUploadHandler?: IAnyObject;
-    }): Promise<any>;
+    }): Promise<ResponseMessageEvent<object>>;
     static uploadAsset(files: any, options?: {
         parentFolderUid?: string;
-    }): Promise<any>;
+    }): Promise<ResponseMessageEvent<object>>;
 }
 declare const _default: (uiConnection: any) => typeof Asset;
 export default _default;
