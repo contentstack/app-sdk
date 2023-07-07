@@ -22,6 +22,7 @@ declare class Extension {
     locationUID: string;
     modal: Modal;
     readonly region: Region;
+    version: number | null;
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
@@ -42,6 +43,11 @@ declare class Extension {
         [key: string]: any;
     }>;
     getCurrentLocation: () => ILocation;
+    /**
+     * Conditionally retrieves and returns the app version if not present already
+     * @returns version of the app currently running.
+     */
+    getAppVersion: () => Promise<number | null>;
     getCurrentRegion: () => Region;
     static initialize(version: string): any;
     setReady(): any;
