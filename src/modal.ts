@@ -4,6 +4,7 @@ class Modal {
             window["iframeRef"] = document?.body?.children[0];
         }
     }
+
     setBackgroundElement(element: HTMLElement) {
         window["iframeRef"] = element;
     }

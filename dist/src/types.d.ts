@@ -37,7 +37,7 @@ export declare interface IAppConfigWidget {
         setInstallationData: (installationData: IInstallationData) => Promise<GenericObjectType>;
         getInstallationData: () => Promise<IInstallationData>;
         setValidity: (isValid: boolean, options?: ValidationOptions) => void;
-        [key: string]: any;
+        stack(): Stack;
     };
     stack: Stack;
 }
