@@ -70,7 +70,7 @@ class FieldModifierLocationEntry extends Entry {
         await this._connection.sendToParent("setTags", { tags });
 
         if (!this._changedData) {
-            this._changedData = {};
+            this._changedData = {} ;
         }
 
         this._changedData.tags = tags;
