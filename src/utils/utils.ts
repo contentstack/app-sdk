@@ -25,3 +25,34 @@ export function formatAppRegion(region: string): Region {
             return Region.UNKNOWN;
     }
 }
+
+export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
+    let rootElementIndex = Infinity;
+    let rootElement: Element | undefined;
+    const elementPreferenceList = [
+        "HEADER",
+        "NAV",
+        "MAIN",
+        "SECTION",
+        "ARTICLE",
+        "ASIDE",
+        "FOOTER",
+        "DIV",
+    ];
+    const nonRenderingTags = ["SCRIPT", "NOSCRIPT", "STYLE", "TEMPLATE"];
+    // ? choose higher preference semantic HTML tags
+    Array.from(nodeCollection).forEach((el) => {
+        const elIndex = elementPreferenceList.indexOf(el.nodeName);
+        if (elIndex >= 0 && elIndex < rootElementIndex) {
+            rootElementIndex = elIndex;
+            rootElement = el;
+        }
+    });
+    // ? choose the first rendering HTML tag found if no semantic tags found
+    if (!rootElement) {
+        rootElement = Array.from(nodeCollection).find(
+            (el) => !nonRenderingTags.includes(el.nodeName)
+        );
+    }
+    return rootElement || nodeCollection[0];
+}

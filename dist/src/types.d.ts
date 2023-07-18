@@ -32,6 +32,21 @@ export declare interface IFieldModifierLocation {
 export declare interface IFullPageLocation {
     stack: Stack;
 }
+export declare interface ManifestUser {
+    uid: string;
+    first_name: string;
+    last_name: string;
+}
+export declare interface Manifest {
+    created_by: ManifestUser;
+    icon: string;
+    name: string;
+    target_type: string;
+    uid: string;
+    updated_by: ManifestUser;
+    version: number;
+    visibility: string;
+}
 export declare interface IAppConfigWidget {
     installation: {
         setInstallationData: (installationData: IInstallationData) => Promise<GenericObjectType>;
@@ -64,6 +79,7 @@ declare interface ICommonInitData {
     stack: StackDetail;
     type: LocationType;
     user: User;
+    manifest?: Manifest;
 }
 export declare interface IDashboardInitData extends ICommonInitData {
     dashboard_width: DashboardWidth;
