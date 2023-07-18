@@ -91,7 +91,7 @@ describe("FieldModifierLocationEntry", () => {
         jest.spyOn(emitter, "on");
         entryInstance = new FieldModifierLocationEntry(
             entryIntialData,
-            connection,
+            connection as any,
             emitter
         );
     });
