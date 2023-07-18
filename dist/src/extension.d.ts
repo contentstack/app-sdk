@@ -62,6 +62,7 @@ declare class Extension {
      * The Contentstack Region on which the app is running.
      */
     readonly region: Region;
+    version: number | null;
     /**
      * This holds the information of the currently running location of an App.
      */
@@ -85,6 +86,11 @@ declare class Extension {
      * Method used to get the type of currently running UI location of the app.
      */
     getCurrentLocation: () => LocationType;
+    /**
+     * Conditionally retrieves and returns the app version if not present already
+     * @returns version of the app currently running.
+     */
+    getAppVersion: () => Promise<number | null>;
     /**
      * Method used to get the Contentstack Region on which the app is running.
      */

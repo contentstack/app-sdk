@@ -22,6 +22,7 @@ import {
     ISidebarWidget,
     InitializationData,
     LocationType,
+    Manifest,
     Region,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
@@ -97,6 +98,7 @@ class Extension {
      * The Contentstack Region on which the app is running.
      */
     readonly region: Region;
+    version: number | null;
 
     /**
      * This holds the information of the currently running location of an App.
@@ -157,6 +159,8 @@ class Extension {
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
         });
+
+        this.version = initializationData.manifest?.version || null;
 
         switch (initializationData.type) {
             case LocationType.DASHBOARD: {
@@ -355,6 +359,32 @@ class Extension {
      */
     getCurrentLocation = (): LocationType => {
         return this.type;
+    };
+
+    /**
+     * Conditionally retrieves and returns the app version if not present already
+     * @returns version of the app currently running.
+     */
+    getAppVersion = async (): Promise<number | null> => {
+        if (this.version) {
+            return Promise.resolve(this.version);
+        }
+        if (!this.installationUID) {
+            return Promise.resolve(null);
+        }
+        const orgUid = this.stack._data.org_uid;
+        const options = {
+            uid: this.installationUID,
+            action: "getAppManifest",
+            headers: { organization_uid: orgUid },
+            skip_api_key: true,
+        };
+        const app: Manifest = await this.postRobot
+            .sendToParent<Manifest>("stackQuery", options)
+            .then(onData)
+            .catch(onError);
+        this.version = app.version;
+        return this.version;
     };
 
     /**
