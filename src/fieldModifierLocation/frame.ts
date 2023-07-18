@@ -1,5 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
+
 import { ERROR_MESSAGES } from "../utils/errorMessages";
 
 /**
@@ -11,7 +12,7 @@ class FieldModifierLocationFrame {
      * @hideconstructor
      */
 
-    _connection: any;
+    _connection: typeof postRobot;
     _autoResizingEnabled = false;
     _emitter: EventEmitter;
     _height?: number;
@@ -19,7 +20,7 @@ class FieldModifierLocationFrame {
 
     private observer: MutationObserver | undefined;
 
-    constructor(connection: any, emitter: EventEmitter) {
+    constructor(connection: typeof postRobot, emitter: EventEmitter) {
         this._connection = connection || postRobot;
         this._autoResizingEnabled = false;
         this._emitter = emitter;
@@ -39,7 +40,7 @@ class FieldModifierLocationFrame {
      * This method updates the extension height and width on Contentstack UI.
      * If the value is not passed, it will update the height and width of the
      * extension with the current height and width of the extension.
-     * @param {string|number} height Desired height of the iframe window
+     * @param {dimension: {height: number, width: number}} dimension Desired height and width of the iframe window
      */
     async updateDimension(dimension?: { height?: number; width?: number }) {
         const { height, width } = dimension || {};
@@ -131,7 +132,7 @@ class FieldModifierLocationFrame {
      * @returns {Promise<void>}
      */
     async closeModal(): Promise<void> {
-        return await this._connection.sendToParent("closeModal");
+        await this._connection.sendToParent("closeModal");
     }
 }
 

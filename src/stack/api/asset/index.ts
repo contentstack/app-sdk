@@ -1,8 +1,7 @@
-
 import Base from '../base';
 import { getReferences, language, environment } from '../../utils';
 import postRobot from 'post-robot';
-import { IAnyObject } from '../../../RTE/types';
+import { GenericObjectType } from '../../../types/common.types';
 
 let connection: any = {};
 
@@ -232,7 +231,7 @@ class Asset extends Base {
     return this.fetch('unpublishAsset', payload);
   }
 
-  static async handleUpload(_files, type, options?: {parentFolderUid?: string, customUploadHandler?: IAnyObject}):Promise<ResponseMessageEvent<object>> {
+  static async handleUpload(_files, type, options?: {parentFolderUid?: string, customUploadHandler?: GenericObjectType}):Promise<ResponseMessageEvent<object>> {
     if (!_files || !_files.length) {
       return Promise.reject(new Error('Kindly provide valid parameters'));
     }
