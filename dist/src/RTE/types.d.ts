@@ -102,18 +102,19 @@ export declare type IRteParamWithPreventDefault = {
 };
 export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
 export declare type IOnFunction = {
+    beforeRender: (rte: IRteParam) => void;
+    beforeChildRender: (rte: IRteParam) => void;
+    change: (params: IRteParamWithPreventDefault) => void;
+    deleteBackward: (params: IRteParamWithPreventDefault) => void;
+    deleteForward: (params: IRteParamWithPreventDefault) => void;
     exec: (rte: IRteParam) => void;
+    insertBreak: (params: IRteParamWithPreventDefault) => void;
     keydown: (params: {
         event: React.KeyboardEvent;
         rte: IRteParam;
     }) => void;
     normalize: (params: IRteParamWithPreventDefault) => void;
-    insertBreak: (params: IRteParamWithPreventDefault) => void;
-    deleteBackward: (params: IRteParamWithPreventDefault) => void;
-    deleteForward: (params: IRteParamWithPreventDefault) => void;
-    beforeRender: (rte: IRteParam) => void;
-    beforeChildRender: (rte: IRteParam) => void;
-    copy: (rte: IRteParam) => void;
+    paste: (params: IRteParamWithPreventDefault) => void;
 };
 export declare type IOnType = "exec" | "normalize" | "deleteBackwards" | "deleteForwards" | "insertBreak" | "beforeRender" | "beforeChildRender" | "copy";
 export declare type IDisplayOnOptions = "toolbar" | "hoveringToolbar";
@@ -126,19 +127,18 @@ export declare interface IDnd {
     droppableContainer: (elementType: string, path: number[]) => string;
     disableColumnLayout: boolean;
 }
-export declare interface IAnyObject {
-    [key: string]: any;
-}
 export declare interface IRteTextType {
     text: string;
 }
 export declare interface IRteElementType {
     uid: string;
     type: string;
-    attrs: IAnyObject;
+    attrs: {
+        [key: string]: any;
+    };
     children: Array<IRteElementType | IRteTextType>;
 }
-declare type IDynamicFunction = ((element: IRteElementType) => Exclude<IElementTypeOptions, "text"> | Exclude<IElementTypeOptions, "text">[]);
+declare type IDynamicFunction = (element: IRteElementType) => Exclude<IElementTypeOptions, "text"> | Exclude<IElementTypeOptions, "text">[];
 export declare interface IConfig {
     title: string;
     icon: React.ReactElement | null;
