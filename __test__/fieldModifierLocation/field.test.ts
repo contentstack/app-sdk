@@ -30,7 +30,7 @@ describe("Field", () => {
             jest.spyOn(connection, "sendToParent");
             jest.spyOn(emitter, "on");
             (testData as any).self = true;
-            field = new Field(testData as any, connection, emitter);
+            field = new Field(testData as any, connection as any, emitter);
         });
 
         it("init", (done) => {
@@ -63,7 +63,7 @@ describe("Field", () => {
         it("setData Error Case", async () => {
             let newField = new Field(
                 testData as any,
-                { sendToParent: sendToParentError },
+                { sendToParent: sendToParentError } as any,
                 emitter
             );
             await expect((newField as any).setData()).rejects.toMatch(
@@ -92,12 +92,12 @@ describe("Field", () => {
             jest.spyOn(emitter, "on");
             singleFileField = new Field(
                 fileFieldData.single as any,
-                connection,
+                connection as any,
                 emitter
             );
             multipleFileField = new Field(
                 fileFieldData.multiple as any,
-                connection,
+                connection as any,
                 emitter
             );
         });
@@ -108,12 +108,12 @@ describe("Field", () => {
             delete clonedfileField.multiple.value;
             let emptySingleFileField = new Field(
                 clonedfileField.single,
-                connection,
+                connection as any,
                 emitter
             );
             let emptyMultipleFileField = new Field(
                 clonedfileField.multiple,
-                connection,
+                connection as any,
                 emitter
             );
             expect(emptySingleFileField.getData()).toBe(undefined);

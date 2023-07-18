@@ -26,7 +26,10 @@ describe("FieldModifierLocationFrame", () => {
         };
 
         jest.spyOn(emitter, "on");
-        frameInstance = new FieldModifierLocationFrame(connection, emitter);
+        frameInstance = new FieldModifierLocationFrame(
+            connection as any,
+            emitter
+        );
     });
 
     afterEach(() => {
@@ -108,7 +111,10 @@ describe("FieldModifierLocationFrame", () => {
             //@ts-ignore
             global.MutationObserver = mutationObserverMock;
 
-            frameInstance = new FieldModifierLocationFrame(connection, emitter);
+            frameInstance = new FieldModifierLocationFrame(
+                connection as any,
+                emitter
+            );
 
             const [observerInstance] = <void[] | [{ trigger: () => {} }]>(
                 mutationObserverMock.mock.instances
@@ -150,7 +156,10 @@ describe("FieldModifierLocationFrame", () => {
             //@ts-ignore
             global.MutationObserver = mutationObserverMock;
 
-            frameInstance = new FieldModifierLocationFrame(connection, emitter);
+            frameInstance = new FieldModifierLocationFrame(
+                connection as any,
+                emitter
+            );
 
             frameInstance.disableAutoResizing();
 
