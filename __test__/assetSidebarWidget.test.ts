@@ -51,7 +51,7 @@ describe("AssetSidebarWidget", () => {
         jest.spyOn(connection, "sendToParent");
         assetSidebarWidget = new AssetSidebarWidget(
             mockInitData as IAssetSidebarInitData,
-            connection,
+            connection as any,
             emitter
         );
     });
@@ -81,7 +81,7 @@ describe("AssetSidebarWidget", () => {
                 "setData",
                 asset
             );
-            expect(result).toEqual({ data: {} });
+            expect(result).toEqual(undefined);
         });
     });
 
@@ -89,7 +89,7 @@ describe("AssetSidebarWidget", () => {
         it("should sync the upstream asset with the current", async () => {
             const result = await assetSidebarWidget.syncAsset();
             expect(connection.sendToParent).toHaveBeenCalledWith("syncAsset");
-            expect(result).toEqual({ data: {} });
+            expect(result).toEqual(undefined);
         });
     });
 
@@ -108,7 +108,7 @@ describe("AssetSidebarWidget", () => {
                 "updateAssetSidebarWidth",
                 mockWidth
             );
-            expect(result).toEqual({ data: {} });
+            expect(result).toEqual(undefined);
         });
     });
 
