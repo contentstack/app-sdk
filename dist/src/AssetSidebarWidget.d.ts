@@ -16,7 +16,7 @@ declare class AssetSidebarWidget {
     getData(): AssetType;
     setData(asset: Partial<setAssetDto>): Promise<void>;
     syncAsset(): Promise<void>;
-    updateWidth(width: AssetType): Promise<void>;
+    updateWidth(width: number): Promise<void>;
     replaceAsset(file: File): Promise<any>;
     /**
      * This function executes the callback function every time an asset is saved.
