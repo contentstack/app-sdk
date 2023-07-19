@@ -1,4 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
 
 import Field from "./field";
 import {
@@ -6,12 +7,14 @@ import {
     IFieldModifierLocationInitData,
     ISidebarInitData,
 } from "./types";
+import { Entry as EntryType } from "../src/types/entry.types";
 import {
     IEntryOptions,
     IGetFieldOptions,
     IOnEntryChangeCallback,
 } from "./types/entry.types";
 import { ContentType, Schema } from "./types/stack.types";
+import { GenericObjectType } from "./types/common.types";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 
@@ -21,11 +24,11 @@ class Entry {
      */
 
     content_type: ContentType;
-    _data: { [key: string]: any };
+    _data: EntryType;
     locale: string;
-    _connection: any;
+    _connection: typeof postRobot;
     _emitter: EventEmitter;
-    _changedData?: { [key: string]: any };
+    _changedData?: GenericObjectType;
     _options: IEntryOptions;
 
     constructor(
@@ -33,7 +36,7 @@ class Entry {
             | IFieldInitData
             | ISidebarInitData
             | IFieldModifierLocationInitData,
-        connection: any,
+        connection: typeof postRobot,
         emitter: EventEmitter,
         options?: IEntryOptions
     ) {
@@ -67,19 +70,13 @@ class Entry {
 
         const thisEntry = this;
 
-        this._emitter.on(
-            "entrySave",
-            (event: { data: { [key: string]: any } }) => {
-                thisEntry._data = event.data;
-            }
-        );
+        this._emitter.on("entrySave", (event: { data: EntryType }) => {
+            thisEntry._data = event.data;
+        });
 
-        this._emitter.on(
-            "entryChange",
-            (event: { data: { [key: string]: any } }) => {
-                thisEntry._changedData = event.data;
-            }
-        );
+        this._emitter.on("entryChange", (event: { data: EntryType }) => {
+            thisEntry._changedData = event.data;
+        });
     }
 
     /**
@@ -113,7 +110,7 @@ class Entry {
         let value = useUnsavedSchema
             ? this._changedData || this._data
             : this._data;
-        let schema: Schema = this.content_type.schema as any;
+        let schema: Schema[0] = this.content_type.schema;
 
         const isDataEmpty = Object.keys(value).length === 0;
 
@@ -183,7 +180,7 @@ class Entry {
         } catch (e) {
             throw Error("Invalid uid, Field not found");
         }
-        const fieldIntilaizationDataObject = {
+        const fieldInitializationDataObject = {
             uid,
             value,
             schema,
@@ -192,7 +189,7 @@ class Entry {
 
         //@ts-ignore
         const fieldObject = new FieldInstance(
-            fieldIntilaizationDataObject,
+            fieldInitializationDataObject,
             this._connection,
             this._emitter
         );
@@ -205,10 +202,10 @@ class Entry {
      * @param {function} callback The function to be called when an entry is saved.
      */
 
-    onSave(callback: (arg0: any) => void) {
+    onSave(callback: (arg0: EntryType) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entrySave", (event: { data: any }) => {
+            entryObj._emitter.on("entrySave", (event: EntryType) => {
                 callback(event.data);
             });
         } else {
@@ -226,7 +223,10 @@ class Entry {
         if (callback && typeof callback === "function") {
             entryObj._emitter.on(
                 "entryChange",
-                (event: { data: any; resolvedData: Record<string, any> }) => {
+                (event: {
+                    data: EntryType;
+                    resolvedData: GenericObjectType;
+                }) => {
                     callback(event.data, event.resolvedData);
                 }
             );
@@ -240,10 +240,10 @@ class Entry {
      * @param {function} callback The function to be called when an entry is published.
      */
 
-    onPublish(callback: (arg0: any) => void) {
+    onPublish(callback: (arg0: EntryType) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entryPublish", (event: { data: any }) => {
+            entryObj._emitter.on("entryPublish", (event: EntryType) => {
                 callback(event.data);
             });
         } else {
@@ -256,10 +256,10 @@ class Entry {
      * @param {function} callback The function to be called when an entry is un published.
      */
 
-    onUnPublish(callback: (arg0: any) => void) {
+    onUnPublish(callback: (arg0: EntryType) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entryUnPublish", (event: { data: any }) => {
+            entryObj._emitter.on("entryUnPublish", (event: EntryType) => {
                 callback(event.data);
             });
         } else {
