@@ -14,7 +14,7 @@ class AssetSidebarWidget {
 
     currentAsset: AssetType;
     _emitter: EventEmitter;
-    _connection: GenericObjectType;
+    _connection: typeof postRobot;
     _changedData?: GenericObjectType;
 
     constructor(
