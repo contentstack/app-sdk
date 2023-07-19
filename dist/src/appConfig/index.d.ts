@@ -1,5 +1,6 @@
 import Stack from "../stack";
-import { IInstallationData, ValidationOptions } from "../types";
+import postRobot from "post-robot";
+import { IInstallationData, ValidationOptions, IAppConfigInitData } from "../types";
 import { GenericObjectType } from "../types/common.types";
 export declare interface AppConfigAdditionalData {
     currentBranch: string;
@@ -8,15 +9,11 @@ export declare interface AppConfigAdditionalData {
  * Class representing the current stack in Contentstack UI.
  */
 export declare class AppConfig {
-    _data: {
-        [key: string]: any;
-    };
-    _connection: any;
+    _data: IAppConfigInitData;
+    _connection: typeof postRobot;
     _emitter: EventEmitter;
     private _additionalData;
-    constructor(data: {
-        [key: string]: any;
-    }, connection: any, emitter: EventEmitter, additionalData: AppConfigAdditionalData);
+    constructor(data: IAppConfigInitData, connection: typeof postRobot, emitter: EventEmitter, additionalData: AppConfigAdditionalData);
     stack: () => Stack;
     setInstallationData: (installationData: IInstallationData) => Promise<GenericObjectType>;
     getInstallationData: () => Promise<IInstallationData>;
