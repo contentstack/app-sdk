@@ -61,7 +61,7 @@ class AssetSidebarWidget {
     async setData(asset: Partial<setAssetDto>): Promise<void> {
         this._connection.sendToParent("setData", asset);
     }
-    
+
     async syncAsset(): Promise<void> {
         this._connection.sendToParent("syncAsset");
     }
@@ -70,7 +70,7 @@ class AssetSidebarWidget {
         if (typeof width !== "number") {
             throw new Error("Width must be a number");
         }
-        this._connection.sendToParent("updateAssetSidebarWidth", width);
+        this._connection.sendToParent("updateAssetSidebarWidth", width as any);
     }
 
     async replaceAsset(file: File): Promise<any> {
