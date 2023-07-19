@@ -61,7 +61,7 @@ class AssetSidebarWidget {
     async setData(asset: Partial<setAssetDto>): Promise<void> {
         this._connection.sendToParent("setData", asset);
     }
-
+    
     async syncAsset(): Promise<void> {
         this._connection.sendToParent("syncAsset");
     }

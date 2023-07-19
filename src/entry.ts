@@ -225,7 +225,7 @@ class Entry {
                 "entryChange",
                 (event: {
                     data: EntryType;
-                    resolvedData: Record<string, GenericObjectType>;
+                    resolvedData: GenericObjectType;
                 }) => {
                     callback(event.data, event.resolvedData);
                 }
