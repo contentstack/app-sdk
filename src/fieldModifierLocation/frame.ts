@@ -42,7 +42,10 @@ class FieldModifierLocationFrame {
      * extension with the current height and width of the extension.
      * @param {dimension: {height: number, width: number}} dimension Desired height and width of the iframe window
      */
-    async updateDimension(dimension?: { height?: number; width?: number }) {
+    async updateDimension(dimension?: {
+        height?: number;
+        width?: number;
+    }): Promise<void> {
         const { height, width } = dimension || {};
 
         if (height === undefined && width === undefined) {
@@ -94,7 +97,7 @@ class FieldModifierLocationFrame {
      * Prevent user from accidently closing the app by clicking outside the frame
      *  if the app is performing some active task.
      */
-    async preventFrameClose(state: boolean) {
+    async preventFrameClose(state: boolean): Promise<void> {
         await this._connection.sendToParent("preventFrameClose", {
             state,
         });

@@ -16,7 +16,11 @@ declare class Field {
     _resolvedData: GenericObjectType;
     _self: boolean;
     _connection: typeof postRobot;
-    constructor(fieldDataObject: IFieldInitData | IFieldModifierLocationInitData, connection: typeof postRobot, emitter: EventEmitter);
+    constructor(
+        fieldDataObject: IFieldInitData | IFieldModifierLocationInitData,
+        connection: typeof postRobot,
+        emitter: EventEmitter
+    );
     /**
      * Sets the data for the current field.
      * @param {Object|string|number} data Data to be set on the field
@@ -29,14 +33,16 @@ declare class Field {
      * @param  {boolean} options.resolved If the resolved parameter is set to true for the File field, then the method will return a resolved asset object along with all the field metadata, e.g. 'field.getData({resolved:true})'.
      * @return {Object|string|number} Returns the field data.
      */
-    getData({ resolved }?: {
+    getData({
+        resolved,
+    }?: {
         resolved?: boolean | undefined;
     }): GenericObjectType;
     /**
      * Sets the focus for a field when an extension is being used. This method shows user presence and highlights the extension field that the user is currently accessing in Contentstack UI.
-     * @return {Object} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
+     * @return {Promise<void} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
      */
-    setFocus(): void;
+    setFocus(): Promise<void>;
     /**
      * This function is called when another extension programmatically changes data of this field using field.setData() function, only available for extension field, only support extensions of data type text, number, boolean or date.
      * @param {function} callback The function to be called when an entry is published.

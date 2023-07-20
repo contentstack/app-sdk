@@ -58,16 +58,16 @@ export class AppConfig {
     };
 
     /**
-     * Set the validation state of the app. If the validation is false, the Contentstack App Config
-     * will not allow to save the configuration. The message will be displayed if provided.
-     * @param isValid set the validation state of the app
-     * @param options additional options to be sent to the parent
-     * @returns returns a promise with the data sent from the parent
+     * Sets the validation state of the app. If the validation is false, the Contentstack App Config
+     * will not allow saving the configuration. The message will be displayed if provided.
+     * @param {boolean} isValid - The validation state of the app.
+     * @param {object} options - Additional options to be sent to the parent.
+     * @returns {Promise<void>} - A promise that resolves to void.
      */
     async setValidity(
         isValid: boolean,
         options?: ValidationOptions
-    ): Promise<Record<string, any>> {
+    ): Promise<void> {
         if (typeof isValid !== "boolean") {
             throw new TypeError(
                 generateErrorMessages(
@@ -84,7 +84,7 @@ export class AppConfig {
             );
         }
 
-        return this._connection
+        await this._connection
             .sendToParent("setValidity", { isValid, options })
             .then(onData)
             .catch(onError);

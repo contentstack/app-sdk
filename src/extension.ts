@@ -167,7 +167,7 @@ class Extension {
                 this.location.DashboardWidget = {
                     frame: new Window(
                         postRobot,
-                        this.type as "DASHBOARD",
+                        this.type as LocationType.DASHBOARD,
                         emitter,
                         initializationData.dashboard_width
                     ),
@@ -258,7 +258,11 @@ class Extension {
                     stack: new Stack(initializationData.stack, postRobot, {
                         currentBranch: initializationData.currentBranch,
                     }),
-                    frame: new Window(postRobot, this.type as "FIELD", emitter),
+                    frame: new Window(
+                        postRobot,
+                        this.type as LocationType.FIELD,
+                        emitter
+                    ),
                 };
 
                 break;

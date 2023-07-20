@@ -145,10 +145,10 @@ class Field {
 
     /**
      * Sets the focus for a field when an extension is being used. This method shows user presence and highlights the extension field that the user is currently accessing in Contentstack UI.
-     * @return {Object} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
+     * @return {Promise<void} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
      */
-    setFocus() {
-        this._connection.sendToParent("focus");
+    async setFocus(): Promise<void> {
+        await this._connection.sendToParent("focus");
     }
 
     /**
