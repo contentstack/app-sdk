@@ -1,13 +1,15 @@
+import { GenericObjectType } from "./types/common.types";
 import { onError } from "./utils/utils";
+import postRobot from "post-robot";
 
 /**
  * Class used by an app to store your data in {@link external:localStorage}.
  * @hideconstructor
  */
 class Store {
-    _connection: any;
+    _connection: typeof postRobot;
 
-    constructor(connection: any) {
+    constructor(connection: typeof postRobot) {
         this._connection = connection;
     }
     /**
@@ -22,7 +24,7 @@ class Store {
         }
         return this._connection
             .sendToParent("store", { action: "get", key })
-            .then((event: { data: any }) => Promise.resolve(event.data))
+            .then((event: { data: GenericObjectType }) => Promise.resolve(event.data))
             .catch(onError);
     }
 
