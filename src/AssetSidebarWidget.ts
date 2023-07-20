@@ -54,35 +54,62 @@ class AssetSidebarWidget {
         this.replaceAsset = this.replaceAsset.bind(this);
     }
 
-    getData() {
+    /**
+     * Get the current asset data.
+     * @returns {AssetData} The current asset data.
+     */
+    getData(): AssetType {
         return this.currentAsset;
     }
 
+    /**
+     * Set data for the asset.
+     * @param {Partial<setAssetDto>} asset - The partial asset data to set.
+     * @returns {Promise<void>} A promise that resolves when the data is set successfully.
+     */
     async setData(asset: Partial<setAssetDto>): Promise<void> {
-        this._connection.sendToParent("setData", asset);
+        await this._connection.sendToParent("setData", asset);
     }
 
+    /**
+     * Synchronize the asset with the parent application in the Contentstack UI.
+     * @returns {Promise<void>} A promise that resolves when the synchronization is complete.
+     */
     async syncAsset(): Promise<void> {
-        this._connection.sendToParent("syncAsset");
+        await this._connection.sendToParent("syncAsset");
     }
 
+    /**
+     * Update the width of the Asset Sidebar widget in the Contentstack UI.
+     * @param {number} width - The new width of the asset sidebar.
+     * @throws {Error} Throws an error if the width parameter is not a number.
+     * @returns {Promise<void>} A promise that resolves when the width is updated successfully.
+     */
     async updateWidth(width: number): Promise<void> {
         if (typeof width !== "number") {
             throw new Error("Width must be a number");
         }
-        this._connection.sendToParent("updateAssetSidebarWidth", width as any);
-    }
-
-    async replaceAsset(file: File): Promise<any> {
-        const asset = Asset(this._emitter);
-        return asset.handleUpload([file], "replace");
+        await this._connection.sendToParent(
+            "updateAssetSidebarWidth",
+            width as any
+        );
     }
 
     /**
-     * This function executes the callback function every time an asset is saved.
-     * @param {function} callback The function to be called when an asset is saved.
+     * Replace the current asset with a new file.
+     * @param {File} file - The file to be used as the replacement asset.
+     * @returns {Promise<void>} A promise that resolves when the replacement is complete.
      */
+    async replaceAsset(file: File): Promise<void> {
+        const asset = Asset(this._emitter);
+        await asset.handleUpload([file], "replace");
+    }
 
+    /**
+     * Executes the provided callback function every time an asset is saved.
+     * @param {function} callback - The function to be called when an asset is saved.
+     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when an asset is saved.
+     */
     onSave(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
@@ -95,10 +122,11 @@ class AssetSidebarWidget {
     }
 
     /**
-     * The field.onChange() function is called when another extension programmatically changes the data of the current extension field using the field.setData() function. This function is only available for extension fields that support the following data types: text, number, boolean, or date.
-     * @param {function} callback The function to be called when an asset is edited/changed.
+     * The `field.onChange()` function is called when another extension programmatically changes the data of the current extension field using the `field.setData()` function.
+     * This function is only available for extension fields that support the following data types: text, number, boolean, or date.
+     * @param {function} callback - The function to be called when the asset is edited/changed.
+     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when the asset is edited/changed.
      */
-
     onChange(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
@@ -112,9 +140,9 @@ class AssetSidebarWidget {
 
     /**
      * The onPublish() function executes the callback function every time an asset has been published with the respective payload.
-     * @param {function} callback The function to be called when an asset is published.
+     * @param {function} callback - The function to be called when an asset is published.
+     * @param {AssetType} arg0 - The data of the published asset passed as an argument to the callback function.
      */
-
     onPublish(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
@@ -127,10 +155,10 @@ class AssetSidebarWidget {
     }
 
     /**
-     * The onUnPublish() function executes the callback function every time an asset has been unpublished with the respective payload.
-     * @param {function} callback The function to be called when an asset is un published.
+     * The `onUnPublish()` function executes the provided callback every time an asset is unpublished.
+     * @param {function} callback - The function to be called when an asset is unpublished.
+     * @param {AssetType} arg0 - The data of the unpublished asset passed as an argument to the callback function.
      */
-
     onUnPublish(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
@@ -142,4 +170,5 @@ class AssetSidebarWidget {
         }
     }
 }
+
 export default AssetSidebarWidget;
