@@ -1,5 +1,9 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
+import { GenericObjectType } from "./types/common.types";
+import { Schema } from "./types/stack.types";
+import { Entry as EntryType } from "../src/types/entry.types";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -9,7 +13,7 @@ const excludedDataTypesForSetField = [
     "global_field",
 ];
 
-function separateResolvedData(field: Field, value: { [key: string]: any }) {
+function separateResolvedData(field: Field, value: GenericObjectType) {
     let resolvedData = value;
     let unResolvedData = value;
     if (field.data_type === "file") {
@@ -35,16 +39,16 @@ class Field {
 
     uid: string;
     data_type: string;
-    schema: { [key: string]: any };
+    schema: Schema;
     _emitter: EventEmitter;
-    _data: { [key: string]: any };
-    _resolvedData: { [key: string]: any };
-    _self: any;
-    _connection: any;
+    _data: GenericObjectType;
+    _resolvedData: GenericObjectType;
+    _self: boolean;
+    _connection: typeof postRobot;
 
     constructor(
         fieldDataObject: IFieldInitData | IFieldModifierLocationInitData,
-        connection: any,
+        connection: typeof postRobot,
         emitter: EventEmitter
     ) {
         /**
@@ -77,7 +81,7 @@ class Field {
 
         const fieldObj = this;
 
-        emitter.on("updateFields", (event: any) => {
+        emitter.on("updateFields", (event: GenericObjectType) => {
             const path = fieldObj.uid.split(".");
             let value = event.data;
 
@@ -144,14 +148,14 @@ class Field {
      * @return {Object} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
      */
     setFocus() {
-        return this._connection.sendToParent("focus");
+        this._connection.sendToParent("focus");
     }
 
     /**
      * This function is called when another extension programmatically changes data of this field using field.setData() function, only available for extension field, only support extensions of data type text, number, boolean or date.
      * @param {function} callback The function to be called when an entry is published.
      */
-    onChange?(callback: (data: any) => any) {
+    onChange?(callback: (data: IFieldInitData) => any) {
         const fieldObj = this;
         if (callback && typeof callback === "function") {
             fieldObj._emitter.on("extensionFieldChange", (event: any) => {
