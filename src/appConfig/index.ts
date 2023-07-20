@@ -1,15 +1,17 @@
-import Stack from "../stack";
 import postRobot from "post-robot";
-import { IInstallationData, ValidationOptions, IAppConfigInitData } from "../types";
-import { GenericObjectType } from "../types/common.types";
+
+import Stack from "../stack";
+import {
+    IInstallationData,
+    ValidationOptions,
+    IAppConfigInitData,
+} from "../types";
 import generateErrorMessages, { ERROR_MESSAGES } from "../utils/errorMessages";
 import { onData, onError } from "../utils/utils";
-
 
 export declare interface AppConfigAdditionalData {
     currentBranch: string;
 }
-  
 
 /**
  * Class representing the current stack in Contentstack UI.
@@ -30,9 +32,9 @@ export class AppConfig {
         this._data = data;
         this._connection = connection;
         this._emitter = emitter;
+        this._additionalData = additionalData;
 
         this.setValidity = this.setValidity.bind(this);
-        this._additionalData = additionalData;
     }
 
     stack = () => {
@@ -43,9 +45,12 @@ export class AppConfig {
 
     setInstallationData = (
         installationData: IInstallationData
-    ): Promise<GenericObjectType> => {
+    ): Promise<IInstallationData> => {
         return this._connection
-            .sendToParent("setInstallationData", installationData)
+            .sendToParent<IInstallationData>(
+                "setInstallationData",
+                installationData
+            )
             .then(onData)
             .catch(onError);
     };
@@ -61,7 +66,7 @@ export class AppConfig {
      * Sets the validation state of the app. If the validation is false, the Contentstack App Config
      * will not allow saving the configuration. The message will be displayed if provided.
      * @param {boolean} isValid - The validation state of the app.
-     * @param {object} options - Additional options to be sent to the parent.
+     * @param {ValidationOptions} options - Additional options to be sent to the parent.
      * @returns {Promise<void>} - A promise that resolves to void.
      */
     async setValidity(
