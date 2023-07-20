@@ -38,7 +38,7 @@ describe("Window", () => {
 
     it("enableResizing", (done) => {
         windowObj.type = "DASHBOARD";
-        windowObj.enableResizing().then(() => {
+        windowObj?.enableResizing().then(() => {
             expect(connection.sendToParent).toHaveBeenCalledWith("window", {
                 action: "enableResizing",
             }); // since previous height was same
