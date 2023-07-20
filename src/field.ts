@@ -155,7 +155,7 @@ class Field {
      * This function is called when another extension programmatically changes data of this field using field.setData() function, only available for extension field, only support extensions of data type text, number, boolean or date.
      * @param {function} callback The function to be called when an entry is published.
      */
-    onChange?(callback: (data: IFieldInitData) => any) {
+    onChange?(callback: (data: any) => any) {
         const fieldObj = this;
         if (callback && typeof callback === "function") {
             fieldObj._emitter.on("extensionFieldChange", (event: any) => {
