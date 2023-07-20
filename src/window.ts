@@ -1,5 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
+import { DashboardWidth, LocationType } from "./types";
 
 const config = { attributes: true, childList: true, subtree: true };
 let observer: MutationObserver;
@@ -15,16 +16,16 @@ class Window {
     _connection: typeof postRobot;
     _autoResizingEnabled: boolean;
     _resizingEnabled: boolean;
-    type: "DASHBOARD" | "FIELD";
+    type: LocationType.DASHBOARD | LocationType.FIELD;
     _emitter: EventEmitter;
-    state: "half_width" | "full_width";
+    state: DashboardWidth;
     _height?: number;
 
     constructor(
         connection: any,
-        type: "DASHBOARD" | "FIELD",
+        type: LocationType.DASHBOARD | LocationType.FIELD,
         emitter: EventEmitter,
-        state: "half_width" | "full_width" = "half_width"
+        state: DashboardWidth = DashboardWidth.HALF_WIDTH
     ) {
         this._connection = connection || postRobot;
         this._autoResizingEnabled = false;
@@ -35,34 +36,33 @@ class Window {
     }
 
     /**
-     * This method activates the resize button that gives you the provision to resize the window size of your Dashboard Widget.
-     * @return {external:Promise}  A promise object which will resolve when a resize button is visible on the Dashboard Widget.
+     * Activates the resize button that allows you to resize the window size of your Dashboard Widget.
+     * @return {Promise} A promise that resolves when the resize button becomes visible on the Dashboard Widget.
      */
-    enableResizing(): Promise<any> {
-        if (this.type !== "DASHBOARD") {
+    async enableResizing(): Promise<void> {
+        if (this.type !== LocationType.DASHBOARD) {
             return Promise.resolve();
         }
         this._resizingEnabled = true;
-        return this._connection.sendToParent("window", {
+        await this._connection.sendToParent("window", {
             action: "enableResizing",
         });
     }
 
     /**
-     * This function executes the callback function whenever a Dashboard Widget extension is maximized or minimized. Only applicable on Dashboard Widget extensions.
-     * @param {function} callback Function to be called when a Dashboard Widget extension is maximized or minimized
-     * @return {boolean} Will return true
+     * This function executes the callback function whenever a Dashboard Widget is maximized or minimized. Only applicable on Dashboard Widgets.
+     * @param {function} callback The function to be called when a Dashboard Widget is maximized or minimized.
+     * @return {boolean} Returns true if the operation completes successfully without errors.
      */
-
     onDashboardResize(callback: (event: any) => void) {
         const windowObj = this;
-        if (this.type !== "DASHBOARD") {
+        if (this.type !== LocationType.DASHBOARD) {
             return false;
         }
         if (callback && typeof callback === "function") {
             windowObj._emitter.on(
                 "dashboardResize",
-                (event: { state: "half_width" | "full_width" }) => {
+                (event: { state: DashboardWidth }) => {
                     windowObj.state = event.state;
                     callback(event.state);
                 }
@@ -74,13 +74,16 @@ class Window {
     }
 
     /**
-     * This method updates the extension height on Contentstack UI.
-     * If the ‘height’ argument is not passed, it will calculate the scroll height and set the height of extension window accordingly.
-     * @param {string|number} height Desired height of the iframe window
-     * @return {external:Promise}  A promise object which will be resolved when Contentstack UI sends an acknowledgement stating that the height has been updated.
+     * Updates the Widget height on Contentstack UI.
+     * If the 'height' argument is not provided, it will automatically calculate the scroll height and adjust the widget window height accordingly.
+     * @param {number} height The desired height of the iframe window.
+     * @return {Promise} A promise that resolves when Contentstack UI acknowledges that the height has been updated.
      */
-    updateHeight(height?: number): Promise<any> {
-        if (this.type === "DASHBOARD" && this.state === "half_width") {
+    async updateHeight(height?: number): Promise<void> {
+        if (
+            this.type === LocationType.DASHBOARD &&
+            this.state === DashboardWidth.HALF_WIDTH
+        ) {
             return Promise.resolve();
         }
         if (!height || isNaN(height)) {
@@ -92,17 +95,18 @@ class Window {
         } else {
             this._height = height;
         }
-        return this._connection.sendToParent("resize", this._height as any);
+        await this._connection.sendToParent("resize", this._height as any);
     }
 
     /**
-     * This method enables auto resizing of the extension height.
-     * @return {Window}.
+     * Enables auto resizing of the Widget height.
+     * @return {Window} The context of the Window class.
      */
-    enableAutoResizing() {
+    enableAutoResizing(): Window {
         if (
             this._autoResizingEnabled ||
-            (this.state === "half_width" && this.type === "DASHBOARD")
+            (this.state === DashboardWidth.HALF_WIDTH &&
+                this.type === LocationType.DASHBOARD)
         ) {
             return this;
         }
@@ -114,10 +118,10 @@ class Window {
     }
 
     /**
-     * This method disables auto resizing of the extension height.
-     * @return {Window}.
+     * Disables auto resizing of the Widget height.
+     * @returns {Window} The context of the Window class.
      */
-    disableAutoResizing() {
+    disableAutoResizing(): Window {
         if (!this._autoResizingEnabled) {
             return this;
         }
@@ -126,16 +130,22 @@ class Window {
         return this;
     }
 
-    enablePaddingTop(): Promise<ResponseMessageEvent<object>> {
-        // @ts-ignore
-        return postRobot.sendToParent("window", {
+    /**
+     * Adds a padding on top of the Dashboard widget.
+     * @returns {Promise<void>} A promise that resolves when the padding is added.
+     */
+    async enablePaddingTop(): Promise<void> {
+        await postRobot.sendToParent("window", {
             action: "dashboardEnableTopPadding",
         });
     }
 
-    disablePaddingTop(): Promise<any> {
-        // @ts-ignore
-        return postRobot.sendToParent("window", {
+    /**
+     * Removes the padding previously added on top of the Dashboard widget.
+     * @returns {Promise<void>} A promise that resolves when the padding is removed.
+     */
+    async disablePaddingTop(): Promise<void> {
+        await postRobot.sendToParent("window", {
             action: "dashboardDisableTopPadding",
         });
     }
