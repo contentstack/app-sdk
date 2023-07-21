@@ -1,7 +1,6 @@
-import Stack from "../stack";
 import postRobot from "post-robot";
+import Stack from "../stack";
 import { IInstallationData, ValidationOptions, IAppConfigInitData } from "../types";
-import { GenericObjectType } from "../types/common.types";
 export declare interface AppConfigAdditionalData {
     currentBranch: string;
 }
@@ -15,13 +14,13 @@ export declare class AppConfig {
     private _additionalData;
     constructor(data: IAppConfigInitData, connection: typeof postRobot, emitter: EventEmitter, additionalData: AppConfigAdditionalData);
     stack: () => Stack;
-    setInstallationData: (installationData: IInstallationData) => Promise<GenericObjectType>;
+    setInstallationData: (installationData: IInstallationData) => Promise<IInstallationData>;
     getInstallationData: () => Promise<IInstallationData>;
     /**
      * Sets the validation state of the app. If the validation is false, the Contentstack App Config
      * will not allow saving the configuration. The message will be displayed if provided.
      * @param {boolean} isValid - The validation state of the app.
-     * @param {object} options - Additional options to be sent to the parent.
+     * @param {ValidationOptions} options - Additional options to be sent to the parent.
      * @returns {Promise<void>} - A promise that resolves to void.
      */
     setValidity(isValid: boolean, options?: ValidationOptions): Promise<void>;
