@@ -1,5 +1,5 @@
 import Base from '../base';
-import { IAnyObject } from '../../../RTE/types';
+import { GenericObjectType } from '../../../types/common.types';
 declare class Asset extends Base {
     getReferences: any;
     environment: any;
@@ -156,11 +156,11 @@ declare class Asset extends Base {
     unpublish(payload: any): any;
     static handleUpload(_files: any, type: any, options?: {
         parentFolderUid?: string;
-        customUploadHandler?: IAnyObject;
-    }): Promise<any>;
+        customUploadHandler?: GenericObjectType;
+    }): Promise<ResponseMessageEvent<object>>;
     static uploadAsset(files: any, options?: {
         parentFolderUid?: string;
-    }): Promise<any>;
+    }): Promise<ResponseMessageEvent<object>>;
 }
 declare const _default: (uiConnection: any) => typeof Asset;
 export default _default;

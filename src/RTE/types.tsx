@@ -13,6 +13,7 @@ import {
 } from "slate";
 
 import { RTEPlugin } from "./index";
+
 declare interface TransformOptions {
     at?: Location;
     match?: (node: Node) => boolean;
@@ -95,12 +96,10 @@ export declare interface IRteParam {
         }
     ) => NodeEntry;
 
-    getNodes: <T extends Node> (
-        options?: {
-            at?: Location,
-            match?: NodeMatch<T>
-        }
-    ) => Generator<NodeEntry<T>, void, undefined>
+    getNodes: <T extends Node>(options?: {
+        at?: Location;
+        match?: NodeMatch<T>;
+    }) => Generator<NodeEntry<T>, void, undefined>;
 
     string: (at: Location) => string;
 
@@ -145,28 +144,24 @@ export declare interface IRteParam {
 export declare type IRteParamWithPreventDefault = {
     rte: IRteParam;
     preventDefault: () => void;
-    [key:string]: any;
-}
+    [key: string]: any;
+};
 
-export declare type IConfigCallback = (rte: IRteParam | void) => Partial<IConfig>;
+export declare type IConfigCallback = (
+    rte: IRteParam | void
+) => Partial<IConfig>;
 
 export declare type IOnFunction = {
-    exec: (rte: IRteParam) => void;
-    keydown: (params: {
-        event: React.KeyboardEvent,
-        rte: IRteParam
-    }) => void;
-
-    normalize: (params: IRteParamWithPreventDefault) => void;
-
-    insertBreak: (params: IRteParamWithPreventDefault) => void;
-    deleteBackward: (params: IRteParamWithPreventDefault) => void;
-    deleteForward: (params: IRteParamWithPreventDefault) => void;
-
     beforeRender: (rte: IRteParam) => void;
     beforeChildRender: (rte: IRteParam) => void;
-
-    copy: (rte: IRteParam) => void;
+    change: (params: IRteParamWithPreventDefault) => void;
+    deleteBackward: (params: IRteParamWithPreventDefault) => void;
+    deleteForward: (params: IRteParamWithPreventDefault) => void;
+    exec: (rte: IRteParam) => void;
+    insertBreak: (params: IRteParamWithPreventDefault) => void;
+    keydown: (params: { event: React.KeyboardEvent; rte: IRteParam }) => void;
+    normalize: (params: IRteParamWithPreventDefault) => void;
+    paste: (params: IRteParamWithPreventDefault) => void;
 };
 
 export declare type IOnType =
@@ -177,10 +172,12 @@ export declare type IOnType =
     | "insertBreak"
     | "beforeRender"
     | "beforeChildRender"
-    | "copy"
+    | "copy";
 
 export declare type IDisplayOnOptions = "toolbar" | "hoveringToolbar";
+
 export declare type IElementTypeOptions = "inline" | "void" | "block" | "text";
+
 export declare interface IDnd {
     disable: boolean;
     hideSelectionBackground: boolean;
@@ -190,26 +187,30 @@ export declare interface IDnd {
     disableColumnLayout: boolean;
 }
 
-export declare interface IAnyObject { [key: string]: any }
-
 export declare interface IRteTextType {
     text: string;
 }
+
 export declare interface IRteElementType {
     uid: string;
     type: string;
-    attrs: IAnyObject;
-    children: Array<IRteElementType | IRteTextType>
+    attrs: { [key: string]: any };
+    children: Array<IRteElementType | IRteTextType>;
 }
 
-type IDynamicFunction = ((element: IRteElementType) => Exclude<IElementTypeOptions,"text"> |  Exclude<IElementTypeOptions,"text">[])
+type IDynamicFunction = (
+    element: IRteElementType
+) =>
+    | Exclude<IElementTypeOptions, "text">
+    | Exclude<IElementTypeOptions, "text">[];
+
 export declare interface IConfig {
     title: string;
     icon: React.ReactElement | null;
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
     render?: (...params: any) => ReactElement;
-    shouldOverride?: (element: IRteElementType) => boolean
+    shouldOverride?: (element: IRteElementType) => boolean;
 }
 
 export declare interface IRegistryDnd {
@@ -240,12 +241,16 @@ export declare interface IRegistry {
         rte: IRteParam
     ) => React.ReactElement;
     IngressComponent?: React.Component | null;
-    shouldOverride?: ( element: IRteElementType) => boolean
+    shouldOverride?: (element: IRteElementType) => boolean;
 }
 
 export declare interface IMeta {
     id: string;
-    elementType: null | IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
+    elementType:
+        | null
+        | IElementTypeOptions
+        | IElementTypeOptions[]
+        | IDynamicFunction;
     editorCallbacks: {
         [key: string]: any;
     };

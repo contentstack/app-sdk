@@ -29,10 +29,8 @@ describe("Field", () => {
             } as EventEmitter;
             jest.spyOn(connection, "sendToParent");
             jest.spyOn(emitter, "on");
-            //@ts-ignore
-            testData.self = true;
-            //@ts-ignore
-            field = new Field({ data: testData }, connection, emitter);
+            (testData as any).self = true;
+            field = new Field(testData as any, connection as any, emitter);
         });
 
         it("init", (done) => {
@@ -64,19 +62,19 @@ describe("Field", () => {
 
         it("setData Error Case", async () => {
             let newField = new Field(
-                //@ts-ignore
-                { data: testData },
-                { sendToParent: sendToParentError },
+                testData as any,
+                { sendToParent: sendToParentError } as any,
                 emitter
             );
-            //@ts-ignore
-            await expect(newField.setData()).rejects.toMatch("sample error");
+            await expect((newField as any).setData()).rejects.toMatch(
+                "sample error"
+            );
         });
 
         it("setFocus", () => {
-            field.setFocus().then(() => {
-                expect(connection.sendToParent).toHaveBeenCalledWith("focus");
-            });
+            field.setFocus() 
+            expect(connection.sendToParent).toHaveBeenCalledWith("focus");
+
         });
     });
 
@@ -99,15 +97,13 @@ describe("Field", () => {
             jest.spyOn(connection, "sendToParent");
             jest.spyOn(emitter, "on");
             singleFileField = new Field(
-                //@ts-ignore
-                { data: fileFieldData.single },
-                connection,
+                fileFieldData.single as any,
+                connection as any,
                 emitter
             );
             multipleFileField = new Field(
-                //@ts-ignore
-                { data: fileFieldData.multiple },
-                connection,
+                fileFieldData.multiple as any,
+                connection as any,
                 emitter
             );
         });
@@ -117,13 +113,13 @@ describe("Field", () => {
             delete clonedfileField.single.value;
             delete clonedfileField.multiple.value;
             let emptySingleFileField = new Field(
-                { data: clonedfileField.single },
-                connection,
+                clonedfileField.single,
+                connection as any,
                 emitter
             );
             let emptyMultipleFileField = new Field(
-                { data: clonedfileField.multiple },
-                connection,
+                clonedfileField.multiple,
+                connection as any,
                 emitter
             );
             expect(emptySingleFileField.getData()).toBe(undefined);
@@ -150,8 +146,7 @@ describe("Field", () => {
 
         it("onChange Callback must be a function", function () {
             expect(() => {
-                //@ts-ignore
-                singleFileField.onChange?.();
+                (singleFileField as any).onChange();
             }).toThrow("Callback must be a function");
         });
     });

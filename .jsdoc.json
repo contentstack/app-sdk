@@ -1,0 +1,19 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
+    "source": {
+        "include": ["src"],
+        "includePattern": ".(js|ts)$"
+    },
+    "opts": {
+        "template": "node_modules/better-docs",
+        "destination": "./jsdocs/"
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "plugins": ["node_modules/better-docs/typescript"]
+}

@@ -1,25 +1,29 @@
 import Stack from "../stack";
-import { IInstallationData, ValidationOptions } from "../types";
+import postRobot from "post-robot";
+import { IInstallationData, ValidationOptions, IAppConfigInitData } from "../types";
+import { GenericObjectType } from "../types/common.types";
 import generateErrorMessages, { ERROR_MESSAGES } from "../utils/errorMessages";
 import { onData, onError } from "../utils/utils";
+
 
 export declare interface AppConfigAdditionalData {
     currentBranch: string;
 }
+  
 
 /**
  * Class representing the current stack in Contentstack UI.
  */
 
 export class AppConfig {
-    _data: { [key: string]: any };
-    _connection: any;
+    _data: IAppConfigInitData;
+    _connection: typeof postRobot;
     _emitter: EventEmitter;
     private _additionalData: AppConfigAdditionalData;
 
     constructor(
-        data: { [key: string]: any },
-        connection: any,
+        data: IAppConfigInitData,
+        connection: typeof postRobot,
         emitter: EventEmitter,
         additionalData: AppConfigAdditionalData
     ) {
@@ -39,7 +43,7 @@ export class AppConfig {
 
     setInstallationData = (
         installationData: IInstallationData
-    ): Promise<{ [key: string]: any }> => {
+    ): Promise<GenericObjectType> => {
         return this._connection
             .sendToParent("setInstallationData", installationData)
             .then(onData)
@@ -48,7 +52,7 @@ export class AppConfig {
 
     getInstallationData = (): Promise<IInstallationData> => {
         return this._connection
-            .sendToParent("getInstallationData")
+            .sendToParent<IInstallationData>("getInstallationData")
             .then(onData)
             .catch(onError);
     };

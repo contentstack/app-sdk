@@ -1,4 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
 /**
  * Class representing an iframe window from Contentstack UI. Not available for Custom Widgets.
  */
@@ -6,19 +7,19 @@ declare class Window {
     /**
      * @hideconstructor
      */
-    _connection: any;
+    _connection: typeof postRobot;
     _autoResizingEnabled: boolean;
     _resizingEnabled: boolean;
-    type: 'DASHBOARD' | 'FIELD';
+    type: "DASHBOARD" | "FIELD";
     _emitter: EventEmitter;
-    state: 'half_width' | 'full_width';
+    state: "half_width" | "full_width";
     _height?: number;
-    constructor(connection: any, type: 'DASHBOARD' | 'FIELD', emitter: EventEmitter, state?: 'half_width' | 'full_width');
+    constructor(connection: any, type: "DASHBOARD" | "FIELD", emitter: EventEmitter, state?: "half_width" | "full_width");
     /**
      * This method activates the resize button that gives you the provision to resize the window size of your Dashboard Widget.
      * @return {external:Promise}  A promise object which will resolve when a resize button is visible on the Dashboard Widget.
      */
-    enableResizing(): any;
+    enableResizing(): Promise<any>;
     /**
      * This function executes the callback function whenever a Dashboard Widget extension is maximized or minimized. Only applicable on Dashboard Widget extensions.
      * @param {function} callback Function to be called when a Dashboard Widget extension is maximized or minimized
@@ -31,7 +32,7 @@ declare class Window {
      * @param {string|number} height Desired height of the iframe window
      * @return {external:Promise}  A promise object which will be resolved when Contentstack UI sends an acknowledgement stating that the height has been updated.
      */
-    updateHeight(height?: number): any;
+    updateHeight(height?: number): Promise<any>;
     /**
      * This method enables auto resizing of the extension height.
      * @return {Window}.
@@ -42,7 +43,7 @@ declare class Window {
      * @return {Window}.
      */
     disableAutoResizing(): this;
-    enablePaddingTop(): Promise<any>;
+    enablePaddingTop(): Promise<ResponseMessageEvent<object>>;
     disablePaddingTop(): Promise<any>;
 }
 export default Window;
