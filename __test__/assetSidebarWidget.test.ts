@@ -1,7 +1,7 @@
 import EventEmitter from "wolfy87-eventemitter";
 
 import AssetSidebarWidget from "../src/AssetSidebarWidget";
-import { IAssetSidebarInitData } from "../src/types";
+import { IAssetSidebarInitData, LocationType } from "../src/types";
 import Asset from "../src/stack/api/asset";
 
 jest.mock("post-robot", () => ({
@@ -16,18 +16,16 @@ jest.mock("../src/stack/api/asset");
 describe("AssetSidebarWidget", () => {
     let assetSidebarWidget: AssetSidebarWidget;
     let mockInitData: IAssetSidebarInitData = {
-        data: {
-            type: "ASSET_SIDEBAR_WIDGET",
-            currentAsset: {},
-            config: {},
-            app_id: "mock_app_uid",
-            installation_uid: "mock_installation_uid",
-            extension_uid: "mock_extension_uid",
-            stack: {} as any,
-            user: {},
-            currentBranch: "mock_branch",
-            region: "region",
-        },
+        type: LocationType.ASSET_SIDEBAR_WIDGET,
+        currentAsset: {} as any,
+        config: {},
+        app_id: "mock_app_uid",
+        installation_uid: "mock_installation_uid",
+        extension_uid: "mock_extension_uid",
+        stack: {} as any,
+        user: {} as any,
+        currentBranch: "mock_branch",
+        region: "region",
     };
 
     let connection: { sendToParent: (...props: any[]) => any };
@@ -53,7 +51,7 @@ describe("AssetSidebarWidget", () => {
         jest.spyOn(connection, "sendToParent");
         assetSidebarWidget = new AssetSidebarWidget(
             mockInitData as IAssetSidebarInitData,
-            connection,
+            connection as any,
             emitter
         );
     });
@@ -63,9 +61,7 @@ describe("AssetSidebarWidget", () => {
     });
 
     it("should set instance properties in constructor", () => {
-        expect(assetSidebarWidget.currentAsset).toBe(
-            mockInitData.data.currentAsset
-        );
+        expect(assetSidebarWidget.currentAsset).toBe(mockInitData.currentAsset);
         expect(assetSidebarWidget._emitter).toBe(emitter);
         expect(assetSidebarWidget._connection).toBe(connection);
     });
@@ -73,7 +69,7 @@ describe("AssetSidebarWidget", () => {
     describe("getData", () => {
         it("should return the current asset", () => {
             const currentAsset = assetSidebarWidget.getData();
-            expect(currentAsset).toBe(mockInitData.data.currentAsset);
+            expect(currentAsset).toBe(mockInitData.currentAsset);
         });
     });
 
@@ -85,7 +81,7 @@ describe("AssetSidebarWidget", () => {
                 "setData",
                 asset
             );
-            expect(result).toEqual({ data: {} });
+            expect(result).toEqual(undefined);
         });
     });
 
@@ -93,7 +89,7 @@ describe("AssetSidebarWidget", () => {
         it("should sync the upstream asset with the current", async () => {
             const result = await assetSidebarWidget.syncAsset();
             expect(connection.sendToParent).toHaveBeenCalledWith("syncAsset");
-            expect(result).toEqual({ data: {} });
+            expect(result).toEqual(undefined);
         });
     });
 
@@ -112,7 +108,7 @@ describe("AssetSidebarWidget", () => {
                 "updateAssetSidebarWidth",
                 mockWidth
             );
-            expect(result).toEqual({ data: {} });
+            expect(result).toEqual(undefined);
         });
     });
 

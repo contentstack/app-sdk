@@ -1,8 +1,9 @@
+import postRobot from "post-robot";
 import Entry from "../entry";
 import { IFieldModifierLocationInitData } from "../types";
 import { IGetTagsOptions } from "../types/entry.types";
 declare class FieldModifierLocationEntry extends Entry {
-    constructor(initializationData: IFieldModifierLocationInitData, connection: any, emitter: EventEmitter);
+    constructor(initializationData: IFieldModifierLocationInitData, connection: typeof postRobot, emitter: EventEmitter);
     /**
      * Returns the value of the tags associated with the entry.
      * @returns {string[]} Returns an array of tags associated with the entry.

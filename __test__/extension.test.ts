@@ -5,11 +5,12 @@ import {
     IAppConfigInitData,
     IAssetSidebarInitData,
     IDashboardInitData,
-    IEntryFieldLocationInitData,
     IFieldInitData,
     IFieldModifierLocationInitData,
     IFullPageLocationInitData,
     ISidebarInitData,
+    LocationType,
+    Manifest,
     Region,
 } from "../src/types";
 
@@ -52,26 +53,22 @@ const mockStackData = {
 };
 
 const initData: IAppConfigInitData = {
-    data: {
-        type: "APP_CONFIG_WIDGET",
-        app_id: "app_id",
-        installation_uid: "installation_uid",
-        extension_uid: "extension_uid",
-        region: "NA",
-        stack: mockStackData,
-        user: {},
-        currentBranch: "currentBranch",
-        manifest: mockManifestData,
-    },
+    type: LocationType.APP_CONFIG_WIDGET,
+    app_id: "app_id",
+    installation_uid: "installation_uid",
+    extension_uid: "extension_uid",
+    region: "NA",
+    stack: mockStackData,
+    user: {} as any,
+    currentBranch: "currentBranch",
+    manifest: mockManifestData,
 };
 
 const initDataJsonRte = {
-    data: {
-        type: "RTE",
-        region: "NA",
-        stack: mockStackData,
-        user: {},
-    },
+    type: "RTE",
+    region: "NA",
+    stack: mockStackData,
+    user: {},
 };
 
 describe("Extension", () => {
@@ -145,7 +142,8 @@ describe("Extension", () => {
         it("should return config for extension if present", async () => {
             const extensionConfig = { foo: "bar" };
             const extension = new Extension({
-                data: { ...initDataJsonRte.data, config: extensionConfig },
+                ...initDataJsonRte,
+                config: extensionConfig,
             } as any);
             const config = await extension.getConfig();
             expect(config).toEqual(extensionConfig);
@@ -170,7 +168,7 @@ describe("Extension", () => {
         it("should return type of location", () => {
             const extension = new Extension(initData);
             const locationType = extension.getCurrentLocation();
-            expect(locationType).toEqual(initData.data.type);
+            expect(locationType).toEqual(initData.type);
         });
     });
 
@@ -199,14 +197,15 @@ describe("Extension", () => {
             (postRobot as any).sendToParent = mockSendToParent;
 
             const options = {
-                uid: initData.data.installation_uid,
+                uid: initData.installation_uid,
                 action: "getAppManifest",
                 headers: { organization_uid: mockStackData.org_uid },
                 skip_api_key: true,
             };
 
             const extension = new Extension({
-                data: { ...initData.data, manifest: undefined },
+                ...initData,
+                manifest: undefined,
             });
             const version = await extension.getAppVersion();
             expect(mockSendToParent).toBeCalledWith("stackQuery", options);
@@ -242,7 +241,7 @@ describe("Extension", () => {
                 version,
                 meta,
             });
-            expect(initData).toEqual({ data: {} });
+            expect(initData).toEqual({});
         });
     });
 
@@ -263,11 +262,9 @@ describe("Extension", () => {
     describe("location", () => {
         it("should accept DASHBOARD as type of location", () => {
             const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "DASHBOARD",
-                    dashboard_width: "half_width",
-                },
+                ...initData,
+                type: "DASHBOARD",
+                dashboard_width: "half_width",
             } as IDashboardInitData);
             expect(extension.location.DashboardWidget).toBeDefined();
             expect(extension.location.DashboardWidget).toHaveProperty("frame");
@@ -276,10 +273,8 @@ describe("Extension", () => {
 
         it("should accept WIDGET as type of location", () => {
             const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "WIDGET",
-                },
+                ...initData,
+                type: "WIDGET",
             } as ISidebarInitData);
             expect(extension.location.SidebarWidget).toBeDefined();
             expect(extension.location.SidebarWidget).toHaveProperty("entry");
@@ -297,43 +292,17 @@ describe("Extension", () => {
 
         it("should accept ASSET_SIDEBAR_WIDGET as type of location", () => {
             const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "ASSET_SIDEBAR_WIDGET",
-                },
+                ...initData,
+                type: "ASSET_SIDEBAR_WIDGET",
             } as IAssetSidebarInitData);
             expect(extension.location.AssetSidebarWidget).toBeDefined();
         });
 
         it("should accept FIELD_MODIFIER_LOCATION as type of location", () => {
             const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "FIELD_MODIFIER_LOCATION",
-                },
+                ...initData,
+                type: "FIELD_MODIFIER_LOCATION",
             } as IFieldModifierLocationInitData);
-            expect(extension.location.FieldModifierLocation).toBeDefined();
-            expect(extension.location.FieldModifierLocation).toHaveProperty(
-                "entry"
-            );
-            expect(extension.location.FieldModifierLocation).toHaveProperty(
-                "stack"
-            );
-            expect(extension.location.FieldModifierLocation).toHaveProperty(
-                "field"
-            );
-            expect(extension.location.FieldModifierLocation).toHaveProperty(
-                "frame"
-            );
-        });
-
-        it("should accept ENTRY_FIELD_LOCATION as type of location", () => {
-            const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "ENTRY_FIELD_LOCATION",
-                },
-            } as IEntryFieldLocationInitData);
             expect(extension.location.FieldModifierLocation).toBeDefined();
             expect(extension.location.FieldModifierLocation).toHaveProperty(
                 "entry"
@@ -351,10 +320,8 @@ describe("Extension", () => {
 
         it("should accept FULL_PAGE_LOCATION as type of location", () => {
             const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "FULL_PAGE_LOCATION",
-                },
+                ...initData,
+                type: "FULL_PAGE_LOCATION",
             } as IFullPageLocationInitData);
             expect(extension.location.FullPage).toBeDefined();
             expect(extension.location.FullPage).toHaveProperty("stack");
@@ -362,10 +329,8 @@ describe("Extension", () => {
 
         it("should accept FIELD as type of location", () => {
             const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "FIELD",
-                },
+                ...initData,
+                type: "FIELD",
             } as IFieldInitData);
             expect(extension.location.CustomField).toBeDefined();
             expect(extension.location.CustomField).toHaveProperty("field");
@@ -379,10 +344,8 @@ describe("Extension", () => {
 
         it("should accept return type as FIELD when not defined", () => {
             const extension = new Extension({
-                data: {
-                    ...initData.data,
-                    type: "",
-                },
+                ...initData,
+                type: "",
             } as any);
             expect(extension.location.CustomField).toBeDefined();
             expect(extension.location.CustomField).toHaveProperty("field");
