@@ -16,11 +16,7 @@ declare class Field {
     _resolvedData: GenericObjectType;
     _self: boolean;
     _connection: typeof postRobot;
-    constructor(
-        fieldDataObject: IFieldInitData | IFieldModifierLocationInitData,
-        connection: typeof postRobot,
-        emitter: EventEmitter
-    );
+    constructor(fieldDataObject: IFieldInitData | IFieldModifierLocationInitData, connection: typeof postRobot, emitter: EventEmitter);
     /**
      * Sets the data for the current field.
      * @param {Object|string|number} data Data to be set on the field
@@ -33,9 +29,7 @@ declare class Field {
      * @param  {boolean} options.resolved If the resolved parameter is set to true for the File field, then the method will return a resolved asset object along with all the field metadata, e.g. 'field.getData({resolved:true})'.
      * @return {Object|string|number} Returns the field data.
      */
-    getData({
-        resolved,
-    }?: {
+    getData({ resolved }?: {
         resolved?: boolean | undefined;
     }): GenericObjectType;
     /**

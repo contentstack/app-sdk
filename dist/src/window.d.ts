@@ -1,4 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
 import { DashboardWidth, LocationType } from "./types";
 /**
  * Class representing an iframe window from Contentstack UI. Not available for Custom Widgets.
@@ -14,12 +15,7 @@ declare class Window {
     _emitter: EventEmitter;
     state: DashboardWidth;
     _height?: number;
-    constructor(
-        connection: any,
-        type: LocationType.DASHBOARD | LocationType.FIELD,
-        emitter: EventEmitter,
-        state?: DashboardWidth
-    );
+    constructor(connection: any, type: LocationType.DASHBOARD | LocationType.FIELD, emitter: EventEmitter, state?: DashboardWidth);
     /**
      * Activates the resize button that allows you to resize the window size of your Dashboard Widget.
      * @return {Promise} A promise that resolves when the resize button becomes visible on the Dashboard Widget.
