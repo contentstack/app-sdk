@@ -16,8 +16,8 @@ class Stack {
 
   _connection: any
   _data: StackDetail
-  ContentType: any // TODO: change it
-  Asset: any // TODO: change it
+  ContentType: any 
+  Asset: any 
   private _currentBranch: BranchDetail | null = null;
 
 
