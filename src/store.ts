@@ -12,28 +12,32 @@ class Store {
     constructor(connection: typeof postRobot) {
         this._connection = connection;
     }
+
     /**
-     * Gets the value of key
-     * @param  {string} key Key of the stored data
-     * @example extension.store.get('key').then((value) => console.log(value)) // will log value for the given key
-     * @return {external:Promise}
+     * Retrieves the stored data value associated with the given key.
+     * @param {string} key - The key of the stored data.
+     * @example
+     * extension.store.get('key').then((value) => console.log(value)); // Logs the value for the given key
+     * @returns {Promise<any>} A Promise that resolves to the value associated with the key.
      */
-    get(key: string) {
+    get(key: string): Promise<any> {
         if (!key || typeof key !== "string") {
             throw new Error("Kindly provide valid parameters");
         }
         return this._connection
             .sendToParent("store", { action: "get", key })
-            .then((event: { data: GenericObjectType }) => Promise.resolve(event.data))
+            .then((event: { data: GenericObjectType }) =>
+                Promise.resolve(event.data)
+            )
             .catch(onError);
     }
 
     /**
-     * Gets an object with all the stored key-value pairs.
-     * @example extension.store.getAll().then((obj) => obj)
-     * @return {external:Promise}
+     * Retrieves an object with all the stored key-value pairs.
+     * @example await extension.store.getAll(); // Returns a Promise containing the stored data.
+     * @return {Promise<GenericObjectType>} A Promise that resolves with the stored key-value pairs as an object.
      */
-    getAll() {
+    getAll(): Promise<GenericObjectType> {
         return this._connection
             .sendToParent("store", { action: "getAll" })
             .then(({ data = {} }) => Promise.resolve(data))
@@ -41,14 +45,13 @@ class Store {
     }
 
     /**
-     * Sets the value of a key
-     * @param  {string} key Key of the stored data.
-     * @param {*} value Data to be stored.
-     * @example extension.store.set('key', 'value').then((success) => console.log(success)) // will log ‘true’ when value is set
-     * @return {external:Promise}
+     * Sets the value of a key.
+     * @param {string} key The key for the stored data.
+     * @param {*} value The data to be stored.
+     * @example await extension.store.set('key', 'value'); // Returns a Promise that resolves with the success status.
+     * @return {Promise<boolean>} A Promise that resolves with the success status (true when the value was set successfully).
      */
-
-    set(key: string, value: string) {
+    set(key: string, value: any): Promise<boolean> {
         if (!key || !value || typeof key !== "string") {
             throw new Error("Kindly provide valid parameters");
         }
@@ -59,13 +62,12 @@ class Store {
     }
 
     /**
-     * Removes the value of a key
-     * @param  {string} key  Key of the data to be removed from the store
-     * @example extension.store.remove('key').then((success) => console.log(success)) // will log ‘true’ when value is removed
-     * @return {external:Promise}
+     * Removes the value associated with a key from the store.
+     * @param {string} key The key whose value needs to be removed.
+     * @example await extension.store.remove('key'); // Returns a Promise that resolves with the success status.
+     * @return {Promise<boolean>} A Promise that resolves with the success status (true when the value was removed successfully).
      */
-
-    remove(key: string) {
+    remove(key: string): Promise<boolean> {
         if (!key || typeof key !== "string") {
             throw new Error("Kindly provide valid parameters");
         }
@@ -76,12 +78,11 @@ class Store {
     }
 
     /**
-     * Clears all the stored data of an extension
-     * @example extension.store.clear().then((success) => console.log(success)) // will log ‘true’ when values are cleared
-     * @return {external:Promise}
+     * Clears all the stored data of an extension.
+     * @example await extension.store.clear(); // Returns a Promise that resolves with the success status.
+     * @returns {Promise<boolean>} A Promise that resolves with the success status (true when all values are cleared successfully).
      */
-
-    clear() {
+    clear(): Promise<boolean> {
         return this._connection
             .sendToParent("store", { action: "clear" })
             .then(() => Promise.resolve(true))

@@ -22,7 +22,7 @@ export declare interface StackDetail {
         live_preview?: Partial<{
             enabled: boolean;
             "default-env": string;
-            "default-url": string; // TODO: correct it
+            "default-url": string;
         }>;
         language_fallback?: boolean;
     };
