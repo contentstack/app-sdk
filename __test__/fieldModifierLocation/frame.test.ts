@@ -26,7 +26,10 @@ describe("FieldModifierLocationFrame", () => {
         };
 
         jest.spyOn(emitter, "on");
-        frameInstance = new FieldModifierLocationFrame(connection, emitter);
+        frameInstance = new FieldModifierLocationFrame(
+            connection as any,
+            emitter
+        );
     });
 
     afterEach(() => {
@@ -108,7 +111,10 @@ describe("FieldModifierLocationFrame", () => {
             //@ts-ignore
             global.MutationObserver = mutationObserverMock;
 
-            frameInstance = new FieldModifierLocationFrame(connection, emitter);
+            frameInstance = new FieldModifierLocationFrame(
+                connection as any,
+                emitter
+            );
 
             const [observerInstance] = <void[] | [{ trigger: () => {} }]>(
                 mutationObserverMock.mock.instances
@@ -150,7 +156,10 @@ describe("FieldModifierLocationFrame", () => {
             //@ts-ignore
             global.MutationObserver = mutationObserverMock;
 
-            frameInstance = new FieldModifierLocationFrame(connection, emitter);
+            frameInstance = new FieldModifierLocationFrame(
+                connection as any,
+                emitter
+            );
 
             frameInstance.disableAutoResizing();
 
@@ -183,6 +192,24 @@ describe("FieldModifierLocationFrame", () => {
             frameInstance.closeModal();
 
             expect(sendToParent).toHaveBeenLastCalledWith("closeModal");
+        });
+    });
+
+    describe("preventFrameClose", () => {
+        it("should not allow user to close frame by clicking background", async () => {
+            await frameInstance.preventFrameClose(true);
+            expect(sendToParent).toHaveBeenCalledTimes(1);
+            expect(sendToParent).toHaveBeenLastCalledWith("preventFrameClose", {
+                state: true,
+            });
+        });
+
+        it("should allow user to close frame by clicking background", async () => {
+            await frameInstance.preventFrameClose(false);
+            expect(sendToParent).toHaveBeenCalledTimes(1);
+            expect(sendToParent).toHaveBeenLastCalledWith("preventFrameClose", {
+                state: false,
+            });
         });
     });
 });

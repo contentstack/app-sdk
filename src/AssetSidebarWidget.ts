@@ -1,6 +1,9 @@
 import EventEmitter from "wolfy87-eventemitter";
 import { IAssetSidebarInitData, setAssetDto } from "./types";
-import Asset from './stack/api/asset'
+import postRobot from "post-robot";
+import Asset from "./stack/api/asset";
+import { Asset as AssetType } from "./types/stack.types";
+import { GenericObjectType } from "./types/common.types";
 
 /** Class representing an asset Extension from Contentstack UI.  */
 
@@ -9,14 +12,14 @@ class AssetSidebarWidget {
      * @hideconstructor
      */
 
-    currentAsset: { [key: string]: any };
+    currentAsset: AssetType;
     _emitter: EventEmitter;
-    _connection: any;
-    _changedData?: { [key: string]: any };
+    _connection: typeof postRobot;
+    _changedData?: GenericObjectType;
 
     constructor(
         initializationData: IAssetSidebarInitData,
-        connection: any,
+        connection: typeof postRobot,
         emitter: EventEmitter
     ) {
         /**
@@ -24,7 +27,7 @@ class AssetSidebarWidget {
          * @type {Object}
          */
 
-        this.currentAsset = initializationData.data.currentAsset;
+        this.currentAsset = initializationData.currentAsset;
 
         this._emitter = emitter;
 
@@ -32,19 +35,13 @@ class AssetSidebarWidget {
 
         const thisAsset = this;
 
-        this._emitter.on(
-            "assetSave",
-            (event: { data: { [key: string]: any } }) => {
-                thisAsset.currentAsset = event.data;
-            }
-        );
+        this._emitter.on("assetSave", (event: { data: AssetType }) => {
+            thisAsset.currentAsset = event.data;
+        });
 
-        this._emitter.on(
-            "assetChange",
-            (event: { data: { [key: string]: any } }) => {
-                thisAsset._changedData = event.data;
-            }
-        );
+        this._emitter.on("assetChange", (event: { data: AssetType }) => {
+            thisAsset._changedData = event.data;
+        });
 
         this.getData = this.getData.bind(this);
         this.setData = this.setData.bind(this);
@@ -57,36 +54,63 @@ class AssetSidebarWidget {
         this.replaceAsset = this.replaceAsset.bind(this);
     }
 
-    getData() {
+    /**
+     * Get the current asset data.
+     * @returns {AssetData} The current asset data.
+     */
+    getData(): AssetType {
         return this.currentAsset;
     }
 
-    async setData(asset: Partial<setAssetDto>): Promise<any> {
-        return this._connection.sendToParent("setData", asset);
-    }
-
-    async syncAsset(): Promise<any> {
-        return this._connection.sendToParent("syncAsset");
-    }
-
-    async updateWidth(width: number): Promise<any> {
-        if (typeof width !== "number") {
-            throw new Error("Width must be a number");
-        }
-        return this._connection.sendToParent("updateAssetSidebarWidth", width);
-    }
-
-    async replaceAsset(file: File): Promise<any> {
-        const asset = Asset(this._emitter);
-        return asset.handleUpload([file], 'replace');
+    /**
+     * Set data for the asset.
+     * @param {Partial<setAssetDto>} asset - The partial asset data to set.
+     * @returns {Promise<void>} A promise that resolves when the data is set successfully.
+     */
+    async setData(asset: Partial<setAssetDto>): Promise<void> {
+        await this._connection.sendToParent("setData", asset);
     }
 
     /**
-     * This function executes the callback function every time an asset is saved.
-     * @param {function} callback The function to be called when an asset is saved.
+     * Synchronize the asset with the parent application in the Contentstack UI.
+     * @returns {Promise<void>} A promise that resolves when the synchronization is complete.
      */
+    async syncAsset(): Promise<void> {
+        await this._connection.sendToParent("syncAsset");
+    }
 
-    onSave(callback: (arg0: any) => void) {
+    /**
+     * Update the width of the Asset Sidebar widget in the Contentstack UI.
+     * @param {number} width - The new width of the asset sidebar.
+     * @throws {Error} Throws an error if the width parameter is not a number.
+     * @returns {Promise<void>} A promise that resolves when the width is updated successfully.
+     */
+    async updateWidth(width: number): Promise<void> {
+        if (typeof width !== "number") {
+            throw new Error("Width must be a number");
+        }
+        await this._connection.sendToParent(
+            "updateAssetSidebarWidth",
+            width as any
+        );
+    }
+
+    /**
+     * Replace the current asset with a new file.
+     * @param {File} file - The file to be used as the replacement asset.
+     * @returns {Promise<void>} A promise that resolves when the replacement is complete.
+     */
+    async replaceAsset(file: File): Promise<void> {
+        const asset = Asset(this._emitter);
+        await asset.handleUpload([file], "replace");
+    }
+
+    /**
+     * Executes the provided callback function every time an asset is saved.
+     * @param {function} callback - The function to be called when an asset is saved.
+     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when an asset is saved.
+     */
+    onSave(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
             assetObj._emitter.on("assetSave", (event: { data: any }) => {
@@ -98,11 +122,12 @@ class AssetSidebarWidget {
     }
 
     /**
-     * The field.onChange() function is called when another extension programmatically changes the data of the current extension field using the field.setData() function. This function is only available for extension fields that support the following data types: text, number, boolean, or date.
-     * @param {function} callback The function to be called when an asset is edited/changed.
+     * The `field.onChange()` function is called when another extension programmatically changes the data of the current extension field using the `field.setData()` function.
+     * This function is only available for extension fields that support the following data types: text, number, boolean, or date.
+     * @param {function} callback - The function to be called when the asset is edited/changed.
+     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when the asset is edited/changed.
      */
-
-    onChange(callback: (arg0: any) => void) {
+    onChange(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
             assetObj._emitter.on("assetChange", (event: { data: any }) => {
@@ -115,10 +140,10 @@ class AssetSidebarWidget {
 
     /**
      * The onPublish() function executes the callback function every time an asset has been published with the respective payload.
-     * @param {function} callback The function to be called when an asset is published.
+     * @param {function} callback - The function to be called when an asset is published.
+     * @param {AssetType} arg0 - The data of the published asset passed as an argument to the callback function.
      */
-
-    onPublish(callback: (arg0: any) => void) {
+    onPublish(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
             assetObj._emitter.on("assetPublish", (event: { data: any }) => {
@@ -130,11 +155,11 @@ class AssetSidebarWidget {
     }
 
     /**
-     * The onUnPublish() function executes the callback function every time an asset has been unpublished with the respective payload.
-     * @param {function} callback The function to be called when an asset is un published.
+     * The `onUnPublish()` function executes the provided callback every time an asset is unpublished.
+     * @param {function} callback - The function to be called when an asset is unpublished.
+     * @param {AssetType} arg0 - The data of the unpublished asset passed as an argument to the callback function.
      */
-
-    onUnPublish(callback: (arg0: any) => void) {
+    onUnPublish(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
             assetObj._emitter.on("assetUnPublish", (event: { data: any }) => {
@@ -145,4 +170,5 @@ class AssetSidebarWidget {
         }
     }
 }
+
 export default AssetSidebarWidget;

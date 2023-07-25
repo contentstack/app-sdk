@@ -1,6 +1,8 @@
 import EventEmitter from "wolfy87-eventemitter";
-import Window from "../src/window";
 import postRobot from "post-robot";
+
+import Window from "../src/window";
+import { DashboardWidth, LocationType } from "../src/types";
 
 jest.mock("post-robot", () => ({
     __esModule: true,
@@ -33,11 +35,11 @@ describe("Window", () => {
 
         connection = { sendToParent: sendToParent };
         jest.spyOn(connection, "sendToParent");
-        windowObj = new Window(connection, "FIELD", emitter);
+        windowObj = new Window(connection, LocationType.FIELD, emitter);
     });
 
     it("enableResizing", (done) => {
-        windowObj.type = "DASHBOARD";
+        windowObj.type = LocationType.DASHBOARD;
         windowObj.enableResizing().then(() => {
             expect(connection.sendToParent).toHaveBeenCalledWith("window", {
                 action: "enableResizing",
@@ -47,7 +49,7 @@ describe("Window", () => {
     });
 
     it("enableResizing called on field extension", (done) => {
-        windowObj.type = "FIELD";
+        windowObj.type = LocationType.FIELD;
         windowObj.enableResizing().then(() => {
             expect(connection.sendToParent).toHaveBeenCalledTimes(0); // since previous height was same
             done();
@@ -62,8 +64,8 @@ describe("Window", () => {
     });
 
     it("updateHeight for dashboard in half width", (done) => {
-        windowObj.type = "DASHBOARD";
-        windowObj.state = "half_width";
+        windowObj.type = LocationType.DASHBOARD;
+        windowObj.state = DashboardWidth.HALF_WIDTH;
         windowObj.updateHeight(55).then(() => {
             expect(connection.sendToParent).toHaveBeenCalledTimes(0);
             done();
@@ -91,7 +93,7 @@ describe("Window", () => {
     });
 
     it("onDashboardResize Callback must be a function", function () {
-        windowObj.type = "DASHBOARD";
+        windowObj.type = LocationType.DASHBOARD;
         //@ts-ignore
         expect(() => windowObj.onDashboardResize()).toThrow(
             "Callback must be a function"
@@ -99,14 +101,14 @@ describe("Window", () => {
     });
 
     it("onDashboardResize for field extension", function () {
-        windowObj.type = "FIELD";
+        windowObj.type = LocationType.FIELD;
         //@ts-ignore
         expect(windowObj.onDashboardResize()).toEqual(false);
     });
 
     it("onDashboardResize", function (done) {
-        windowObj.type = "DASHBOARD";
-        expect(windowObj.state).toEqual("half_width");
+        windowObj.type = LocationType.DASHBOARD;
+        expect(windowObj.state).toEqual(DashboardWidth.HALF_WIDTH);
         windowObj.onDashboardResize(function () {
             expect(emitter.on).toHaveBeenCalledWith(
                 "dashboardResize",
@@ -119,7 +121,7 @@ describe("Window", () => {
     });
 
     it("should send dashboardEnableTopPadding on enablePaddingTop", (done) => {
-        windowObj.type = "DASHBOARD";
+        windowObj.type = LocationType.DASHBOARD;
         windowObj.enablePaddingTop().then(() => {
             expect((postRobot as any).sendToParent).toHaveBeenCalledWith(
                 "window",
@@ -132,7 +134,7 @@ describe("Window", () => {
     });
 
     it("should send dashboardDisableTopPadding on disablePaddingTop", (done) => {
-        windowObj.type = "DASHBOARD";
+        windowObj.type = LocationType.DASHBOARD;
         windowObj.disablePaddingTop().then(() => {
             expect((postRobot as any).sendToParent).toHaveBeenCalledWith(
                 "window",
