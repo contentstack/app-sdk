@@ -34,7 +34,7 @@ function separateResolvedData(
     return { resolvedData, unResolvedData };
 }
 
-/** Class representing a field from Contentstack UI. Only available for Custom Field extension */
+/** Class representing a field from Contentstack UI. */
 class FieldModifierLocationField {
     /**
      * @hideconstructor

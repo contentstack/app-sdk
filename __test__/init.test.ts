@@ -1,8 +1,8 @@
 import ContentstackAppSDK from "../src/index";
-import Extension from "../src/extension";
+import UiLocation from "../src/uiLocation";
 import { version } from "../package.json";
 
-jest.mock("../src/extension");
+jest.mock("../src/uiLocation");
 
 describe("ContentstackAppSDK", () => {
     describe("init", () => {
@@ -11,36 +11,38 @@ describe("ContentstackAppSDK", () => {
         };
         beforeEach(() => {
             const mockInitialize = jest.fn().mockResolvedValue(mockInitData);
-            Extension.initialize = mockInitialize;
+            UiLocation.initialize = mockInitialize;
         });
 
         afterEach(() => {
             // Reset the static variable after every test
-            (ContentstackAppSDK._extension as any) = undefined;
+            (ContentstackAppSDK._uiLocation as any) = undefined;
             jest.resetAllMocks();
         });
 
-        it("should initialize the extension and return an instance of Extension", async () => {
-            const extension = await ContentstackAppSDK.init();
+        it("should initialize the ui location and return an instance of Location", async () => {
+            const uiLocation = await ContentstackAppSDK.init();
 
-            expect(Extension.initialize).toHaveBeenCalledTimes(1);
-            expect(Extension.initialize).toBeCalledWith(version);
-            expect(Extension).toHaveBeenCalledWith(mockInitData);
-            expect(extension).toBeInstanceOf(Extension);
+            expect(UiLocation.initialize).toHaveBeenCalledTimes(1);
+            expect(UiLocation.initialize).toBeCalledWith(version);
+            expect(UiLocation).toHaveBeenCalledWith(mockInitData);
+            expect(uiLocation).toBeInstanceOf(UiLocation);
         });
 
-        it("should return the same instance of Extension if it has already been initialized", async () => {
-            (Extension.initialize as jest.Mock).mockResolvedValue(mockInitData);
-            const extension = await ContentstackAppSDK.init();
-            const extension2 = await ContentstackAppSDK.init();
+        it("should return the same instance of Location if it has already been initialized", async () => {
+            (UiLocation.initialize as jest.Mock).mockResolvedValue(
+                mockInitData
+            );
+            const uiLocation = await ContentstackAppSDK.init();
+            const uiLocation2 = await ContentstackAppSDK.init();
 
-            expect(Extension.initialize).toHaveBeenCalledTimes(1);
-            expect(extension).toBe(extension2);
+            expect(UiLocation.initialize).toHaveBeenCalledTimes(1);
+            expect(uiLocation).toBe(uiLocation2);
         });
 
         it("should reject the promise if initialization fails", async () => {
             const error = new Error("Initialization failed");
-            (Extension.initialize as jest.Mock).mockRejectedValue(error);
+            (UiLocation.initialize as jest.Mock).mockRejectedValue(error);
 
             await expect(ContentstackAppSDK.init()).rejects.toThrow(error);
         });
