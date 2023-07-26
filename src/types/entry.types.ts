@@ -12,7 +12,7 @@ export declare interface IGetFieldOptions {
 export declare interface IEntryInternalFlags {
     /**
      * This is an internal flag used to inject a custom field instance.
-     * This is used by the extension SDK to inject a custom field instance.
+     * This is used by the App SDK to inject a custom field instance.
      */
     FieldInstance?: Field;
 }
