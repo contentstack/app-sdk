@@ -1,3 +1,4 @@
+import Entry from "../entry";
 import { AnyProperty, GenericObjectType } from "./common.types";
 export declare interface StackDetail {
     created_at: string;
@@ -131,5 +132,12 @@ export interface Asset extends AnyProperty {
     parent_uid?: string;
     url?: string;
     filename?: string;
+}
+export interface PublishDetails extends AnyProperty {
+    entries: Array<Entry>;
+    environments: Array<String>;
+    locales: Array<String>;
+    publish_with_reference: boolean;
+    rules: GenericObjectType;
 }
 //# sourceMappingURL=stack.types.d.ts.map

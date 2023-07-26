@@ -3,7 +3,7 @@ import { IAssetSidebarInitData, setAssetDto } from "./types";
 import postRobot from "post-robot";
 import { Asset as AssetType } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
-/** Class representing an asset Extension from Contentstack UI.  */
+/** Class representing an Asset Sidebar UI Location from Contentstack UI.  */
 declare class AssetSidebarWidget {
     /**
      * @hideconstructor
@@ -49,10 +49,9 @@ declare class AssetSidebarWidget {
      */
     onSave(callback: (arg0: AssetType) => void): void;
     /**
-     * The `field.onChange()` function is called when another extension programmatically changes the data of the current extension field using the `field.setData()` function.
-     * This function is only available for extension fields that support the following data types: text, number, boolean, or date.
-     * @param {function} callback - The function to be called when the asset is edited/changed.
-     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when the asset is edited/changed.
+     * Registers a callback function to be executed whenever there is a change made to the Asset.
+     * @param {function} callback - The function to be called when the asset is edited or changed.
+     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when the asset is edited or changed.
      */
     onChange(callback: (arg0: AssetType) => void): void;
     /**
