@@ -3,7 +3,7 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "../types";
 import { GenericObjectType } from "../types/common.types";
 import { Schema } from "../types/stack.types";
-/** Class representing a field from Contentstack UI. Only available for Custom Field extension */
+/** Class representing a field from Contentstack UI. */
 declare class FieldModifierLocationField {
     /**
      * @hideconstructor

@@ -3,7 +3,7 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
-/** Class representing a field from Contentstack UI. Only available for Custom Field extension */
+/** Class representing a field from Contentstack UI. Only available for Custom Field and Field Modifier UI Location */
 declare class Field {
     /**
      * @hideconstructor
@@ -33,13 +33,14 @@ declare class Field {
         resolved?: boolean | undefined;
     }): GenericObjectType;
     /**
-     * Sets the focus for a field when an extension is being used. This method shows user presence and highlights the extension field that the user is currently accessing in Contentstack UI.
-     * @return {Promise<void} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
+     * Sets the focus for a field when an App is being used. This method shows user presence and highlights the App's Custom Field that the user is currently accessing in Contentstack UI.
+     * @return {Promise<void>} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
      */
     setFocus(): Promise<void>;
     /**
-     * This function is called when another extension programmatically changes data of this field using field.setData() function, only available for extension field, only support extensions of data type text, number, boolean or date.
-     * @param {function} callback The function to be called when an entry is published.
+     * The `onChange` function is triggered when another extension or app programmatically modifies the data of this field using the `field.setData()` function.
+     * It is specifically designed for App's Custom Fields of data types text, number, boolean, or date.
+     * @param {function} callback The function to be called when a field has been updated.
      */
     onChange?(callback: (data: any) => any): void;
 }
