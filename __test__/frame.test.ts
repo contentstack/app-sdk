@@ -48,7 +48,7 @@ describe("Window", () => {
         });
     });
 
-    it("enableResizing called on field extension", (done) => {
+    it("enableResizing called on Custom Field UI location", (done) => {
         windowObj.type = LocationType.FIELD;
         windowObj.enableResizing().then(() => {
             expect(connection.sendToParent).toHaveBeenCalledTimes(0); // since previous height was same
@@ -94,16 +94,14 @@ describe("Window", () => {
 
     it("onDashboardResize Callback must be a function", function () {
         windowObj.type = LocationType.DASHBOARD;
-        //@ts-ignore
-        expect(() => windowObj.onDashboardResize()).toThrow(
+        expect(() => windowObj.onDashboardResize(undefined as any)).toThrow(
             "Callback must be a function"
         );
     });
 
-    it("onDashboardResize for field extension", function () {
+    it("onDashboardResize for Custom Field UI location", function () {
         windowObj.type = LocationType.FIELD;
-        //@ts-ignore
-        expect(windowObj.onDashboardResize()).toEqual(false);
+        expect(windowObj.onDashboardResize(undefined as any)).toEqual(false);
     });
 
     it("onDashboardResize", function (done) {

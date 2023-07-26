@@ -33,11 +33,11 @@ import Window from "./window";
 const emitter = new EventEmitter();
 
 /**
- * Class representing an extension from Contentstack App SDK.
+ * Class representing an UI Location from Contentstack App SDK.
  * @hideconstructor
  */
 
-class Extension {
+class UiLocation {
     /**
      * This value represents the current app's unique ID.
      */
@@ -74,7 +74,7 @@ class Extension {
     stack: Stack;
 
     /**
-     * Store to persist data for extension.
+     * Store to persist data for the app.
      * Note: Data is stored in the browser's {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
      */
     store: Store;
@@ -85,7 +85,7 @@ class Extension {
     metadata: Metadata;
 
     /**
-     * This value represents the current location's unique ID. One App may contain multiple locations
+     * This value represents the current UI location's unique ID. One App may contain multiple UI locations
      */
     locationUID: string;
 
@@ -101,7 +101,7 @@ class Extension {
     version: number | null;
 
     /**
-     * This holds the information of the currently running location of an App.
+     * This holds the information of the currently running UI location of an App.
      */
     location: {
         DashboardWidget: IDashboardWidget | null;
@@ -337,7 +337,7 @@ class Extension {
                 }
             });
         } catch (err) {
-            console.error("extension Event", err);
+            console.error("Extension Event", err);
         }
     }
 
@@ -418,4 +418,4 @@ class Extension {
     }
 }
 
-export default Extension;
+export default UiLocation;

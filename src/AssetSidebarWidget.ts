@@ -5,7 +5,7 @@ import Asset from "./stack/api/asset";
 import { Asset as AssetType } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
 
-/** Class representing an asset Extension from Contentstack UI.  */
+/** Class representing an Asset Sidebar UI Location from Contentstack UI.  */
 
 class AssetSidebarWidget {
     /**
@@ -122,17 +122,19 @@ class AssetSidebarWidget {
     }
 
     /**
-     * The `field.onChange()` function is called when another extension programmatically changes the data of the current extension field using the `field.setData()` function.
-     * This function is only available for extension fields that support the following data types: text, number, boolean, or date.
-     * @param {function} callback - The function to be called when the asset is edited/changed.
-     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when the asset is edited/changed.
+     * Registers a callback function to be executed whenever there is a change made to the Asset.
+     * @param {function} callback - The function to be called when the asset is edited or changed.
+     * @param {AssetType} arg0 - The asset data passed as an argument to the callback function when the asset is edited or changed.
      */
     onChange(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
-            assetObj._emitter.on("assetChange", (event: { data: any }) => {
-                callback(event.data);
-            });
+            assetObj._emitter.on(
+                "assetChange",
+                (event: { data: AssetType }) => {
+                    callback(event.data);
+                }
+            );
         } else {
             throw Error("Callback must be a function");
         }
@@ -146,9 +148,12 @@ class AssetSidebarWidget {
     onPublish(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
-            assetObj._emitter.on("assetPublish", (event: { data: any }) => {
-                callback(event.data);
-            });
+            assetObj._emitter.on(
+                "assetPublish",
+                (event: { data: AssetType }) => {
+                    callback(event.data);
+                }
+            );
         } else {
             throw Error("Callback must be a function");
         }
@@ -162,9 +167,12 @@ class AssetSidebarWidget {
     onUnPublish(callback: (arg0: AssetType) => void) {
         const assetObj = this;
         if (callback && typeof callback === "function") {
-            assetObj._emitter.on("assetUnPublish", (event: { data: any }) => {
-                callback(event.data);
-            });
+            assetObj._emitter.on(
+                "assetUnPublish",
+                (event: { data: AssetType }) => {
+                    callback(event.data);
+                }
+            );
         } else {
             throw Error("Callback must be a function");
         }

@@ -37,9 +37,9 @@ class FieldModifierLocationFrame {
     }
 
     /**
-     * This method updates the extension height and width on Contentstack UI.
+     * This method updates the UI location height and width on Contentstack UI.
      * If the value is not passed, it will update the height and width of the
-     * extension with the current height and width of the extension.
+     * UI location with the current height and width of the UI location.
      * @param {dimension: {height: number, width: number}} dimension Desired height and width of the iframe window
      */
     async updateDimension(dimension?: {
@@ -104,7 +104,7 @@ class FieldModifierLocationFrame {
     }
 
     /**
-     * This method enables auto resizing of the extension height.
+     * This method enables auto resizing of the UI Location height.
      * @return {FieldModifierLocationFrame}.
      */
     enableAutoResizing(): FieldModifierLocationFrame {
@@ -128,7 +128,7 @@ class FieldModifierLocationFrame {
     }
 
     /**
-     * This method disables auto resizing of the extension height.
+     * This method disables auto resizing of the UI location height.
      * @return {FieldModifierLocationFrame}.
      */
     disableAutoResizing(): FieldModifierLocationFrame {

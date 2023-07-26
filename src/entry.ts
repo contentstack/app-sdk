@@ -13,10 +13,10 @@ import {
     IGetFieldOptions,
     IOnEntryChangeCallback,
 } from "./types/entry.types";
-import { ContentType, Schema } from "./types/stack.types";
+import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
 
-/** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
+/** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
 class Entry {
     /**
@@ -90,8 +90,8 @@ class Entry {
 
     /**
      * Gets the field object for the saved data, which allows you to interact with the field.
-     * This object will have all the same methods and properties of extension.field.
-     * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and extension of data type text, number, boolean, and date.
+     * This object will have all the same methods and properties of appSDK.location.CustomField.field.
+     * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and Custom Field UI Location of data type text, number, boolean, and date.
      * @example
      * var field = entry.getField('field_uid');
      * var fieldSchema = field.schema;
@@ -205,7 +205,7 @@ class Entry {
     onSave(callback: (arg0: EntryType) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entrySave", (event: EntryType) => {
+            entryObj._emitter.on("entrySave", (event: { data: EntryType }) => {
                 callback(event.data);
             });
         } else {
@@ -214,8 +214,8 @@ class Entry {
     }
 
     /**
-     * The field.onChange() function is called when another extension programmatically changes the data of the current extension field using the field.setData() function. This function is only available for extension fields that support the following data types: text, number, boolean, or date.
-     * @param {function} callback The function to be called when an entry is edited/changed.
+     * The onChange() function executes the provided callback function whenever an entry is updated.
+     * @param {function} callback - The function to be called when the entry is edited or changed.
      */
 
     onChange(callback: IOnEntryChangeCallback) {
@@ -240,12 +240,15 @@ class Entry {
      * @param {function} callback The function to be called when an entry is published.
      */
 
-    onPublish(callback: (arg0: EntryType) => void) {
+    onPublish(callback: (arg0: PublishDetails) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entryPublish", (event: EntryType) => {
-                callback(event.data);
-            });
+            entryObj._emitter.on(
+                "entryPublish",
+                (event: { data: PublishDetails }) => {
+                    callback(event.data);
+                }
+            );
         } else {
             throw Error("Callback must be a function");
         }
@@ -256,12 +259,15 @@ class Entry {
      * @param {function} callback The function to be called when an entry is un published.
      */
 
-    onUnPublish(callback: (arg0: EntryType) => void) {
+    onUnPublish(callback: (arg0: PublishDetails) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entryUnPublish", (event: EntryType) => {
-                callback(event.data);
-            });
+            entryObj._emitter.on(
+                "entryUnPublish",
+                (event: { data: PublishDetails }) => {
+                    callback(event.data);
+                }
+            );
         } else {
             throw Error("Callback must be a function");
         }
