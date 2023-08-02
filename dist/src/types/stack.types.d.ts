@@ -120,6 +120,7 @@ export interface ContentTypeOptions {
 export interface Schema extends AnyProperty {
     display_name: string;
     uid: string;
+    $uid: string;
     data_type: string;
     mandatory?: boolean;
     unique?: boolean;
