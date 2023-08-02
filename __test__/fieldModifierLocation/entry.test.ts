@@ -29,6 +29,7 @@ describe("FieldModifierLocationEntry", () => {
             schema: {
                 display_name: "sample_schema_name",
                 uid: "sample_schema_uid",
+                $uid: "sample_schema_uid",
                 data_type: "text",
             },
             value: {},
