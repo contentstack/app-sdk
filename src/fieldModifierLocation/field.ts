@@ -85,7 +85,7 @@ class FieldModifierLocationField {
         const fieldObj = this;
 
         emitter.on("updateFields", (event: any) => {
-            const path = fieldObj.uid.split(".");
+            const path = fieldObj.schema.$uid.split(".");
             let value = event.data;
 
             path.forEach((key) => {
