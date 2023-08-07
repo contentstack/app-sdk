@@ -82,7 +82,11 @@ class Field {
         const fieldObj = this;
 
         emitter.on("updateFields", (event: GenericObjectType) => {
-            const path = fieldObj.schema.$uid.split(".");
+            const schemaPath =
+                this._self && "$uid" in fieldObj.schema
+                    ? fieldObj.schema.$uid
+                    : fieldObj.uid;
+            const path = schemaPath.split(".");
             let value = event.data;
 
             path.forEach((key) => {
