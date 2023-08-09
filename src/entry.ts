@@ -75,6 +75,7 @@ class Entry {
         this._emitter.on(
             "entryChange",
             (event: { data: { [key: string]: any } }) => {
+                console.log("rte listened to the change", event.data);
                 thisEntry._changedData = event.data;
             }
         );
