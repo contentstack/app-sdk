@@ -18,8 +18,7 @@
         "prettier:fix": "npx prettier src --write",
         "lint:fix": "eslint --fix",
         "prepare": "npm run build && husky install",
-        "format": "npm run prettier:fix && npm run lint:fix",
-        "docs:jsdoc": "node_modules/.bin/jsdoc --configure .jsdoc.json --readme README.md --verbose"
+        "format": "npm run prettier:fix && npm run lint:fix"
     },
     "keywords": [],
     "author": {
@@ -43,16 +42,13 @@
         "@typescript-eslint/eslint-plugin": "^5.10.1",
         "@typescript-eslint/parser": "^5.10.1",
         "babel-loader": "^9.1.0",
-        "better-docs": "^2.7.2",
         "chai": "^4.3.4",
         "css-loader": "^5.2.2",
         "eslint": "^8.7.0",
         "eslint-plugin-only-warn": "^1.1.0",
         "husky": "^8.0.0",
         "jest": "^27.3.1",
-        "jsdoc": "^3.6.11",
-        "jsdoc-plugin-typescript": "^2.2.1",
-        "lint-staged": "^13.1.0",
+        "lint-staged": "^13.2.3",
         "react": "^17.0.2",
         "slate": "^0.72.3",
         "ts-jest": "^27.0.7",
