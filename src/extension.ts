@@ -233,7 +233,7 @@ class Extension {
                             postRobot,
                             emitter
                         ),
-                    }
+                    };
                 });
                 break;
             }
@@ -302,7 +302,7 @@ class Extension {
                     ]);
                 }
 
-                if (event.data.name === "entryChange") {
+                if (event.data.eventName === "entryChange") {
                     emitter.emitEvent("entryChange", [
                         {
                             data: event.data.data,
