@@ -142,6 +142,10 @@ export declare interface IRteParam {
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
 
+export declare interface IRTELocation {
+    [key: string]: any;
+}
+
 export declare type IRteParamWithPreventDefault = {
     rte: IRteParam;
     preventDefault: () => void;
