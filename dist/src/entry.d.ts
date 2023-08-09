@@ -1,6 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import Field from "./field";
-import { ICurrentContentType, IFieldInitData, IFieldModifierLocationInitData, ISidebarInitData } from "./types";
+import { ICurrentContentType, IFieldInitData, IFieldModifierLocationInitData, IRTELocationInitData, ISidebarInitData } from "./types";
 import { IEntryOptions, IGetFieldOptions, IOnEntryChangeCallback } from "./types/entry.types";
 /** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
 declare class Entry {
@@ -18,7 +18,7 @@ declare class Entry {
         [key: string]: any;
     };
     _options: IEntryOptions;
-    constructor(initializationData: IFieldInitData | ISidebarInitData | IFieldModifierLocationInitData, connection: any, emitter: EventEmitter, options?: IEntryOptions);
+    constructor(initializationData: IFieldInitData | ISidebarInitData | IRTELocationInitData | IFieldModifierLocationInitData, connection: any, emitter: EventEmitter, options?: IEntryOptions);
     /**
      * Gets data of the current entry.
      * @return {Object} Returns entry data.

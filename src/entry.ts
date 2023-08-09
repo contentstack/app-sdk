@@ -5,6 +5,7 @@ import {
     ICurrentContentType,
     IFieldInitData,
     IFieldModifierLocationInitData,
+    IRTELocationInitData,
     ISidebarInitData,
 } from "./types";
 import {
@@ -32,6 +33,7 @@ class Entry {
         initializationData:
             | IFieldInitData
             | ISidebarInitData
+            | IRTELocationInitData
             | IFieldModifierLocationInitData,
         connection: any,
         emitter: EventEmitter,

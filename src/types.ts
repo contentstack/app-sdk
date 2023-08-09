@@ -120,6 +120,15 @@ export declare interface ISidebarInitData {
     };
 }
 
+export declare interface IRTELocationInitData {
+    data: ICommonInitData & {
+        content_type: ICurrentContentType;
+        entry: ICurrentEntry;
+        locale: string;
+        changedData: ICurrentEntry;
+    }
+}
+
 export declare interface IFieldInitData {
     data: ICommonInitData & {
         entry: ICurrentEntry;

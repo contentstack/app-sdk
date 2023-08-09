@@ -1,5 +1,5 @@
 import AssetSidebarWidget from "./AssetSidebarWidget";
-import { IRTEPluginInitializer } from "./RTE/types";
+import { IRTELocation, IRTEPluginInitializer } from "./RTE/types";
 import Metadata from "./metadata";
 import Modal from "./modal";
 import Stack from "./stack";
@@ -28,6 +28,7 @@ declare class Extension {
         SidebarWidget: ISidebarWidget | null;
         CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
+        RTELocation: IRTELocation | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;

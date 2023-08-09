@@ -95,6 +95,9 @@ export declare interface IRteParam {
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
+export declare interface IRTELocation {
+    [key: string]: any;
+}
 export declare type IRteParamWithPreventDefault = {
     rte: IRteParam;
     preventDefault: () => void;

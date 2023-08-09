@@ -2,7 +2,7 @@ import postRobot from "post-robot";
 import EventEmitter from "wolfy87-eventemitter";
 
 import AssetSidebarWidget from "./AssetSidebarWidget";
-import { IRTEPluginInitializer } from "./RTE/types";
+import { IRTELocation, IRTEPluginInitializer } from "./RTE/types";
 import { AppConfig } from "./appConfig";
 import Entry from "./entry";
 import Field from "./field";
@@ -30,6 +30,7 @@ import {
     ILocation,
     IPageWidget,
     IRTEInitData,
+    IRTELocationInitData,
     ISidebarInitData,
     ISidebarWidget,
     IUser,
@@ -68,6 +69,7 @@ class Extension {
         SidebarWidget: ISidebarWidget | null;
         CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
+        RTELocation: IRTELocation | null;
         AppConfigWidget: IAppConfigWidget | null;
         FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
@@ -144,6 +146,7 @@ class Extension {
             CustomField: null,
             SidebarWidget: null,
             RTEPlugin: null,
+            RTELocation: null,
             AppConfigWidget: null,
             FullscreenAppWidget: null,
             AssetSidebarWidget: null,
@@ -224,6 +227,13 @@ class Extension {
             case "RTE": {
                 import("./RTE").then(({ rtePluginInitializer }) => {
                     this.location.RTEPlugin = rtePluginInitializer;
+                    this.location.RTELocation = {
+                        entry: new Entry(
+                            initializationData as IRTELocationInitData,
+                            postRobot,
+                            emitter
+                        ),
+                    }
                 });
                 break;
             }
