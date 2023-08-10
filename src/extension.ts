@@ -302,7 +302,7 @@ class Extension {
                     ]);
                 }
 
-                if (event.data.eventName === "entryChange") {
+                if (event.data.name === "entryChange") {
                     emitter.emitEvent("entryChange", [
                         {
                             data: event.data.data,
