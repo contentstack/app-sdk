@@ -207,11 +207,15 @@ export declare interface IRteElementType {
 }
 
 type IDynamicFunction = ((element: IRteElementType) => Exclude<IElementTypeOptions,"text"> |  Exclude<IElementTypeOptions,"text">[])
+type IHoveringToolbarOptions = {
+    autoWidth?: boolean;
+}
 export declare interface IConfig {
     title: string;
     icon: React.ReactElement | null;
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
+    hoveringToolbarOptions?: IHoveringToolbarOptions;
     render?: (...params: any) => ReactElement;
     shouldOverride?: (element: IRteElementType) => boolean
 }
@@ -233,6 +237,9 @@ export declare interface IRegistry {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
     };
+    hoveringToolbarOptions?: {
+        autoWidth: true;
+    }
     isContentstackElement: boolean;
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;

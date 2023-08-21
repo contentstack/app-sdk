@@ -158,6 +158,13 @@ export class RTEPlugin {
                         break;
                     }
 
+                    case "hoveringToolbarOptions": {
+                        this.pluginMetaData.registry.hoveringToolbarOptions = {
+                            autoWidth: value?.autoWidth
+                        }
+                        break;
+                    }
+
                     case "elementType": {
                         const isInline = (
                             typeof value === 'string' && value === 'inline' ||
