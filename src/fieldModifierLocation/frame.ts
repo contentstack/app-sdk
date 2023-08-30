@@ -136,6 +136,10 @@ class FieldModifierLocationFrame {
         return this;
     }
 
+    async updateParentContainerStyle(controlStyleFromApp: boolean) {
+        await this._connection.sendToParent("updateParentContainerStyle", { controlStyleFromApp });
+    }
+
     /**
      * It closes the app modal.
      * @returns {Promise<void>}
