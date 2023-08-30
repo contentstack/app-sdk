@@ -38,6 +38,7 @@ declare class FieldModifierLocationFrame {
      * @return {FieldModifierLocationFrame}.
      */
     disableAutoResizing(): FieldModifierLocationFrame;
+    updateParentContainerStyle(controlStyleFromApp: boolean): Promise<void>;
     /**
      * It closes the app modal.
      * @returns {Promise<void>}
