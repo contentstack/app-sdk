@@ -13,7 +13,7 @@ npm install @contentstack/app-sdk
 Alternatively, you can use the following command within the script tag to install the App SDK:
 
 ```html
-<script src="https://unpkg.com/@contentstack/app-sdk@^1.4.1/dist/index.js"></script>
+<script src="https://unpkg.com/@contentstack/app-sdk@2.0.0/dist/index.js"></script>
 ```
 
 ### Initializing the App SDK
@@ -46,6 +46,8 @@ The Contentstack App SDK currently supports the following UI Locations:
 -   [App Config Location](https://www.contentstack.com/docs/developers/developer-hub/app-config-location)
 -   [RTE Location](https://www.contentstack.com/docs/developers/developer-hub/rte-location)
 -   [Sidebar Location](https://www.contentstack.com/docs/developers/developer-hub/sidebar-location)
+-   [Field Modifier Location](https://www.contentstack.com/docs/developers/developer-hub/field-modifier-location/)
+-   [Full Page Location](https://www.contentstack.com/docs/developers/developer-hub/full-page-location)
 
 ### Custom Field Location
 
@@ -72,6 +74,14 @@ The RTE Location allows you to create custom plugins to expand the functionality
 ### Sidebar Location
 
 The Sidebar Location provides powerful tools for analyzing and recommending ideas for your entry. Use the [Smartling](https://help.smartling.com/hc/en-us/articles/4865477629083) sidebar location to help translate your content.
+
+### Field Modifier Location
+
+The Field Modifier Location is a type of UI location which extends the capabilities of entry fields. With the Field Modifier UI location, you can allow the different apps to appear on defined field data types such as Text, Number, JSON, Boolean, File, Reference fields etc.
+
+### Full Page Location
+
+The Full Page location is a type of UI location that lets you view full page apps such as [Release Preview](https://www.contentstack.com/docs/developers/marketplace-apps/release-preview) within your stack.
 
 ## Using Contentstack styles
 
