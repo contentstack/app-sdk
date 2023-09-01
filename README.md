@@ -93,18 +93,18 @@ npm i @contentstack/venus-components --save
 
 For more information on styling your application, refer to our [style guide](https://www.contentstack.com/docs/developers/venus-component-library/).
 
-**App SDK v2.0.0 Migration and Upgrade Guide**
-
-This guide provides instructions for migrating your application to App SDK version 2.0.0. It covers changes in metadata responses, field modifier and full page location updates, and the transition from the `_extension` property to `_uiLocation`. If you are upgrading your app to the latest version, make sure to follow these steps for a smooth transition.
-
-[Read the Migration Guide](docs/app-sdk-v2-migration.md)
-
 ## More information
 
 -   [App SDK API Reference](https://github.com/contentstack/app-sdk-docs#readme)
 -   [Marketplace Platform Guides](https://www.contentstack.com/docs/developers/marketplace-platform-guides/)
 -   [Marketplace Apps](https://www.contentstack.com/docs/developers/marketplace-apps/)
 -   [Contentstack App Development](https://www.contentstack.com/docs/developers/developer-hub/)
+
+## App SDK v2.0.0 Migration Guide
+
+This guide provides instructions for migrating your application to App SDK version 2.0.0. It covers changes in metadata responses, field modifier and full page location updates, and the transition from the `_extension` property to `_uiLocation`. If you are upgrading your app to the latest version, make sure to follow these steps for a smooth transition.
+
+[Read the Migration Guide](./docs/app-sdk-v2-migration.md)
 
 ## License
 

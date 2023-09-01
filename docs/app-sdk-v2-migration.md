@@ -22,7 +22,7 @@ Here's a comparison of the old and new response structures:
 
 #### Older Response (Version 1.x):
 
-```json
+```js
 {
   data: {
       metadata: {} // Actual metadata response to be returned,
@@ -34,7 +34,7 @@ Here's a comparison of the old and new response structures:
 
 #### Newer Response (Version 2.0.0):
 
-```json
+```js
 {
     "metadata": {} // Actual metadata response to be returned,
 }
