@@ -1,80 +1,93 @@
-function onError(error: Error) {
-  return Promise.reject(error);
-}
+import { GenericObjectType } from "./types/common.types";
+import { onError } from "./utils/utils";
+import postRobot from "post-robot";
+
 /**
- * Class used by an extension to store your data in {@link external:localStorage}.
+ * Class used by an app to store your data in {@link external:localStorage}.
+ * @hideconstructor
  */
 class Store {
-  /**
-   * @hideconstructor
-   */
+    _connection: typeof postRobot;
 
-  _connection: any
-
-  constructor(connection: any) {
-    this._connection = connection;
-  }
-  /**
-     * Gets the value of key
-     * @param  {string} key Key of the stored data
-     * @example extension.store.get('key').then((value) => console.log(value)) // will log value for the given key
-     * @return {external:Promise}
-     */
-  get(key: string) {
-    if (!key || typeof key !== 'string') { throw new Error('Kindly provide valid parameters'); }
-    return this._connection.sendToParent('store', { action: 'get', key })
-      .then((event: { data: any; }) => Promise.resolve(event.data)).catch(onError);
-  }
-
-  /**
-     * Gets an object with all the stored key-value pairs.
-     * @example extension.store.getAll().then((obj) => obj)
-     * @return {external:Promise}
-     */
-  getAll() {
-    return this._connection.sendToParent('store', { action: 'getAll' })
-      .then(({ data = {} }) => Promise.resolve(data)).catch(onError);
-  }
-
-  /**
-     * Sets the value of a key
-     * @param  {string} key Key of the stored data.
-     * @param {*} value Data to be stored.
-     * @example extension.store.set('key', 'value').then((success) => console.log(success)) // will log ‘true’ when value is set
-     * @return {external:Promise}
-     */
-
-  set(key: string, value: string) {
-    if (!key || !value || typeof key !== 'string') {
-      throw new Error('Kindly provide valid parameters');
+    constructor(connection: typeof postRobot) {
+        this._connection = connection;
     }
-    return this._connection.sendToParent('store', { action: 'set', key, value })
-      .then(() => Promise.resolve(true)).catch(onError);
-  }
 
-  /**
-     * Removes the value of a key
-     * @param  {string} key  Key of the data to be removed from the store
-     * @example extension.store.remove('key').then((success) => console.log(success)) // will log ‘true’ when value is removed
-     * @return {external:Promise}
+    /**
+     * Retrieves the stored data value associated with the given key.
+     * @param {string} key - The key of the stored data.
+     * @example
+     * appSDK.store.get('key').then((value) => console.log(value)); // Logs the value for the given key
+     * @returns {Promise<any>} A Promise that resolves to the value associated with the key.
      */
+    get(key: string): Promise<any> {
+        if (!key || typeof key !== "string") {
+            throw new Error("Kindly provide valid parameters");
+        }
+        return this._connection
+            .sendToParent("store", { action: "get", key })
+            .then((event: { data: GenericObjectType }) =>
+                Promise.resolve(event.data)
+            )
+            .catch(onError);
+    }
 
-  remove(key: string) {
-    if (!key || typeof key !== 'string') { throw new Error('Kindly provide valid parameters'); }
-    return this._connection.sendToParent('store', { action: 'remove', key })
-      .then(() => Promise.resolve(true)).catch(onError);
-  }
-
-  /**
-     * Clears all the stored data of an extension
-     * @example extension.store.clear().then((success) => console.log(success)) // will log ‘true’ when values are cleared
-     * @return {external:Promise}
+    /**
+     * Retrieves an object with all the stored key-value pairs.
+     * @example await appSDK.store.getAll(); // Returns a Promise containing the stored data.
+     * @return {Promise<GenericObjectType>} A Promise that resolves with the stored key-value pairs as an object.
      */
+    getAll(): Promise<GenericObjectType> {
+        return this._connection
+            .sendToParent("store", { action: "getAll" })
+            .then(({ data = {} }) => Promise.resolve(data))
+            .catch(onError);
+    }
 
-  clear() {
-    return this._connection.sendToParent('store', { action: 'clear' })
-      .then(() => Promise.resolve(true)).catch(onError);
-  }
+    /**
+     * Sets the value of a key.
+     * @param {string} key The key for the stored data.
+     * @param {*} value The data to be stored.
+     * @example await appSDK.store.set('key', 'value'); // Returns a Promise that resolves with the success status.
+     * @return {Promise<boolean>} A Promise that resolves with the success status (true when the value was set successfully).
+     */
+    set(key: string, value: any): Promise<boolean> {
+        if (!key || !value || typeof key !== "string") {
+            throw new Error("Kindly provide valid parameters");
+        }
+        return this._connection
+            .sendToParent("store", { action: "set", key, value })
+            .then(() => Promise.resolve(true))
+            .catch(onError);
+    }
+
+    /**
+     * Removes the value associated with a key from the store.
+     * @param {string} key The key whose value needs to be removed.
+     * @example await appSDK.store.remove('key'); // Returns a Promise that resolves with the success status.
+     * @return {Promise<boolean>} A Promise that resolves with the success status (true when the value was removed successfully).
+     */
+    remove(key: string): Promise<boolean> {
+        if (!key || typeof key !== "string") {
+            throw new Error("Kindly provide valid parameters");
+        }
+        return this._connection
+            .sendToParent("store", { action: "remove", key })
+            .then(() => Promise.resolve(true))
+            .catch(onError);
+    }
+
+    /**
+     * Clears all the stored data of an UI Location.
+     * @example await appSDK.store.clear(); // Returns a Promise that resolves with the success status.
+     * @returns {Promise<boolean>} A Promise that resolves with the success status (true when all values are cleared successfully).
+     */
+    clear(): Promise<boolean> {
+        return this._connection
+            .sendToParent("store", { action: "clear" })
+            .then(() => Promise.resolve(true))
+            .catch(onError);
+    }
 }
 
 export default Store;

@@ -1,5 +1,11 @@
+import postRobot from "post-robot";
+
 import Stack from "../stack";
-import { IInstallationData, ValidationOptions } from "../types";
+import {
+    IInstallationData,
+    ValidationOptions,
+    IAppConfigInitData,
+} from "../types";
 import generateErrorMessages, { ERROR_MESSAGES } from "../utils/errorMessages";
 import { onData, onError } from "../utils/utils";
 
@@ -12,23 +18,23 @@ export declare interface AppConfigAdditionalData {
  */
 
 export class AppConfig {
-    _data: { [key: string]: any };
-    _connection: any;
+    _data: IAppConfigInitData;
+    _connection: typeof postRobot;
     _emitter: EventEmitter;
     private _additionalData: AppConfigAdditionalData;
 
     constructor(
-        data: { [key: string]: any },
-        connection: any,
+        data: IAppConfigInitData,
+        connection: typeof postRobot,
         emitter: EventEmitter,
         additionalData: AppConfigAdditionalData
     ) {
         this._data = data;
         this._connection = connection;
         this._emitter = emitter;
+        this._additionalData = additionalData;
 
         this.setValidity = this.setValidity.bind(this);
-        this._additionalData = additionalData;
     }
 
     stack = () => {
@@ -39,31 +45,34 @@ export class AppConfig {
 
     setInstallationData = (
         installationData: IInstallationData
-    ): Promise<{ [key: string]: any }> => {
+    ): Promise<IInstallationData> => {
         return this._connection
-            .sendToParent("setInstallationData", installationData)
+            .sendToParent<IInstallationData>(
+                "setInstallationData",
+                installationData
+            )
             .then(onData)
             .catch(onError);
     };
 
     getInstallationData = (): Promise<IInstallationData> => {
         return this._connection
-            .sendToParent("getInstallationData")
+            .sendToParent<IInstallationData>("getInstallationData")
             .then(onData)
             .catch(onError);
     };
 
     /**
-     * Set the validation state of the app. If the validation is false, the Contentstack App Config
-     * will not allow to save the configuration. The message will be displayed if provided.
-     * @param isValid set the validation state of the app
-     * @param options additional options to be sent to the parent
-     * @returns returns a promise with the data sent from the parent
+     * Sets the validation state of the app. If the validation is false, the Contentstack App Config
+     * will not allow saving the configuration. The message will be displayed if provided.
+     * @param {boolean} isValid - The validation state of the app.
+     * @param {ValidationOptions} options - Additional options to be sent to the parent.
+     * @returns {Promise<void>} - A promise that resolves to void.
      */
     async setValidity(
         isValid: boolean,
         options?: ValidationOptions
-    ): Promise<Record<string, any>> {
+    ): Promise<void> {
         if (typeof isValid !== "boolean") {
             throw new TypeError(
                 generateErrorMessages(
@@ -80,7 +89,7 @@ export class AppConfig {
             );
         }
 
-        return this._connection
+        await this._connection
             .sendToParent("setValidity", { isValid, options })
             .then(onData)
             .catch(onError);
