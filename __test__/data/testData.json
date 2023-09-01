@@ -566,6 +566,7 @@
                                 "data_type": "text",
                                 "display_name": "Single line textbox",
                                 "uid": "single_line",
+                                "$uid": "group.single_line",
                                 "field_metadata": {
                                     "description": "",
                                     "default_value": ""
@@ -580,18 +581,21 @@
                             }
                         ],
                         "uid": "group",
+                        "$uid": "group",
                         "multiple": true,
                         "mandatory": false,
                         "unique": false
                     }
                 ],
                 "uid": "group",
+                "$uid": "group",
                 "multiple": false,
                 "mandatory": false,
                 "unique": false
             }
         ],
         "uid": "group1",
+        "$uid": "group1",
         "multiple": false,
         "mandatory": false,
         "unique": false

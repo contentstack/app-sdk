@@ -4,7 +4,7 @@ import {
     IOnFunction,
     IPluginMetaData,
     IRteParam,
-    IConfig
+    IConfig,
 } from "./types";
 
 export class RTEPlugin {
@@ -159,18 +159,22 @@ export class RTEPlugin {
                     }
 
                     case "elementType": {
-                        const isInline = (
-                            typeof value === 'string' && value === 'inline' ||
-                            Array.isArray(value) && value.includes('inline')
-                        )
-                        if(isInline) {
-                            let dndOptions = this.pluginMetaData['registry']['dndOptions'];
-                            if(!dndOptions) {
-                                this.pluginMetaData['registry']['dndOptions'] = {};
-                                dndOptions = this.pluginMetaData['registry']['dndOptions']
+                        const isInline =
+                            (typeof value === "string" && value === "inline") ||
+                            (Array.isArray(value) && value.includes("inline"));
+                        if (isInline) {
+                            let dndOptions =
+                                this.pluginMetaData["registry"]["dndOptions"];
+                            if (!dndOptions) {
+                                this.pluginMetaData["registry"]["dndOptions"] =
+                                    {};
+                                dndOptions =
+                                    this.pluginMetaData["registry"][
+                                        "dndOptions"
+                                    ];
                             }
-                            dndOptions['DisableDND'] = true;
-                            dndOptions['DisableSelectionHalo'] = true;
+                            dndOptions["DisableDND"] = true;
+                            dndOptions["DisableSelectionHalo"] = true;
                         }
                         this.pluginMetaData.meta.elementType = value;
                         break;
@@ -181,8 +185,8 @@ export class RTEPlugin {
                         break;
                     }
 
-                    case "shouldOverride" : {
-                        this.pluginMetaData.registry.shouldOverride = value
+                    case "shouldOverride": {
+                        this.pluginMetaData.registry.shouldOverride = value;
                     }
                 }
             }
@@ -213,7 +217,8 @@ export const rtePluginInitializer = (
     id: string,
     configCallback: IConfigCallback
 ) => {
-    if (!(id && configCallback)) throw Error('Please provide value "id" and "configCallback"');
+    if (!(id && configCallback))
+        throw Error('Please provide value "id" and "configCallback"');
 
     return new RTEPlugin(id, configCallback);
 };

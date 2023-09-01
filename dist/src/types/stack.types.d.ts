@@ -1,4 +1,5 @@
-import { AnyObject } from "./common.types";
+import Entry from "../entry";
+import { AnyProperty, GenericObjectType } from "./common.types";
 export declare interface StackDetail {
     created_at: string;
     updated_at: string;
@@ -48,7 +49,7 @@ export declare interface StackDetail {
         invited_at: string;
         invited_by: string;
     }[];
-    stack_variables?: AnyObject;
+    stack_variables?: GenericObjectType;
     discrete_variables?: {
         cms: boolean;
         _version: number;
@@ -94,13 +95,50 @@ export declare interface StackSearchQuery {
     include_fields?: boolean;
     include_rules?: boolean;
     include_title_field_uid?: boolean;
-    query?: AnyObject;
+    query?: GenericObjectType;
     search?: string;
     save_recent_search?: boolean;
     desc?: string;
 }
 export declare interface GetAllStacksOptions {
     orgUid?: string;
-    params?: AnyObject;
+    params?: GenericObjectType;
+}
+export interface ContentType extends AnyProperty {
+    title: string;
+    uid: string;
+    schema: Array<Schema>;
+    options: ContentTypeOptions;
+}
+export interface ContentTypeOptions {
+    is_page: boolean;
+    singleton: boolean;
+    title: string;
+    sub_title: Array<any>;
+    url_pattern?: string;
+}
+export interface Schema extends AnyProperty {
+    display_name: string;
+    uid: string;
+    $uid: string;
+    data_type: string;
+    mandatory?: boolean;
+    unique?: boolean;
+    field_metadata?: GenericObjectType;
+}
+export interface Asset extends AnyProperty {
+    uid: string;
+    title: string;
+    description?: string;
+    parent_uid?: string;
+    url?: string;
+    filename?: string;
+}
+export interface PublishDetails extends AnyProperty {
+    entries: Array<Entry>;
+    environments: Array<String>;
+    locales: Array<String>;
+    publish_with_reference: boolean;
+    rules: GenericObjectType;
 }
 //# sourceMappingURL=stack.types.d.ts.map
