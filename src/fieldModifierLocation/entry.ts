@@ -1,3 +1,5 @@
+import postRobot from "post-robot";
+
 import Entry from "../entry";
 import { IFieldModifierLocationInitData } from "../types";
 import { IGetTagsOptions } from "../types/entry.types";
@@ -7,7 +9,7 @@ import Field from "./field";
 class FieldModifierLocationEntry extends Entry {
     constructor(
         initializationData: IFieldModifierLocationInitData,
-        connection: any,
+        connection: typeof postRobot,
         emitter: EventEmitter
     ) {
         super(initializationData, connection, emitter, {
@@ -50,12 +52,18 @@ class FieldModifierLocationEntry extends Entry {
         }
 
         if (tags === undefined) {
-            throw new Error(generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldNotBeBlank));
+            throw new Error(
+                generateErrorMessages(
+                    ERROR_MESSAGES.entryField.entry.tagsShouldNotBeBlank
+                )
+            );
         }
 
         if (!areTagsValid(tags)) {
             throw new Error(
-                generateErrorMessages(ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings)
+                generateErrorMessages(
+                    ERROR_MESSAGES.entryField.entry.tagsShouldBeArrayOfStrings
+                )
             );
         }
 

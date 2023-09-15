@@ -1,7 +1,7 @@
 import Metadata from "../src/metadata";
 
 describe("Metadata", () => {
-    let connection: { sendToParent: typeof jest.fn };
+    let connection;
     let sendToParent: typeof jest.fn;
 
     beforeEach(() => {
