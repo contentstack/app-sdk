@@ -136,8 +136,11 @@ class FieldModifierLocationFrame {
         return this;
     }
 
-    async updateParentContainerStyle(controlStyleFromApp: boolean) {
-        await this._connection.sendToParent("updateParentContainerStyle", { controlStyleFromApp });
+    /**
+     * This method disables the iframe styles applied by the UI
+     */
+    async disableInherentStyle() {
+        await this._connection.sendToParent("disableInherentStyle");
     }
 
     /**
