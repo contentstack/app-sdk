@@ -29,7 +29,7 @@ const createPlugin = (config = {}) => {
         },
         display: ["hoveringToolbar", "toolbar"],
         elementType: ["inline", "void", "block", "text"],
-        ...config
+        ...config,
     };
     const Plugin = new RTEPlugin(detail.id, () => {
         return detail;
@@ -116,36 +116,36 @@ describe("RTE Plugin", () => {
         expect(dropdown.meta.dependentPlugins).to.have.length(1);
     });
 
-    it('Test inline with DND Options disable', async () => {
+    it("Test inline with DND Options disable", async () => {
         const [plugin, details] = createPlugin();
         const registry = (await plugin.get()).registry;
-        expect(registry['dndOptions']['DisableDND']).to.be.eq(true);
-        expect(registry['dndOptions']['DisableSelectionHalo']).to.be.eq(true);
-    })
+        expect(registry["dndOptions"]["DisableDND"]).to.be.eq(true);
+        expect(registry["dndOptions"]["DisableSelectionHalo"]).to.be.eq(true);
+    });
 
-    it('Test DND Options undefined', async () => {
+    it("Test DND Options undefined", async () => {
         let [plugin, details] = createPlugin({
-            elementType: 'block'
+            elementType: "block",
         });
         let registry = (await plugin.get()).registry;
-        expect(registry['dndOptions']).to.be.undefined;
+        expect(registry["dndOptions"]).to.be.undefined;
         [plugin, details] = createPlugin({
-            elementType: ['block']
+            elementType: ["block"],
         });
         registry = (await plugin.get()).registry;
-        expect(registry['dndOptions']).to.be.undefined;
+        expect(registry["dndOptions"]).to.be.undefined;
     });
-    
+
     it("Check if `shouldOverride` is register on registry", async () => {
         const options = {
             shouldOverride: (element) => {
-                return false
-            }
-        }
+                return false;
+            },
+        };
         const [plugin, inputPluginProps] = createPlugin(options);
         const pluginProps = await plugin.get();
         const registry = pluginProps.registry;
-        expect(registry).to.haveOwnProperty('shouldOverride')
-        expect(registry).to.contain({...options})
-    })
+        expect(registry).to.haveOwnProperty("shouldOverride");
+        expect(registry).to.contain({ ...options });
+    });
 });
