@@ -1,7 +1,7 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
 import Field from "./field";
-import { IFieldInitData, IFieldModifierLocationInitData, ISidebarInitData } from "./types";
+import { IFieldInitData, IFieldModifierLocationInitData, IRTELocationInitData, ISidebarInitData } from "./types";
 import { Entry as EntryType } from "../src/types/entry.types";
 import { IEntryOptions, IGetFieldOptions, IOnEntryChangeCallback } from "./types/entry.types";
 import { ContentType, PublishDetails } from "./types/stack.types";
@@ -18,7 +18,7 @@ declare class Entry {
     _emitter: EventEmitter;
     _changedData?: GenericObjectType;
     _options: IEntryOptions;
-    constructor(initializationData: IFieldInitData | ISidebarInitData | IFieldModifierLocationInitData, connection: typeof postRobot, emitter: EventEmitter, options?: IEntryOptions);
+    constructor(initializationData: IFieldInitData | ISidebarInitData | IRTELocationInitData | IFieldModifierLocationInitData, connection: typeof postRobot, emitter: EventEmitter, options?: IEntryOptions);
     /**
      * Gets data of the current entry.
      * @return {Object} Returns entry data.

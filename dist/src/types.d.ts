@@ -93,6 +93,11 @@ export declare interface ISidebarInitData extends ICommonInitData {
     locale: string;
     type: LocationType.WIDGET;
 }
+export declare interface IRTELocationInitData extends ICommonInitData {
+    content_type: ContentType;
+    entry: Entry;
+    locale: string;
+}
 export declare interface IFieldInitData extends ICommonInitData {
     config?: GenericObjectType;
     content_type: ContentType;
