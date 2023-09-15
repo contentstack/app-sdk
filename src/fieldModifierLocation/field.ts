@@ -1,5 +1,9 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
+
 import { IFieldInitData, IFieldModifierLocationInitData } from "../types";
+import { GenericObjectType } from "../types/common.types";
+import { Schema } from "../types/stack.types";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -11,7 +15,7 @@ const excludedDataTypesForSetField = [
 
 function separateResolvedData(
     field: FieldModifierLocationField,
-    value: { [key: string]: any }
+    value: GenericObjectType
 ) {
     let resolvedData = value;
     let unResolvedData = value;
@@ -30,7 +34,7 @@ function separateResolvedData(
     return { resolvedData, unResolvedData };
 }
 
-/** Class representing a field from Contentstack UI. Only available for Custom Field extension */
+/** Class representing a field from Contentstack UI. */
 class FieldModifierLocationField {
     /**
      * @hideconstructor
@@ -38,40 +42,37 @@ class FieldModifierLocationField {
 
     uid: string;
     data_type: string;
-    schema: { [key: string]: any };
+    schema: Schema;
     _emitter: EventEmitter;
-    _data: { [key: string]: any };
-    _resolvedData: { [key: string]: any };
-    _self: any;
-    _connection: any;
+    _data: GenericObjectType;
+    _resolvedData: GenericObjectType;
+    _self: boolean;
+    _connection: typeof postRobot;
 
     constructor(
         fieldDataObject: IFieldInitData | IFieldModifierLocationInitData,
-        connection: any,
+        connection: typeof postRobot,
         emitter: EventEmitter
     ) {
         /**
          * The UID of the current field is defined in the content type of the entry.
          * @type {string}
          */
-        this.uid = fieldDataObject.data.uid;
+        this.uid = fieldDataObject.uid;
         /**
          * The data type of the current field is set using this method.
          * @type {string}
          */
-        this.data_type = fieldDataObject.data.schema.data_type;
+        this.data_type = fieldDataObject.schema.data_type;
         /**
          * The schema of the current field (schema of fields such as ‘Single Line Textbox’, ‘Number’,
          *  and so on) is set using this method.
          * @type {Object}
          */
-        this.schema = fieldDataObject.data.schema;
+        this.schema = fieldDataObject.schema;
         this._emitter = emitter;
 
-        const separatedData = separateResolvedData(
-            this,
-            fieldDataObject.data.value
-        );
+        const separatedData = separateResolvedData(this, fieldDataObject.value);
 
         this._data = separatedData.unResolvedData;
 
@@ -79,12 +80,16 @@ class FieldModifierLocationField {
 
         this._connection = connection;
 
-        this._self = fieldDataObject.data.self || false;
+        this._self = fieldDataObject.self || false;
 
         const fieldObj = this;
 
         emitter.on("updateFields", (event: any) => {
-            const path = fieldObj.uid.split(".");
+            const schemaPath =
+                this._self && "$uid" in fieldObj.schema
+                    ? fieldObj.schema.$uid
+                    : fieldObj.uid;
+            const path = schemaPath.split(".");
             let value = event.data;
 
             path.forEach((key) => {
@@ -102,7 +107,8 @@ class FieldModifierLocationField {
     /**
      * Sets the data for the current field.
      * @param {Object|string|number} data Data to be set on the field
-     * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
+     * @return {external:Promise} A promise object which is resolved when data is set for a field.
+     * Note: The data set by this function will only be saved when user saves the entry.
      */
     async setData(data: any): Promise<FieldModifierLocationField> {
         const currentFieldObj = this;
@@ -140,7 +146,7 @@ class FieldModifierLocationField {
      * @param  {boolean} options.resolved If the resolved parameter is set to true for the File field, then the method will return a resolved asset object along with all the field metadata, e.g. 'field.getData({resolved:true})'.
      * @return {Object|string|number} Returns the field data.
      */
-    getData({ resolved = false }: { resolved?: boolean } = {}): any {
+    getData({ resolved = false } = {}): GenericObjectType {
         return resolved ? this._resolvedData : this._data;
     }
 }

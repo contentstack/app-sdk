@@ -14,56 +14,96 @@ import Modal from "./modal";
 import Stack from "./stack";
 import Store from "./store";
 import {
-    IAppConfigInitData,
     IAppConfigWidget,
-    IAssetSidebarInitData,
     ICustomField,
-    IDashboardInitData,
     IDashboardWidget,
-    IEntryFieldLocation,
-    IEntryFieldLocationInitData,
-    IFieldInitData,
     IFieldModifierLocation,
-    IFieldModifierLocationInitData,
     IFullPageLocation,
-    IFullPageLocationInitData,
-    ILocation,
-    IPageWidget,
-    IRTEInitData,
     IRTELocationInitData,
-    ISidebarInitData,
     ISidebarWidget,
-    IUser,
+    InitializationData,
+    LocationType,
     Manifest,
     Region,
 } from "./types";
-import { AnyObject } from "./types/common.types";
+import { GenericObjectType } from "./types/common.types";
+import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 
 const emitter = new EventEmitter();
 
-/** Class representing an extension from Contentstack App Framework SDK. */
+/**
+ * Class representing an UI Location from Contentstack App SDK.
+ * @hideconstructor
+ */
 
-class Extension {
+class UiLocation {
     /**
-     * @hideconstructor
+     * This value represents the current app's unique ID.
      */
-
     appUID: string;
+
+    /**
+     * This holds the app's installation ID.
+     */
     installationUID: string;
-    currentUser: IUser;
-    private type: ILocation;
-    private config: AnyObject;
-    postRobot: any;
+
+    /**
+     * This object holds details of the current user.
+     */
+    currentUser: User;
+
+    /**
+     * The type of UI Location being rendered.
+     */
+    private type: LocationType;
+
+    /**
+     * The configuration set for an app.
+     */
+    private config: GenericObjectType;
+
+    /**
+     * This holds the instance of Cross-domain communication library for posting messages between windows.
+     */
+    postRobot: typeof postRobot;
+
+    /**
+     * This holds the stack instance that allows users to read and manipulate a range of objects in a stack.
+     */
     stack: Stack;
+
+    /**
+     * Store to persist data for the app.
+     * Note: Data is stored in the browser's {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
+     */
     store: Store;
+
+    /**
+     * This holds the instance of the Metadata class used to manage metadata.
+     */
     metadata: Metadata;
+
+    /**
+     * This value represents the current UI location's unique ID. One App may contain multiple UI locations
+     */
     locationUID: string;
+
+    /**
+     * This holds the instance of a helper class used to manage modals in an App.
+     */
     modal: Modal;
+
+    /**
+     * The Contentstack Region on which the app is running.
+     */
     readonly region: Region;
     version: number | null;
 
+    /**
+     * This holds the information of the currently running UI location of an App.
+     */
     location: {
         DashboardWidget: IDashboardWidget | null;
         SidebarWidget: ISidebarWidget | null;
@@ -71,75 +111,35 @@ class Extension {
         RTEPlugin: IRTEPluginInitializer | null;
         RTELocation: IRTELocation | null;
         AppConfigWidget: IAppConfigWidget | null;
-        FullscreenAppWidget: IPageWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
-        EntryFieldLocation: IEntryFieldLocation | null;
         FullPage: IFullPageLocation | null;
         FieldModifierLocation: IFieldModifierLocation | null;
     };
 
-    constructor(
-        initData:
-            | IRTEInitData
-            | IDashboardInitData
-            | IFieldInitData
-            | ISidebarInitData
-            | IAppConfigInitData
-            | IAssetSidebarInitData
-            | IFullPageLocationInitData
-            | IEntryFieldLocationInitData
-            | IFieldModifierLocationInitData
-    ) {
+    constructor(initData: InitializationData) {
         const initializationData = initData;
 
         this.postRobot = postRobot;
 
-        /**
-         * This value represents the current App's unique ID. One App may contain multiple locations
-         * @type {string}
-         */
-        this.appUID = initializationData.data.app_id;
+        this.appUID = initializationData.app_id;
 
-        /**
-         *  This value represents the current location's unique ID. One App may contain multiple locations
-         * @type {string}
-         */
-        this.locationUID = initializationData.data.extension_uid;
+        this.locationUID = initializationData.extension_uid;
 
-        /**
-         * This object holds details of the app initialization user.
-         * @type {Object}
-         */
-        this.installationUID = initializationData.data.installation_uid;
-        /**
-         * This object holds details of the current user.
-         * @type {Object}
-         */
-        this.currentUser = initializationData.data.user;
+        this.installationUID = initializationData.installation_uid;
 
-        /**
-         * location of extension, "RTE" | "FIELD" | "DASHBOARD" | "WIDGET" | "APP_CONFIG_WIDGET" | "FULL_SCREEN_WIDGET".
-         * @type {string}
-         */
-        this.type = initializationData.data.type;
+        this.currentUser = initializationData.user;
 
-        /**
-         * Store to persist data for extension.
-         * Note: Data is stored in the browser {@link external:localStorage} and will be lost if the {@link external:localStorage} is cleared in the browser.
-         * @type {Store}
-         */
+        this.type = initializationData.type;
+
         this.store = new Store(postRobot);
 
-        /**
-         * This method returns stack object which allows users to read and manipulate a range of objects in a stack.
-         * @type {Stack}
-         */
-        this.stack = new Stack(initializationData.data.stack, postRobot, {
-            currentBranch: initializationData.data.currentBranch,
+        this.stack = new Stack(initializationData.stack, postRobot, {
+            currentBranch: initializationData.currentBranch,
         });
+
         this.metadata = new Metadata(postRobot);
 
-        this.config = initializationData.data.config ?? {};
+        this.config = initializationData.config ?? {};
 
         this.location = {
             DashboardWidget: null,
@@ -148,10 +148,8 @@ class Extension {
             RTEPlugin: null,
             RTELocation: null,
             AppConfigWidget: null,
-            FullscreenAppWidget: null,
             AssetSidebarWidget: null,
             FullPage: null,
-            EntryFieldLocation: null,
             FieldModifierLocation: null,
         };
 
@@ -159,72 +157,66 @@ class Extension {
 
         this.modal = new Modal();
 
-        this.region = formatAppRegion(initializationData.data.region);
+        this.region = formatAppRegion(initializationData.region);
 
-        this.version = initializationData.data.manifest?.version || null;
-
-        const stack = new Stack(initializationData.data.stack, postRobot, {
-            currentBranch: initializationData.data.currentBranch,
+        const stack = new Stack(initializationData.stack, postRobot, {
+            currentBranch: initializationData.currentBranch,
         });
 
-        switch (initializationData.data.type) {
-            case "DASHBOARD": {
+        this.version = initializationData.manifest?.version || null;
+
+        switch (initializationData.type) {
+            case LocationType.DASHBOARD: {
                 this.location.DashboardWidget = {
                     frame: new Window(
                         postRobot,
-                        this.type as "DASHBOARD",
+                        this.type as LocationType.DASHBOARD,
                         emitter,
-                        initializationData.data.dashboard_width
+                        initializationData.dashboard_width
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                 };
                 break;
             }
-            case "WIDGET": {
+            case LocationType.WIDGET: {
                 this.location.SidebarWidget = {
-                    entry: new Entry(
-                        initializationData as ISidebarInitData,
-                        postRobot,
-                        emitter
-                    ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    entry: new Entry(initializationData, postRobot, emitter),
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                 };
                 break;
             }
 
-            case "APP_CONFIG_WIDGET": {
+            case LocationType.APP_CONFIG_WIDGET: {
                 this.location.AppConfigWidget = {
                     installation: new AppConfig(
                         initializationData,
                         postRobot,
                         emitter,
                         {
-                            currentBranch:
-                                initializationData.data.currentBranch,
+                            currentBranch: initializationData.currentBranch,
                         }
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                 };
                 break;
             }
 
-            case "ASSET_SIDEBAR_WIDGET": {
+            case LocationType.ASSET_SIDEBAR_WIDGET: {
                 this.location.AssetSidebarWidget = new AssetSidebarWidget(
-                    initializationData as IAssetSidebarInitData,
+                    initializationData,
                     postRobot,
                     emitter
                 );
-
                 break;
             }
 
-            case "RTE": {
+            case LocationType.RTE: {
                 import("./RTE").then(({ rtePluginInitializer }) => {
                     this.location.RTEPlugin = rtePluginInitializer;
                     this.location.RTELocation = {
@@ -238,20 +230,19 @@ class Extension {
                 break;
             }
 
-            case "FIELD_MODIFIER_LOCATION":
-            case "ENTRY_FIELD_LOCATION": {
-                initializationData.data.self = true;
+            case LocationType.FIELD_MODIFIER_LOCATION: {
+                initializationData.self = true;
                 this.location.FieldModifierLocation = {
                     entry: new FieldModifierLocationEntry(
-                        initializationData as IFieldModifierLocationInitData,
+                        initializationData,
                         postRobot,
                         emitter
                     ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
                     field: new FieldModifierLocationField(
-                        initializationData as IFieldInitData,
+                        initializationData,
                         postRobot,
                         emitter
                     ),
@@ -260,32 +251,28 @@ class Extension {
                 break;
             }
 
-            case "FULL_PAGE_LOCATION": {
+            case LocationType.FULL_PAGE_LOCATION: {
                 this.location.FullPage = {
                     stack: stack,
                 };
                 break;
             }
 
-            case "FIELD":
+            case LocationType.FIELD:
             default: {
-                initializationData.data.self = true;
+                initializationData.self = true;
                 this.location.CustomField = {
-                    field: new Field(
-                        initializationData as IFieldInitData,
-                        postRobot,
-                        emitter
-                    ),
-                    fieldConfig: initializationData.data.field_config,
-                    entry: new Entry(
-                        initializationData as IFieldInitData,
-                        postRobot,
-                        emitter
-                    ),
-                    stack: new Stack(initializationData.data.stack, postRobot, {
-                        currentBranch: initializationData.data.currentBranch,
+                    field: new Field(initializationData, postRobot, emitter),
+                    fieldConfig: initializationData.field_config,
+                    entry: new Entry(initializationData, postRobot, emitter),
+                    stack: new Stack(initializationData.stack, postRobot, {
+                        currentBranch: initializationData.currentBranch,
                     }),
-                    frame: new Window(postRobot, this.type as "FIELD", emitter),
+                    frame: new Window(
+                        postRobot,
+                        this.type as LocationType.FIELD,
+                        emitter
+                    ),
                 };
 
                 break;
@@ -293,8 +280,7 @@ class Extension {
         }
 
         try {
-            //@ts-ignore
-            postRobot.on("extensionEvent", (event) => {
+            postRobot.on("extensionEvent", async (event) => {
                 if (event.data.name === "entrySave") {
                     emitter.emitEvent("entrySave", [{ data: event.data.data }]);
                     emitter.emitEvent("updateFields", [
@@ -361,15 +347,18 @@ class Extension {
                 }
             });
         } catch (err) {
-            console.error("extension Event", err);
+            console.error("Extension Event", err);
         }
     }
 
-    pulse = (eventName: string, metadata: { [key: string]: any }) => {
+    pulse = (eventName: string, metadata: GenericObjectType): void => {
         this.postRobot.sendToParent("analytics", { eventName, metadata });
     };
 
-    getConfig = (): Promise<{ [key: string]: any }> => {
+    /**
+     * Method used to retrieve the configuration set for an app.
+     */
+    getConfig = (): Promise<GenericObjectType> => {
         if (!this.installationUID) {
             return Promise.resolve(this.config);
         }
@@ -379,7 +368,10 @@ class Extension {
             .catch(onError);
     };
 
-    getCurrentLocation = () => {
+    /**
+     * Method used to get the type of currently running UI location of the app.
+     */
+    getCurrentLocation = (): LocationType => {
         return this.type;
     };
 
@@ -402,28 +394,38 @@ class Extension {
             skip_api_key: true,
         };
         const app: Manifest = await this.postRobot
-            .sendToParent("stackQuery", options)
+            .sendToParent<Manifest>("stackQuery", options)
             .then(onData)
             .catch(onError);
         this.version = app.version;
         return this.version;
     };
 
-    getCurrentRegion = () => {
+    /**
+     * Method used to get the Contentstack Region on which the app is running.
+     */
+    getCurrentRegion = (): Region => {
         return this.region;
     };
 
-    static initialize(version: string) {
+    /**
+     * Method used to initialize the App SDK.
+     * @param version - Version of the app SDK in use.
+     */
+    static async initialize(version: string): Promise<InitializationData> {
         const meta = {
             sdkType: "app-sdk",
         };
-        //@ts-ignore
-        return postRobot.sendToParent("init", { version, meta });
+        const initData = await postRobot.sendToParent<InitializationData>(
+            "init",
+            { version, meta }
+        );
+        return initData.data;
     }
 
-    setReady() {
+    setReady(): Promise<ResponseMessageEvent> {
         return this.postRobot.sendToParent("ready");
     }
 }
 
-export default Extension;
+export default UiLocation;

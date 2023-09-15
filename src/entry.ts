@@ -1,32 +1,35 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
 
 import Field from "./field";
 import {
-    ICurrentContentType,
     IFieldInitData,
     IFieldModifierLocationInitData,
     IRTELocationInitData,
     ISidebarInitData,
 } from "./types";
+import { Entry as EntryType } from "../src/types/entry.types";
 import {
     IEntryOptions,
     IGetFieldOptions,
     IOnEntryChangeCallback,
 } from "./types/entry.types";
+import { ContentType, PublishDetails, Schema } from "./types/stack.types";
+import { GenericObjectType } from "./types/common.types";
 
-/** Class representing an entry from Contentstack UI. Not available for Dashboard Widget extension.  */
+/** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
 class Entry {
     /**
      * @hideconstructor
      */
 
-    content_type: ICurrentContentType;
-    _data: { [key: string]: any };
+    content_type: ContentType;
+    _data: EntryType;
     locale: string;
-    _connection: any;
+    _connection: typeof postRobot;
     _emitter: EventEmitter;
-    _changedData?: { [key: string]: any };
+    _changedData?: GenericObjectType;
     _options: IEntryOptions;
 
     constructor(
@@ -35,7 +38,7 @@ class Entry {
             | ISidebarInitData
             | IRTELocationInitData
             | IFieldModifierLocationInitData,
-        connection: any,
+        connection: typeof postRobot,
         emitter: EventEmitter,
         options?: IEntryOptions
     ) {
@@ -43,19 +46,23 @@ class Entry {
          * Gets the content type of the current entry.
          * @type {Object}
          */
-        this.content_type = initializationData.data.content_type;
+        this.content_type = initializationData.content_type;
 
-        this._data = initializationData.data.entry;
+        this._data = initializationData.entry;
 
-        if (initializationData.data.changedData) {
-            this._changedData = initializationData.data.changedData;
+        if (
+            (initializationData as IFieldModifierLocationInitData).changedData
+        ) {
+            this._changedData = (
+                initializationData as IFieldModifierLocationInitData
+            ).changedData;
         }
 
         /**
          * Gets the locale of the current entry.
          * @type {string}
          */
-        this.locale = initializationData.data.locale;
+        this.locale = initializationData.locale;
 
         this._connection = connection;
 
@@ -65,20 +72,13 @@ class Entry {
 
         const thisEntry = this;
 
-        this._emitter.on(
-            "entrySave",
-            (event: { data: { [key: string]: any } }) => {
-                thisEntry._data = event.data;
-            }
-        );
+        this._emitter.on("entrySave", (event: { data: EntryType }) => {
+            thisEntry._data = event.data;
+        });
 
-        this._emitter.on(
-            "entryChange",
-            (event: { data: { [key: string]: any } }) => {
-                console.log("rte listened to the change", event.data);
-                thisEntry._changedData = event.data;
-            }
-        );
+        this._emitter.on("entryChange", (event: { data: EntryType }) => {
+            thisEntry._changedData = event.data;
+        });
     }
 
     /**
@@ -92,8 +92,8 @@ class Entry {
 
     /**
      * Gets the field object for the saved data, which allows you to interact with the field.
-     * This object will have all the same methods and properties of extension.field.
-     * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and extension of data type text, number, boolean, and date.
+     * This object will have all the same methods and properties of appSDK.location.CustomField.field.
+     * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and Custom Field UI Location of data type text, number, boolean, and date.
      * @example
      * var field = entry.getField('field_uid');
      * var fieldSchema = field.schema;
@@ -112,7 +112,7 @@ class Entry {
         let value = useUnsavedSchema
             ? this._changedData || this._data
             : this._data;
-        let schema = this.content_type.schema;
+        let schema: Schema[0] = this.content_type.schema;
 
         const isDataEmpty = Object.keys(value).length === 0;
 
@@ -182,18 +182,16 @@ class Entry {
         } catch (e) {
             throw Error("Invalid uid, Field not found");
         }
-        const fieldIntilaizationDataObject = {
-            data: {
-                uid,
-                value,
-                schema,
-                data_type: schema.data_type,
-            },
+        const fieldInitializationDataObject = {
+            uid,
+            value,
+            schema,
+            data_type: schema.data_type,
         };
 
         //@ts-ignore
         const fieldObject = new FieldInstance(
-            fieldIntilaizationDataObject,
+            fieldInitializationDataObject,
             this._connection,
             this._emitter
         );
@@ -206,10 +204,10 @@ class Entry {
      * @param {function} callback The function to be called when an entry is saved.
      */
 
-    onSave(callback: (arg0: any) => void) {
+    onSave(callback: (arg0: EntryType) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entrySave", (event: { data: any }) => {
+            entryObj._emitter.on("entrySave", (event: { data: EntryType }) => {
                 callback(event.data);
             });
         } else {
@@ -218,8 +216,8 @@ class Entry {
     }
 
     /**
-     * The field.onChange() function is called when another extension programmatically changes the data of the current extension field using the field.setData() function. This function is only available for extension fields that support the following data types: text, number, boolean, or date.
-     * @param {function} callback The function to be called when an entry is edited/changed.
+     * The onChange() function executes the provided callback function whenever an entry is updated.
+     * @param {function} callback - The function to be called when the entry is edited or changed.
      */
 
     onChange(callback: IOnEntryChangeCallback) {
@@ -227,7 +225,10 @@ class Entry {
         if (callback && typeof callback === "function") {
             entryObj._emitter.on(
                 "entryChange",
-                (event: { data: any; resolvedData: Record<string, any> }) => {
+                (event: {
+                    data: EntryType;
+                    resolvedData: GenericObjectType;
+                }) => {
                     callback(event.data, event.resolvedData);
                 }
             );
@@ -241,12 +242,15 @@ class Entry {
      * @param {function} callback The function to be called when an entry is published.
      */
 
-    onPublish(callback: (arg0: any) => void) {
+    onPublish(callback: (arg0: PublishDetails) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entryPublish", (event: { data: any }) => {
-                callback(event.data);
-            });
+            entryObj._emitter.on(
+                "entryPublish",
+                (event: { data: PublishDetails }) => {
+                    callback(event.data);
+                }
+            );
         } else {
             throw Error("Callback must be a function");
         }
@@ -257,12 +261,15 @@ class Entry {
      * @param {function} callback The function to be called when an entry is un published.
      */
 
-    onUnPublish(callback: (arg0: any) => void) {
+    onUnPublish(callback: (arg0: PublishDetails) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
-            entryObj._emitter.on("entryUnPublish", (event: { data: any }) => {
-                callback(event.data);
-            });
+            entryObj._emitter.on(
+                "entryUnPublish",
+                (event: { data: PublishDetails }) => {
+                    callback(event.data);
+                }
+            );
         } else {
             throw Error("Callback must be a function");
         }

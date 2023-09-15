@@ -15,7 +15,7 @@ describe("Store", () => {
 
         connection = { sendToParent: sendToParent };
         jest.spyOn(connection, "sendToParent");
-        storeObj = new Store(connection);
+        storeObj = new Store(connection as any);
     });
 
     it("get", (done) => {
@@ -86,7 +86,9 @@ describe("Store", () => {
     });
 
     it("errorCase", async () => {
-        let storeWithError = new Store({ sendToParent: sendToParentError });
+        let storeWithError = new Store({
+            sendToParent: sendToParentError,
+        } as any);
 
         await expect(() => storeWithError.remove("a")).rejects.toThrow(
             "sample store error"

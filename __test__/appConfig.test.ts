@@ -11,8 +11,8 @@ describe("app config", () => {
         stack: {},
     };
     const appConfig: AppConfig = new AppConfig(
-        mockData,
-        mockConnection,
+        mockData as any,
+        mockConnection as any,
         mockEmitter,
         { currentBranch: "master" }
     );

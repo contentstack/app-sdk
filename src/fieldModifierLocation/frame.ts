@@ -1,5 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
+
 import { ERROR_MESSAGES } from "../utils/errorMessages";
 
 /**
@@ -11,7 +12,7 @@ class FieldModifierLocationFrame {
      * @hideconstructor
      */
 
-    _connection: any;
+    _connection: typeof postRobot;
     _autoResizingEnabled = false;
     _emitter: EventEmitter;
     _height?: number;
@@ -19,7 +20,7 @@ class FieldModifierLocationFrame {
 
     private observer: MutationObserver | undefined;
 
-    constructor(connection: any, emitter: EventEmitter) {
+    constructor(connection: typeof postRobot, emitter: EventEmitter) {
         this._connection = connection || postRobot;
         this._autoResizingEnabled = false;
         this._emitter = emitter;
@@ -36,12 +37,15 @@ class FieldModifierLocationFrame {
     }
 
     /**
-     * This method updates the extension height and width on Contentstack UI.
+     * This method updates the UI location height and width on Contentstack UI.
      * If the value is not passed, it will update the height and width of the
-     * extension with the current height and width of the extension.
-     * @param {string|number} height Desired height of the iframe window
+     * UI location with the current height and width of the UI location.
+     * @param {dimension: {height: number, width: number}} dimension Desired height and width of the iframe window
      */
-    async updateDimension(dimension?: { height?: number; width?: number }) {
+    async updateDimension(dimension?: {
+        height?: number;
+        width?: number;
+    }): Promise<void> {
         const { height, width } = dimension || {};
 
         if (height === undefined && width === undefined) {
@@ -93,14 +97,14 @@ class FieldModifierLocationFrame {
      * Prevent user from accidently closing the app by clicking outside the frame
      *  if the app is performing some active task.
      */
-    async preventFrameClose(state: boolean) {
+    async preventFrameClose(state: boolean): Promise<void> {
         await this._connection.sendToParent("preventFrameClose", {
             state,
         });
     }
 
     /**
-     * This method enables auto resizing of the extension height.
+     * This method enables auto resizing of the UI Location height.
      * @return {FieldModifierLocationFrame}.
      */
     enableAutoResizing(): FieldModifierLocationFrame {
@@ -124,7 +128,7 @@ class FieldModifierLocationFrame {
     }
 
     /**
-     * This method disables auto resizing of the extension height.
+     * This method disables auto resizing of the UI location height.
      * @return {FieldModifierLocationFrame}.
      */
     disableAutoResizing(): FieldModifierLocationFrame {
@@ -141,7 +145,7 @@ class FieldModifierLocationFrame {
      * @returns {Promise<void>}
      */
     async closeModal(): Promise<void> {
-        return await this._connection.sendToParent("closeModal");
+        await this._connection.sendToParent("closeModal");
     }
 }
 
