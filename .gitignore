@@ -128,7 +128,8 @@ storybook-static
 tmp/
 temp/
 
-
+# Docs
+jsdocs/
 
 .DS_Store
 
@@ -139,6 +140,3 @@ temp/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
-
-
-# End of https://www.toptal.com/developers/gitignore/api/node,web,vscode

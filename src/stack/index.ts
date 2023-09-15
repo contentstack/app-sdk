@@ -16,8 +16,8 @@ class Stack {
 
   _connection: any
   _data: StackDetail
-  ContentType: any // TODO: change it
-  Asset: any // TODO: change it
+  ContentType: any 
+  Asset: any 
   private _currentBranch: BranchDetail | null = null;
 
 
@@ -30,7 +30,7 @@ class Stack {
      * @desc Content type defines the structure or schema of a page or a section of your web or mobile property
      * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#content-types| ContentType}
      * @param {string} uid - Uid of contenttype.
-     * @example extension.stack.ContentType('content_type_uid')
+     * @example appSDK.stack.ContentType('content_type_uid')
      * */
     this.ContentType = ContentType(connection);
     /**
@@ -39,7 +39,7 @@ class Stack {
      * @desc An initializer is responsible for creating an Asset object.
      * @see {@link https://www.contentstack.com/docs/apis/content-management-api/#assets| Asset}
      * @param {string} uid - UID of the asset.
-     * @example extension.stack.Asset('asset_uid')
+     * @example appSDK.stack.Asset('asset_uid')
      * */
     this.Asset = Asset(connection);
 

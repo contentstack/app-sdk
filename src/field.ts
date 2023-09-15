@@ -1,5 +1,9 @@
 import EventEmitter from "wolfy87-eventemitter";
+import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
+import { GenericObjectType } from "./types/common.types";
+import { Schema } from "./types/stack.types";
+import { Entry as EntryType } from "../src/types/entry.types";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -9,7 +13,7 @@ const excludedDataTypesForSetField = [
     "global_field",
 ];
 
-function separateResolvedData(field: Field, value: { [key: string]: any }) {
+function separateResolvedData(field: Field, value: GenericObjectType) {
     let resolvedData = value;
     let unResolvedData = value;
     if (field.data_type === "file") {
@@ -27,7 +31,7 @@ function separateResolvedData(field: Field, value: { [key: string]: any }) {
     return { resolvedData, unResolvedData };
 }
 
-/** Class representing a field from Contentstack UI. Only available for Custom Field extension */
+/** Class representing a field from Contentstack UI. Only available for Custom Field and Field Modifier UI Location */
 class Field {
     /**
      * @hideconstructor
@@ -35,40 +39,37 @@ class Field {
 
     uid: string;
     data_type: string;
-    schema: { [key: string]: any };
+    schema: Schema;
     _emitter: EventEmitter;
-    _data: { [key: string]: any };
-    _resolvedData: { [key: string]: any };
-    _self: any;
-    _connection: any;
+    _data: GenericObjectType;
+    _resolvedData: GenericObjectType;
+    _self: boolean;
+    _connection: typeof postRobot;
 
     constructor(
         fieldDataObject: IFieldInitData | IFieldModifierLocationInitData,
-        connection: any,
+        connection: typeof postRobot,
         emitter: EventEmitter
     ) {
         /**
          * The UID of the current field is defined in the content type of the entry.
          * @type {string}
          */
-        this.uid = fieldDataObject.data.uid;
+        this.uid = fieldDataObject.uid;
         /**
          * The data type of the current field is set using this method.
          * @type {string}
          */
-        this.data_type = fieldDataObject.data.schema.data_type;
+        this.data_type = fieldDataObject.schema.data_type;
         /**
          * The schema of the current field (schema of fields such as ‘Single Line Textbox’, ‘Number’,
          *  and so on) is set using this method.
          * @type {Object}
          */
-        this.schema = fieldDataObject.data.schema;
+        this.schema = fieldDataObject.schema;
         this._emitter = emitter;
 
-        const separatedData = separateResolvedData(
-            this,
-            fieldDataObject.data.value
-        );
+        const separatedData = separateResolvedData(this, fieldDataObject.value);
 
         this._data = separatedData.unResolvedData;
 
@@ -76,12 +77,16 @@ class Field {
 
         this._connection = connection;
 
-        this._self = fieldDataObject.data.self || false;
+        this._self = fieldDataObject.self || false;
 
         const fieldObj = this;
 
-        emitter.on("updateFields", (event: any) => {
-            const path = fieldObj.uid.split(".");
+        emitter.on("updateFields", (event: GenericObjectType) => {
+            const schemaPath =
+                this._self && "$uid" in fieldObj.schema
+                    ? fieldObj.schema.$uid
+                    : fieldObj.uid;
+            const path = schemaPath.split(".");
             let value = event.data;
 
             path.forEach((key) => {
@@ -143,16 +148,17 @@ class Field {
     }
 
     /**
-     * Sets the focus for a field when an extension is being used. This method shows user presence and highlights the extension field that the user is currently accessing in Contentstack UI.
-     * @return {Object} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
+     * Sets the focus for a field when an App is being used. This method shows user presence and highlights the App's Custom Field that the user is currently accessing in Contentstack UI.
+     * @return {Promise<void>} A promise object which is resolved when Contentstack UI returns an acknowledgement of the focused state.
      */
-    setFocus() {
-        return this._connection.sendToParent("focus");
+    async setFocus(): Promise<void> {
+        await this._connection.sendToParent("focus");
     }
 
     /**
-     * This function is called when another extension programmatically changes data of this field using field.setData() function, only available for extension field, only support extensions of data type text, number, boolean or date.
-     * @param {function} callback The function to be called when an entry is published.
+     * The `onChange` function is triggered when another extension or app programmatically modifies the data of this field using the `field.setData()` function.
+     * It is specifically designed for App's Custom Fields of data types text, number, boolean, or date.
+     * @param {function} callback The function to be called when a field has been updated.
      */
     onChange?(callback: (data: any) => any) {
         const fieldObj = this;
