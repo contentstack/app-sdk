@@ -141,6 +141,10 @@ export declare interface IRteParam {
     setVariable: <T = unknown>(name: string, value: T) => void;
 }
 
+export declare interface IRTELocation {
+    [key: string]: any;
+}
+
 export declare type IRteParamWithPreventDefault = {
     rte: IRteParam;
     preventDefault: () => void;
@@ -204,11 +208,15 @@ type IDynamicFunction = (
     | Exclude<IElementTypeOptions, "text">
     | Exclude<IElementTypeOptions, "text">[];
 
+type IHoveringToolbarOptions = {
+    autoWidth?: boolean;
+}
 export declare interface IConfig {
     title: string;
     icon: React.ReactElement | null;
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
+    hoveringToolbarOptions?: IHoveringToolbarOptions;
     render?: (...params: any) => ReactElement;
     shouldOverride?: (element: IRteElementType) => boolean;
 }
@@ -230,6 +238,9 @@ export declare interface IRegistry {
         inMainToolbar: boolean;
         inHoveringToolbar: boolean;
     };
+    hoveringToolbarOptions?: {
+        autoWidth: true;
+    }
     isContentstackElement: boolean;
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
