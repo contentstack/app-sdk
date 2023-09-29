@@ -143,8 +143,25 @@ class FieldModifierLocationFrame {
     /**
      * This method disables the iframe styles applied by the UI
      */
-    async disableInherentStyle() {
-        await this._connection.sendToParent("disableInherentStyle");
+    async disableInherentStyle(id: string) {
+        this.observer = new MutationObserver(
+            async () => {
+                const app = document.getElementById(id);
+                if (app) {
+                    const value = app.getBoundingClientRect();
+                    const {width, height, left, right} = value;
+                    await this._connection.sendToParent("disableInherentStyle", {width,height, left, right});
+                }
+            }
+        );
+
+        const mutationObserverConfig = {
+            attributes: true,
+            childList: true,
+            subtree: true,
+        };
+
+        this.observer.observe(window.document.body, mutationObserverConfig);
     }
 
     /**
