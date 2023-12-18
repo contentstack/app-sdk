@@ -25,12 +25,6 @@
         "name": "Contentstack",
         "url": "https://www.contentstack.com/"
     },
-    "maintainers": [
-        {
-            "name": "Deepak Kharah",
-            "email": "deepak.kharah@contentstack.com"
-        }
-    ],
     "license": "MIT",
     "devDependencies": {
         "@babel/core": "^7.2.2",
