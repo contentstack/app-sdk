@@ -255,6 +255,9 @@ class Asset extends Base {
             customUploadHandler?: GenericObjectType;
         }
     ): Promise<ResponseMessageEvent<object>> {
+        if(_files && !Array.isArray(_files)){
+            _files = _files.files
+        }
         if (!_files || !_files.length) {
             return Promise.reject(new Error("Kindly provide valid parameters"));
         }
