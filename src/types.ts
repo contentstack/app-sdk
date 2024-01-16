@@ -229,4 +229,5 @@ export enum Region {
     EU = "EU",
     AZURE_NA = "AZURE_NA",
     AZURE_EU = "AZURE_EU",
+    GCP_NA = "GCP_NA",
 }
