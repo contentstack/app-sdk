@@ -32,7 +32,7 @@ For more information, please refer to our [App SDK API Reference](https://github
 
 You can extend or customize the functionality of Contentstack CMS with Marketplace apps. To simplify and speed up the building process, boilerplates describe repetitive elements in a project. This boilerplate will help you build custom applications for your organization or stack.
 
-Download the [boilerplate](https://assets.contentstack.io/v3/assets/blt23180bf2502c7444/blt2bccdd28a2d44d1b/62fcb522da3c526fe6314886/app-boilerplate.zip?disposition=download).
+Download the [boilerplate](https://github.com/contentstack/marketplace-app-boilerplate/archive/refs/heads/master.zip).
 
 ## UI Locations and Examples
 
