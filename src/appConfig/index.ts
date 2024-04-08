@@ -62,6 +62,13 @@ export class AppConfig {
             .catch(onError);
     };
 
+    validatePlans = (plans:string[]):Promise<string[]>=>{
+        return this._connection
+            .sendToParent("validatePlans", plans)
+            .then((data)=>(onData(data) as any)?.value)
+            .catch(onError);
+    }
+
     /**
      * Sets the validation state of the app. If the validation is false, the Contentstack App Config
      * will not allow saving the configuration. The message will be displayed if provided.
