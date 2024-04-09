@@ -114,15 +114,15 @@ export declare interface IRteParam {
     updateNode: (
         type: string,
         attrs: { [key: string]: any },
-        options: TransformOptions
+        options?: TransformOptions
     ) => void;
 
-    unsetNode: (options: TransformOptions) => void;
+    unsetNode: (options?: TransformOptions) => void;
     insertNode: (
         node: Node,
-        options: Omit<TransformOptions, "split"> & { select?: boolean }
+        options?: Omit<TransformOptions, "split"> & { select?: boolean }
     ) => void;
-    deleteNode: (options: {
+    deleteNode: (options?: {
         at?: Location;
         distance?: number;
         unit?: "character" | "word" | "line" | "block";
@@ -132,9 +132,9 @@ export declare interface IRteParam {
     }) => void;
 
     removeNode: (node: Node) => void;
-    wrapNode: (node: Node, options: Omit<TransformOptions, "hanging">) => void;
-    unwrapNode: (options: Omit<TransformOptions, "hanging">) => void;
-    mergeNodes: (options: Omit<TransformOptions, "split">) => void;
+    wrapNode: (node: Node, options?: Omit<TransformOptions, "hanging">) => void;
+    unWrapNode: (options?: Omit<TransformOptions, "hanging">) => void;
+    mergeNodes: (options?: Omit<TransformOptions, "split">) => void;
 
     getEmbeddedItems: () => { [key: string]: any };
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
