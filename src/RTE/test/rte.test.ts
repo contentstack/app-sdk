@@ -123,6 +123,16 @@ describe("RTE Plugin", () => {
         expect(registry["dndOptions"]["DisableSelectionHalo"]).to.be.eq(true);
     });
 
+    it("Test disableDND option", async () => {
+        const [plugin, details] = createPlugin({
+            elementType: "block",
+            disableDND: true,
+        });
+        const registry = (await plugin.get()).registry;
+        expect(registry["dndOptions"]["DisableDND"]).to.be.eq(true);
+        expect(registry["dndOptions"]["DisableSelectionHalo"]).to.be.eq(true);
+    });
+
     it("Test DND Options undefined", async () => {
         let [plugin, details] = createPlugin({
             elementType: "block",
