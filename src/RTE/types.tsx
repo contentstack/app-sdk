@@ -209,6 +209,7 @@ export declare interface IConfig {
     icon: React.ReactElement | null;
     display: IDisplayOnOptions | IDisplayOnOptions[];
     elementType: IElementTypeOptions | IElementTypeOptions[] | IDynamicFunction;
+    disableDND?: boolean;
     render?: (...params: any) => ReactElement;
     shouldOverride?: (element: IRteElementType) => boolean;
 }
