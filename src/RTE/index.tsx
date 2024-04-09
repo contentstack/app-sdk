@@ -179,6 +179,23 @@ export class RTEPlugin {
                         this.pluginMetaData.meta.elementType = value;
                         break;
                     }
+                    
+                    case 'disableDND': {
+                        if (value) {
+                            let dndOptions =
+                            this.pluginMetaData["registry"]["dndOptions"];
+                            if (!dndOptions) {
+                                this.pluginMetaData["registry"]["dndOptions"] =
+                                    {};
+                                dndOptions =
+                                    this.pluginMetaData["registry"][
+                                        "dndOptions"
+                                    ];
+                            }
+                            dndOptions["DisableDND"] = true;
+                            dndOptions["DisableSelectionHalo"] = true;
+                        }
+                    }
 
                     case "render": {
                         this.pluginMetaData.registry.Component = value;
