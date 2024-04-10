@@ -62,12 +62,14 @@ export class AppConfig {
             .catch(onError);
     };
 
-    validatePlans = (plans:string[]):Promise<string[]>=>{
-        return this._connection
-            .sendToParent("validatePlans", plans)
-            .then((data)=>(onData(data) as any)?.value)
-            .catch(onError);
-    }
+    /**
+     * Optional method to check if the current plan supports a feature.
+     * Only available for apps that are white-listed.
+     */
+ 
+    isCurrentPlanSupportsFeature = (plan:string)=> {
+        return this._connection.sendToParent("isCurrentPlanSupportsFeature", {plan}).then((e)=>{console.log(e); return e}).then(onData).catch(onError);
+       }
 
     /**
      * Sets the validation state of the app. If the validation is false, the Contentstack App Config
