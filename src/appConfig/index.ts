@@ -68,7 +68,9 @@ export class AppConfig {
      */
  
     isCurrentPlanSupportsFeature = (plan:string)=> {
-        return this._connection.sendToParent("isCurrentPlanSupportsFeature", {plan}).then((e)=>{console.log(e); return e}).then(onData).catch(onError);
+        return this._connection.sendToParent("isCurrentPlanSupportsFeature", {plan})
+        .then(async(e)=> (await onData(e) as unknown as {value:{enable:boolean}})?.value)
+        .catch(onError);
        }
 
     /**
