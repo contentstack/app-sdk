@@ -62,6 +62,7 @@ export declare interface IAppConfigWidget {
         ) => Promise<GenericObjectType>;
         getInstallationData: () => Promise<IInstallationData>;
         setValidity: (isValid: boolean, options?: ValidationOptions) => void;
+        isCurrentPlanSupportsFeature: (plan:string) => Promise<{enabled: boolean}>;
         stack(): Stack;
     };
     stack: Stack;
