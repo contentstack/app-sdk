@@ -375,12 +375,12 @@ class Entry extends Base {
         this._query.locale = locale;
         return this.fetch("updateEntry", payload);
     }
-    variants(variant_uid: string) {
+    fetchVariant(variant_uid: string) {
         if(!variant_uid || typeof variant_uid !== "string") {
             return Promise.reject(new Error("Kindly provide valid parameters"));
         }
         this._query.variant_uid = variant_uid;
-        return this.fetch("variants");
+        return this.fetch("fetchVariant");
     }
 
 }
