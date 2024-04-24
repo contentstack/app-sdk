@@ -9,6 +9,7 @@ import {
     includeSchema,
     includeReference,
 } from "../../utils";
+import { GenericObjectType } from "../../../types/common.types";
 
 let connection = {};
 let contentTypeUid = "";
@@ -376,13 +377,25 @@ class Entry extends Base {
         return this.fetch("updateEntry", payload);
     }
     fetchVariant(variant_uid: string) {
-        if(!variant_uid || typeof variant_uid !== "string") {
+        if (!variant_uid || typeof variant_uid !== "string") {
             return Promise.reject(new Error("Kindly provide valid parameters"));
         }
         this._query.variant_uid = variant_uid;
         return this.fetch("fetchVariant");
     }
 
+    updateVariant(variant_uid: string, payload: GenericObjectType) {
+        if (
+            !variant_uid ||
+            typeof variant_uid !== "string" ||
+            typeof payload !== "object" ||
+            payload instanceof Array
+        ) {
+            return Promise.reject(new Error("Kindly provide valid parameters"));
+        }
+        this._query.variant_uid = variant_uid;
+        return this.fetch("updateVariant", payload);
+    }
 }
 
 export default (uiConnection: any, contentType: string) => {
