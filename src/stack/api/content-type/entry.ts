@@ -9,6 +9,7 @@ import {
     includeSchema,
     includeReference,
 } from "../../utils";
+import { GenericObjectType } from "../../../types/common.types";
 
 let connection = {};
 let contentTypeUid = "";
@@ -374,6 +375,55 @@ class Entry extends Base {
         }
         this._query.locale = locale;
         return this.fetch("updateEntry", payload);
+    }
+    /**
+     * @see {@link https://www.contentstack.com/docs/apis/content-management-api| fetch variant}
+     * @name Stack#ContentType#Entry#fetchVariant
+     * @function
+     * @description This call allows you to fetch variant customization of an entry.
+     * @param {string} variant_uid - parameter for the request
+     * @example appSDK.stack.ContentType('contenttype_uid').Entry('bltsomething123').fetchVariant('variant_uid').then(...).catch(...);
+     * @return {external:Promise}
+     */
+
+    fetchVariant(variant_uid: string) {
+        if (!variant_uid || typeof variant_uid !== "string") {
+            return Promise.reject(new Error("Kindly provide valid parameters"));
+        }
+        this._query.variant_uid = variant_uid;
+        return this.fetch("fetchVariant");
+    }
+
+    /**
+     * @see {@link https://www.contentstack.com/docs/apis/content-management-api| update variant}
+     * @name Stack#ContentType#Entry#updateVariant
+     * @function
+     * @description This call allows you to update variant customization of an entry.
+     * @param  {string} variant_uid - parameter for the request
+     * @param  {object} payload - parameter for the request
+     * @example appSDK.stack.ContentType('contenttype_uid').Entry('bltsomething123').updateVariant('variant_uid', 
+     * { "entry": {
+            "title": "test variant entry",
+             "url": "/variant-url",
+             "_variant": {
+                "_change_set": ["title", "url"]
+            }
+        }
+        }).then(...).catch(...);
+     * @return {external:Promise}
+     */
+
+    updateVariant(variant_uid: string, payload: GenericObjectType) {
+        if (
+            !variant_uid ||
+            typeof variant_uid !== "string" ||
+            typeof payload !== "object" ||
+            payload instanceof Array
+        ) {
+            return Promise.reject(new Error("Kindly provide valid parameters"));
+        }
+        this._query.variant_uid = variant_uid;
+        return this.fetch("updateVariant", payload);
     }
 }
 

@@ -3,6 +3,8 @@ import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils/utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 import { IManagementTokenDetails } from '../types';
+import  VariantGroup  from "../variantGroup";
+import { GenericObjectType } from "../types/common.types";
 
 
 /**
@@ -18,6 +20,7 @@ class Stack {
   _data: StackDetail
   ContentType: any 
   Asset: any 
+  VariantGroup: any
   private _currentBranch: BranchDetail | null = null;
 
 
@@ -42,6 +45,16 @@ class Stack {
      * @example appSDK.stack.Asset('asset_uid')
      * */
     this.Asset = Asset(connection);
+
+    /**
+     * @constructor
+     * @hideconstructor
+     * @desc An initializer is responsible for creating an VariantGroup object.
+     * @see {@link https://www.contentstack.com/docs/apis/content-management-api/| VariantGroup}
+     * @param {string} uid - variant group uid.
+     * @example appSDK.stack.VariantGroup('variant_group_uid')
+     * */
+    this.VariantGroup = VariantGroup(connection);
 
     const currentBranch = additionalData.currentBranch || ""
 
@@ -271,6 +284,17 @@ class Stack {
      */
     getCurrentBranch(): BranchDetail | null {
       return this._currentBranch;
+    }
+
+    /**
+     * Returns variant groups of the current stack.
+     * @returns variant groups of the current stack
+     */
+    getVariantGroups(query = {}, params = {}) {
+      const optionParams: GenericObjectType = params;
+      optionParams.query = query;
+      const options = { params: optionParams, action: 'getVariantGroups' };
+      return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }
 
