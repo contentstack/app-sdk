@@ -46,6 +46,14 @@ class Stack {
      * */
     this.Asset = Asset(connection);
 
+    /**
+     * @constructor
+     * @hideconstructor
+     * @desc An initializer is responsible for creating an VariantGroup object.
+     * @see {@link https://www.contentstack.com/docs/apis/content-management-api/| VariantGroup}
+     * @param {string} uid - variant group uid.
+     * @example appSDK.stack.VariantGroup('variant_group_uid')
+     * */
     this.VariantGroup = VariantGroup(connection);
 
     const currentBranch = additionalData.currentBranch || ""

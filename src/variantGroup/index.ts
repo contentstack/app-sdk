@@ -20,7 +20,7 @@ class VariantGroup extends Base {
     static get connection() {
         return connection;
     }
- /**
+    /**
      * @function
      * @name Stack#VariantGroup#createVariant
      * @description This method creates a new variant in a group.
