@@ -20,7 +20,7 @@ class Stack {
   _data: StackDetail
   ContentType: any 
   Asset: any 
-  variantGroup: GenericObjectType
+  VariantGroup: any
   private _currentBranch: BranchDetail | null = null;
 
 
@@ -46,7 +46,7 @@ class Stack {
      * */
     this.Asset = Asset(connection);
 
-    this.variantGroup = VariantGroup(connection);
+    this.VariantGroup = VariantGroup(connection);
 
     const currentBranch = additionalData.currentBranch || ""
 
