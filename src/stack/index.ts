@@ -3,6 +3,8 @@ import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils/utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 import { IManagementTokenDetails } from '../types';
+import  VariantGroup  from "../variantGroup";
+import { GenericObjectType } from "../types/common.types";
 
 
 /**
@@ -18,6 +20,7 @@ class Stack {
   _data: StackDetail
   ContentType: any 
   Asset: any 
+  variantGroup: GenericObjectType
   private _currentBranch: BranchDetail | null = null;
 
 
@@ -42,6 +45,8 @@ class Stack {
      * @example appSDK.stack.Asset('asset_uid')
      * */
     this.Asset = Asset(connection);
+
+    this.variantGroup = VariantGroup(connection);
 
     const currentBranch = additionalData.currentBranch || ""
 
