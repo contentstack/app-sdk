@@ -18,7 +18,7 @@ class VariantGroup extends Base {
     }
 
     createVariantGroup() {
-        console.log("Variant Group created");
+        return "Hello World";
     }
 }
 
