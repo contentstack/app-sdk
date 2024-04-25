@@ -277,14 +277,26 @@ class Stack {
     getCurrentBranch(): BranchDetail | null {
       return this._currentBranch;
     }
+
     /**
      * Returns the variant groups of the current stack.
      * @returns variant groups of the current stack
      */
-    getVariantGroups(query = {}, params = {}):any{
+    getVariantGroups(query = {}, params = {}) {
       const optionParams: { [key: string]: any } = params;
       optionParams.query = query;
       const options = { params: optionParams, action: 'getVariantGroups' };
+      return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    }
+
+    /**
+     * Creates a variant group within a stack.
+     * @returns creates a variant group within a stack.
+     */
+    createVariantGroup(query = {}, params = {}){
+      const optionParams: { [key: string]: any } = params;
+      optionParams.query = query;
+      const options = { params: optionParams, action: 'createVariantGroup' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }
