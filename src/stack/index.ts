@@ -277,7 +277,10 @@ class Stack {
     getCurrentBranch(): BranchDetail | null {
       return this._currentBranch;
     }
-
+    /**
+     * Returns the variant groups of the current stack.
+     * @returns variant groups of the current stack
+     */
     getVariantGroups(query = {}, params = {}):any{
       const optionParams: { [key: string]: any } = params;
       optionParams.query = query;
