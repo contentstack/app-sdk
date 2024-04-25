@@ -293,10 +293,10 @@ class Stack {
      * Creates a variant group within a stack.
      * @returns creates a variant group within a stack.
      */
-    createVariantGroup(query = {}, params = {}){
-      const optionParams: { [key: string]: any } = params;
-      optionParams.query = query;
-      const options = { params: optionParams, action: 'createVariantGroup' };
+    createVariantGroup(payload: { [key: string]: any }) {
+      // const optionParams: { [key: string]: any } = params;
+      // optionParams.query = query;
+      const options = { data: payload, action: 'createVariantGroup' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }
