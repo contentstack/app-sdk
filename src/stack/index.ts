@@ -277,6 +277,13 @@ class Stack {
     getCurrentBranch(): BranchDetail | null {
       return this._currentBranch;
     }
+
+    getVariantGroups(query = {}, params = {}):any{
+      const optionParams: { [key: string]: any } = params;
+      optionParams.query = query;
+      const options = { params: optionParams, action: 'getVariantGroups' };
+      return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    }
 }
 
 export default Stack;
