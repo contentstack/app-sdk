@@ -1,4 +1,5 @@
 import Base from "../stack/api/base";
+import { GenericObjectType } from "../types/common.types";
 
 /**
  * Class representing the Variant Group.
@@ -19,7 +20,16 @@ class VariantGroup extends Base {
     static get connection() {
         return connection;
     }
-
+ /**
+     * @function
+     * @name Stack#VariantGroup#createVariant
+     * @description This method creates a new variant in a group.
+     * @example appSDK.stack.VariantGroup("variant_group_uid").createVariant(variant_payload);
+     * @return {external:Promise}
+     */
+    createVariant(payload: GenericObjectType) {
+        return this.fetch("createVariant", payload);
+    }
     /**
      * @function
      * @name Stack#VariantGroup#getVariantsByGroup
@@ -44,7 +54,7 @@ class VariantGroup extends Base {
     }
 }
 
-export default (uiConnection: any) => {
+export default (uiConnection: GenericObjectType) => {
     connection = uiConnection;
     return new Proxy(VariantGroup, {
         apply(Target: any, thisArg, argumentsList: any[]) {

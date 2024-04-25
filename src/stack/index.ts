@@ -279,24 +279,13 @@ class Stack {
     }
 
     /**
-     * Returns the variant groups of the current stack.
+     * Returns variant groups of the current stack.
      * @returns variant groups of the current stack
      */
     getVariantGroups(query = {}, params = {}) {
-      const optionParams: { [key: string]: any } = params;
+      const optionParams: GenericObjectType = params;
       optionParams.query = query;
       const options = { params: optionParams, action: 'getVariantGroups' };
-      return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
-    }
-
-    /**
-     * Creates a variant group within a stack.
-     * @returns creates a variant group within a stack.
-     */
-    createVariantGroup(payload: { [key: string]: any }) {
-      // const optionParams: { [key: string]: any } = params;
-      // optionParams.query = query;
-      const options = { data: payload, action: 'createVariantGroup' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }

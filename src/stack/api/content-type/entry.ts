@@ -398,7 +398,7 @@ class Entry extends Base {
      * @see {@link https://www.contentstack.com/docs/apis/content-management-api| update variant}
      * @name Stack#ContentType#Entry#updateVariant
      * @function
-     * @description This call allows you to fetch variant customization of an entry.
+     * @description This call allows you to update variant customization of an entry.
      * @param  {string} variant_uid - parameter for the request
      * @param  {object} payload - parameter for the request
      * @example appSDK.stack.ContentType('contenttype_uid').Entry('bltsomething123').updateVariant('variant_uid', 
