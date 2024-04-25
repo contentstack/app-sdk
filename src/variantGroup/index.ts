@@ -11,14 +11,18 @@ class VariantGroup extends Base {
             throw new Error("uid is required");
         }
         super(uid);
+        this._query = {};
+        return this
     }
 
     static get connection() {
         return connection;
     }
 
-    createVariantGroup() {
-        return "Hello World";
+    getGroupedVariants() {
+        console.log("getGroupedVariants",this.uid);
+        this._query.group_uid = this.uid
+        return this.fetch("getGroupedVariants");
     }
 }
 
