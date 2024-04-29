@@ -20,17 +20,7 @@ class VariantGroup extends Base {
     static get connection() {
         return connection;
     }
-     /**
-     * @function
-     * @name Stack#VariantGroup#getSingleVariantGroupDetails
-     * @description This method retrieves a single variant group details.
-     * @example appSDK.stack.VariantGroup("variant_group_uid").getSingleVariantGroupDetails();
-     * @return {external:Promise}
-     */
-     getSingleVariantGroupDetails() {
-        return this.fetch("getSingleVariantGroupDetails");
-    }
-
+    
     /**
      * @function
      * @name Stack#VariantGroup#createVariant
