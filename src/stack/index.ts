@@ -20,7 +20,7 @@ class Stack {
   _data: StackDetail
   ContentType: any 
   Asset: any 
-  VariantGroup: any
+  VariantGroup: GenericObjectType
   private _currentBranch: BranchDetail | null = null;
 
 
