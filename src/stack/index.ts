@@ -305,7 +305,7 @@ class Stack {
       if (!variant_uid) {
         return Promise.reject(new Error('variant uid is required'));
       }
-      const options = { params: variant_uid, action: 'getVariantById' };
+      const options = { params: {uid : variant_uid}, action: 'getVariantById' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }
