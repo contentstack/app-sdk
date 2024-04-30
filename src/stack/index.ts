@@ -296,6 +296,17 @@ class Stack {
       const options = { params: optionParams, action: 'getVariantGroups' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
+
+    /**
+     * Returns variant groups details.
+     * @returns variant groups details.
+     */
+    getVariantById(query={}, params = {}) {
+      const optionParams: GenericObjectType = params;
+      optionParams.query = query;
+      const options = { params: optionParams, action: 'getVariantById' };
+      return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    }
 }
 
 export default Stack;
