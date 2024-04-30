@@ -108,6 +108,14 @@ export function language(languageCode) {
     throw Error("Argument should be a String.");
 }
 
+export function variant(variant_uid) {
+    if (variant_uid && typeof variant_uid === "string") {
+        this._query.locale = variant_uid;
+        return this;
+    }
+    throw Error("Argument should be a String.");
+}
+
 export function environment(environmentCode) {
     if (environmentCode && typeof environmentCode === "string") {
         this._query.environment = environmentCode;

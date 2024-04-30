@@ -3,6 +3,7 @@ import {
     getReferences,
     addQuery,
     language,
+    variant,
     environment,
     includeOwner,
     includeContentType,
@@ -35,6 +36,7 @@ class Entry extends Base {
         const entryQuery = super.Query();
         Object.assign(entryQuery, {
             language,
+            variant,
             environment,
             includeOwner,
             includeContentType,
@@ -377,22 +379,14 @@ class Entry extends Base {
         return this.fetch("updateEntry", payload);
     }
     /**
-     * @see {@link https://www.contentstack.com/docs/apis/content-management-api| fetch variant}
+     * @see {@link https://www.contentstack.com/docs/apis/content-management-api| variant}
      * @name Stack#ContentType#Entry#fetchVariant
      * @function
-     * @description This call allows you to fetch variant customization of an entry.
+     * @description This call allows you to get a variant customization of an entry.
      * @param {string} variant_uid - parameter for the request
-     * @example appSDK.stack.ContentType('contenttype_uid').Entry('bltsomething123').fetchVariant('variant_uid').then(...).catch(...);
+     * @example appSDK.stack.ContentType('contenttype_uid').Entry('bltsomething123').variant('variant_uid')..fetch().then(...).catch(...);
      * @return {external:Promise}
      */
-
-    fetchVariant(variant_uid: string) {
-        if (!variant_uid || typeof variant_uid !== "string") {
-            return Promise.reject(new Error("Kindly provide valid parameters"));
-        }
-        this._query.variant_uid = variant_uid;
-        return this.fetch("fetchVariant");
-    }
 
     /**
      * @see {@link https://www.contentstack.com/docs/apis/content-management-api| update variant}
@@ -437,6 +431,7 @@ export default (uiConnection: any, contentType: string) => {
                 getReferences,
                 addQuery,
                 language,
+                variant,
                 environment,
                 includeOwner,
                 includeContentType,
