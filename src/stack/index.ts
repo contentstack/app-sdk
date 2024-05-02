@@ -3,6 +3,7 @@ import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils/utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 import { IManagementTokenDetails } from '../types';
+import { GenericObjectType } from "../types/common.types";
 
 
 /**
@@ -271,6 +272,17 @@ class Stack {
      */
     getCurrentBranch(): BranchDetail | null {
       return this._currentBranch;
+    }
+
+    /**
+     * Returns variant groups details.
+     * @returns variant groups details.
+     */
+    getVariantById(query={}, params = {}) {
+      const optionParams: GenericObjectType = params;
+      optionParams.query = query;
+      const options = { params: optionParams, action: 'getVariantById' };
+      return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }
 
