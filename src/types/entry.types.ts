@@ -48,5 +48,5 @@ export interface Entry extends AnyProperty {
     locale: string;
     url?: string;
     _variant?: GenericObjectType ;
-    variant_id?: string
+    variant_uid?: string
 }
