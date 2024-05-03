@@ -278,10 +278,11 @@ class Stack {
      * Returns variant groups details.
      * @returns variant groups details.
      */
-    getVariantById(query={}, params = {}) {
-      const optionParams: GenericObjectType = params;
-      optionParams.query = query;
-      const options = { params: optionParams, action: 'getVariantById' };
+    getVariantById(variant_uid:string) {
+      if (!variant_uid) {
+        return Promise.reject(new Error('variant uid is required'));
+      }
+      const options = { params: {uid : variant_uid}, action: 'getVariantById' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }
