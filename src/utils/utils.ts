@@ -12,18 +12,10 @@ export function onError(error: Error) {
 }
 
 export function formatAppRegion(region: string): Region {
-    switch (region) {
-        case "NA":
-            return Region.NA;
-        case "EU":
-            return Region.EU;
-        case "AZURE_NA":
-            return Region.AZURE_NA;
-        case "AZURE_EU":
-            return Region.AZURE_EU;
-        default:
-            return Region.UNKNOWN;
+    if (region && Object.values(Region).includes(region as Region)) {
+        return region as Region;
     }
+    return Region.UNKNOWN;
 }
 
 export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
