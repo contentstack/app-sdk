@@ -5,7 +5,7 @@ import Field from "./field";
 import {
     IFieldInitData,
     IFieldModifierLocationInitData,
-    IRTELocationInitData,
+    IRTEInitData,
     ISidebarInitData,
 } from "./types";
 import { Entry as EntryType } from "../src/types/entry.types";
@@ -36,7 +36,7 @@ class Entry {
         initializationData:
             | IFieldInitData
             | ISidebarInitData
-            | IRTELocationInitData
+            | IRTEInitData
             | IFieldModifierLocationInitData,
         connection: typeof postRobot,
         emitter: EventEmitter,
