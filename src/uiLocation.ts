@@ -19,6 +19,7 @@ import {
     IDashboardWidget,
     IFieldModifierLocation,
     IFullPageLocation,
+    IRTEInitData,
     ISidebarWidget,
     InitializationData,
     LocationType,
@@ -108,6 +109,7 @@ class UiLocation {
         SidebarWidget: ISidebarWidget | null;
         CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
+        RTELocation: GenericObjectType | null;
         AppConfigWidget: IAppConfigWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
         FullPage: IFullPageLocation | null;
@@ -144,6 +146,7 @@ class UiLocation {
             CustomField: null,
             SidebarWidget: null,
             RTEPlugin: null,
+            RTELocation: null,
             AppConfigWidget: null,
             AssetSidebarWidget: null,
             FullPage: null,
@@ -216,6 +219,13 @@ class UiLocation {
             case LocationType.RTE: {
                 import("./RTE").then(({ rtePluginInitializer }) => {
                     this.location.RTEPlugin = rtePluginInitializer;
+                    this.location.RTELocation = {
+                        entry: new Entry(
+                            initializationData as IRTEInitData,
+                            postRobot,
+                            emitter
+                        ),
+                    };
                 });
                 break;
             }

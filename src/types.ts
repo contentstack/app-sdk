@@ -132,6 +132,9 @@ export declare interface IFullPageLocationInitData extends ICommonInitData {
 export declare interface IRTEInitData extends ICommonInitData {
     config?: GenericObjectType;
     type: LocationType.RTE;
+    entry: Entry;
+    content_type: ContentType;
+    locale: string;
 }
 
 export declare interface IAppConfigInitData extends ICommonInitData {

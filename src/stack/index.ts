@@ -3,6 +3,7 @@ import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils/utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 import { IManagementTokenDetails } from '../types';
+import { GenericObjectType } from "../types/common.types";
 
 
 /**
@@ -271,6 +272,18 @@ class Stack {
      */
     getCurrentBranch(): BranchDetail | null {
       return this._currentBranch;
+    }
+
+    /**
+     * Returns variant groups details.
+     * @returns variant groups details.
+     */
+    getVariantById(variant_uid:string) {
+      if (!variant_uid) {
+        return Promise.reject(new Error('variant uid is required'));
+      }
+      const options = { params: {uid : variant_uid}, action: 'getVariantById' };
+      return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
 }
 

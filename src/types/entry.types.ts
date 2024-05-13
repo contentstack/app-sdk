@@ -1,5 +1,5 @@
 import Field from "../field";
-import { AnyProperty } from "./common.types";
+import { AnyProperty, GenericObjectType } from "./common.types";
 
 export declare interface IGetFieldOptions {
     /**
@@ -47,4 +47,6 @@ export interface Entry extends AnyProperty {
     publish_details: Array<any>;
     locale: string;
     url?: string;
+    variant_uid?: string;
+    _variant?: GenericObjectType
 }
