@@ -2,7 +2,7 @@ import postRobot from "post-robot";
 import EventEmitter from "wolfy87-eventemitter";
 
 import AssetSidebarWidget from "./AssetSidebarWidget";
-import { IRTELocation, IRTEPluginInitializer } from "./RTE/types";
+import { IRTEPluginInitializer } from "./RTE/types";
 import { AppConfig } from "./appConfig";
 import Entry from "./entry";
 import Field from "./field";
@@ -109,7 +109,7 @@ class UiLocation {
         SidebarWidget: ISidebarWidget | null;
         CustomField: ICustomField | null;
         RTEPlugin: IRTEPluginInitializer | null;
-        RTELocation: IRTELocation | null;
+        RTELocation: GenericObjectType | null;
         AppConfigWidget: IAppConfigWidget | null;
         AssetSidebarWidget: AssetSidebarWidget | null;
         FullPage: IFullPageLocation | null;
