@@ -19,7 +19,7 @@ import {
     IDashboardWidget,
     IFieldModifierLocation,
     IFullPageLocation,
-    IRTELocationInitData,
+    IRTEInitData,
     ISidebarWidget,
     InitializationData,
     LocationType,
@@ -221,7 +221,7 @@ class UiLocation {
                     this.location.RTEPlugin = rtePluginInitializer;
                     this.location.RTELocation = {
                         entry: new Entry(
-                            initializationData as IRTELocationInitData,
+                            initializationData as IRTEInitData,
                             postRobot,
                             emitter
                         ),
