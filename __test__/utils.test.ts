@@ -18,6 +18,10 @@ describe("formatAppRegion", () => {
         expect(formatAppRegion("AZURE_EU")).toBe(Region.AZURE_EU);
     });
 
+    it('should return GCP_NA for "GCP_NA"', () => {
+        expect(formatAppRegion("GCP_NA")).toBe(Region.GCP_NA);
+    });
+
     it("should return unknown for any invalid region", () => {
         expect(formatAppRegion("invalid")).toBe(Region.UNKNOWN);
     });
