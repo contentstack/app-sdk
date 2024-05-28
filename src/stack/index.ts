@@ -285,6 +285,42 @@ class Stack {
       const options = { params: {uid : variant_uid}, action: 'getVariantById' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
     }
+
+    /**
+     * This API allows you to retrieve data of a single global field of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api#get-single-global-field| Global Field API} requests. This method returns a Promise object.
+     * @param {string} uid UID of the desired global field
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with global field details.
+     */
+    getGlobalField(uid: string, params = {}): Promise<{ [key: string]: any }> {
+      if (!uid) {
+          return Promise.reject(new Error("uid is required"));
+      }
+      const options = { uid, params, action: "getGlobalField" };
+      return this._connection
+          .sendToParent("stackQuery", options)
+          .then(onData)
+          .catch(onError);
+    }
+
+    /**
+     * This API allows you to retrieve data of all global fields of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api#get-all-global-fields| Global Fields API} requests. This method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with global field details.
+     */
+    getGlobalFields(
+        query = {},
+        params: { [key: string]: any } = {}
+    ): Promise<{ [key: string]: any }> {
+        const optionParams = params;
+        optionParams.query = query;
+        const options = { params: optionParams, action: "getGlobalFields" };
+        return this._connection
+            .sendToParent("stackQuery", options)
+            .then(onData)
+            .catch(onError);
+    }
 }
 
 export default Stack;
