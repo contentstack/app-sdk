@@ -288,11 +288,11 @@ class Stack {
 
     /**
      * This API allows you to retrieve data of a single global field of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api#get-single-global-field| Global Field API} requests. This method returns a Promise object.
-     * @param {string} uid UID of the desired global field
+     * @param {string} uid of the desired global field
      * @param {Object} params Optional parameters for the GET call
      * @return {Object} A promise object which will be resolved with global field details.
      */
-    getGlobalField(uid: string, params = {}): Promise<{ [key: string]: any }> {
+    getGlobalField(uid: string, params = {}): Promise<{ [key: string]: GenericObjectType }> {
       if (!uid) {
           return Promise.reject(new Error("uid is required"));
       }
@@ -311,8 +311,8 @@ class Stack {
      */
     getGlobalFields(
         query = {},
-        params: { [key: string]: any } = {}
-    ): Promise<{ [key: string]: any }> {
+        params: { [key: string]: GenericObjectType } = {}
+    ): Promise<{ [key: string]: GenericObjectType }> {
         const optionParams = params;
         optionParams.query = query;
         const options = { params: optionParams, action: "getGlobalFields" };
