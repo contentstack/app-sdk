@@ -1,3 +1,4 @@
+import { dispatchPostRobotRequest } from "../../utils/adapter";
 import * as Utils from "../utils";
 
 function onData(data) {
@@ -598,6 +599,21 @@ class Query {
             .sendToParent("stackQuery", options)
             .then(onData)
             .catch(onError);
+    }
+
+    api(action: string, payload?: { [key: string]: any }) {
+        const options = {
+            payload,
+            content_type_uid: this.contentTypeUid || undefined,
+            params: this._query,
+            action: action || `get${this.module}`
+        };
+
+        if (!payload) { delete options.payload }
+        if ('content_type_uid' in options) {
+            delete options.content_type_uid;
+        }
+        return dispatchPostRobotRequest(this._connection, options)
     }
 
     /**
