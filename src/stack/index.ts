@@ -3,6 +3,7 @@ import ContentType from './api/content-type/index';
 import { onData, onError } from "../utils/utils";
 import { BranchDetail, GetAllStacksOptions, StackAdditionalData, StackDetail, StackSearchQuery } from '../types/stack.types';
 import { IManagementTokenDetails } from '../types';
+import { GenericObjectType } from "../types/common.types";
 
 
 /**
