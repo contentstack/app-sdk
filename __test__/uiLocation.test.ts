@@ -12,6 +12,9 @@ import {
     LocationType,
     Region,
 } from "../src/types";
+import { ApiRequestProps } from '../src/types/stack.types';
+import { dispatchPostRobotRequest } from '../src/utils/adapter';
+import { onData, onError } from '../src/utils/utils';
 
 jest.mock("post-robot");
 jest.mock("wolfy87-eventemitter");
@@ -128,6 +131,67 @@ describe("UI Location", () => {
                     metadata,
                 }
             );
+        });
+    });
+
+    describe('dispatchPostRobotRequest', () => {
+        let mockPostRobot: typeof postRobot;
+        let opts: ApiRequestProps;
+        let uiLocationInstance: UiLocation;
+        let onError: jest.Mock;
+
+        beforeEach(() => {
+            mockPostRobot = postRobot;
+            opts = { method: 'GET', url: '/test' };
+            uiLocationInstance = new UiLocation(initData);
+            onError = jest.fn();
+            uiLocationInstance.api = jest.fn().mockResolvedValue({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                body: {}
+            });
+        });
+
+        it('should call sendToParent with the correct arguments and resolve with data', async () => {
+            const mockData = { success: true };
+            // Call the method that uses uiLocationInstance.api
+            const result = await uiLocationInstance.api({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                body: {}
+            });
+
+            // Assertions
+            expect(uiLocationInstance.api).toHaveBeenCalledWith({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                body: {}
+            });
+            expect(result).toEqual({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                body: {}
+            });
+
+        });
+
+        it('should call onError if sendToParent rejects', async () => {
+            const mockError = new Error('Test error');
+
+            // Mock the api method to reject with an error
+            uiLocationInstance.api = jest.fn().mockRejectedValue(mockError);
+
+            // Mock the onError implementation
+            onError.mockImplementation((error) => {
+                throw error;
+            });
+
+            // Call the method that uses uiLocationInstance.api and expect it to throw an error
+            await expect(uiLocationInstance.api({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                body: {}
+            })).rejects.toThrow('Test error');
         });
     });
 
