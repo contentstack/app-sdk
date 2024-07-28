@@ -30,6 +30,8 @@ import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
+import CMA from './api';
+import { ApiRequestProps } from './types/stack.types';
 
 const emitter = new EventEmitter();
 
@@ -73,6 +75,8 @@ class UiLocation {
      * This holds the stack instance that allows users to read and manipulate a range of objects in a stack.
      */
     stack: Stack;
+
+    api: (payload:ApiRequestProps)=> Promise<any>;
 
     /**
      * Store to persist data for the app.
@@ -136,6 +140,8 @@ class UiLocation {
         this.stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
         });
+
+        this.api = (payload:ApiRequestProps)=> new CMA(postRobot).api(payload);
 
         this.metadata = new Metadata(postRobot);
 

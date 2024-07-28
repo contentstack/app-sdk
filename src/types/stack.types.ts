@@ -156,7 +156,7 @@ export type RequestMethods = "GET" | "POST" | "PUT" | "DELETE";
 
 export type ApiRequestProps = {
         method: RequestMethods,
-        url: URL,
+        url: string,
         headers?: {
             [key: string]: string;
         },

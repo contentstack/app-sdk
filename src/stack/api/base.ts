@@ -77,18 +77,4 @@ export default class Base {
       .then(onData).catch(onError);
   }
 
-  api(payload:ApiRequestProps) {
-    const options = {
-      ...payload, 
-      params: this._query, 
-      content_type_uid: this.constructor.contentTypeUid,
-      headers:{...(payload.headers || {}), "X-Request-Id": uuidv4()}
-       ,
-    };
-    if (!this.constructor.contentTypeUid) { delete options.content_type_uid; }
-    if (this.uid) options[`${(this.constructor.module() as string).toLowerCase()}_uid`] = this.uid;
-
-    return dispatchPostRobotRequest(this.constructor.connection, options)
-  }
-
 }
