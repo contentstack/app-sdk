@@ -149,7 +149,7 @@ export declare type IRteParamWithPreventDefault = {
 };
 
 export declare type IConfigCallback = (
-    rte: IRteParam
+    rte: IRteParam | void
 ) => Partial<IConfig>;
 
 export declare type IOnFunction = {
