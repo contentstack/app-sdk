@@ -3,7 +3,6 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
-import { Entry as EntryType } from "../src/types/entry.types";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -87,10 +86,12 @@ class Field {
                     ? fieldObj.schema.$uid
                     : fieldObj.uid;
             const path = schemaPath.split(".");
-            let value = event.data;
-
+            let value: GenericObjectType = new Map(Object.entries(event.data));
+            
             path.forEach((key) => {
-                value = value && value[key];
+                if (value) {
+                    value = value.get(key);
+                }
             });
 
             if (fieldObj._data !== value) {

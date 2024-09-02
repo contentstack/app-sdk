@@ -91,6 +91,24 @@ class Entry {
     }
 
     /**
+    * 
+    * 
+    * Safely retrieves the value of a property from an object.
+    * 
+    * This function checks if the object has the specified property as its own property
+    * (i.e., not inherited from the prototype chain) before accessing it. This helps
+    * mitigate prototype pollution vulnerabilities.
+    * 
+    * @param {GenericObjectType} obj - The object from which to retrieve the property.
+    * @param {string | number} key - The key of the property to retrieve.
+    * @returns {any} - The value of the property if it exists, otherwise undefined.
+    */
+   
+    getPropertySafely(obj: GenericObjectType, key: string | number) {
+        return Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : undefined;
+    }
+
+    /**
      * Gets the field object for the saved data, which allows you to interact with the field.
      * This object will have all the same methods and properties of appSDK.location.CustomField.field.
      * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and Custom Field UI Location of data type text, number, boolean, and date.
@@ -109,7 +127,7 @@ class Entry {
         const { FieldInstance = Field } = this._options._internalFlags || {};
 
         const path = uid.split(".");
-        let value = useUnsavedSchema
+        let value: GenericObjectType = useUnsavedSchema
             ? this._changedData || this._data
             : this._data;
         let schema: Schema[0] = this.content_type.schema;
@@ -125,6 +143,7 @@ class Entry {
         try {
             let skipNext = false;
             let skipNextTwo = false;
+            
             path.forEach((key: string | number, index: number) => {
                 if (skipNext) {
                     if (skipNextTwo) {
@@ -140,7 +159,7 @@ class Entry {
                     throw Error("schema not found");
                 }
 
-                value = value && value[key];
+                value = this.getPropertySafely(value, key);
 
                 if (
                     (schema.data_type === "group" ||
@@ -156,7 +175,7 @@ class Entry {
                     path.length !== index + 1
                 ) {
                     schema = schema.schema;
-                    value = value && value[path[index + 1]];
+                    value = this.getPropertySafely(value, path[index + 1]);
                     skipNext = true;
                 } else if (
                     schema.data_type === "blocks" &&
@@ -168,10 +187,10 @@ class Entry {
                     );
                     if (path.length === index + 2) {
                         // complete block value with uid
-                        value = value && value[path[index + 1]];
+                        value = this.getPropertySafely(value, path[index + 1]);
                     } else {
                         // block value without uid
-                        value = value && value[path[index + 1]][blockId];
+                        value = this.getPropertySafely(value, path[index + 1])[blockId];
                         schema = schema.schema;
                     }
 
