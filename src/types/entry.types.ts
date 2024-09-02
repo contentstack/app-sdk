@@ -47,6 +47,10 @@ export interface Entry extends AnyProperty {
     publish_details: Array<any>;
     locale: string;
     url?: string;
-    variant_uid?: string;
-    _variant?: GenericObjectType
+    _variant_uid?: string;
+    _variant?: GenericObjectType;
+    _applied_variants?: GenericObjectType;
+    isVariantizedEntry?: boolean;
+    _base_entry_version?: number;
+    _variant_raw_data?: GenericObjectType;
 }
