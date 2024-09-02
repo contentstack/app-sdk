@@ -93,9 +93,7 @@ class FieldModifierLocationField {
             let value = event.data;
 
             path.forEach((key) => {
-                if (value) {
-                    value = value[key];
-                }
+                value = value && value[key];
             });
 
             if (fieldObj._data !== value) {

@@ -140,7 +140,7 @@ class Entry {
                     throw Error("schema not found");
                 }
 
-                value = value[key];
+                value = value && value[key];
 
                 if (
                     (schema.data_type === "group" ||
@@ -156,7 +156,7 @@ class Entry {
                     path.length !== index + 1
                 ) {
                     schema = schema.schema;
-                    value = value[path[index + 1]];
+                    value = value && value[path[index + 1]];
                     skipNext = true;
                 } else if (
                     schema.data_type === "blocks" &&
@@ -168,10 +168,10 @@ class Entry {
                     );
                     if (path.length === index + 2) {
                         // complete block value with uid
-                        value = value[path[index + 1]];
+                        value = value && value[path[index + 1]];
                     } else {
                         // block value without uid
-                        value = value[path[index + 1]][blockId];
+                        value = value && value[path[index + 1]][blockId];
                         schema = schema.schema;
                     }
 
