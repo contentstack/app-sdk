@@ -90,10 +90,12 @@ class FieldModifierLocationField {
                     ? fieldObj.schema.$uid
                     : fieldObj.uid;
             const path = schemaPath.split(".");
-            let value = event.data;
+            let value: GenericObjectType = new Map(Object.entries(event.data));
 
             path.forEach((key) => {
-                value = value && value[key];
+                if (value) {
+                    value = value.get(key);
+                }
             });
 
             if (fieldObj._data !== value) {
