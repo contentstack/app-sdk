@@ -87,15 +87,12 @@ class Field {
                     : fieldObj.uid;
             const path = schemaPath.split(".");
             let value = event.data
-            console.log("value-->updateFields PRE", value);
+            
             path.forEach((key) => {
                 if (value) {
-                    value = Object.create(value[key] as GenericObjectType)
-                    console.log("value-->updateFields IF", value);
+                    value = Object.assign({} ,value[key]);
                 }
             });
-
-            console.log("value-->updateFields POST", value);
 
             if (fieldObj._data !== value) {
                 fieldObj._data = value;
