@@ -1,6 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
-import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
+import { IFieldInitData, IFieldModifierLocationInitData, Indexable } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
 
@@ -86,7 +86,7 @@ class Field {
                     ? fieldObj.schema.$uid
                     : fieldObj.uid;
             const path = schemaPath.split(".");
-            let value: GenericObjectType = new Map(Object.entries(event.data));
+            let value: Indexable  = new Map(Object.entries(event.data));
             
             path.forEach((key) => {
                 if (value) {
