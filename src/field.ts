@@ -86,11 +86,15 @@ class Field {
                     ? fieldObj.schema.$uid
                     : fieldObj.uid;
             const path = schemaPath.split(".");
-            let value : any  = new Map(Object.entries(event.data));
+            let value = event.data;
+
+            // Create a safe object to avoid prototype pollution
+            let safeValue = Object.create(null);
+            Object.assign(safeValue, value);
             
             path.forEach((key) => {
                 if (value) {
-                    value = value.get(value[key]);
+                    value = safeValue[key]
                 }
             });
 
