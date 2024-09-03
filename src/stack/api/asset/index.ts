@@ -205,7 +205,7 @@ class Asset extends Base {
       });
      * @return {external:Promise}
      */
-    publish(payload) {
+      publish(payload, options?: {}) {
         if (
             !payload ||
             typeof payload !== "object" ||
@@ -213,6 +213,11 @@ class Asset extends Base {
         ) {
             return Promise.reject(new Error("Kindly provide valid parameters"));
         }
+        
+        if (options && typeof options === "object") {
+            payload = { ...payload, ...options };
+        }
+        console.log(payload,"payload")
         return this.fetch("publishAsset", payload);
     }
 

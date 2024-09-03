@@ -269,7 +269,7 @@ class Entry extends Base {
   }).then(...).catch(...);
   * @return {external:Promise}
   */
-    publish(payload: { [key: string]: any }) {
+     publish(payload: { [key: string]: any }, options?: { [key: string]: any }) {
         if (
             !payload ||
             typeof payload !== "object" ||
@@ -277,6 +277,11 @@ class Entry extends Base {
         ) {
             return Promise.reject(new Error("Kindly provide valid parameters"));
         }
+    
+        if (options && typeof options === "object" && !(options instanceof Array)) {
+            payload = { ...payload, ...options };
+        }
+        console.log(payload,"payload")
         this._query = {};
         return this.fetch("publishEntry", payload);
     }
