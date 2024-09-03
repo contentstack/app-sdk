@@ -86,11 +86,14 @@ class Field {
                     ? fieldObj.schema.$uid
                     : fieldObj.uid;
             const path = schemaPath.split(".");
-            let value = event.data
+
+            let value = event.data;
+            let sanitizedObject = Object.create(null);
+            Object.assign(sanitizedObject, value);
             
             path.forEach((key) => {
                 if (value) {
-                    value = Object.assign({} ,value[key]);
+                    value = sanitizedObject[key];
                 }
             });
 
