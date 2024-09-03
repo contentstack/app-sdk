@@ -86,11 +86,11 @@ class Field {
                     ? fieldObj.schema.$uid
                     : fieldObj.uid;
             const path = schemaPath.split(".");
-            let value: Indexable  = new Map(Object.entries(event.data));
+            let value = event.data
             
             path.forEach((key) => {
                 if (value) {
-                    value = value.get(key);
+                    value = Object.create(value[key] as GenericObjectType)
                 }
             });
 
