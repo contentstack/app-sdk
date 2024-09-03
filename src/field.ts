@@ -1,6 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
 import postRobot from "post-robot";
-import { IFieldInitData, IFieldModifierLocationInitData, Indexable } from "./types";
+import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
 
