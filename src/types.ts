@@ -234,7 +234,3 @@ export enum Region {
     AZURE_EU = "AZURE_EU",
     GCP_NA = "GCP_NA",
 }
-
-export declare interface Indexable {
-    [key: string]: any;
-}
