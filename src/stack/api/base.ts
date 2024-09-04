@@ -61,7 +61,7 @@ export default class Base {
   }
 
   fetch(action: string, payload?: { [key: string]: any }) {
-    console.log('fetch------->', action, payload);
+
     const options = {
       payload,
       content_type_uid: this.constructor.contentTypeUid,
@@ -73,8 +73,6 @@ export default class Base {
     if ((action === 'publishEntry' || action === 'publishAsset') && payload?.headers && Object.keys(payload.headers).length > 0) {
       options.headers = payload.headers;
     }
-
-    console.log('options before cleanup------->', options);
 
     if (!payload) { delete options.payload; }
     if (!this.constructor.contentTypeUid) { delete options.content_type_uid; }
