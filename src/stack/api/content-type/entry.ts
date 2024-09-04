@@ -269,7 +269,7 @@ class Entry extends Base {
   }).then(...).catch(...);
   * @return {external:Promise}
   */
-    publish(payload: { [key: string]: any }) {
+    publish(payload: { [key: string]: any }, api_version: string = "") {
         if (
             !payload ||
             typeof payload !== "object" ||
@@ -277,6 +277,11 @@ class Entry extends Base {
         ) {
             return Promise.reject(new Error("Kindly provide valid parameters"));
         }
+
+        if (api_version !== "") {
+            payload = { ...payload, headers: { api_version } };
+        }
+
         this._query = {};
         return this.fetch("publishEntry", payload);
     }
