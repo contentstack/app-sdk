@@ -61,35 +61,40 @@ export default class Base {
   }
 
   fetch(action: string, payload?: { [key: string]: any }) {
-    console.log('fetch------->', action, payload)
+    console.log('fetch------->', action, payload);
+  
     const headers = new Headers();
-    
+  
+    // Only append headers if action is 'publishEntry' or 'publishAsset'
     if (action === 'publishEntry' || action === 'publishAsset') {
-      headers.append('X-API-KEY', 'v3.0.9');
+      if (payload?.headers) {
+        Object.entries(payload.headers).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            headers.append(key, value as string);
+          }
+        });
+      }
     }
   
-    const options = {
+    const options: any = {
       payload,
-      headers: headers,
+      headers,
       content_type_uid: this.constructor.contentTypeUid,
       uid: this.uid,
       params: this._query,
       action: action || `get${this.constructor.module()}`
     };
   
-    if (payload && payload.headers && Object.keys(payload.headers).length > 0) {
-      Object.entries(payload.headers).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          headers.append(key, value as string);
-        }
-      });
-    } else {
+    // Remove headers from options if action is not 'publishEntry' or 'publishAsset'
+    if (action !== 'publishEntry' && action !== 'publishAsset') {
       delete options.headers;
     }
   
+    // Clean up options object
     if (!payload) { delete options.payload; }
     if (!this.constructor.contentTypeUid) { delete options.content_type_uid; }
-    console.log('options------->', options)
+  
+    console.log('options------->', options);
     return this.constructor.connection.sendToParent('stackQuery', options)
       .then(onData)
       .catch(onError);
