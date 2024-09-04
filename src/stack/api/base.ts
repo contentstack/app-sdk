@@ -61,6 +61,7 @@ export default class Base {
   }
 
   fetch(action: string, payload?: { [key: string]: any }) {
+    console.log('fetch------->', action, payload)
     const headers = new Headers();
     
     if (action === 'publishEntry' || action === 'publishAsset') {
@@ -88,7 +89,7 @@ export default class Base {
   
     if (!payload) { delete options.payload; }
     if (!this.constructor.contentTypeUid) { delete options.content_type_uid; }
-  
+    console.log('options------->', options)
     return this.constructor.connection.sendToParent('stackQuery', options)
       .then(onData)
       .catch(onError);
