@@ -63,15 +63,7 @@ export default class Base {
   fetch(action: string, payload?: { [key: string]: any }) {
     console.log('fetch------->', action, payload);
   
-    const headers = new Headers();
-  
-    // Only append headers if action is 'publishEntry' or 'publishAsset'
-    if (action === 'publishEntry' || action === 'publishAsset') {
-      if (Object.entries(payload?.headers).length > 0) {
-        headers.append(payload.headers)
-    }
-    
-    console.log('headers------->', headers);
+    // const headers = new Headers();
     const options: any = {
       payload,
       headers: headers,
@@ -80,6 +72,15 @@ export default class Base {
       params: this._query,
       action: action || `get${this.constructor.module()}`
     };
+  
+    // Only append headers if action is 'publishEntry' or 'publishAsset'
+    if (action === 'publishEntry' || action === 'publishAsset') {
+      if (payload?.headers && Object.keys(payload.headers).length > 0) {
+        options.headers = payload.headers;
+    }
+    
+    console.log('headers------->', options);
+   
   
     // Remove headers from options if action is not 'publishEntry' or 'publishAsset'
     if (action !== 'publishEntry' && action !== 'publishAsset') {
