@@ -61,8 +61,10 @@ export default class Base {
   }
 
   fetch(action: string, payload?: { [key: string]: any }) {
+    const headers = new Headers();
     const options = {
       payload,
+      headers:{"X-API_VERSION": "v2.3.4"},
       content_type_uid: this.constructor.contentTypeUid,
       uid: this.uid,
       params: this._query,
