@@ -67,18 +67,14 @@ export default class Base {
   
     // Only append headers if action is 'publishEntry' or 'publishAsset'
     if (action === 'publishEntry' || action === 'publishAsset') {
-      if (payload?.headers) {
-        Object.entries(payload.headers).forEach(([key, value]) => {
-          if (value !== undefined && value !== null) {
-            headers.append(key, value as string);
-          }
-        });
-      }
+      if (Object.entries(payload?.headers).length > 0) {
+        headers.append(payload.headers)
     }
-  
+    
+    console.log('headers------->', headers);
     const options: any = {
       payload,
-      headers,
+      headers: headers,
       content_type_uid: this.constructor.contentTypeUid,
       uid: this.uid,
       params: this._query,
@@ -98,5 +94,5 @@ export default class Base {
     return this.constructor.connection.sendToParent('stackQuery', options)
       .then(onData)
       .catch(onError);
-  }
+  }}
 }
