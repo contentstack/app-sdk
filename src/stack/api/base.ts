@@ -62,18 +62,35 @@ export default class Base {
 
   fetch(action: string, payload?: { [key: string]: any }) {
     const headers = new Headers();
+    
+    if (action === 'publishEntry' || action === 'publishAsset') {
+      headers.append('X-API-KEY', 'v3.0.9');
+    }
+  
     const options = {
       payload,
-      headers:{"X-API_VERSION": "v2.3.4"},
+      headers: headers,
       content_type_uid: this.constructor.contentTypeUid,
       uid: this.uid,
       params: this._query,
       action: action || `get${this.constructor.module()}`
     };
-
+  
+    if (payload && payload.headers && Object.keys(payload.headers).length > 0) {
+      Object.entries(payload.headers).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          headers.append(key, value as string);
+        }
+      });
+    } else {
+      delete options.headers;
+    }
+  
     if (!payload) { delete options.payload; }
     if (!this.constructor.contentTypeUid) { delete options.content_type_uid; }
+  
     return this.constructor.connection.sendToParent('stackQuery', options)
-      .then(onData).catch(onError);
+      .then(onData)
+      .catch(onError);
   }
 }
