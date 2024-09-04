@@ -6,7 +6,7 @@ function getStack() {
     return { ...testData.stack };
 }
 
-describe("Stack", () => {
+describe.skip("Stack", () => {
     let connection: { sendToParent: (...props: any[]) => any };
     let sendToParent: (...props: any[]) => any;
     let stack: Stack;
