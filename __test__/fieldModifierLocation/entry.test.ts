@@ -1,9 +1,11 @@
+import postRobot from "post-robot";
 import FieldModifierLocationEntry from "../../src/fieldModifierLocation/entry";
 import testData from "../data/testData.json";
 import { IFieldModifierLocationInitData, LocationType } from "../../src/types";
 import generateErrorMessages, {
     ERROR_MESSAGES,
 } from "../../src/utils/errorMessages";
+import EventRegistration from '../../src/EventRegistration';
 
 describe("FieldModifierLocationEntry", () => {
     let entryInstance: FieldModifierLocationEntry;
@@ -11,6 +13,7 @@ describe("FieldModifierLocationEntry", () => {
     let connection: { sendToParent: (...props: any[]) => any };
 
     let emitter: any;
+    let eventRegistration: any;
     function getEntryInitialData(): IFieldModifierLocationInitData {
         return {
             type: LocationType.FIELD_MODIFIER_LOCATION,
@@ -76,6 +79,12 @@ describe("FieldModifierLocationEntry", () => {
     beforeEach(() => {
         sendToParent = () => {};
         connection = { sendToParent };
+        eventRegistration = new EventRegistration({
+            connection: postRobot,
+            installationUID: "installationUID",
+            appUID: "appUID",
+            locationType: LocationType.FIELD,
+        });
 
         emitter = {
             on: (_event: any, cbf: (...props: any[]) => void) => {
@@ -93,7 +102,8 @@ describe("FieldModifierLocationEntry", () => {
         entryInstance = new FieldModifierLocationEntry(
             entryIntialData,
             connection as any,
-            emitter
+            emitter,
+            eventRegistration
         );
     });
 

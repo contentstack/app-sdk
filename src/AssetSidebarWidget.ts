@@ -4,6 +4,7 @@ import postRobot from "post-robot";
 import Asset from "./stack/api/asset";
 import { Asset as AssetType } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
+import EventRegistration from './EventRegistration';
 
 /** Class representing an Asset Sidebar UI Location from Contentstack UI.  */
 
@@ -16,11 +17,13 @@ class AssetSidebarWidget {
     _emitter: EventEmitter;
     _connection: typeof postRobot;
     _changedData?: GenericObjectType;
+    private _eventRegistration: EventRegistration;
 
     constructor(
         initializationData: IAssetSidebarInitData,
         connection: typeof postRobot,
-        emitter: EventEmitter
+        emitter: EventEmitter,
+        eventRegistration: EventRegistration
     ) {
         /**
          * Gets the content type of the current asset.
@@ -32,6 +35,8 @@ class AssetSidebarWidget {
         this._emitter = emitter;
 
         this._connection = connection;
+
+        this._eventRegistration = eventRegistration;
 
         const thisAsset = this;
 
@@ -114,6 +119,7 @@ class AssetSidebarWidget {
         const assetObj = this;
         if (callback && typeof callback === "function") {
             assetObj._emitter.on("assetSave", (event: { data: any }) => {
+                this._eventRegistration.insertEvent("events", "assetSave");
                 callback(event.data);
             });
         } else {
@@ -132,6 +138,7 @@ class AssetSidebarWidget {
             assetObj._emitter.on(
                 "assetChange",
                 (event: { data: AssetType }) => {
+                    this._eventRegistration.insertEvent("events", "assetChange");
                     callback(event.data);
                 }
             );
@@ -151,6 +158,7 @@ class AssetSidebarWidget {
             assetObj._emitter.on(
                 "assetPublish",
                 (event: { data: AssetType }) => {
+                    this._eventRegistration.insertEvent("events", "assetPublish");
                     callback(event.data);
                 }
             );
@@ -170,6 +178,7 @@ class AssetSidebarWidget {
             assetObj._emitter.on(
                 "assetUnPublish",
                 (event: { data: AssetType }) => {
+                    this._eventRegistration.insertEvent("events", "assetUnPublish");
                     callback(event.data);
                 }
             );

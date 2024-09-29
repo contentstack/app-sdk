@@ -1,5 +1,5 @@
 import Entry from "../src/entry";
-import { GenericObjectType } from "../src/types/common.types";
+import EventRegistration from '../src/EventRegistration';
 import testData from "./data/testData.json";
 import { jest } from "@jest/globals";
 
@@ -8,6 +8,7 @@ describe("Entry", () => {
     let emitter: any;
     let entry: Entry;
     let sendToParent: any;
+    let eventRegistration: EventRegistration;
 
     beforeEach(() => {
         sendToParent = () => {};
@@ -33,7 +34,8 @@ describe("Entry", () => {
         entry = new Entry(
             { ...testData, changedData } as any,
             connection as any,
-            emitter
+            emitter,
+            eventRegistration
         );
     });
 
@@ -134,7 +136,7 @@ describe("Entry", () => {
         });
         it("should use custom Field instance if internal flag is set", () => {
             const fieldInstance: any = jest.fn();
-            entry = new Entry(testData as any, connection as any, emitter, {
+            entry = new Entry(testData as any, connection as any, emitter,eventRegistration ,{
                 _internalFlags: {
                     FieldInstance: fieldInstance,
                 },
@@ -172,7 +174,7 @@ describe("Entry", () => {
     it("getField within Create page", function () {
         const dataWithoutEntry = JSON.parse(JSON.stringify(testData));
         dataWithoutEntry.entry = {};
-        entry = new Entry(dataWithoutEntry, connection as any, emitter);
+        entry = new Entry(dataWithoutEntry, connection as any, emitter, eventRegistration);
         expect(() => entry.getField("invaliduid")).toThrowError(
             "The data is unsaved. Save the data before requesting the field."
         );

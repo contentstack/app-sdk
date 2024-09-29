@@ -6,7 +6,7 @@ import {
     IFieldInitData,
     IFieldModifierLocationInitData,
     IRTEInitData,
-    ISidebarInitData,
+    ISidebarInitData
 } from "./types";
 import { Entry as EntryType } from "../src/types/entry.types";
 import {
@@ -16,6 +16,7 @@ import {
 } from "./types/entry.types";
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
+import EventRegistration from "./EventRegistration";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -31,6 +32,7 @@ class Entry {
     _emitter: EventEmitter;
     _changedData?: GenericObjectType;
     _options: IEntryOptions;
+    registeredEvents: EventRegistration;
 
     constructor(
         initializationData:
@@ -40,6 +42,7 @@ class Entry {
             | IFieldModifierLocationInitData,
         connection: typeof postRobot,
         emitter: EventEmitter,
+        eventRegistration: EventRegistration,
         options?: IEntryOptions
     ) {
         /**
@@ -47,6 +50,8 @@ class Entry {
          * @type {Object}
          */
         this.content_type = initializationData.content_type;
+
+        this.registeredEvents = eventRegistration;
 
         this._data = initializationData.entry;
 
@@ -91,21 +96,23 @@ class Entry {
     }
 
     /**
-    * 
-    * 
-    * Safely retrieves the value of a property from an object.
-    * 
-    * This function checks if the object has the specified property as its own property
-    * (i.e., not inherited from the prototype chain) before accessing it. This helps
-    * mitigate prototype pollution vulnerabilities.
-    * 
-    * @param {GenericObjectType} obj - The object from which to retrieve the property.
-    * @param {string | number} key - The key of the property to retrieve.
-    * @returns {any} - The value of the property if it exists, otherwise undefined.
-    */
-   
+     *
+     *
+     * Safely retrieves the value of a property from an object.
+     *
+     * This function checks if the object has the specified property as its own property
+     * (i.e., not inherited from the prototype chain) before accessing it. This helps
+     * mitigate prototype pollution vulnerabilities.
+     *
+     * @param {GenericObjectType} obj - The object from which to retrieve the property.
+     * @param {string | number} key - The key of the property to retrieve.
+     * @returns {any} - The value of the property if it exists, otherwise undefined.
+     */
+
     getPropertySafely(obj: GenericObjectType, key: string | number) {
-        return Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : undefined;
+        return Object.prototype.hasOwnProperty.call(obj, key)
+            ? obj[key]
+            : undefined;
     }
 
     /**
@@ -143,7 +150,7 @@ class Entry {
         try {
             let skipNext = false;
             let skipNextTwo = false;
-            
+
             path.forEach((key: string | number, index: number) => {
                 if (skipNext) {
                     if (skipNextTwo) {
@@ -190,7 +197,9 @@ class Entry {
                         value = this.getPropertySafely(value, path[index + 1]);
                     } else {
                         // block value without uid
-                        value = this.getPropertySafely(value, path[index + 1])[blockId];
+                        value = this.getPropertySafely(value, path[index + 1])[
+                            blockId
+                        ];
                         schema = schema.schema;
                     }
 
@@ -227,6 +236,7 @@ class Entry {
         const entryObj = this;
         if (callback && typeof callback === "function") {
             entryObj._emitter.on("entrySave", (event: { data: EntryType }) => {
+                this.registeredEvents.insertEvent("events", "entrySave");
                 callback(event.data);
             });
         } else {
@@ -248,6 +258,10 @@ class Entry {
                     data: EntryType;
                     resolvedData: GenericObjectType;
                 }) => {
+                    this.registeredEvents.insertEvent(
+                        "events",
+                        "entryChange"
+                    );
                     callback(event.data, event.resolvedData);
                 }
             );
@@ -267,6 +281,10 @@ class Entry {
             entryObj._emitter.on(
                 "entryPublish",
                 (event: { data: PublishDetails }) => {
+                    this.registeredEvents.insertEvent(
+                        "events",
+                        "entryPublish"
+                    );
                     callback(event.data);
                 }
             );
@@ -286,6 +304,10 @@ class Entry {
             entryObj._emitter.on(
                 "entryUnPublish",
                 (event: { data: PublishDetails }) => {
+                    this.registeredEvents.insertEvent(
+                        "events",
+                        "entryUnPublish"
+                    );
                     callback(event.data);
                 }
             );
