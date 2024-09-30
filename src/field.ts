@@ -3,6 +3,7 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
+import EventRegistration from './EventRegistration';
 
 const excludedDataTypesForSetField = [
     "file",
@@ -44,11 +45,13 @@ class Field {
     _resolvedData: GenericObjectType;
     _self: boolean;
     _connection: typeof postRobot;
+    _eventRegistration: EventRegistration;
 
     constructor(
         fieldDataObject: IFieldInitData | IFieldModifierLocationInitData,
         connection: typeof postRobot,
-        emitter: EventEmitter
+        emitter: EventEmitter,
+        eventRegistration: EventRegistration
     ) {
         /**
          * The UID of the current field is defined in the content type of the entry.
@@ -67,6 +70,7 @@ class Field {
          */
         this.schema = fieldDataObject.schema;
         this._emitter = emitter;
+        this._eventRegistration = eventRegistration;
 
         const separatedData = separateResolvedData(this, fieldDataObject.value);
 
@@ -167,6 +171,7 @@ class Field {
             fieldObj._emitter.on("extensionFieldChange", (event: any) => {
                 this._data = event.data;
                 this._resolvedData = event.data;
+                this._eventRegistration.insertEvent("events", "extensionFieldChange");
                 callback(event.data);
             });
         } else {
