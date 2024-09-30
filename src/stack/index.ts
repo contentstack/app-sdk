@@ -145,7 +145,7 @@ class Stack {
    * @return {Object} A promise object which will be resolved with details of the content type.
    */
   getContentTypes(query = {}, params: { [key: string]: any } = {}): Promise<{ [key: string]: any }> {
-    const { branch, ... optionParams } = params;
+    const {branch, ... optionParams} = params;
     optionParams.query = query;
   
     const options: any = {
