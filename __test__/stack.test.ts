@@ -187,7 +187,7 @@ describe("Stack", () => {
             );
         });
 
-                it("getContentTypes", (done) => {
+        it("getContentTypes", (done) => {
             let params: { [key: string]: any } = { sample: "parameter", branch: "sampleBranch" };
             let query = { sample: "query" };
             let expectedParams = { sample: "parameter", query };
