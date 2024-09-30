@@ -65,7 +65,10 @@ class UiLocation {
      */
     private config: GenericObjectType;
 
-    private eventRegistration: EventRegistration;
+    /**
+     * This holds the instance of EventRegistration class used to manage events.
+     */
+    eventRegistration: EventRegistration;
 
     /**
      * This holds the instance of Cross-domain communication library for posting messages between windows.

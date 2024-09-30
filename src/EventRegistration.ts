@@ -3,9 +3,9 @@ import { Subject } from "rxjs";
 import { debounceTime } from "rxjs/operators";
 
 class EventRegistration {
-    private events: { [key: string]: Set<string> } = {};
+    private events: { [key: string]: string[] } = {};
     private eventsSubject = new Subject<{
-        events: { [key: string]: Set<string> };
+        events: { [key: string]: string[] };
         action: string;
     }>();
     _connection: typeof postRobot;
@@ -41,51 +41,38 @@ class EventRegistration {
             });
     }
 
-    private onChange(events: { [key: string]: Set<string> }, action: string) {
-        const serializedEvents = this.serializeEvents(events);
-
+    private onChange(events: { [key: string]: string[] }, action: string) {
         this._connection.sendToParent("registeredEvents", {
             [this.installationUID]: {
                 appUID: this.appUID,
                 registeredEvents: {
-                    [this.locationType]: serializedEvents,
+                    [this.locationType]: events,
                 },
                 action,
             },
         });
     }
 
-    private serializeEvents(events: { [key: string]: Set<string> }): {
-        [key: string]: string[];
-    } {
-        return Object.fromEntries(
-            Object.entries(events).map(([key, value]) => [
-                key,
-                Array.from(value),
-            ])
-        );
-    }
-
     insertEvent(eventName: string, eventType: string) {
         if (!this.events[eventName]) {
-            this.events[eventName] = new Set();
+            this.events[eventName] = [];
         }
         if (!this.hasEvent(eventName, eventType)) {
-            this.events[eventName].add(eventType);
+            this.events[eventName].push(eventType);
             this.eventsSubject.next({ events: this.events, action: "insert" });
         }
     }
 
     hasEvent(eventName: string, eventType: string) {
-        return this.events[eventName]?.has(eventType);
+        return this.events[eventName]?.includes(eventType);
     }
 
     removeEvent(eventName: string, eventType: string) {
         if (this.events[eventName]) {
-            const prevSize = this.events[eventName].size;
-            this.events[eventName].delete(eventType);
-            if (this.events[eventName].size !== prevSize) {
-                if (this.events[eventName].size === 0) {
+            const index = this.events[eventName].indexOf(eventType);
+            if (index !== -1) {
+                this.events[eventName].splice(index, 1);
+                if (this.events[eventName].length === 0) {
                     delete this.events[eventName];
                 }
                 this.eventsSubject.next({
@@ -101,7 +88,7 @@ class EventRegistration {
     }
 
     // Method to retrieve values from the events object
-    getEventTypes(eventName: string): Set<string> | undefined {
+    getEventTypes(eventName: string): string[] | undefined {
         return this.events[eventName];
     }
 }
