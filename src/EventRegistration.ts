@@ -43,13 +43,12 @@ class EventRegistration {
 
     private onChange(events: { [key: string]: string[] }, action: string) {
         this._connection.sendToParent("registeredEvents", {
-            [this.installationUID]: {
-                appUID: this.appUID,
-                registeredEvents: {
-                    [this.locationType]: events,
-                },
-                action,
+            installationUID: this.installationUID,
+            appUID: this.appUID,
+            locationEvents: {
+                [this.locationType]: events,
             },
+            action,
         });
     }
 
