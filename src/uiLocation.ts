@@ -307,7 +307,7 @@ class UiLocation {
 
         try {
             postRobot.on("extensionEvent", async (event) => {
-                this.eventRegistration.insertEvent("events", event.data.type);
+                this.eventRegistration.insertEvent("events", event.data.name);
                 if (event.data.name === "entrySave") {
                     emitter.emitEvent("entrySave", [{ data: event.data.data }]);
                     emitter.emitEvent("updateFields", [
