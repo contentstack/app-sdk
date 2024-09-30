@@ -188,18 +188,21 @@ describe("Stack", () => {
         });
 
         it("getContentTypes", (done) => {
-            let params: { [key: string]: any } = { sample: "parameter" };
-            let query = { sample: "query" };
-            stack.getContentTypes(query, params).then((data) => {
-                params.query = query;
+            const params: { [key: string]: any } = { sample: "parameter" };
+            const query = { sample: "query" };
+            const branch = "sampleBranch"; 
+        
+            stack.getContentTypes(branch, query, params).then((data) => {
                 expect(data).toEqual({});
-                expect(connection.sendToParent).toHaveBeenCalledWith(
-                    "stackQuery",
-                    { params, action: "getContentTypes" }
-                );
+                expect(connection.sendToParent).toHaveBeenCalledWith("stackQuery", {
+                    params: { ...params, query }, 
+                    action: "getContentTypes",
+                    ...(branch && { headers: { branch } }), 
+                });
                 done();
             });
         });
+        
 
         it("getContentTypes error case", async () => {
             let newStack = new Stack(
