@@ -283,7 +283,7 @@ class UiLocation {
             default: {
                 initializationData.self = true;
                 this.location.CustomField = {
-                    field: new Field(initializationData, postRobot, emitter),
+                    field: new Field(initializationData, postRobot, emitter, this.eventRegistration),
                     fieldConfig: initializationData.field_config,
                     entry: new Entry(
                         initializationData,
