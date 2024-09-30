@@ -144,10 +144,18 @@ class Stack {
    * @param {Object} params Optional parameters for the GET call
    * @return {Object} A promise object which will be resolved with details of the content type.
    */
-  getContentTypes(query = {}, params: { [key: string]: any } = {}): Promise<{ [key: string]: any }> {
+  getContentTypes(branch?: string, query = {}, params: { [key: string]: any } = {}): Promise<{ [key: string]: any }> {
     const optionParams = params;
     optionParams.query = query;
-    const options = { params: optionParams, action: 'getContentTypes' };
+  
+    const options: any = {
+      params: optionParams,
+      action: 'getContentTypes',
+    };
+
+    if (branch) {
+      options.headers = { branch };
+    }
     return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
   }
 
