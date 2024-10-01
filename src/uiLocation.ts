@@ -30,6 +30,7 @@ import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
+import EventRegistry from "./EventRegistry";
 
 const emitter = new EventEmitter();
 
@@ -349,6 +350,20 @@ class UiLocation {
         } catch (err) {
             console.error("Extension Event", err);
         }
+        emitter.addListener(
+            "_eventRegistration",
+            this.handleEventRegistration.bind(this)
+        );
+    }
+
+    private handleEventRegistration(event: any) {
+        const eventRegistry = new EventRegistry({
+            installationUID: this.installationUID,
+            appUID: this.appUID,
+            locationType: this.type,
+            connection: postRobot,
+        });
+        eventRegistry.register(event.name);
     }
 
     pulse = (eventName: string, metadata: GenericObjectType): void => {
