@@ -1,5 +1,4 @@
 import EventEmitter from "wolfy87-eventemitter";
-
 import AssetSidebarWidget from "../src/AssetSidebarWidget";
 import { IAssetSidebarInitData, LocationType } from "../src/types";
 import Asset from "../src/stack/api/asset";
@@ -38,17 +37,19 @@ describe("AssetSidebarWidget", () => {
         };
 
         emitter = {
-            on: (_event, cbf) => {
+            on: (_event: string, cbf: (data: { state: string }) => void) => {
                 setTimeout(() => {
                     cbf({ state: "full_width" });
                 }, 50);
             },
-        } as EventEmitter;
+            emitEvent: (_s: string, _cb: () => void) => {}
+        } as unknown as EventEmitter;
 
         jest.spyOn(emitter, "on");
 
         connection = { sendToParent };
         jest.spyOn(connection, "sendToParent");
+
         assetSidebarWidget = new AssetSidebarWidget(
             mockInitData as IAssetSidebarInitData,
             connection as any,
