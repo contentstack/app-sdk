@@ -40,10 +40,6 @@ class EventRegistry {
         });
     }
 
-    private clearEvents() {
-        this.events = [];
-    }
-
     public register(eventType: string) {
         this.events.push(eventType);
         this.eventsSubject.next(eventType);
