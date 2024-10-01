@@ -18,17 +18,22 @@ class EventRegistry {
     private appUID: string;
     private locationType: string;
 
-    constructor({ connection, installationUID, appUID, locationType }: EventRegistryConfig) {
+    constructor({
+        connection,
+        installationUID,
+        appUID,
+        locationType,
+    }: EventRegistryConfig) {
         this._connection = connection;
         this.installationUID = installationUID;
         this.appUID = appUID;
         this.locationType = locationType;
 
-        this.eventsSubject.pipe(
-            debounceTime(this.debounceInterval)
-        ).subscribe(() => {
-            this.sendRegisteredEvents();
-        });
+        this.eventsSubject
+            .pipe(debounceTime(this.debounceInterval))
+            .subscribe(() => {
+                this.sendRegisteredEvents();
+            });
     }
 
     private sendRegisteredEvents() {

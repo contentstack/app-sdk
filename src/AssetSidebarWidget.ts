@@ -116,7 +116,9 @@ class AssetSidebarWidget {
             assetObj._emitter.on("assetSave", (event: { data: any }) => {
                 callback(event.data);
             });
-            this._emitter.emitEvent("_eventRegistration",[{name:"assetSave"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "assetSave" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -136,7 +138,9 @@ class AssetSidebarWidget {
                     callback(event.data);
                 }
             );
-            this._emitter.emitEvent("_eventRegistration",[{name:"entryChange"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryChange" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -156,7 +160,9 @@ class AssetSidebarWidget {
                     callback(event.data);
                 }
             );
-            this._emitter.emitEvent("_eventRegistration",[{name:"assetPublish"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "assetPublish" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -176,7 +182,9 @@ class AssetSidebarWidget {
                     callback(event.data);
                 }
             );
-            this._emitter.emitEvent("_eventRegistration",[{name:"assetUnPublish"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "assetUnPublish" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
