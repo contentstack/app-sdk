@@ -3,7 +3,7 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
-import EventRegistry from './EventRegistry';
+import EventRegistry from "./EventRegistry";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -170,7 +170,9 @@ class Field {
                 this._resolvedData = event.data;
                 callback(event.data);
             });
-            this._emitter.emitEvent("_eventRegistration",[{name:"extensionFieldChange"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "extensionFieldChange" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }

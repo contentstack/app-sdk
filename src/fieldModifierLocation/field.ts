@@ -93,7 +93,7 @@ class FieldModifierLocationField {
             let value = event.data;
             let sanitizedObject = Object.create(null);
             Object.assign(sanitizedObject, value);
-            
+
             path.forEach((key) => {
                 if (value) {
                     value = sanitizedObject[key];

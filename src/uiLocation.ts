@@ -30,10 +30,9 @@ import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import EventRegistry from './EventRegistry';
+import EventRegistry from "./EventRegistry";
 
 const emitter = new EventEmitter();
-
 
 /**
  * Class representing an UI Location from Contentstack App SDK.
@@ -184,11 +183,7 @@ class UiLocation {
             }
             case LocationType.WIDGET: {
                 this.location.SidebarWidget = {
-                    entry: new Entry(
-                        initializationData,
-                        postRobot,
-                        emitter
-                    ),
+                    entry: new Entry(initializationData, postRobot, emitter),
                     stack: new Stack(initializationData.stack, postRobot, {
                         currentBranch: initializationData.currentBranch,
                     }),
@@ -270,11 +265,7 @@ class UiLocation {
                 this.location.CustomField = {
                     field: new Field(initializationData, postRobot, emitter),
                     fieldConfig: initializationData.field_config,
-                    entry: new Entry(
-                        initializationData,
-                        postRobot,
-                        emitter
-                    ),
+                    entry: new Entry(initializationData, postRobot, emitter),
                     stack: new Stack(initializationData.stack, postRobot, {
                         currentBranch: initializationData.currentBranch,
                     }),
@@ -359,11 +350,13 @@ class UiLocation {
         } catch (err) {
             console.error("Extension Event", err);
         }
-        emitter.addListener("_eventRegistration", this.handleEventRegistration.bind(this));
-
+        emitter.addListener(
+            "_eventRegistration",
+            this.handleEventRegistration.bind(this)
+        );
     }
 
-    private handleEventRegistration(event: any) { 
+    private handleEventRegistration(event: any) {
         const eventRegistry = new EventRegistry({
             installationUID: this.installationUID,
             appUID: this.appUID,

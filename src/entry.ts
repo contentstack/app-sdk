@@ -234,7 +234,9 @@ class Entry {
             entryObj._emitter.on("entrySave", (event: { data: EntryType }) => {
                 callback(event.data);
             });
-            this._emitter.emitEvent("_eventRegistration",[{name:"entrySave"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entrySave" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -257,7 +259,9 @@ class Entry {
                     callback(event.data, event.resolvedData);
                 }
             );
-            this._emitter.emitEvent("_eventRegistration",[{name:"entryChange"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryChange" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -277,7 +281,9 @@ class Entry {
                     callback(event.data);
                 }
             );
-            this._emitter.emitEvent("_eventRegistration",[{name:"entryPublish"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryPublish" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -297,7 +303,9 @@ class Entry {
                     callback(event.data);
                 }
             );
-            this._emitter.emitEvent("_eventRegistration",[{name:"entryUnPublish"}]);
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryUnPublish" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }

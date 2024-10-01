@@ -11,9 +11,8 @@ class FieldModifierLocationEntry extends Entry {
         initializationData: IFieldModifierLocationInitData,
         connection: typeof postRobot,
         emitter: EventEmitter
-
     ) {
-        super(initializationData, connection, emitter ,{
+        super(initializationData, connection, emitter, {
             _internalFlags: {
                 FieldInstance: Field as any,
             },
