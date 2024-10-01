@@ -6,7 +6,7 @@ import {
     IFieldInitData,
     IFieldModifierLocationInitData,
     IRTEInitData,
-    ISidebarInitData
+    ISidebarInitData,
 } from "./types";
 import { Entry as EntryType } from "../src/types/entry.types";
 import {
@@ -16,7 +16,7 @@ import {
 } from "./types/entry.types";
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
-import EventRegistration from "./EventRegistration";
+import EventRegistry from "./EventRegistry";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -32,7 +32,6 @@ class Entry {
     _emitter: EventEmitter;
     _changedData?: GenericObjectType;
     _options: IEntryOptions;
-    registeredEvents: EventRegistration;
 
     constructor(
         initializationData:
@@ -42,7 +41,6 @@ class Entry {
             | IFieldModifierLocationInitData,
         connection: typeof postRobot,
         emitter: EventEmitter,
-        eventRegistration: EventRegistration,
         options?: IEntryOptions
     ) {
         /**
@@ -50,8 +48,6 @@ class Entry {
          * @type {Object}
          */
         this.content_type = initializationData.content_type;
-
-        this.registeredEvents = eventRegistration;
 
         this._data = initializationData.entry;
 
@@ -236,9 +232,9 @@ class Entry {
         const entryObj = this;
         if (callback && typeof callback === "function") {
             entryObj._emitter.on("entrySave", (event: { data: EntryType }) => {
-                this.registeredEvents.insertEvent("events", "entrySave");
                 callback(event.data);
             });
+            this._emitter.emitEvent("_eventRegistration",[{name:"entrySave"}]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -258,13 +254,10 @@ class Entry {
                     data: EntryType;
                     resolvedData: GenericObjectType;
                 }) => {
-                    this.registeredEvents.insertEvent(
-                        "events",
-                        "entryChange"
-                    );
                     callback(event.data, event.resolvedData);
                 }
             );
+            this._emitter.emitEvent("_eventRegistration",[{name:"entryChange"}]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -281,13 +274,10 @@ class Entry {
             entryObj._emitter.on(
                 "entryPublish",
                 (event: { data: PublishDetails }) => {
-                    this.registeredEvents.insertEvent(
-                        "events",
-                        "entryPublish"
-                    );
                     callback(event.data);
                 }
             );
+            this._emitter.emitEvent("_eventRegistration",[{name:"entryPublish"}]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -304,13 +294,10 @@ class Entry {
             entryObj._emitter.on(
                 "entryUnPublish",
                 (event: { data: PublishDetails }) => {
-                    this.registeredEvents.insertEvent(
-                        "events",
-                        "entryUnPublish"
-                    );
                     callback(event.data);
                 }
             );
+            this._emitter.emitEvent("_eventRegistration",[{name:"entryUnPublish"}]);
         } else {
             throw Error("Callback must be a function");
         }

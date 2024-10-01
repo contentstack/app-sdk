@@ -30,9 +30,10 @@ import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import EventRegistration from "./EventRegistration";
+import EventRegistry from './EventRegistry';
 
 const emitter = new EventEmitter();
+
 
 /**
  * Class representing an UI Location from Contentstack App SDK.
@@ -64,11 +65,6 @@ class UiLocation {
      * The configuration set for an app.
      */
     private config: GenericObjectType;
-
-    /**
-     * This holds the instance of EventRegistration class used to manage events.
-     */
-    eventRegistration: EventRegistration;
 
     /**
      * This holds the instance of Cross-domain communication library for posting messages between windows.
@@ -137,13 +133,6 @@ class UiLocation {
 
         this.type = initializationData.type;
 
-        this.eventRegistration = new EventRegistration({
-            installationUID: this.installationUID,
-            appUID: this.appUID,
-            locationType: this.type,
-            connection: postRobot,
-        });
-
         this.store = new Store(postRobot);
 
         this.stack = new Stack(initializationData.stack, postRobot, {
@@ -198,8 +187,7 @@ class UiLocation {
                     entry: new Entry(
                         initializationData,
                         postRobot,
-                        emitter,
-                        this.eventRegistration
+                        emitter
                     ),
                     stack: new Stack(initializationData.stack, postRobot, {
                         currentBranch: initializationData.currentBranch,
@@ -229,8 +217,7 @@ class UiLocation {
                 this.location.AssetSidebarWidget = new AssetSidebarWidget(
                     initializationData,
                     postRobot,
-                    emitter,
-                    this.eventRegistration
+                    emitter
                 );
                 break;
             }
@@ -242,8 +229,7 @@ class UiLocation {
                         entry: new Entry(
                             initializationData as IRTEInitData,
                             postRobot,
-                            emitter,
-                            this.eventRegistration
+                            emitter
                         ),
                     };
                 });
@@ -256,8 +242,7 @@ class UiLocation {
                     entry: new FieldModifierLocationEntry(
                         initializationData,
                         postRobot,
-                        emitter,
-                        this.eventRegistration
+                        emitter
                     ),
                     stack: new Stack(initializationData.stack, postRobot, {
                         currentBranch: initializationData.currentBranch,
@@ -283,13 +268,12 @@ class UiLocation {
             default: {
                 initializationData.self = true;
                 this.location.CustomField = {
-                    field: new Field(initializationData, postRobot, emitter, this.eventRegistration),
+                    field: new Field(initializationData, postRobot, emitter),
                     fieldConfig: initializationData.field_config,
                     entry: new Entry(
                         initializationData,
                         postRobot,
-                        emitter,
-                        this.eventRegistration
+                        emitter
                     ),
                     stack: new Stack(initializationData.stack, postRobot, {
                         currentBranch: initializationData.currentBranch,
@@ -307,7 +291,6 @@ class UiLocation {
 
         try {
             postRobot.on("extensionEvent", async (event) => {
-                this.eventRegistration.insertEvent("events", event.data.name);
                 if (event.data.name === "entrySave") {
                     emitter.emitEvent("entrySave", [{ data: event.data.data }]);
                     emitter.emitEvent("updateFields", [
@@ -376,6 +359,18 @@ class UiLocation {
         } catch (err) {
             console.error("Extension Event", err);
         }
+        emitter.addListener("_eventRegistration", this.handleEventRegistration.bind(this));
+
+    }
+
+    private handleEventRegistration(event: any) { 
+        const eventRegistry = new EventRegistry({
+            installationUID: this.installationUID,
+            appUID: this.appUID,
+            locationType: this.type,
+            connection: postRobot,
+        });
+        eventRegistry.register(event.name);
     }
 
     pulse = (eventName: string, metadata: GenericObjectType): void => {

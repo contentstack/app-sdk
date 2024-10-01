@@ -1,9 +1,7 @@
 import EventEmitter from "wolfy87-eventemitter";
-import postRobot from "post-robot"; 
 import AssetSidebarWidget from "../src/AssetSidebarWidget";
 import { IAssetSidebarInitData, LocationType } from "../src/types";
 import Asset from "../src/stack/api/asset";
-import EventRegistration from '../src/EventRegistration';
 
 jest.mock("post-robot", () => ({
     __esModule: true,
@@ -32,7 +30,6 @@ describe("AssetSidebarWidget", () => {
     let connection: { sendToParent: (...props: any[]) => any };
     let sendToParent;
     let emitter: EventEmitter;
-    let eventRegistration: EventRegistration;
 
     beforeEach(function () {
         sendToParent = function () {
@@ -40,30 +37,23 @@ describe("AssetSidebarWidget", () => {
         };
 
         emitter = {
-            on: (_event, cbf) => {
+            on: (_event: string, cbf: (data: { state: string }) => void) => {
                 setTimeout(() => {
                     cbf({ state: "full_width" });
                 }, 50);
             },
-        } as EventEmitter;
+            emitEvent: (_s: string, _cb: () => void) => {}
+        } as unknown as EventEmitter;
 
         jest.spyOn(emitter, "on");
 
         connection = { sendToParent };
         jest.spyOn(connection, "sendToParent");
 
-        eventRegistration = new EventRegistration({
-            connection: postRobot,
-            installationUID: "installationUID",
-            appUID: "appUID",
-            locationType: LocationType.ASSET_SIDEBAR_WIDGET,
-        });
-
         assetSidebarWidget = new AssetSidebarWidget(
             mockInitData as IAssetSidebarInitData,
             connection as any,
-            emitter,
-            eventRegistration
+            emitter
         );
     });
 
