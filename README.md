@@ -4,6 +4,14 @@ The Contentstack App SDK allows you to customize your applications. This documen
 
 ## Getting started
 
+Include the compiled version of the extension client library by adding the following line to your application.
+
+<script
+    src="https://unpkg.com/@contentstack/app-sdk@2.1.0/dist/index.js"
+    integrity="sha512-wlEBUkZA+vdcHXRTK69fZvK44c5Y8KeU/kw9OOShWNDjddtrIB8a1lfbLjH5nKWQqkWZ2L9VYEqr96P7qx3ZZg=="
+    crossorigin="anonymous"
+></script>
+
 To include the App SDK in your project, you need to run the following command:
 
 ```sh
