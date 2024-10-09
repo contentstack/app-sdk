@@ -18,7 +18,9 @@
         "prettier:fix": "npx prettier src --write",
         "lint:fix": "eslint --fix",
         "prepare": "npm run build && husky install",
-        "format": "npm run prettier:fix && npm run lint:fix"
+        "format": "npm run prettier:fix && npm run lint:fix",
+        "generate:sri": "node ./subresourceIntegrity.js",
+        "generate:readme": "npm run build && npm run generate:sri && npx @appnest/readme generate"
     },
     "keywords": [],
     "author": {
@@ -56,8 +58,10 @@
         "webpack-dev-server": "^4.7.3"
     },
     "dependencies": {
+        "jsonfile": "^6.1.0",
         "loader-utils": "^3.2.1",
         "post-robot": "^8.0.31",
+        "ssri": "^12.0.0",
         "wolfy87-eventemitter": "^5.2.9"
     },
     "files": [
