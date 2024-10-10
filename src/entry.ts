@@ -16,6 +16,7 @@ import {
 } from "./types/entry.types";
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
+import EventRegistry from "./EventRegistry";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -91,21 +92,23 @@ class Entry {
     }
 
     /**
-    * 
-    * 
-    * Safely retrieves the value of a property from an object.
-    * 
-    * This function checks if the object has the specified property as its own property
-    * (i.e., not inherited from the prototype chain) before accessing it. This helps
-    * mitigate prototype pollution vulnerabilities.
-    * 
-    * @param {GenericObjectType} obj - The object from which to retrieve the property.
-    * @param {string | number} key - The key of the property to retrieve.
-    * @returns {any} - The value of the property if it exists, otherwise undefined.
-    */
-   
+     *
+     *
+     * Safely retrieves the value of a property from an object.
+     *
+     * This function checks if the object has the specified property as its own property
+     * (i.e., not inherited from the prototype chain) before accessing it. This helps
+     * mitigate prototype pollution vulnerabilities.
+     *
+     * @param {GenericObjectType} obj - The object from which to retrieve the property.
+     * @param {string | number} key - The key of the property to retrieve.
+     * @returns {any} - The value of the property if it exists, otherwise undefined.
+     */
+
     getPropertySafely(obj: GenericObjectType, key: string | number) {
-        return Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : undefined;
+        return Object.prototype.hasOwnProperty.call(obj, key)
+            ? obj[key]
+            : undefined;
     }
 
     /**
@@ -143,7 +146,7 @@ class Entry {
         try {
             let skipNext = false;
             let skipNextTwo = false;
-            
+
             path.forEach((key: string | number, index: number) => {
                 if (skipNext) {
                     if (skipNextTwo) {
@@ -190,7 +193,9 @@ class Entry {
                         value = this.getPropertySafely(value, path[index + 1]);
                     } else {
                         // block value without uid
-                        value = this.getPropertySafely(value, path[index + 1])[blockId];
+                        value = this.getPropertySafely(value, path[index + 1])[
+                            blockId
+                        ];
                         schema = schema.schema;
                     }
 
@@ -229,6 +234,9 @@ class Entry {
             entryObj._emitter.on("entrySave", (event: { data: EntryType }) => {
                 callback(event.data);
             });
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entrySave" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -251,6 +259,9 @@ class Entry {
                     callback(event.data, event.resolvedData);
                 }
             );
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryChange" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -270,6 +281,9 @@ class Entry {
                     callback(event.data);
                 }
             );
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryPublish" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
@@ -289,6 +303,9 @@ class Entry {
                     callback(event.data);
                 }
             );
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryUnPublish" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
