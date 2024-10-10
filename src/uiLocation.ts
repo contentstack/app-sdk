@@ -30,8 +30,8 @@ import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import CMA from './api';
 import { ApiRequestProps } from './types/stack.types';
+import { dispatchPostRobotRequest } from './utils/adapter';
 
 const emitter = new EventEmitter();
 
@@ -76,7 +76,7 @@ class UiLocation {
      */
     stack: Stack;
 
-    api: (payload:ApiRequestProps)=> Promise<any>;
+    api: (payload:ApiRequestProps)=> Promise<GenericObjectType>;
 
     /**
      * Store to persist data for the app.
@@ -141,7 +141,7 @@ class UiLocation {
             currentBranch: initializationData.currentBranch,
         });
 
-        this.api = (payload:ApiRequestProps)=> new CMA(postRobot).api(payload);
+        this.api = (payload:ApiRequestProps)=> dispatchPostRobotRequest(postRobot, payload);
 
         this.metadata = new Metadata(postRobot);
 
