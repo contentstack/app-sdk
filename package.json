@@ -58,7 +58,6 @@
     "dependencies": {
         "loader-utils": "^3.2.1",
         "post-robot": "^8.0.31",
-        "uuid": "^10.0.0",
         "wolfy87-eventemitter": "^5.2.9"
     },
     "files": [
