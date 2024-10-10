@@ -1,5 +1,4 @@
 //@ts-nocheck
-import { v4 as uuidv4 } from 'uuid';
 import Query from './query';
 import { transform, addParam } from '../utils';
 import { dispatchPostRobotRequest } from "../../utils/adapter.ts";
