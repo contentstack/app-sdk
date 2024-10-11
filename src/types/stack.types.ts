@@ -151,3 +151,19 @@ export interface PublishDetails extends AnyProperty {
     publish_with_reference: boolean;
     rules: GenericObjectType;
 }
+
+export type RequestMethods = "GET" | "POST" | "PUT" | "DELETE";
+
+export type ApiRequestProps = {
+        method: RequestMethods,
+        url: string,
+        headers?: GenericObjectType,
+        body?: unknown,
+        params?:GenericObjectType
+        multipart_data?: {
+          [key:string]: {
+            "type": string,
+            "value": any
+          }
+        }
+}

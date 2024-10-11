@@ -1,7 +1,8 @@
 //@ts-nocheck
-
 import Query from './query';
 import { transform, addParam } from '../utils';
+import { dispatchPostRobotRequest } from "../../utils/adapter.ts";
+import { ApiRequestProps } from '../../types/stack.types';
 
 
 function onData(data: { data: any; }) {
@@ -79,4 +80,5 @@ export default class Base {
     return this.constructor.connection.sendToParent('stackQuery', options)
       .then(onData).catch(onError);
   }
+
 }
