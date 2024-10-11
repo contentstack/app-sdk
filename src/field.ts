@@ -3,7 +3,7 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
-import { Entry as EntryType } from "../src/types/entry.types";
+import EventRegistry from "./EventRegistry";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -87,11 +87,13 @@ class Field {
                     ? fieldObj.schema.$uid
                     : fieldObj.uid;
             const path = schemaPath.split(".");
-            let value = event.data;
 
+            let value = event.data;
+            let sanitizedObject = Object.create(null);
+            Object.assign(sanitizedObject, value);
             path.forEach((key) => {
                 if (value) {
-                    value = value[key];
+                    value = sanitizedObject[key];
                 }
             });
 
@@ -168,6 +170,9 @@ class Field {
                 this._resolvedData = event.data;
                 callback(event.data);
             });
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "extensionFieldChange" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }

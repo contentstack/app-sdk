@@ -1,5 +1,4 @@
 import Entry from "../src/entry";
-import { GenericObjectType } from "../src/types/common.types";
 import testData from "./data/testData.json";
 import { jest } from "@jest/globals";
 
@@ -134,7 +133,7 @@ describe("Entry", () => {
         });
         it("should use custom Field instance if internal flag is set", () => {
             const fieldInstance: any = jest.fn();
-            entry = new Entry(testData as any, connection as any, emitter, {
+            entry = new Entry(testData as any, connection as any, emitter ,{
                 _internalFlags: {
                     FieldInstance: fieldInstance,
                 },

@@ -145,9 +145,17 @@ class Stack {
    * @return {Object} A promise object which will be resolved with details of the content type.
    */
   getContentTypes(query = {}, params: { [key: string]: any } = {}): Promise<{ [key: string]: any }> {
-    const optionParams = params;
+    const {branch, ...optionParams} = params;
     optionParams.query = query;
-    const options = { params: optionParams, action: 'getContentTypes' };
+  
+    const options: any = {
+      params: optionParams,
+      action: 'getContentTypes',
+    };
+
+    if (branch) {
+      options.headers = { branch };
+    }
     return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
   }
 
@@ -284,6 +292,41 @@ class Stack {
       }
       const options = { params: {uid : variant_uid}, action: 'getVariantById' };
       return this._connection.sendToParent('stackQuery', options).then(onData).catch(onError);
+    }
+    /**
+     * This API allows you to retrieve data of a single global field of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api#get-single-global-field| Global Field API} requests. This method returns a Promise object.
+     * @param {string} uid of the desired global field
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with global field details.
+     */
+    getGlobalField(uid: string, params = {}): Promise<{ [key: string]: GenericObjectType }> {
+      if (!uid) {
+          return Promise.reject(new Error("uid is required"));
+      }
+      const options = { uid, params, action: "getGlobalField" };
+      return this._connection
+          .sendToParent("stackQuery", options)
+          .then(onData)
+          .catch(onError);
+    }
+
+    /**
+     * This API allows you to retrieve data of all global fields of a stack using the {@link https://www.contentstack.com/docs/developers/apis/content-management-api#get-all-global-fields| Global Fields API} requests. This method returns a Promise object.
+     * @param {Object} query Query for the GET call
+     * @param {Object} params Optional parameters for the GET call
+     * @return {Object} A promise object which will be resolved with global field details.
+     */
+    getGlobalFields(
+        query = {},
+        params: { [key: string]: GenericObjectType } = {}
+    ): Promise<{ [key: string]: GenericObjectType }> {
+        const optionParams = params;
+        optionParams.query = query;
+        const options = { params: optionParams, action: "getGlobalFields" };
+        return this._connection
+            .sendToParent("stackQuery", options)
+            .then(onData)
+            .catch(onError);
     }
 }
 
