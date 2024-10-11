@@ -139,6 +139,7 @@ export declare interface IRteParam {
     getEmbeddedItems: () => { [key: string]: any };
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
+    getConfig: <T>() => { [key: string]: T };
 }
 
 export declare type IRteParamWithPreventDefault = {
@@ -206,7 +207,7 @@ type IDynamicFunction = (
 
 type IHoveringToolbarOptions = {
     autoWidth?: boolean;
-}
+};
 export declare interface IConfig {
     title: string;
     icon: React.ReactElement | null;
@@ -236,7 +237,7 @@ export declare interface IRegistry {
     };
     hoveringToolbarOptions?: {
         autoWidth: true;
-    }
+    };
     isContentstackElement: boolean;
     beforeChildrenRender?: (...params: any) => any;
     beforeElementRender?: (...params: any) => any;
