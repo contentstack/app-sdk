@@ -112,6 +112,15 @@ class UiLocation {
     readonly region: Region;
     version: number | null;
 
+    ids: {
+        apiKey: string;
+        appUID: string;
+        installationUID: string;
+        locationUID: string;
+        orgUID: string;
+        userUID: string;
+    };
+
     /**
      * This holds the information of the currently running UI location of an App.
      */
@@ -155,6 +164,15 @@ class UiLocation {
         this.metadata = new Metadata(postRobot);
 
         this.config = initializationData.config ?? {};
+
+        this.ids = {
+            apiKey: initializationData.stack.api_key,
+            appUID: initializationData.app_id,
+            installationUID: initializationData.installation_uid,
+            locationUID: initializationData.extension_uid,
+            orgUID: initializationData.stack.org_uid,
+            userUID: initializationData.user.uid,
+        };
 
         this.location = {
             DashboardWidget: null,
