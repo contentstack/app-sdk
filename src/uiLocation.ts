@@ -5,6 +5,7 @@ import AssetSidebarWidget from "./AssetSidebarWidget";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { AppConfig } from "./appConfig";
 import Entry from "./entry";
+import EventRegistry from "./EventRegistry";
 import Field from "./field";
 import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
 import FieldModifierLocationField from "./fieldModifierLocation/field";
@@ -31,8 +32,8 @@ import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { ApiRequestProps } from './types/stack.types';
-import { dispatchPostRobotRequest } from './utils/adapter';
-import EventRegistry from "./EventRegistry";
+import { createSDKAdapter, dispatchPostRobotRequest } from './utils/adapter';
+import { AxiosRequestConfig, AxiosResponse } from './types/axios.type';
 
 const emitter = new EventEmitter();
 
@@ -78,6 +79,11 @@ class UiLocation {
     stack: Stack;
 
     api: (payload:ApiRequestProps)=> Promise<GenericObjectType>;
+
+    /**
+     * This holds the instance of the createAdapter method that provides ability to app-sdk to integrate javascript management sdk.
+    */
+    createAdapter: (config: AxiosRequestConfig) => Promise<AxiosResponse<GenericObjectType>>;
 
     /**
      * Store to persist data for the app.
@@ -143,6 +149,8 @@ class UiLocation {
         });
 
         this.api = (payload:ApiRequestProps)=> dispatchPostRobotRequest(postRobot, payload);
+
+        this.createAdapter = createSDKAdapter(postRobot);
 
         this.metadata = new Metadata(postRobot);
 

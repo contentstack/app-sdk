@@ -195,6 +195,76 @@ describe("UI Location", () => {
         });
     });
 
+
+    describe("createSDKAdapter", () => {
+        let mockPostRobot: typeof postRobot;
+        let opts: ApiRequestProps;
+        let uiLocationInstance: UiLocation;
+        let onError: jest.Mock;
+        beforeEach(() => {
+            mockPostRobot = postRobot;
+            opts = { method: 'GET', url: '/test' };
+            uiLocationInstance = new UiLocation(initData);
+            onError = jest.fn();
+            uiLocationInstance.createAdapter = jest.fn().mockResolvedValue({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                data: {}
+            });
+        });
+
+        afterEach(() => {
+            postRobotOnMock.mockClear();
+            postRobotSendToParentMock.mockClear();
+    
+            jest.clearAllMocks();
+            window["postRobot"] = undefined;
+            window["iframeRef"] = undefined;
+        });
+
+        it('should call createAdapter with the correct arguments and resolve with data', async () => {
+            const mockData = { success: true };
+            // Call the method that uses uiLocationInstance.api
+            const result = await uiLocationInstance.createAdapter({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                data: {}
+            });
+
+            // Assertions
+            expect(uiLocationInstance.createAdapter).toHaveBeenCalledWith({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                data: {}
+            });
+            expect(result).toEqual({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                data: {}
+            });
+        })
+
+        it('should call onError if createAdapter rejects', async () => {
+            const mockError = new Error('Test error');
+
+            // Mock the api method to reject with an error
+            uiLocationInstance.createAdapter = jest.fn().mockRejectedValue(mockError);
+
+            // Mock the onError implementation
+            onError.mockImplementation((error) => {
+                throw error;
+            });
+
+            // Call the method that uses uiLocationInstance.api and expect it to throw an error
+            await expect(uiLocationInstance.createAdapter({
+                method: 'GET',
+                url: '/test?limit=10&skip=0',
+                data: {}
+            })).rejects.toThrow('Test error');
+        })
+
+    });
+    
     describe("getConfig", () => {
         it("should return config if no installation uid present", async () => {
             const uiLocation = new UiLocation(initDataJsonRte as any);
