@@ -33,7 +33,7 @@ import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { ApiRequestProps } from './types/stack.types';
 import { createSDKAdapter, dispatchPostRobotRequest } from './utils/adapter';
-import { AxiosRequestConfig, AxiosResponse } from './types/axios.type';
+import { GenericRequestConfig, GenericResponse } from './types/generic.type';
 
 const emitter = new EventEmitter();
 
@@ -83,7 +83,7 @@ class UiLocation {
     /**
      * This holds the instance of the createAdapter method that provides ability to app-sdk to integrate javascript management sdk.
     */
-    createAdapter: (config: AxiosRequestConfig) => Promise<AxiosResponse<GenericObjectType>>;
+    createAdapter: <T>(config: unknown) => Promise<GenericResponse<T>>;
 
     /**
      * Store to persist data for the app.
@@ -157,9 +157,9 @@ class UiLocation {
             currentBranch: initializationData.currentBranch,
         });
 
-        this.api = (payload:ApiRequestProps)=> dispatchPostRobotRequest(postRobot, payload);
+        this.api = (payload:ApiRequestProps)=> dispatchPostRobotRequest(postRobot)(payload);
 
-        this.createAdapter = createSDKAdapter(postRobot);
+        this.createAdapter = <T>(config: unknown) => createSDKAdapter(postRobot)(config as unknown as GenericRequestConfig) as Promise<GenericResponse<T>>;
 
         this.metadata = new Metadata(postRobot);
 
