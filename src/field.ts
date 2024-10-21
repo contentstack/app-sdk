@@ -20,7 +20,7 @@ function separateResolvedData(field: Field, value: GenericObjectType) {
             resolvedData = value;
             unResolvedData =
                 field.schema.multiple === true
-                    ? value.map(({ file }: GenericObjectType) => file.uid)
+                    ? value.map(({ file }: GenericObjectType) => file?.uid)
                     : value.uid;
         } else if (field.schema.multiple === true) {
             resolvedData = [];
