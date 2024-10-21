@@ -125,7 +125,7 @@ describe("Field", () => {
                 singleFileField.getData()
             );
             expect(
-                fileFieldData.multiple.value.map((file) => file.uid)
+                fileFieldData.multiple.value.map(({ file }) => file.uid)
             ).toEqual(multipleFileField.getData());
         });
 

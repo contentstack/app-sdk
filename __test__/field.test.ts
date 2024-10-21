@@ -72,9 +72,8 @@ describe("Field", () => {
         });
 
         it("setFocus", () => {
-            field.setFocus() 
+            field.setFocus();
             expect(connection.sendToParent).toHaveBeenCalledWith("focus");
-
         });
     });
 
@@ -131,7 +130,7 @@ describe("Field", () => {
                 singleFileField.getData()
             );
             expect(
-                fileFieldData.multiple.value.map((file) => file.uid)
+                fileFieldData.multiple.value.map(({ file }) => file.uid)
             ).toEqual(multipleFileField.getData());
         });
 
