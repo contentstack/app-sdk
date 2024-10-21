@@ -142,12 +142,13 @@ describe("UI Location", () => {
 
         beforeEach(() => {
             mockPostRobot = postRobot;
-            opts = { method: 'GET', url: '/test' };
+            opts = { method: 'GET', url: '/test', baseURL: 'https://test.com' };
             uiLocationInstance = new UiLocation(initData);
             onError = jest.fn();
             uiLocationInstance.api = jest.fn().mockResolvedValue({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 body: {}
             });
         });
@@ -158,6 +159,7 @@ describe("UI Location", () => {
             const result = await uiLocationInstance.api({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 body: {}
             });
 
@@ -165,11 +167,13 @@ describe("UI Location", () => {
             expect(uiLocationInstance.api).toHaveBeenCalledWith({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 body: {}
             });
             expect(result).toEqual({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 body: {}
             });
 
@@ -190,6 +194,7 @@ describe("UI Location", () => {
             await expect(uiLocationInstance.api({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 body: {}
             })).rejects.toThrow('Test error');
         });
@@ -203,12 +208,13 @@ describe("UI Location", () => {
         let onError: jest.Mock;
         beforeEach(() => {
             mockPostRobot = postRobot;
-            opts = { method: 'GET', url: '/test' };
+            opts = { method: 'GET', url: '/test', baseURL: 'https://test.com' };
             uiLocationInstance = new UiLocation(initData);
             onError = jest.fn();
             uiLocationInstance.createAdapter = jest.fn().mockResolvedValue({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 data: {}
             });
         });
@@ -228,6 +234,7 @@ describe("UI Location", () => {
             const result = await uiLocationInstance.createAdapter({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 data: {}
             });
 
@@ -235,11 +242,13 @@ describe("UI Location", () => {
             expect(uiLocationInstance.createAdapter).toHaveBeenCalledWith({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 data: {}
             });
             expect(result).toEqual({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 data: {}
             });
         })
@@ -259,6 +268,7 @@ describe("UI Location", () => {
             await expect(uiLocationInstance.createAdapter({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
+                baseURL: 'https://test.com',
                 data: {}
             })).rejects.toThrow('Test error');
         })
