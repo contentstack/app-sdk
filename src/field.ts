@@ -3,7 +3,6 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
-import EventRegistry from "./EventRegistry";
 
 const excludedDataTypesForSetField = [
     "file",
@@ -21,7 +20,7 @@ function separateResolvedData(field: Field, value: GenericObjectType) {
             resolvedData = value;
             unResolvedData =
                 field.schema.multiple === true
-                    ? value.map(({ file }: any) => file.uid)
+                    ? value.map(({ file }: GenericObjectType) => file.uid)
                     : value.uid;
         } else if (field.schema.multiple === true) {
             resolvedData = [];
