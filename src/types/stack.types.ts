@@ -157,6 +157,7 @@ export type RequestMethods = "GET" | "POST" | "PUT" | "DELETE";
 export type ApiRequestProps = {
         method: RequestMethods,
         url: string,
+        baseURL: string,
         headers?: GenericObjectType,
         body?: unknown,
         params?:GenericObjectType

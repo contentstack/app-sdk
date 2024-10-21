@@ -15,6 +15,7 @@ export type HTTPMethods = Uppercase<_HTTPMethods> | Lowercase<_HTTPMethods>
 export type ApiRequestProps = {
         method: HTTPMethods,
         url: string,
+        baseURL: string,
         headers?: GenericObjectType,
         body?: unknown,
         params?:GenericObjectType
