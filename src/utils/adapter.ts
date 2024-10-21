@@ -6,9 +6,10 @@ import { ApiRequestProps, GenericObjectType } from '../types/common.types';
 type RequestHandler = (opts: ApiRequestProps) => Promise<GenericObjectType>;
 
 const createRequestProps = (config: GenericRequestConfig): ApiRequestProps => {
-  const baseUrl =  config.host || config.defaultHostName || config.baseURL|| '';
+  const baseURL =  config.host || config.defaultHostName || config.baseURL|| '';
   return {
-    url: `${baseUrl}${config.url}`,
+    baseURL,
+    url: config.url,
     method: config.method,
     headers: config.headers,
     body: config.data,

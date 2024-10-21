@@ -12,24 +12,12 @@ export interface GenericRequestConfig {
   [key: string]: any;
 }
 
-export interface BaseConfig {
-  url: string;
-  method: string;
-  headers?: Record<string, string>;
-  data?: any;
-  params?: Record<string, any>;
-}
-
-export interface GenericConfig<T = any> extends BaseConfig {
-  [key: string]: any;
-}
-
 export interface GenericResponse<T = any> {
   data: T;
   status: number;
   statusText: string;
   headers: Record<string, string>;
-  config: GenericConfig;
+  config: GenericRequestConfig;
   request?: any;
 }
 
