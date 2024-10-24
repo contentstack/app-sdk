@@ -364,9 +364,6 @@ class UiLocation {
                     emitter.emitEvent("contentTypeSave", [
                         { data: event.data.data },
                     ]);
-                    emitter.emitEvent("updateFields", [
-                        { data: event.data.data },
-                    ]);
                 }
             });
         } catch (err) {

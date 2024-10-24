@@ -59,6 +59,9 @@ class ContentTypeSidebarWidget {
                     callback(event.data);
                 }
             );
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "contentTypeSave" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
