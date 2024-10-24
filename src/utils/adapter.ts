@@ -1,23 +1,22 @@
 import PostRobot from 'post-robot';
 import { onData, onError } from './utils';
-import { GenericRequestConfig, GenericResponse } from '../types/generic.type';
-import { ApiRequestProps, GenericObjectType } from '../types/common.types';
+import { ApiRequestParams, ApiResponse } from '../types/api.type';
+import { RequestInit, GenericObjectType } from '../types/common.types';
 
-type RequestHandler = (opts: ApiRequestProps) => Promise<GenericObjectType>;
+type RequestHandler = (opts: RequestInit) => Promise<GenericObjectType>;
 
-const createRequestProps = (config: GenericRequestConfig): ApiRequestProps => {
-  const baseURL =  config.host || config.defaultHostName || config.baseURL|| '';
+const createRequestProps = (config: ApiRequestParams): ApiRequestParams => {
+  const baseURL = (config.baseURL || '').replace(":443", "");
   return {
     baseURL,
     url: config.url,
     method: config.method,
     headers: config.headers,
-    body: config.data,
-    params: config.params,
+    data: config.data
   };
 };
 
-const createGenericResponse = (data: GenericObjectType, config: GenericRequestConfig, req: ApiRequestProps): GenericResponse<GenericObjectType> => {
+const createApiResponse = (data: GenericObjectType, config: ApiRequestParams, req: RequestInit): ApiResponse<GenericObjectType> => {
   return {
     data,
     status: data.status || 200,
@@ -28,10 +27,10 @@ const createGenericResponse = (data: GenericObjectType, config: GenericRequestCo
   };
 };
 
-const handleGenericError = (error: any, config: GenericRequestConfig, req: ApiRequestProps): GenericResponse<GenericObjectType> => {
+const handleApiError = (error: any, config: ApiRequestParams, req: RequestInit): ApiResponse<GenericObjectType> => {
   const typedError = error as GenericObjectType & { status?: number; statusText?: string; headers?: Record<string, string> };
   return {
-    data: typedError,
+    data: typedError.body || typedError.message || typedError.data,
     status: typedError.status || 500,
     statusText: typedError.statusText || 'Internal Server Error',
     headers: typedError.headers || {},
@@ -40,24 +39,23 @@ const handleGenericError = (error: any, config: GenericRequestConfig, req: ApiRe
   };
 };
 
-export function createGenericAdapter(requestHandler: RequestHandler): (config: GenericRequestConfig) => Promise<GenericResponse<GenericObjectType>> {
-  return async (config: GenericRequestConfig): Promise<GenericResponse<GenericObjectType>> => {
+export function createApiAdapter(requestHandler: RequestHandler): (config: ApiRequestParams) => Promise<ApiResponse<GenericObjectType>> {
+  return async (config: ApiRequestParams): Promise<ApiResponse<GenericObjectType>> => {
     const req = createRequestProps(config);
-
     try {
       const data = await requestHandler(req);
-      return createGenericResponse(data, config, req);
+      return createApiResponse(data, config, req);
     } catch (error) {
-      return handleGenericError(error, config, req);
+      return handleApiError(error, config, req);
     }
   };
 }
 
-export const dispatchPostRobotRequest = (postRobot: typeof PostRobot) => (opts: ApiRequestProps): Promise<GenericObjectType> => {
+export const dispatchPostRobotRequest = (postRobot: typeof PostRobot) => (opts: RequestInit| ApiRequestParams): Promise<GenericObjectType> => {
   return postRobot
     .sendToParent("apiAdapter", opts)
     .then(onData)
     .catch(onError);
 };
 
-export const createSDKAdapter = (postRobot: typeof PostRobot) => createGenericAdapter(dispatchPostRobotRequest(postRobot));
+export const createSDKAdapter = (postRobot: typeof PostRobot) => createApiAdapter(dispatchPostRobotRequest(postRobot));
