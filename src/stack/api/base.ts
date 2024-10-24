@@ -61,6 +61,7 @@ export default class Base {
   }
 
   fetch(action: string, payload?: { [key: string]: any }) {
+
     const options = {
       payload,
       content_type_uid: this.constructor.contentTypeUid,
@@ -68,6 +69,10 @@ export default class Base {
       params: this._query,
       action: action || `get${this.constructor.module()}`
     };
+
+    if ((action === 'publishEntry' || action === 'publishAsset') && payload?.headers && Object.keys(payload.headers).length > 0) {
+      options.headers = payload.headers;
+    }
 
     if (!payload) { delete options.payload; }
     if (!this.constructor.contentTypeUid) { delete options.content_type_uid; }

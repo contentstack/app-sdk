@@ -76,7 +76,6 @@ describe("FieldModifierLocationEntry", () => {
     beforeEach(() => {
         sendToParent = () => {};
         connection = { sendToParent };
-
         emitter = {
             on: (_event: any, cbf: (...props: any[]) => void) => {
                 setTimeout(() => {
