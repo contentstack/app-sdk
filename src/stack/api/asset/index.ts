@@ -205,7 +205,7 @@ class Asset extends Base {
       });
      * @return {external:Promise}
      */
-    publish(payload) {
+    publish(payload: { [key: string]: any }, api_version: string = "") {
         if (
             !payload ||
             typeof payload !== "object" ||
@@ -213,6 +213,11 @@ class Asset extends Base {
         ) {
             return Promise.reject(new Error("Kindly provide valid parameters"));
         }
+    
+        if (api_version !== "") {
+            payload = { ...payload, headers: { api_version } };
+        }
+
         return this.fetch("publishAsset", payload);
     }
 

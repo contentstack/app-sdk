@@ -20,7 +20,7 @@ function separateResolvedData(field: Field, value: GenericObjectType) {
             resolvedData = value;
             unResolvedData =
                 field.schema.multiple === true
-                    ? value.map((file: any) => file.uid)
+                    ? value.map(({ file }: GenericObjectType) => file?.uid)
                     : value.uid;
         } else if (field.schema.multiple === true) {
             resolvedData = [];
@@ -90,7 +90,6 @@ class Field {
             let value = event.data;
             let sanitizedObject = Object.create(null);
             Object.assign(sanitizedObject, value);
-            
             path.forEach((key) => {
                 if (value) {
                     value = sanitizedObject[key];
@@ -170,6 +169,9 @@ class Field {
                 this._resolvedData = event.data;
                 callback(event.data);
             });
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "extensionFieldChange" },
+            ]);
         } else {
             throw Error("Callback must be a function");
         }
