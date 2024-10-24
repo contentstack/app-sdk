@@ -12,9 +12,8 @@ import {
     LocationType,
     Region,
 } from "../src/types";
-import { ApiRequestProps } from '../src/types/stack.types';
-import { dispatchPostRobotRequest } from '../src/utils/adapter';
-import { onData, onError } from '../src/utils/utils';
+import { RequestInit } from '../src/types/common.types';
+import { ApiRequestParams } from '../src/types/api.type';
 
 jest.mock("post-robot");
 jest.mock("wolfy87-eventemitter");
@@ -136,45 +135,35 @@ describe("UI Location", () => {
 
     describe('dispatchPostRobotRequest', () => {
         let mockPostRobot: typeof postRobot;
-        let opts: ApiRequestProps;
+        let opts: RequestInit;
         let uiLocationInstance: UiLocation;
         let onError: jest.Mock;
 
         beforeEach(() => {
             mockPostRobot = postRobot;
-            opts = { method: 'GET', url: '/test', baseURL: 'https://test.com' };
+            opts = { method: 'GET' };
             uiLocationInstance = new UiLocation(initData);
             onError = jest.fn();
             uiLocationInstance.api = jest.fn().mockResolvedValue({
                 method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                body: {}
+                url: "https://test.com/test?limit=10&skip=0"
             });
         });
 
         it('should call sendToParent with the correct arguments and resolve with data', async () => {
             const mockData = { success: true };
             // Call the method that uses uiLocationInstance.api
-            const result = await uiLocationInstance.api({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                body: {}
+            const result = await uiLocationInstance.api("https://test.com/test?limit=10&skip=0",{
+                method: 'GET'
             });
 
             // Assertions
-            expect(uiLocationInstance.api).toHaveBeenCalledWith({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                body: {}
+            expect(uiLocationInstance.api).toHaveBeenCalledWith('https://test.com/test?limit=10&skip=0',{
+                method: 'GET'
             });
             expect(result).toEqual({
                 method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                body: {}
+                url: 'https://test.com/test?limit=10&skip=0',
             });
 
         });
@@ -191,11 +180,8 @@ describe("UI Location", () => {
             });
 
             // Call the method that uses uiLocationInstance.api and expect it to throw an error
-            await expect(uiLocationInstance.api({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                body: {}
+            await expect(uiLocationInstance.api("https://test.com/test?limit=10&skip=0",{
+                method: 'GET'
             })).rejects.toThrow('Test error');
         });
     });
@@ -203,12 +189,12 @@ describe("UI Location", () => {
 
     describe("createSDKAdapter", () => {
         let mockPostRobot: typeof postRobot;
-        let opts: ApiRequestProps;
+        let opts: ApiRequestParams;
         let uiLocationInstance: UiLocation;
         let onError: jest.Mock;
         beforeEach(() => {
             mockPostRobot = postRobot;
-            opts = { method: 'GET', url: '/test', baseURL: 'https://test.com' };
+            opts = { method: 'GET', baseURL:"https://test.com", url:"/test?limit10&skip=0" };
             uiLocationInstance = new UiLocation(initData);
             onError = jest.fn();
             uiLocationInstance.createAdapter = jest.fn().mockResolvedValue({
