@@ -1,6 +1,6 @@
 import EventEmitter from "wolfy87-eventemitter";
-import { IContentTypeSidebarInitData } from "./types";
 import postRobot from "post-robot";
+import { IContentTypeSidebarInitData } from "./types";
 import { ContentType } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
 
@@ -55,7 +55,7 @@ class ContentTypeSidebarWidget {
         if (callback && typeof callback === "function") {
             contentTypeObj._emitter.on(
                 "contentTypeSave",
-                (event: { data: any }) => {
+                (event: { data: ContentType }) => {
                     callback(event.data);
                 }
             );
