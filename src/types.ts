@@ -81,6 +81,7 @@ export enum LocationType {
     FULL_PAGE_LOCATION = "FULL_PAGE_LOCATION",
     RTE = "RTE",
     WIDGET = "WIDGET",
+    CONTENT_TYPE_SIDEBAR_WIDGET = "CONTENT_TYPE_SIDEBAR_WIDGET",
 }
 
 // Init data
@@ -148,6 +149,12 @@ export declare interface IAssetSidebarInitData extends ICommonInitData {
     type: LocationType.ASSET_SIDEBAR_WIDGET;
 }
 
+export declare interface IContentTypeSidebarInitData extends ICommonInitData {
+    config?: GenericObjectType;
+    currentContentType: ContentType;
+    type: LocationType.CONTENT_TYPE_SIDEBAR_WIDGET;
+}
+
 export declare interface IFieldModifierLocationInitData
     extends ICommonInitData {
     changedData: Entry;
@@ -194,7 +201,8 @@ export type InitializationData =
     | IFieldModifierLocationInitData
     | IFullPageLocationInitData
     | IRTEInitData
-    | ISidebarInitData;
+    | ISidebarInitData
+    | IContentTypeSidebarInitData;
 
 /**
  * installation details API response
