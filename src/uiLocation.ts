@@ -27,7 +27,7 @@ import {
     Manifest,
     Region,
 } from "./types";
-import { GenericObjectType, RequestInit } from "./types/common.types";
+import { GenericObjectType, RequestOption } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
@@ -447,7 +447,7 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url:string, payload:RequestInit)=> dispatchPostRobotRequest(this.postRobot)({url,...payload});
+    api = (url: string, option?: RequestOption) => dispatchPostRobotRequest(this.postRobot)(url, option );
 
     /**
      * Method used to create an adapter for management sdk.
