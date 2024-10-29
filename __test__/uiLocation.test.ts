@@ -12,7 +12,7 @@ import {
     LocationType,
     Region,
 } from "../src/types";
-import { RequestInit } from '../src/types/common.types';
+import { RequestOption } from '../src/types/common.types';
 import { ApiRequestParams } from '../src/types/api.type';
 
 jest.mock("post-robot");
@@ -135,7 +135,7 @@ describe("UI Location", () => {
 
     describe('dispatchPostRobotRequest', () => {
         let mockPostRobot: typeof postRobot;
-        let opts: RequestInit;
+        let opts: RequestOption;
         let uiLocationInstance: UiLocation;
         let onError: jest.Mock;
 
