@@ -12,11 +12,12 @@ type _HTTPMethods = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' | 'OPTI
 
 export type HTTPMethods = Uppercase<_HTTPMethods> | Lowercase<_HTTPMethods>
 
-export type RequestInit = {
+export type RequestOption = {
         method: HTTPMethods,
         headers?: GenericObjectType,
         body?: unknown,
+        [key:string]: any
 }
 export type RequestHandler = {
   url: string,
-} & RequestInit
+} & RequestOption
