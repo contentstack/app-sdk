@@ -14,6 +14,5 @@ export interface ApiResponse<T = any> {
   status: number;
   statusText: string;
   headers: Record<string, string>;
-  config: ApiRequestParams;
   request?: any;
 }

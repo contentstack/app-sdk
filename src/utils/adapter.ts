@@ -24,7 +24,6 @@ export const createSDKAdapter = (postRobot: typeof PostRobot) => async (config: 
       status: data?.status || 200,
       statusText: 'OK',
       headers: config.headers || {},
-      config,
     };
   } catch (error) {
     const typedError = error as GenericObjectType & { status?: number; statusText?: string; headers?: Record<string, string>; body?: any; message?: string };
@@ -33,7 +32,6 @@ export const createSDKAdapter = (postRobot: typeof PostRobot) => async (config: 
       status: typedError.status || 500,
       statusText: typedError.statusText || 'Internal Server Error',
       headers: typedError.headers || {},
-      config,
     };
   }
 };
