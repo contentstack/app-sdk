@@ -1,5 +1,5 @@
 import Entry from "../entry";
-import { AnyProperty, GenericObjectType } from "./common.types";
+import { AnyProperty, GenericObjectType, HTTPMethods } from "./common.types";
 
 export declare interface StackDetail {
     created_at: string;
@@ -150,20 +150,4 @@ export interface PublishDetails extends AnyProperty {
     locales: Array<String>;
     publish_with_reference: boolean;
     rules: GenericObjectType;
-}
-
-export type RequestMethods = "GET" | "POST" | "PUT" | "DELETE";
-
-export type ApiRequestProps = {
-        method: RequestMethods,
-        url: string,
-        headers?: GenericObjectType,
-        body?: unknown,
-        params?:GenericObjectType
-        multipart_data?: {
-          [key:string]: {
-            "type": string,
-            "value": any
-          }
-        }
 }

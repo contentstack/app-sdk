@@ -2,7 +2,6 @@
 import Query from './query';
 import { transform, addParam } from '../utils';
 import { dispatchPostRobotRequest } from "../../utils/adapter.ts";
-import { ApiRequestProps } from '../../types/stack.types';
 
 
 function onData(data: { data: any; }) {

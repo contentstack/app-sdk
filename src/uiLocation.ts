@@ -27,13 +27,12 @@ import {
     Manifest,
     Region,
 } from "./types";
-import { GenericObjectType } from "./types/common.types";
+import { GenericObjectType, RequestOption } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import { ApiRequestProps } from './types/stack.types';
 import { createSDKAdapter, dispatchPostRobotRequest } from './utils/adapter';
-import { AxiosRequestConfig, AxiosResponse } from './types/axios.type';
+import {ApiRequestParams, ApiResponse } from './types/api.type';
 
 const emitter = new EventEmitter();
 
@@ -77,13 +76,6 @@ class UiLocation {
      * This holds the stack instance that allows users to read and manipulate a range of objects in a stack.
      */
     stack: Stack;
-
-    api: (payload:ApiRequestProps)=> Promise<GenericObjectType>;
-
-    /**
-     * This holds the instance of the createAdapter method that provides ability to app-sdk to integrate javascript management sdk.
-    */
-    createAdapter: (config: AxiosRequestConfig) => Promise<AxiosResponse<GenericObjectType>>;
 
     /**
      * Store to persist data for the app.
@@ -156,10 +148,6 @@ class UiLocation {
         this.stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
         });
-
-        this.api = (payload:ApiRequestProps)=> dispatchPostRobotRequest(postRobot, payload);
-
-        this.createAdapter = createSDKAdapter(postRobot);
 
         this.metadata = new Metadata(postRobot);
 
@@ -454,6 +442,18 @@ class UiLocation {
     getCurrentRegion = (): Region => {
         return this.region;
     };
+
+    /**
+     * Method used to make an API request to the Contentstack's CMA APIs.
+     */
+
+    api = (url: string, option?: RequestOption) => dispatchPostRobotRequest(this.postRobot)(url, option );
+
+    /**
+     * Method used to create an adapter for management sdk.
+    */
+
+    createAdapter = <T>(config: unknown) => createSDKAdapter(this.postRobot)(config as unknown as ApiRequestParams) as Promise<ApiResponse<T>>;
 
     /**
      * Method used to initialize the App SDK.
