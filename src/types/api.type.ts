@@ -17,5 +17,3 @@ export interface ApiResponse<T = any> {
   config: ApiRequestParams;
   request?: any;
 }
-
-export type GenericAdapter = (config: ApiRequestParams) => Promise<ApiResponse>;
