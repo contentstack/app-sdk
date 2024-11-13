@@ -12,17 +12,6 @@ export const dispatchPostRobotRequest = (postRobot: typeof PostRobot) => (url:st
 
 export const createSDKAdapter = (postRobot: typeof PostRobot) => async (config: ApiRequestParams) => {
   try {
-    if (config.data) {
-      if (typeof config.data === "string") {
-          try {
-              config.data = JSON.parse(config.data);
-          } catch (e) {
-              config.data = config.data;
-          }
-      } else {
-          config.data = config.data;
-      }
-  }
     const data = await dispatchPostRobotRequest(postRobot)(config.url, {
       baseURL: config.baseURL,
       url: config.url,
