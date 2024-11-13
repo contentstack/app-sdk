@@ -12,16 +12,12 @@ type _HTTPMethods = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' | 'OPTI
 
 export type HTTPMethods = Uppercase<_HTTPMethods> | Lowercase<_HTTPMethods>
 
-export type ApiRequestProps = {
+export type RequestOption = {
         method: HTTPMethods,
-        url: string,
         headers?: GenericObjectType,
         body?: unknown,
-        params?:GenericObjectType
-        multipart_data?: {
-          [key:string]: {
-            "type": string,
-            "value": any
-          }
-        }
+        [key:string]: any
 }
+export type RequestHandler = {
+  url: string,
+} & RequestOption
