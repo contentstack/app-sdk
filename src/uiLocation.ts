@@ -3,6 +3,7 @@ import EventEmitter from "wolfy87-eventemitter";
 
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import ContentTypeSidebarWidget from "./ContentTypeSidebarWidget";
+import OrganizationFullPage from "./OrganizationFullPage";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { AppConfig } from "./appConfig";
 import Entry from "./entry";
@@ -26,6 +27,7 @@ import {
     LocationType,
     Manifest,
     Region,
+    IOrgFullPageLocation,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
@@ -117,6 +119,7 @@ class UiLocation {
         FullPage: IFullPageLocation | null;
         FieldModifierLocation: IFieldModifierLocation | null;
         ContentTypeSidebarWidget: ContentTypeSidebarWidget | null;
+        OrganizationFullPage: IOrgFullPageLocation | null;
     };
 
     constructor(initData: InitializationData) {
@@ -155,6 +158,7 @@ class UiLocation {
             FullPage: null,
             FieldModifierLocation: null,
             ContentTypeSidebarWidget: null,
+            OrganizationFullPage: null
         };
 
         window["postRobot"] = postRobot;
@@ -261,6 +265,17 @@ class UiLocation {
                 };
                 break;
             }
+
+            case LocationType.ORGANIZATION_FULL_PAGE: {
+                this.location.OrganizationFullPage = {
+                    organization: new OrganizationFullPage(
+                        initializationData,
+                        postRobot,
+                        emitter
+                    ),
+                };
+                break;
+            } 
 
             case LocationType.CONTENT_TYPE_SIDEBAR_WIDGET: {
                 this.location.ContentTypeSidebarWidget =
