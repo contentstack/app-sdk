@@ -6,8 +6,10 @@ import Stack from "./stack";
 import { GenericObjectType } from "./types/common.types";
 import { Entry } from "./types/entry.types";
 import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
+import { OrganizationDetails } from "./types/organization.types";
 import { User } from "./types/user.types";
 import Window from "./window";
+import OrganizationFullPage from "./OrganizationFullPage";
 
 export declare interface IDashboardWidget {
     frame: Window;
@@ -67,6 +69,10 @@ export declare interface IAppConfigWidget {
     stack: Stack;
 }
 
+export declare interface IOrgFullPageLocation {
+    organization: OrganizationFullPage;
+}
+
 export enum DashboardWidth {
     FULL_WIDTH = "full_width",
     HALF_WIDTH = "half_width",
@@ -82,6 +88,7 @@ export enum LocationType {
     RTE = "RTE",
     WIDGET = "WIDGET",
     CONTENT_TYPE_SIDEBAR_WIDGET = "CONTENT_TYPE_SIDEBAR_WIDGET",
+    ORGANIZATION_FULL_PAGE = "ORGANIZATION_FULL_PAGE",
 }
 
 // Init data
@@ -96,6 +103,12 @@ declare interface ICommonInitData {
     type: LocationType;
     user: User;
     manifest?: Manifest;
+}
+
+export declare interface IOrgFullPageLocationInitData extends ICommonInitData {
+    organization: OrganizationDetails;
+    config?: GenericObjectType;
+    type: LocationType.ORGANIZATION_FULL_PAGE;
 }
 
 export declare interface IDashboardInitData extends ICommonInitData {
@@ -202,7 +215,8 @@ export type InitializationData =
     | IFullPageLocationInitData
     | IRTEInitData
     | ISidebarInitData
-    | IContentTypeSidebarInitData;
+    | IContentTypeSidebarInitData
+    | IOrgFullPageLocationInitData;
 
 /**
  * installation details API response
