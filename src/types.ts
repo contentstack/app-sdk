@@ -9,7 +9,6 @@ import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
 import { OrganizationDetails } from "./types/organization.types";
 import { User } from "./types/user.types";
 import Window from "./window";
-import OrganizationFullPage from "./OrganizationFullPage";
 
 export declare interface IDashboardWidget {
     frame: Window;
@@ -70,7 +69,7 @@ export declare interface IAppConfigWidget {
 }
 
 export declare interface IOrgFullPageLocation {
-    organization: OrganizationFullPage;
+    currentOrganization: OrganizationDetails;
 }
 
 export enum DashboardWidth {
