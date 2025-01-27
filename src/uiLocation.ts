@@ -3,7 +3,6 @@ import EventEmitter from "wolfy87-eventemitter";
 
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import ContentTypeSidebarWidget from "./ContentTypeSidebarWidget";
-import OrganizationFullPage from "./OrganizationFullPage";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { AppConfig } from "./appConfig";
 import Entry from "./entry";
@@ -268,11 +267,7 @@ class UiLocation {
 
             case LocationType.ORGANIZATION_FULL_PAGE: {
                 this.location.OrganizationFullPage = {
-                    organization: new OrganizationFullPage(
-                        initializationData,
-                        postRobot,
-                        emitter
-                    ),
+                  currentOrganization: initializationData.organization,
                 };
                 break;
             } 
