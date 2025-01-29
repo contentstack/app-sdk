@@ -158,11 +158,11 @@ class UiLocation {
         this.config = initializationData.config ?? {};
 
         this.ids = {
-            apiKey: initializationData.stack.api_key,
+            apiKey: initializationData.stack?.api_key,
             appUID: initializationData.app_id,
             installationUID: initializationData.installation_uid,
             locationUID: initializationData.extension_uid,
-            orgUID: initializationData.stack.org_uid,
+            orgUID: initializationData.stack?.org_uid,
             userUID: initializationData.user.uid,
         };
 
