@@ -6,6 +6,7 @@ import ContentTypeSidebarWidget from "./ContentTypeSidebarWidget";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { AppConfig } from "./appConfig";
 import Entry from "./entry";
+import EventRegistry from "./EventRegistry";
 import Field from "./field";
 import FieldModifierLocationEntry from "./fieldModifierLocation/entry";
 import FieldModifierLocationField from "./fieldModifierLocation/field";
@@ -28,11 +29,12 @@ import {
     Region,
     IOrgFullPageLocation,
 } from "./types";
-import { GenericObjectType } from "./types/common.types";
+import { GenericObjectType, RequestOption } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import EventRegistry from "./EventRegistry";
+import { createSDKAdapter, dispatchPostRobotRequest } from './utils/adapter';
+import {ApiRequestParams, ApiResponse } from './types/api.type';
 
 const emitter = new EventEmitter();
 
@@ -104,6 +106,15 @@ class UiLocation {
     readonly region: Region;
     version: number | null;
 
+    ids: {
+        apiKey: string;
+        appUID: string;
+        installationUID: string;
+        locationUID: string;
+        orgUID: string;
+        userUID: string;
+    };
+
     /**
      * This holds the information of the currently running UI location of an App.
      */
@@ -145,6 +156,15 @@ class UiLocation {
         this.metadata = new Metadata(postRobot);
 
         this.config = initializationData.config ?? {};
+
+        this.ids = {
+            apiKey: initializationData.stack.api_key,
+            appUID: initializationData.app_id,
+            installationUID: initializationData.installation_uid,
+            locationUID: initializationData.extension_uid,
+            orgUID: initializationData.stack.org_uid,
+            userUID: initializationData.user.uid,
+        };
 
         this.location = {
             DashboardWidget: null,
@@ -451,6 +471,18 @@ class UiLocation {
     getCurrentRegion = (): Region => {
         return this.region;
     };
+
+    /**
+     * Method used to make an API request to the Contentstack's CMA APIs.
+     */
+
+    api = (url: string, option?: RequestOption) => dispatchPostRobotRequest(this.postRobot)(url, option );
+
+    /**
+     * Method used to create an adapter for management sdk.
+    */
+
+    createAdapter = <T>(config: unknown) => createSDKAdapter(this.postRobot)(config as unknown as ApiRequestParams) as Promise<ApiResponse<T>>;
 
     /**
      * Method used to initialize the App SDK.
