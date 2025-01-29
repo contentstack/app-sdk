@@ -1,5 +1,5 @@
 import Entry from "../entry";
-import { AnyProperty, GenericObjectType } from "./common.types";
+import { AnyProperty, GenericObjectType, HTTPMethods } from "./common.types";
 
 export declare interface StackDetail {
     created_at: string;
