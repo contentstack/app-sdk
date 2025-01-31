@@ -2,6 +2,7 @@ import postRobot from "post-robot";
 import EventEmitter from "wolfy87-eventemitter";
 
 import AssetSidebarWidget from "./AssetSidebarWidget";
+import ContentTypeSidebarWidget from "./ContentTypeSidebarWidget";
 import { IRTEPluginInitializer } from "./RTE/types";
 import { AppConfig } from "./appConfig";
 import Entry from "./entry";
@@ -115,6 +116,7 @@ class UiLocation {
         AssetSidebarWidget: AssetSidebarWidget | null;
         FullPage: IFullPageLocation | null;
         FieldModifierLocation: IFieldModifierLocation | null;
+        ContentTypeSidebarWidget: ContentTypeSidebarWidget | null;
     };
 
     constructor(initData: InitializationData) {
@@ -152,6 +154,7 @@ class UiLocation {
             AssetSidebarWidget: null,
             FullPage: null,
             FieldModifierLocation: null,
+            ContentTypeSidebarWidget: null,
         };
 
         window["postRobot"] = postRobot;
@@ -259,6 +262,16 @@ class UiLocation {
                 break;
             }
 
+            case LocationType.CONTENT_TYPE_SIDEBAR_WIDGET: {
+                this.location.ContentTypeSidebarWidget =
+                    new ContentTypeSidebarWidget(
+                        initializationData,
+                        postRobot,
+                        emitter
+                    );
+                break;
+            }
+
             case LocationType.FIELD:
             default: {
                 initializationData.self = true;
@@ -343,6 +356,12 @@ class UiLocation {
 
                 if (event.data.name === "extensionFieldChange") {
                     emitter.emitEvent("extensionFieldChange", [
+                        { data: event.data.data },
+                    ]);
+                }
+
+                if (event.data.name === "contentTypeSave") {
+                    emitter.emitEvent("contentTypeSave", [
                         { data: event.data.data },
                     ]);
                 }
