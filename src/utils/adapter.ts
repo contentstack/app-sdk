@@ -1,37 +1,54 @@
 import PostRobot from 'post-robot';
-import { onData, onError } from './utils';
-import { ApiRequestParams } from '../types/api.type';
-import { RequestOption, GenericObjectType } from '../types/common.types';
+import axios, { AxiosRequestConfig, AxiosResponse} from 'axios';
 
-export const dispatchPostRobotRequest = (postRobot: typeof PostRobot) => (url:string ,opts?: RequestOption): Promise<GenericObjectType> => {
+import { onData, onError, convertHeaders,convertAxiosHeadersToHeadersInit } from './utils';
+
+/**
+ * Dispatches a request using PostRobot.
+ * @param postRobot - The PostRobot instance.
+ * @returns A function that takes AxiosRequestConfig and returns a promise.
+ */
+export const dispatchPostRobotRequest = (postRobot: typeof PostRobot) => (config: AxiosRequestConfig)=> {
   return postRobot
-    .sendToParent("apiAdapter", {url, option:opts})
+    .sendToParent("apiAdapter",  config )
     .then(onData)
     .catch(onError);
 };
 
-export const createSDKAdapter = (postRobot: typeof PostRobot) => async (config: ApiRequestParams) => {
+/**
+ * Dispatches an API request using axios and PostRobot.
+ * @param url - The URL of the API endpoint.
+ * @param options - Optional request options.
+ * @returns A promise that resolves to a partial Response object.
+ */
+export const dispatchApiRequest = async (url: string, options?: RequestInit):Promise<Partial<Response>> => {
   try {
-    const data = await dispatchPostRobotRequest(postRobot)(config.url, {
-      baseURL: config.baseURL,
-      url: config.url,
-      method: config.method,
-      headers: config.headers,
-      body: config.data as BodyInit,
-    });
-    return {
-      data,
-      status: data?.status || 200,
-      statusText: 'OK',
-      headers: config.headers || {},
+    const config: AxiosRequestConfig = {
+      url,
+      method: options?.method || "GET",
+      ...(options?.headers && { headers: convertHeaders(options.headers) }),
+      ...(options?.body && { data: options?.body })
     };
+
+    const responseData = await dispatchPostRobotRequest(PostRobot)(config) as AxiosResponse;
+
+    const fetchResponse: Partial<Response> = {
+      ok: responseData.status >= 200 && responseData.status < 300,
+      status: responseData.status,
+      statusText: responseData.statusText,
+      headers: new Headers(convertAxiosHeadersToHeadersInit(responseData.headers || {})),
+      json: async () => responseData.data,
+      text: async () => JSON.stringify(responseData.data),
+    };
+
+    return fetchResponse;
   } catch (error) {
-    const typedError = error as GenericObjectType & { status?: number; statusText?: string; headers?: Record<string, string>; body?: any; message?: string };
-    return {
-      data: typedError.body || typedError.message || typedError.data,
-      status: typedError.status || 500,
-      statusText: typedError.statusText || 'Internal Server Error',
-      headers: typedError.headers || {},
-    };
+    if (axios.isAxiosError(error)) {
+      console.error("API request failed:", error.message);
+      throw new Error(`API request failed: ${error.message}`);
+    } else {
+      console.error("An error occurred:", error);
+      throw new Error("An error occurred");
+    }
   }
 };
