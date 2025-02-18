@@ -58,6 +58,7 @@
         "webpack-dev-server": "^4.7.3"
     },
     "dependencies": {
+        "axios": "^1.7.9",
         "jsonfile": "^6.1.0",
         "loader-utils": "^3.2.1",
         "post-robot": "^8.0.31",

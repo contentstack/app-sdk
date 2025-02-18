@@ -3,6 +3,7 @@ import UiLocation from "../src/uiLocation";
 import { version } from "../package.json";
 
 jest.mock("../src/uiLocation");
+jest.mock("axios");
 
 describe("ContentstackAppSDK", () => {
     describe("init", () => {

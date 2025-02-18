@@ -1,4 +1,5 @@
 import { Region } from "../types";
+import { AxiosHeaders } from "axios";
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -48,3 +49,30 @@ export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
     }
     return rootElement || nodeCollection[0];
 }
+
+
+export const convertHeaders = (headers: HeadersInit): AxiosHeaders => {
+    const axiosHeaders = new AxiosHeaders();
+    if (headers instanceof Headers) {
+      headers.forEach((value, key) => {
+        axiosHeaders.set(key, value);
+      });
+    } else if (Array.isArray(headers)) {
+      headers.forEach(([key, value]) => {
+        axiosHeaders.set(key, value);
+      });
+    } else {
+      Object.entries(headers).forEach(([key, value]) => {
+        axiosHeaders.set(key, value);
+      });
+    }
+    return axiosHeaders;
+  };
+
+  export const convertAxiosHeadersToHeadersInit = (axiosHeaders: any): HeadersInit => {
+    const headers: HeadersInit = {};
+    Object.keys(axiosHeaders).forEach(key => {
+      headers[key] = axiosHeaders[key];
+    });
+    return headers;
+  };
