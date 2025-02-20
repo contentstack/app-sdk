@@ -13,7 +13,7 @@ import {
     Region,
 } from "../src/types";
 import { RequestOption } from '../src/types/common.types';
-import { ProxyConfig } from '../src/types/api.type';
+import { RequestConfig } from '../src/types/api.type';
 
 jest.mock("post-robot");
 jest.mock("wolfy87-eventemitter");
@@ -189,7 +189,7 @@ describe("UI Location", () => {
 
     describe("createSDKAdapter", () => {
         let mockPostRobot: typeof postRobot;
-        let opts: ProxyConfig;
+        let opts: RequestConfig;
         let uiLocationInstance: UiLocation;
         let onError: jest.Mock;
         beforeEach(() => {
