@@ -1,5 +1,5 @@
 import { Region } from "../types";
-import { AxiosHeaders } from "axios";
+import { AxiosHeaders, AxiosRequestConfig } from "axios";
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -69,10 +69,17 @@ export const convertHeaders = (headers: HeadersInit): AxiosHeaders => {
     return axiosHeaders;
   };
 
-  export const convertAxiosHeadersToHeadersInit = (axiosHeaders: any): HeadersInit => {
-    const headers: HeadersInit = {};
-    Object.keys(axiosHeaders).forEach(key => {
-      headers[key] = axiosHeaders[key];
-    });
-    return headers;
-  };
+  export const fetchToAxiosConfig = (url: string, options: RequestInit = {}): AxiosRequestConfig => {
+    const axiosConfig: AxiosRequestConfig = {
+      url,
+      method: options.method || 'GET',
+      headers: options.headers ? convertHeaders({...options.headers}) : {}, 
+      data: options.body,
+    };
+  
+    if (options.credentials === 'include') {
+      axiosConfig.withCredentials = true;
+    }
+  
+    return axiosConfig;
+  }

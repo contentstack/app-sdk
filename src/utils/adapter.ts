@@ -1,6 +1,6 @@
 import PostRobot from 'post-robot';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { onError, convertHeaders, convertAxiosHeadersToHeadersInit } from './utils';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { onError, fetchToAxiosConfig } from './utils';
 
 /**
  * Dispatches a request using PostRobot.
@@ -20,34 +20,28 @@ export const dispatchAdapter = (postRobot: typeof PostRobot) => (config: AxiosRe
  * @param options - Optional request options.
  * @returns A promise that resolves to a partial Response object.
  */
-export const dispatchApiRequest = async (url: string, options?: RequestInit): Promise<Partial<Response>> => {
+export const dispatchApiRequest = async (url: string, options?: RequestInit): Promise<Response> => {
   try {
-    const config: AxiosRequestConfig = {
-      url,
-      method: options?.method || "GET",
-      ...(options?.headers && { headers: convertHeaders(options.headers) }),
-      ...(options?.body && { data: options?.body })
-    };
-
+    const config = fetchToAxiosConfig(url, options);
     const responseData = await dispatchAdapter(PostRobot)(config) as AxiosResponse; 
-    const isCallSuccessful = responseData.status >= 200 && responseData.status < 300;
-    const fetchResponse: Partial<Response> = {
-      ok: isCallSuccessful,
+    return new Response(responseData.data,{
       status: responseData.status,
       statusText: responseData.statusText,
-      headers: new Headers(convertAxiosHeadersToHeadersInit(responseData.config.headers || {})),
-      json: async () => responseData.data,
-      text: async () => JSON.stringify(responseData.data),
-    };
+      headers: new Headers(responseData.config.headers || {}),
+    });
 
-    return fetchResponse;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("API request failed:", error.message);
-      throw new Error(`API request failed: ${error.message}`);
+  } catch (error: any) {
+    if (error.response) {
+      const fetchResponse = new Response(error.response.data, {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          headers: new Headers(error.response.headers) 
+      });
+      return Promise.reject(fetchResponse);
+    } else if (error.request) {
+        return Promise.reject(new Response(null, { status: 0, statusText: 'Network Error' }));
     } else {
-      console.error("An unexpected error occurred:", error);
-      throw new Error("An unexpected error occurred");
+        return Promise.reject(new Response(null, { status: 0, statusText: error.message }));
     }
   }
 };
