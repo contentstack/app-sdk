@@ -33,8 +33,8 @@ import { GenericObjectType, RequestOption } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import { dispatchApiRequest, dispatchPostRobotRequest } from './utils/adapter';
-import {ProxyConfig } from './types/api.type';
+import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
+import {ProxyConfig, ProxyResponse } from './types/api.type';
 
 const emitter = new EventEmitter();
 
@@ -482,7 +482,7 @@ class UiLocation {
      * Method used to create an adapter for management sdk.
     */
 
-    createAdapter = (config: ProxyConfig) => dispatchPostRobotRequest(this.postRobot)(config) as Promise<Response>;
+    createAdapter = (config: ProxyConfig) => dispatchAdapter(this.postRobot)(config) as Promise<ProxyResponse>;
 
     /**
      * Method used to initialize the App SDK.
