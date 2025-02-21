@@ -14,6 +14,7 @@ import {
 } from "../src/types";
 import { RequestOption } from '../src/types/common.types';
 import { RequestConfig } from '../src/types/api.type';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 jest.mock("post-robot");
 jest.mock("wolfy87-eventemitter");
@@ -192,19 +193,22 @@ describe("UI Location", () => {
         let opts: RequestConfig;
         let uiLocationInstance: UiLocation;
         let onError: jest.Mock;
+    
         beforeEach(() => {
             mockPostRobot = postRobot;
-            opts = { method: 'GET', baseURL:"https://test.com", url:"/test?limit10&skip=0" };
+            opts = { method: 'GET', baseURL: "https://test.com", url: "/test?limit10&skip=0" };
             uiLocationInstance = new UiLocation(initData);
             onError = jest.fn();
-            uiLocationInstance.createAdapter = jest.fn().mockResolvedValue({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                data: {}
+            uiLocationInstance.createAdapter = jest.fn().mockImplementation(() => async (config: AxiosRequestConfig) => {
+                return {
+                    method: 'GET',
+                    url: '/test?limit=10&skip=0',
+                    baseURL: 'https://test.com',
+                    data: {}
+                } as unknown as AxiosResponse;
             });
         });
-
+    
         afterEach(() => {
             postRobotOnMock.mockClear();
             postRobotSendToParentMock.mockClear();
@@ -213,52 +217,46 @@ describe("UI Location", () => {
             window["postRobot"] = undefined;
             window["iframeRef"] = undefined;
         });
-
+    
         it('should call createAdapter with the correct arguments and resolve with data', async () => {
             const mockData = { success: true };
-            // Call the method that uses uiLocationInstance.api
-            const result = await uiLocationInstance.createAdapter({
+            // Call the method that uses uiLocationInstance.createAdapter
+            const result = await uiLocationInstance.createAdapter()({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
                 baseURL: 'https://test.com',
                 data: {}
             });
-
-            // Assertions
-            expect(uiLocationInstance.createAdapter).toHaveBeenCalledWith({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                data: {}
-            });
+    
             expect(result).toEqual({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
                 baseURL: 'https://test.com',
                 data: {}
             });
-        })
-
+        });
+    
         it('should call onError if createAdapter rejects', async () => {
             const mockError = new Error('Test error');
-
-            // Mock the api method to reject with an error
-            uiLocationInstance.createAdapter = jest.fn().mockRejectedValue(mockError);
-
+    
+            // Mock the createAdapter method to reject with an error
+            uiLocationInstance.createAdapter = jest.fn().mockImplementation(() => async (config: AxiosRequestConfig) => {
+                throw mockError;
+            });
+    
             // Mock the onError implementation
             onError.mockImplementation((error) => {
                 throw error;
             });
-
-            // Call the method that uses uiLocationInstance.api and expect it to throw an error
-            await expect(uiLocationInstance.createAdapter({
+    
+            // Call the method that uses uiLocationInstance.createAdapter and expect it to throw an error
+            await expect(uiLocationInstance.createAdapter()({
                 method: 'GET',
                 url: '/test?limit=10&skip=0',
                 baseURL: 'https://test.com',
                 data: {}
             })).rejects.toThrow('Test error');
-        })
-
+        });
     });
     
     describe("getConfig", () => {
