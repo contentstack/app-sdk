@@ -29,12 +29,12 @@ import {
     Region,
     IOrgFullPageLocation,
 } from "./types";
-import { GenericObjectType, RequestOption } from "./types/common.types";
+import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
-import {RequestConfig, ProxyResponse } from './types/api.type';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const emitter = new EventEmitter();
 
@@ -480,9 +480,12 @@ class UiLocation {
 
     /**
      * Method used to create an adapter for management sdk.
-    */
-
-    createAdapter = (config: RequestConfig) => dispatchAdapter(this.postRobot)(config) as Promise<ProxyResponse>;
+     */
+    createAdapter = (): (config: AxiosRequestConfig) => Promise<AxiosResponse> => {
+        return (config: AxiosRequestConfig): Promise<AxiosResponse> => {
+          return dispatchAdapter(postRobot)(config) as Promise<AxiosResponse>;
+        };
+      };
 
     /**
      * Method used to initialize the App SDK.
