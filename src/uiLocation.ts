@@ -29,12 +29,12 @@ import {
     Region,
     IOrgFullPageLocation,
 } from "./types";
-import { GenericObjectType, RequestOption } from "./types/common.types";
+import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import { createSDKAdapter, dispatchPostRobotRequest } from './utils/adapter';
-import {ApiRequestParams, ApiResponse } from './types/api.type';
+import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const emitter = new EventEmitter();
 
@@ -476,13 +476,16 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestOption) => dispatchPostRobotRequest(this.postRobot)(url, option );
+    api = (url: string, option?: RequestInit): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.
-    */
-
-    createAdapter = <T>(config: unknown) => createSDKAdapter(this.postRobot)(config as unknown as ApiRequestParams) as Promise<ApiResponse<T>>;
+     */
+    createAdapter = (): (config: AxiosRequestConfig) => Promise<AxiosResponse> => {
+        return (config: AxiosRequestConfig): Promise<AxiosResponse> => {
+          return dispatchAdapter(postRobot)(config) as Promise<AxiosResponse>;
+        };
+      };
 
     /**
      * Method used to initialize the App SDK.
