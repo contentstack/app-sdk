@@ -13,6 +13,8 @@ const excludedDataTypesForSetField = [
     "global_field",
 ];
 
+console.log("Global Field", this);
+
 function separateResolvedData(
     field: FieldModifierLocationField,
     value: GenericObjectType
@@ -114,6 +116,7 @@ class FieldModifierLocationField {
      */
     async setData(data: any): Promise<FieldModifierLocationField> {
         const currentFieldObj = this;
+        console.log("Current Field Object", currentFieldObj);
         const dataObj = {
             data,
             uid: currentFieldObj.uid,
