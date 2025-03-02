@@ -1,5 +1,5 @@
 import { Region } from "../types";
-import { AxiosHeaders, AxiosRequestConfig } from "axios";
+import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -82,4 +82,14 @@ export const convertHeaders = (headers: HeadersInit): AxiosHeaders => {
     }
   
     return axiosConfig;
+  }
+
+  export const serializeAxiosResponse = (responseData: AxiosResponse, config) => {
+    return {
+      data: responseData.data,
+      status: responseData.status,
+      statusText: responseData.statusText,
+      headers: responseData.headers as AxiosHeaders,
+      config,
+    }
   }
