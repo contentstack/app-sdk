@@ -157,7 +157,7 @@ class UiLocation {
         });
 
         this.metadata = new Metadata(postRobot);
-
+        
         this.config = initializationData.config ?? {};
 
         this.ids = {
@@ -189,6 +189,8 @@ class UiLocation {
 
         this.region = formatAppRegion(initializationData.region);
         this.endpoints = initializationData.endpoints;
+
+        this.hostedEndpoints = initializationData.serviceDomainUrls ?? { CMA: '' };
 
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
