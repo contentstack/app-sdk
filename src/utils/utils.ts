@@ -1,5 +1,6 @@
 import { Region } from "../types";
 import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
+import { RequestConfigWithBaseUrl } from '../types/api.type';
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -50,6 +51,14 @@ export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
     return rootElement || nodeCollection[0];
 }
 
+function isAbsoluteURL(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 export const convertHeaders = (headers: HeadersInit): AxiosHeaders => {
     const axiosHeaders = new AxiosHeaders();
@@ -69,15 +78,20 @@ export const convertHeaders = (headers: HeadersInit): AxiosHeaders => {
     return axiosHeaders;
   };
 
-  export const fetchToAxiosConfig = (url: string, options: RequestInit = {}): AxiosRequestConfig => {
+  export const fetchToAxiosConfig = (url: string ,options?: RequestConfigWithBaseUrl): AxiosRequestConfig => {
+
     const axiosConfig: AxiosRequestConfig = {
       url,
-      method: options.method || 'GET',
-      headers: options.headers ? convertHeaders({...options.headers}) : {}, 
-      data: options.body,
+      method: options?.method || 'GET',
+      headers: options?.headers ? convertHeaders({...options?.headers}) : {}, 
+      data: options?.body,
     };
-  
-    if (options.credentials === 'include') {
+    
+    if (!isAbsoluteURL(url)) {
+      axiosConfig.baseURL = options?.baseURL;
+    }
+
+    if (options?.credentials === 'include') {
       axiosConfig.withCredentials = true;
     }
   

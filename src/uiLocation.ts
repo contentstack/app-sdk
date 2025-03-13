@@ -1,3 +1,4 @@
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import postRobot from "post-robot";
 import EventEmitter from "wolfy87-eventemitter";
 
@@ -34,7 +35,7 @@ import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { RequestInitConfig, ServiceURLsMap } from "./types/api.type";
 
 const emitter = new EventEmitter();
 
@@ -68,6 +69,9 @@ class UiLocation {
      * The configuration set for an app.
      */
     private config: GenericObjectType;
+
+
+    readonly hostedEndpoints: ServiceURLsMap
 
     /**
      * This holds the instance of Cross-domain communication library for posting messages between windows.
@@ -154,7 +158,7 @@ class UiLocation {
         });
 
         this.metadata = new Metadata(postRobot);
-
+        
         this.config = initializationData.config ?? {};
 
         this.ids = {
@@ -185,6 +189,8 @@ class UiLocation {
         this.modal = new Modal();
 
         this.region = formatAppRegion(initializationData.region);
+
+        this.hostedEndpoints = initializationData.serviceDomainUrls ?? { CMA: '' };
 
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
@@ -476,7 +482,7 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestInit): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
+    api = (url: string, option?: RequestInitConfig): Promise<Response> => dispatchApiRequest(url,this.hostedEndpoints, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.

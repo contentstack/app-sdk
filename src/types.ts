@@ -7,6 +7,7 @@ import { GenericObjectType } from "./types/common.types";
 import { Entry } from "./types/entry.types";
 import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
 import { OrganizationDetails } from "./types/organization.types";
+import { ServiceURLsMap } from './types/api.type';
 import { User } from "./types/user.types";
 import Window from "./window";
 
@@ -102,6 +103,7 @@ declare interface ICommonInitData {
     type: LocationType;
     user: User;
     manifest?: Manifest;
+    serviceDomainUrls?: ServiceURLsMap;
 }
 
 export declare interface IOrgFullPageLocationInitData extends ICommonInitData {
@@ -254,4 +256,5 @@ export enum Region {
     AZURE_NA = "AZURE_NA",
     AZURE_EU = "AZURE_EU",
     GCP_NA = "GCP_NA",
+    GCP_EU = "GCP_EU",
 }
