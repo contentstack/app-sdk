@@ -1,6 +1,13 @@
 import PostRobot from "post-robot";
-import { AxiosError, AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
+import { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
+
 import { onError, fetchToAxiosConfig, serializeAxiosResponse } from "./utils";
+import { RequestInitConfig, ServiceURLsMap } from "../types/api.type";
+
+export const resolveBaseUrl = (hostingRegion:ServiceURLsMap, option?:RequestInitConfig)=>{
+return option?.service? hostingRegion[option.service]: hostingRegion.CMA
+}
+
 
 /**
  * Dispatches a request using PostRobot.
@@ -19,7 +26,6 @@ export const dispatchAdapter = (postRobot: typeof PostRobot) => (config: AxiosRe
     })
     .catch(onError);
 };
-//owner-rm-servicing@nobroker.in
 /**
  * Dispatches an API request using axios and PostRobot.
  * @param url - The URL of the API endpoint.
@@ -28,10 +34,12 @@ export const dispatchAdapter = (postRobot: typeof PostRobot) => (config: AxiosRe
  */
 export const dispatchApiRequest = async (
     url: string,
-    options?: RequestInit
+    hostedUrl:ServiceURLsMap,
+    options?: RequestInitConfig,
 ): Promise<Response> => {
     try {
-        const config = fetchToAxiosConfig(url, options);
+        const updatedOptions = {...options, baseURL: resolveBaseUrl(hostedUrl, options)};
+        const config = fetchToAxiosConfig(url, updatedOptions);
         const responseData = (await dispatchAdapter(PostRobot)(
             config
         )) as AxiosResponse;
@@ -52,7 +60,7 @@ export const dispatchApiRequest = async (
       const statusText = error.response?.statusText || error.statusText || "Internal Server Error";
       const headers = new Headers(error.response?.headers || error.headers);
 
-      return new Response(data, {
+      throw new Response(data, {
           status,
           statusText,
           headers,
