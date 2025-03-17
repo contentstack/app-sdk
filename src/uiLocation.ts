@@ -190,8 +190,6 @@ class UiLocation {
         this.region = formatAppRegion(initializationData.region);
         this.endpoints = initializationData.endpoints;
 
-        this.hostedEndpoints = initializationData.serviceDomainUrls ?? { CMA: '' };
-
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
         });
@@ -485,8 +483,7 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestInit): Promise<Response> =>
-        dispatchApiRequest(url, option, {installationUID:this.installationUID, extensionUID:this.locationUID}) as Promise<Response>;
+    api = (url: string, option?: RequestInit): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.
