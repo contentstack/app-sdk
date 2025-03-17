@@ -71,7 +71,7 @@ class UiLocation {
     private config: GenericObjectType;
 
 
-    readonly hostedEndpoints: ServiceURLsMap
+    readonly endpoints: ServiceURLsMap
 
     /**
      * This holds the instance of Cross-domain communication library for posting messages between windows.
@@ -188,9 +188,8 @@ class UiLocation {
 
         this.modal = new Modal();
 
-        this.region = formatAppRegion(initializationData.region);
-
-        this.hostedEndpoints = initializationData.serviceDomainUrls ?? { CMA: '' };
+        this.region = formatAppRegion(initializationData.region);   
+        this.endpoints = initializationData.serviceEndpoints ?? { CMA: '' };
 
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
@@ -482,7 +481,7 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestInitConfig): Promise<Response> => dispatchApiRequest(url,this.hostedEndpoints, option) as Promise<Response>;
+    api = (url: string, option?: RequestInitConfig): Promise<Response> => dispatchApiRequest(url,this.endpoints, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.
