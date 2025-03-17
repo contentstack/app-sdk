@@ -103,7 +103,7 @@ declare interface ICommonInitData {
     type: LocationType;
     user: User;
     manifest?: Manifest;
-    serviceDomainUrls?: ServiceURLsMap;
+    serviceEndpoints?: ServiceURLsMap;
 }
 
 export declare interface IOrgFullPageLocationInitData extends ICommonInitData {
