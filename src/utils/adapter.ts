@@ -2,12 +2,7 @@ import PostRobot from "post-robot";
 import { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
 
 import { onError, fetchToAxiosConfig, serializeAxiosResponse } from "./utils";
-import { RequestInitConfig, ServiceURLsMap } from "../types/api.type";
-
-export const resolveBaseUrl = (hostingRegion:ServiceURLsMap, option?:RequestInitConfig)=>{
-return option?.service? hostingRegion[option.service]: hostingRegion.CMA
-}
-
+import { RequestInitConfig } from "../types/api.type";
 
 /**
  * Dispatches a request using PostRobot.
@@ -34,12 +29,10 @@ export const dispatchAdapter = (postRobot: typeof PostRobot) => (config: AxiosRe
  */
 export const dispatchApiRequest = async (
     url: string,
-    hostedUrl:ServiceURLsMap,
     options?: RequestInitConfig,
 ): Promise<Response> => {
     try {
-        const updatedOptions = {...options, baseURL: resolveBaseUrl(hostedUrl, options)};
-        const config = fetchToAxiosConfig(url, updatedOptions);
+        const config = fetchToAxiosConfig(url, options);
         const responseData = (await dispatchAdapter(PostRobot)(
             config
         )) as AxiosResponse;

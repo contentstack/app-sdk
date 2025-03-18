@@ -1,6 +1,6 @@
 import { Region } from "../types";
 import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
-import { RequestConfigWithBaseUrl } from '../types/api.type';
+import { RequestInitConfig } from '../types/api.type';
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -78,7 +78,7 @@ export const convertHeaders = (headers: HeadersInit): AxiosHeaders => {
     return axiosHeaders;
   };
 
-  export const fetchToAxiosConfig = (url: string ,options?: RequestConfigWithBaseUrl): AxiosRequestConfig => {
+  export const fetchToAxiosConfig = (url: string ,options?: RequestInitConfig): AxiosRequestConfig => {
 
     const axiosConfig: AxiosRequestConfig = {
       url,
