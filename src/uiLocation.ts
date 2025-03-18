@@ -35,7 +35,7 @@ import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
-import { RequestInitConfig, ServiceURLsMap } from "./types/api.type";
+import { RequestInitConfig, ContentstackEndpoints } from "./types/api.type";
 
 const emitter = new EventEmitter();
 
@@ -71,7 +71,7 @@ class UiLocation {
     private config: GenericObjectType;
 
 
-    readonly endpoints: ServiceURLsMap
+    readonly endpoints: ContentstackEndpoints
 
     /**
      * This holds the instance of Cross-domain communication library for posting messages between windows.
@@ -477,10 +477,9 @@ class UiLocation {
         return this.region;
     };
 
-    getCurrentEndpoints = (): ServiceURLsMap => {
+    getCurrentEndpoints = ():ContentstackEndpoints => {
         return this.endpoints;
-    };
-
+    }
     /**
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
