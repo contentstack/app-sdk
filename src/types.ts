@@ -7,7 +7,7 @@ import { GenericObjectType } from "./types/common.types";
 import { Entry } from "./types/entry.types";
 import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
 import { OrganizationDetails } from "./types/organization.types";
-import { ServiceURLsMap } from './types/api.type';
+import { ContentstackEndpoints } from './types/api.type';
 import { User } from "./types/user.types";
 import Window from "./window";
 
@@ -103,7 +103,7 @@ declare interface ICommonInitData {
     type: LocationType;
     user: User;
     manifest?: Manifest;
-    serviceEndpoints?: ServiceURLsMap;
+    serviceEndpoints?: ContentstackEndpoints;
 }
 
 export declare interface IOrgFullPageLocationInitData extends ICommonInitData {

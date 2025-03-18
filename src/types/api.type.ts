@@ -2,8 +2,9 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 export type RequestConfig = AxiosRequestConfig;
 export type ProxyResponse = AxiosResponse;
 
-export type ServiceURLsMap = {
+export type ContentstackEndpoints = {
     CMA: string;
+    [key:string]:string;
 };
 
 
