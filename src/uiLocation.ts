@@ -477,6 +477,10 @@ class UiLocation {
         return this.region;
     };
 
+    getCurrentEndpoints = (): ServiceURLsMap => {
+        return this.endpoints;
+    };
+
     /**
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
