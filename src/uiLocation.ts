@@ -481,7 +481,7 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestInitConfig): Promise<Response> => dispatchApiRequest(url,this.endpoints, option) as Promise<Response>;
+    api = (url: string, option?: RequestInitConfig): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.
