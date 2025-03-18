@@ -1,5 +1,5 @@
 import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
-import { RequestConfigWithBaseUrl } from '../types/api.type';
+import { RequestInitConfig } from '../types/api.type';
 
 import { Region, RegionType } from "../types";
 
