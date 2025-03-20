@@ -27,15 +27,15 @@ import {
     InitializationData,
     LocationType,
     Manifest,
-    Region,
     IOrgFullPageLocation,
+    RegionType,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
-import { RequestInitConfig, ContentstackEndpoints } from "./types/api.type";
+import { ContentstackEndpoints } from "./types/api.type";
 
 const emitter = new EventEmitter();
 
@@ -107,7 +107,7 @@ class UiLocation {
     /**
      * The Contentstack Region on which the app is running.
      */
-    readonly region: Region;
+    readonly region: RegionType;
     version: number | null;
 
     ids: {
@@ -189,7 +189,7 @@ class UiLocation {
         this.modal = new Modal();
 
         this.region = formatAppRegion(initializationData.region);   
-        this.endpoints = initializationData.serviceEndpoints ?? { CMA: '' };
+        this.endpoints = initializationData.endpoints;
 
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
@@ -473,7 +473,7 @@ class UiLocation {
     /**
      * Method used to get the Contentstack Region on which the app is running.
      */
-    getCurrentRegion = (): Region => {
+    getCurrentRegion = (): RegionType => {
         return this.region;
     };
 
@@ -484,7 +484,7 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestInitConfig): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
+    api = (url: string, option?: RequestInit): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.

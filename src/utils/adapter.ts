@@ -2,7 +2,6 @@ import PostRobot from "post-robot";
 import { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
 
 import { onError, fetchToAxiosConfig, serializeAxiosResponse } from "./utils";
-import { RequestInitConfig } from "../types/api.type";
 
 /**
  * Dispatches a request using PostRobot.
@@ -29,7 +28,7 @@ export const dispatchAdapter = (postRobot: typeof PostRobot) => (config: AxiosRe
  */
 export const dispatchApiRequest = async (
     url: string,
-    options?: RequestInitConfig,
+    options?: RequestInit,
 ): Promise<Response> => {
     try {
         const config = fetchToAxiosConfig(url, options);
