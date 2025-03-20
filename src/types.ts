@@ -103,7 +103,7 @@ declare interface ICommonInitData {
     type: LocationType;
     user: User;
     manifest?: Manifest;
-    serviceEndpoints?: ContentstackEndpoints;
+    endpoints: ContentstackEndpoints;
 }
 
 export declare interface IOrgFullPageLocationInitData extends ICommonInitData {
@@ -258,3 +258,5 @@ export enum Region {
     GCP_NA = "GCP_NA",
     GCP_EU = "GCP_EU",
 }
+
+export type RegionType = "UNKNOWN" | "NA" | "EU" | "AZURE_NA" | "AZURE_EU" | "GCP_NA" | string;

@@ -7,6 +7,7 @@ const mockData: IOrgFullPageLocationInitData = {
     installation_uid: "installation_uid",
     extension_uid: "extension_uid",
     region: "NA",
+    endpoints:{CMA:"",APP:""},
     stack: {} as any,
     user: {} as any,
     currentBranch: "currentBranch",

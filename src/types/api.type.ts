@@ -3,11 +3,7 @@ export type RequestConfig = AxiosRequestConfig;
 export type ProxyResponse = AxiosResponse;
 
 export type ContentstackEndpoints = {
+    APP: string;
     CMA: string;
     [key:string]:string;
-};
-
-
-export type RequestInitConfig = RequestInit & {
-    baseURL?: string;
 };
