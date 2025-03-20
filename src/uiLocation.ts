@@ -491,7 +491,7 @@ class UiLocation {
      */
     createAdapter = (): (config: AxiosRequestConfig) => Promise<AxiosResponse> => {
         return (config: AxiosRequestConfig): Promise<AxiosResponse> => {
-          return dispatchAdapter(postRobot)(config) as Promise<AxiosResponse>;
+          return dispatchAdapter(postRobot)(config)
         };
       };
 
