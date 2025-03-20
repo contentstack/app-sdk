@@ -1,5 +1,6 @@
 import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
-import { RequestInitConfig } from '../types/api.type';
+
+import { Region, RegionType } from "../types";
 
 import { Region, RegionType } from "../types";
 
