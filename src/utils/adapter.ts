@@ -1,7 +1,7 @@
 import PostRobot from "post-robot";
-import { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
 
-import { onError, fetchToAxiosConfig, serializeAxiosResponse } from "./utils";
+import { onError, fetchToAxiosConfig, serializeAxiosResponse, createErrorResponse, axiosError } from "./utils";
 
 /**
  * Dispatches a request using PostRobot.
@@ -47,15 +47,8 @@ export const dispatchApiRequest = async (
         return response
         
     } catch (error: any) {
-      const data = error.response?.data || error.data;
-      const status = error.response?.status || error.status || 500;
-      const statusText = error.response?.statusText || error.statusText || "Internal Server Error";
-      const headers = new Headers(error.response?.headers || error.headers);
-
-      throw new Response(data, {
-          status,
-          statusText,
-          headers,
-      });
+     throw isAxiosError(error)
+     ? createErrorResponse(axiosError(error))
+     : createErrorResponse(error);
   }
 };

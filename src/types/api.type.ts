@@ -5,6 +5,6 @@ export type ProxyResponse = AxiosResponse;
 export type ContentstackEndpoints = {
     APP: string;
     CMA: string;
-    DEVELOPERHUB: string;
+    DEVELOPER_HUB: string;
     [key:string]:string;
 };
