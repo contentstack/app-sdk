@@ -1,4 +1,9 @@
-import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
+import {
+    AxiosError,
+    AxiosHeaders,
+    AxiosRequestConfig,
+    AxiosResponse,
+} from "axios";
 
 import { Region, RegionType } from "../types";
 
@@ -14,6 +19,38 @@ export function onData<Data extends Record<string, any>>(data: { data: Data }) {
 export function onError(error: Error) {
     return Promise.reject(error);
 }
+
+export function axiosError(error: AxiosError) {
+    const { response, message } = error || {};
+    return {
+        data: response?.data || message,
+        status: response?.status || 500,
+        statusText: response?.statusText || "Internal Server Error",
+        headers: new Headers(
+            response?.headers ? Object.entries(response.headers) : undefined
+        ),
+    };
+}
+
+export const createErrorResponse = (errorData: any): Response => {
+  const data = errorData.data || errorData.message || errorData;
+  const status = errorData.status || 500;
+  const statusText = errorData.statusText || 'Internal Server Error';
+  const headers = errorData.headers instanceof Headers 
+    ? errorData.headers 
+    : new Headers(errorData.headers || {});
+  
+  // Handle various data types appropriately
+  const responseBody = typeof data === 'string' 
+    ? data 
+    : JSON.stringify(data);
+  
+  return new Response(responseBody, {
+    status,
+    statusText,
+    headers
+  });
+};
 
 export function formatAppRegion(region: string): RegionType {
     return region ?? Region.UNKNOWN;
