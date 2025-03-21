@@ -47,7 +47,7 @@ describe("FieldModifierLocationEntry", () => {
             extension_uid: "extension_uid",
             installation_uid: "installation_uid",
             region: "NA",
-            endpoints: { CMA: "", APP: "",DEVELOPERHUB:"" },
+            endpoints: { CMA: "", APP: "",DEVELOPER_HUB:"" },
             stack: {
                 api_key: "api_key",
                 created_at: "created_at",
