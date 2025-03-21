@@ -1,7 +1,7 @@
 import PostRobot from "post-robot";
-import { AxiosError, AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
+import { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
 
-import { onError, fetchToAxiosConfig, serializeAxiosResponse, createErrorResponse, axiosError } from "./utils";
+import { onError, fetchToAxiosConfig, serializeAxiosResponse, handleApiError } from "./utils";
 
 /**
  * Dispatches a request using PostRobot.
@@ -46,9 +46,7 @@ export const dispatchApiRequest = async (
         });
         return response
         
-    } catch (error: any) {
-     throw isAxiosError(error)
-     ? createErrorResponse(axiosError(error))
-     : createErrorResponse(error);
+    } catch (error) {
+     throw handleApiError(error);
   }
 };
