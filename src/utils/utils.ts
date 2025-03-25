@@ -1,5 +1,14 @@
-import { Region } from "../types";
-import { AxiosHeaders, AxiosRequestConfig } from "axios";
+import {
+    AxiosError,
+    AxiosHeaders,
+    AxiosRequestConfig,
+    AxiosResponse,
+    isAxiosError,
+    RawAxiosRequestHeaders,
+} from "axios";
+import { Response } from "node-fetch";
+
+import { Region, RegionType } from "../types";
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -12,11 +21,60 @@ export function onError(error: Error) {
     return Promise.reject(error);
 }
 
-export function formatAppRegion(region: string): Region {
-    if (region && Object.values(Region).includes(region as Region)) {
-        return region as Region;
+export const createAxiosErrorResponse = (error: AxiosError): Response => {
+    const { response, message, config } = error;
+
+    const responseBody = response?.data || { message };
+    const status = response?.status || 500;
+    const statusText = response?.statusText || "Internal Server Error";
+    const headers = new Headers(
+        sanitizeResponseHeader(config?.headers || {})
+    );
+
+    return new Response(JSON.stringify(responseBody), {
+        status,
+        statusText,
+        headers,
+    });
+};
+
+export const sanitizeResponseHeader = (headers: RawAxiosRequestHeaders) => {
+    const responseHeaders = new Headers();
+    const filterHeaders = [
+        "api_key",
+        "authorization",
+        "x-api-key",
+        "user-agent",
+    ];
+    if (headers instanceof Headers) {
+        headers.forEach((value, key) => {
+            if (!filterHeaders.includes(key.toLowerCase())) {
+                responseHeaders.set(key, value);
+            }
+        });
     }
-    return Region.UNKNOWN;
+    return responseHeaders;
+};
+
+export const handleApiError = (error: unknown): Response => {
+    return isAxiosError(error)
+        ? createErrorResponse(createAxiosErrorResponse(error))
+        : createErrorResponse(error as Error);
+};
+
+export const createErrorResponse = (error: Error): Response => {
+    return new Response(
+        JSON.stringify({ message: (error).message || error }),
+        {
+            status: 500,
+            statusText: "Internal Server Error",
+            headers: new Headers(),
+        }
+    );
+};
+
+export function formatAppRegion(region: string): RegionType {
+    return region ?? Region.UNKNOWN;
 }
 
 export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
@@ -50,36 +108,50 @@ export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
     return rootElement || nodeCollection[0];
 }
 
-
 export const convertHeaders = (headers: HeadersInit): AxiosHeaders => {
     const axiosHeaders = new AxiosHeaders();
     if (headers instanceof Headers) {
-      headers.forEach((value, key) => {
-        axiosHeaders.set(key, value);
-      });
+        headers.forEach((value, key) => {
+            axiosHeaders.set(key, value);
+        });
     } else if (Array.isArray(headers)) {
-      headers.forEach(([key, value]) => {
-        axiosHeaders.set(key, value);
-      });
+        headers.forEach(([key, value]) => {
+            axiosHeaders.set(key, value);
+        });
     } else {
-      Object.entries(headers).forEach(([key, value]) => {
-        axiosHeaders.set(key, value);
-      });
+        Object.entries(headers).forEach(([key, value]) => {
+            axiosHeaders.set(key, value);
+        });
     }
     return axiosHeaders;
-  };
+};
 
-  export const fetchToAxiosConfig = (url: string, options: RequestInit = {}): AxiosRequestConfig => {
+export const fetchToAxiosConfig = (
+    url: string,
+    options?: RequestInit
+): AxiosRequestConfig => {
     const axiosConfig: AxiosRequestConfig = {
-      url,
-      method: options.method || 'GET',
-      headers: options.headers ? convertHeaders({...options.headers}) : {}, 
-      data: options.body,
+        url,
+        method: options?.method || "GET",
+        headers: options?.headers
+            ? convertHeaders({ ...options?.headers })
+            : {},
+        data: options?.body,
     };
-  
-    if (options.credentials === 'include') {
-      axiosConfig.withCredentials = true;
+
+    if (options?.credentials === "include") {
+        axiosConfig.withCredentials = true;
     }
-  
+
     return axiosConfig;
-  }
+};
+
+export const serializeAxiosResponse = (responseData: AxiosResponse, config) => {
+    return {
+        data: responseData.data,
+        status: responseData.status,
+        statusText: responseData.statusText,
+        headers: responseData.headers as AxiosHeaders,
+        config,
+    };
+};

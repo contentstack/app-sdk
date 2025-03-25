@@ -60,6 +60,7 @@ const initData: IAppConfigInitData = {
     installation_uid: "installation_uid",
     extension_uid: "extension_uid",
     region: "NA",
+    endpoints: { CMA: "https://api.contentstack.io", APP: "https://app.contentstack.app",DEVELOPER_HUB:"" },
     stack: mockStackData,
     user: {} as any,
     currentBranch: "currentBranch",
