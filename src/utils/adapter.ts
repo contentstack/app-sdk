@@ -1,7 +1,8 @@
 import PostRobot from "post-robot";
-import { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
+import { Response } from 'node-fetch';
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { onError, fetchToAxiosConfig, serializeAxiosResponse, handleApiError } from "./utils";
+import { onError, fetchToAxiosConfig, serializeAxiosResponse, handleApiError, sanitizeResponseHeader } from "./utils";
 
 /**
  * Dispatches a request using PostRobot.
@@ -35,18 +36,15 @@ export const dispatchApiRequest = async (
         const responseData = (await dispatchAdapter(PostRobot)(
             config
         )) as AxiosResponse;
-  
-        if (isAxiosError(responseData)) {
-          throw responseData;
-        }
-        const response = new Response(responseData?.data, {
+        
+        return new Response(responseData?.data, {
             status: responseData.status,
             statusText: responseData.statusText,
-            headers: new Headers(responseData.config.headers || {}),
+            url: responseData.config.url,
+            headers: new Headers(sanitizeResponseHeader(responseData.config.headers || {})),
         });
-        return response
         
     } catch (error) {
-     throw handleApiError(error);
+     return handleApiError(error);
   }
 };

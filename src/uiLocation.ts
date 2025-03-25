@@ -477,7 +477,7 @@ class UiLocation {
         return this.region;
     };
 
-    getCurrentEndpoints = ():ContentstackEndpoints => {
+    getEndpoints = ():ContentstackEndpoints => {
         return this.endpoints;
     }
     /**

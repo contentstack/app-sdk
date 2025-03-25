@@ -4,7 +4,9 @@ import {
     AxiosRequestConfig,
     AxiosResponse,
     isAxiosError,
+    RawAxiosRequestHeaders,
 } from "axios";
+import { Response } from "node-fetch";
 
 import { Region, RegionType } from "../types";
 
@@ -19,41 +21,56 @@ export function onError(error: Error) {
     return Promise.reject(error);
 }
 
-export function axiosError(error: AxiosError) {
-    const { response, message } = error || {};
-    return {
-        data: response?.data || message,
-        status: response?.status || 500,
-        statusText: response?.statusText || "Internal Server Error",
-        headers: new Headers(
-            response?.headers ? Object.entries(response.headers) : undefined
-        ),
-    };
-}
+export const createAxiosErrorResponse = (error: AxiosError): Response => {
+    const { response, message, config } = error;
 
-export const handleApiError = (error: any): Response => {
-    return isAxiosError(error)
-        ? createErrorResponse(axiosError(error))
-        : createErrorResponse(error);
-};
+    const responseBody = response?.data || { message };
+    const status = response?.status || 500;
+    const statusText = response?.statusText || "Internal Server Error";
+    const headers = new Headers(
+        sanitizeResponseHeader(config?.headers || {})
+    );
 
-export const createErrorResponse = (errorData: any): Response => {
-    const data = errorData.data || errorData.message || errorData;
-    const status = errorData.status || 500;
-    const statusText = errorData.statusText || 'Internal Server Error';
-    const headers = errorData.headers instanceof Headers 
-        ? errorData.headers 
-        : new Headers(errorData.headers || {});
-
-    const responseBody = typeof data === 'string' 
-        ? data 
-        : JSON.stringify(data);
-    
-    return new Response(responseBody, {
+    return new Response(JSON.stringify(responseBody), {
         status,
         statusText,
-        headers
+        headers,
     });
+};
+
+export const sanitizeResponseHeader = (headers: RawAxiosRequestHeaders) => {
+    const responseHeaders = new Headers();
+    const filterHeaders = [
+        "api_key",
+        "authorization",
+        "x-api-key",
+        "user-agent",
+    ];
+    if (headers instanceof Headers) {
+        headers.forEach((value, key) => {
+            if (!filterHeaders.includes(key.toLowerCase())) {
+                responseHeaders.set(key, value);
+            }
+        });
+    }
+    return responseHeaders;
+};
+
+export const handleApiError = (error: unknown): Response => {
+    return isAxiosError(error)
+        ? createErrorResponse(createAxiosErrorResponse(error))
+        : createErrorResponse(error as Error);
+};
+
+export const createErrorResponse = (error: Error): Response => {
+    return new Response(
+        JSON.stringify({ message: (error).message || error }),
+        {
+            status: 500,
+            statusText: "Internal Server Error",
+            headers: new Headers(),
+        }
+    );
 };
 
 export function formatAppRegion(region: string): RegionType {
