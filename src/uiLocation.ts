@@ -1,3 +1,4 @@
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import postRobot from "post-robot";
 import EventEmitter from "wolfy87-eventemitter";
 
@@ -26,15 +27,15 @@ import {
     InitializationData,
     LocationType,
     Manifest,
-    Region,
     IOrgFullPageLocation,
+    RegionType,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ContentstackEndpoints } from "./types/api.type";
 
 const emitter = new EventEmitter();
 
@@ -68,6 +69,9 @@ class UiLocation {
      * The configuration set for an app.
      */
     private config: GenericObjectType;
+
+
+    readonly endpoints: ContentstackEndpoints
 
     /**
      * This holds the instance of Cross-domain communication library for posting messages between windows.
@@ -103,7 +107,7 @@ class UiLocation {
     /**
      * The Contentstack Region on which the app is running.
      */
-    readonly region: Region;
+    readonly region: RegionType;
     version: number | null;
 
     ids: {
@@ -154,7 +158,7 @@ class UiLocation {
         });
 
         this.metadata = new Metadata(postRobot);
-
+        
         this.config = initializationData.config ?? {};
 
         this.ids = {
@@ -184,7 +188,8 @@ class UiLocation {
 
         this.modal = new Modal();
 
-        this.region = formatAppRegion(initializationData.region);
+        this.region = formatAppRegion(initializationData.region);   
+        this.endpoints = initializationData.endpoints;
 
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
@@ -468,10 +473,13 @@ class UiLocation {
     /**
      * Method used to get the Contentstack Region on which the app is running.
      */
-    getCurrentRegion = (): Region => {
+    getCurrentRegion = (): RegionType => {
         return this.region;
     };
 
+    getEndpoints = ():ContentstackEndpoints => {
+        return this.endpoints;
+    }
     /**
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
@@ -483,7 +491,7 @@ class UiLocation {
      */
     createAdapter = (): (config: AxiosRequestConfig) => Promise<AxiosResponse> => {
         return (config: AxiosRequestConfig): Promise<AxiosResponse> => {
-          return dispatchAdapter(postRobot)(config) as Promise<AxiosResponse>;
+          return dispatchAdapter(postRobot)(config)
         };
       };
 
