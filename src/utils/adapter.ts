@@ -28,7 +28,7 @@ export const dispatchAdapter =
                 if (data.status >= 400) {
                     throw data
                 }
-                return data as AxiosResponse;
+                return data;
             })
             .catch((err)=>onError(err));
     };
