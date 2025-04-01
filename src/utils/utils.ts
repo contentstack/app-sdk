@@ -39,27 +39,31 @@ export function sanitizeResponseHeader(axiosHeaders) {
     return fetchHeaders;
 };
 export const handleApiError = (error: AxiosResponse | AxiosError): Response => {
-    // Extract relevant information from the error
-    const isServerError = (error as AxiosResponse).status >= 500;
-    const responseBody = isServerError
-        ? (error as AxiosError).stack || "Internal Server Error"
-        : (error as AxiosResponse).data || "An error occurred";
-
-    const status = (error as AxiosResponse).status || 500;
-    const statusText =
-        isServerError
-            ? (error as AxiosError).message || "Internal Server Error"
-            : (error as AxiosResponse).statusText || "Error";
-
-    const headers = new Headers(
-        sanitizeResponseHeader((error as AxiosResponse).headers || {})
-    );
-
-    return new Response(JSON.stringify(responseBody), {
-        status,
-        statusText,
-        headers,
-    });
+    if (isAxiosError(error)) {
+        const isServerError = (error?.status ?? 0) >= 500;
+        const responseBody = isServerError
+            ? error.stack || "Internal Server Error"
+            : (error as unknown as AxiosResponse)?.data || "An error occurred";
+        const status = error?.status || 500;
+        const statusText =
+            isServerError
+                ? error.message || "Internal Server Error"
+                : (error as unknown as AxiosResponse)?.statusText || "Error";
+        const headers = new Headers(
+            sanitizeResponseHeader(error.response?.headers || {})
+        );
+        return new Response(JSON.stringify(responseBody), {
+            status,
+            statusText,
+            headers,
+        });
+    } else {
+        const responseBody = error.statusText || "An error occurred";
+        return new Response(JSON.stringify(responseBody), {
+            status: 500,
+            statusText: "Internal Server Error",
+        });
+    }
 }
 export function formatAppRegion(region: string): RegionType {
     return region ?? Region.UNKNOWN;
