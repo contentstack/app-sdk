@@ -1,22 +1,6 @@
-import {
-    AxiosError,
-    AxiosHeaders,
-    AxiosRequestConfig,
-    AxiosResponse,
-    isAxiosError,
-    RawAxiosRequestHeaders,
-} from "axios";
-import { Response } from "node-fetch";
+import { AxiosHeaders, AxiosRequestConfig } from "axios";
 
 import { Region, RegionType } from "../types";
-
-const filterHeaders = [
-    "api_key",
-    "authorization",
-    "auth_token",
-    "x-api-key",
-    "user-agent",
-  ];
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -32,39 +16,11 @@ export function onError(error: Error) {
 export function sanitizeResponseHeader(axiosHeaders) {
     const fetchHeaders = new Headers();
     for (const key in axiosHeaders) {
-        if (axiosHeaders.hasOwnProperty(key) && !filterHeaders.includes(key)) {
-            fetchHeaders.append(key, axiosHeaders[key]);
-          }    
+        fetchHeaders.append(key, axiosHeaders[key]);
     }
     return fetchHeaders;
-};
-export const handleApiError = (error: AxiosResponse | AxiosError): Response => {
-    if (isAxiosError(error)) {
-        const isServerError = (error?.status ?? 0) >= 500;
-        const responseBody = isServerError
-            ? error.stack || "Internal Server Error"
-            : (error as unknown as AxiosResponse)?.data || "An error occurred";
-        const status = error?.status || 500;
-        const statusText =
-            isServerError
-                ? error.message || "Internal Server Error"
-                : (error as unknown as AxiosResponse)?.statusText || "Error";
-        const headers = new Headers(
-            sanitizeResponseHeader(error.response?.headers || {})
-        );
-        return new Response(JSON.stringify(responseBody), {
-            status,
-            statusText,
-            headers,
-        });
-    } else {
-        const responseBody = error.statusText || "An error occurred";
-        return new Response(JSON.stringify(responseBody), {
-            status: 500,
-            statusText: "Internal Server Error",
-        });
-    }
 }
+
 export function formatAppRegion(region: string): RegionType {
     return region ?? Region.UNKNOWN;
 }

@@ -2,16 +2,12 @@ import PostRobot from "post-robot";
 import { Response } from "node-fetch";
 import {
     AxiosError,
+    AxiosHeaders,
     AxiosRequestConfig,
     AxiosResponse,
 } from "axios";
 
-import {
-    onError,
-    fetchToAxiosConfig,
-    handleApiError,
-    sanitizeResponseHeader,
-} from "./utils";
+import { fetchToAxiosConfig } from "./utils";
 
 /**
  * Dispatches a request using PostRobot.
@@ -19,20 +15,46 @@ import {
  * @returns A function that takes AxiosRequestConfig and returns a promise.
  */
 export const dispatchAdapter =
-    (postRobot: typeof PostRobot) =>
-    (config: AxiosRequestConfig): Promise<AxiosResponse> => {
-        return postRobot
-            .sendToParent("apiAdapter", config)
-            .then((event: unknown) => {
-                const { data } = event as { data: AxiosResponse };
-                if (data.status >= 400) {
-                    throw data
-                }
-                return data;
-            })
-            .catch((err)=>onError(err));
+    (postRobot: typeof PostRobot) => (config: AxiosRequestConfig) => {
+        return new Promise((resolve, reject) => {
+            postRobot
+                .sendToParent("apiAdapter", config)
+                .then((event: unknown) => {
+                    const { data: response } = event as { data: AxiosResponse };
+
+                    if (response.status >= 400) {
+                        return reject({ ...response, config });
+                    }
+                    resolve({
+                        data: response.data,
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: response.headers,
+                        config: config,
+                    });
+                })
+                .catch(() => {
+                    return reject(
+                        new AxiosError(
+                            "Something went wrong with the request",
+                            "ERR_INTERNAL_SERVER",
+                            {
+                                ...config,
+                                headers: config.headers as AxiosHeaders,
+                            },
+                            null,
+                            undefined
+                        )
+                    );
+                });
+        });
     };
 /**
+GitHub Copilot
+To handle errors generically and robustly, we can refactor the code to ensure that all errors are properly processed and converted into a standardized format. Here's how you can fix and improve the error handling in the provided code:
+
+Refactored Code
+
  * Dispatches an API request using axios and PostRobot.
  * @param url - The URL of the API endpoint.
  * @param options - Optional request options.
@@ -44,20 +66,30 @@ export const dispatchApiRequest = async (
 ): Promise<Response> => {
     try {
         const config = fetchToAxiosConfig(url, options);
-        const responseData = (await dispatchAdapter(PostRobot)(
+        const response = (await dispatchAdapter(PostRobot)(
             config
         )) as AxiosResponse;
-       
-        
-        return new Response(responseData?.data, {
-            status: responseData.status,
-            statusText: responseData.statusText,
-            url: responseData.config.url,
-            headers: new Headers(
-                sanitizeResponseHeader(responseData.config.headers || {})
-            ),
+
+        return new Response(response?.data, {
+            status: response.status,
+            statusText: response.statusText,
+            url: response.config.url,
+            headers: new Headers(Object.entries(response.headers ?? {})),
         });
-    } catch (error) {
-        return handleApiError(error as AxiosResponse | AxiosError);
+    } catch (err: any) {
+        if (err.response) {
+            return new Response(err.response?.data, {
+                status: err.status,
+                statusText: err.statusText,
+                headers: new Headers(
+                    Object.entries(err.response.headers ?? {})
+                ),
+            });
+        }
+        return new Response(err.stack, {
+            status: err.status || 500,
+            statusText: err.message || "Internal Server Error",
+            headers: new Headers(Object.entries(err.headers ?? {})),
+        });
     }
 };
