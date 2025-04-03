@@ -13,14 +13,6 @@ export function onError(error: Error) {
     return Promise.reject(error);
 }
 
-export function sanitizeResponseHeader(axiosHeaders) {
-    const fetchHeaders = new Headers();
-    for (const key in axiosHeaders) {
-        fetchHeaders.append(key, axiosHeaders[key]);
-    }
-    return fetchHeaders;
-}
-
 export function formatAppRegion(region: string): RegionType {
     return region ?? Region.UNKNOWN;
 }
