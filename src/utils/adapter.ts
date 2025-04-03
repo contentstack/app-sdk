@@ -1,5 +1,4 @@
 import PostRobot from "post-robot";
-import { Response } from "node-fetch";
 import {
     AxiosError,
     AxiosHeaders,
@@ -50,11 +49,6 @@ export const dispatchAdapter =
         });
     };
 /**
-GitHub Copilot
-To handle errors generically and robustly, we can refactor the code to ensure that all errors are properly processed and converted into a standardized format. Here's how you can fix and improve the error handling in the provided code:
-
-Refactored Code
-
  * Dispatches an API request using axios and PostRobot.
  * @param url - The URL of the API endpoint.
  * @param options - Optional request options.
@@ -73,23 +67,21 @@ export const dispatchApiRequest = async (
         return new Response(response?.data, {
             status: response.status,
             statusText: response.statusText,
-            url: response.config.url,
-            headers: new Headers(Object.entries(response.headers ?? {})),
+            headers: response.config.headers,
         });
     } catch (err: any) {
         if (err.response) {
             return new Response(err.response?.data, {
-                status: err.status,
-                statusText: err.statusText,
-                headers: new Headers(
-                    Object.entries(err.response.headers ?? {})
-                ),
+                status: err.response.status,
+                statusText: err.response.statusText,
+                headers: err.response.headers
+             
             });
         }
         return new Response(err.stack, {
             status: err.status || 500,
             statusText: err.message || "Internal Server Error",
-            headers: new Headers(Object.entries(err.headers ?? {})),
+            headers: err.config.headers,
         });
     }
 };
