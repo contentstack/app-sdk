@@ -1,47 +1,87 @@
-import PostRobot from 'post-robot';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { onError, fetchToAxiosConfig } from './utils';
+import PostRobot from "post-robot";
+import {
+    AxiosError,
+    AxiosHeaders,
+    AxiosRequestConfig,
+    AxiosResponse,
+} from "axios";
+
+import { fetchToAxiosConfig } from "./utils";
 
 /**
  * Dispatches a request using PostRobot.
  * @param postRobot - The PostRobot instance.
  * @returns A function that takes AxiosRequestConfig and returns a promise.
  */
-export const dispatchAdapter = (postRobot: typeof PostRobot) => (config: AxiosRequestConfig)=> {
-  return postRobot
-    .sendToParent("apiAdapter",  config )
-    .then(({ data }) => ({ ...data, config }))
-    .catch(onError);
-};
+export const dispatchAdapter =
+    (postRobot: typeof PostRobot) => (config: AxiosRequestConfig) => {
+        return new Promise((resolve, reject) => {
+            postRobot
+                .sendToParent("apiAdapter", config)
+                .then((event: unknown) => {
+                    const { data: response } = event as { data: AxiosResponse };
 
+                    if (response.status >= 400) {
+                        return reject({ ...response, config });
+                    }
+                    resolve({
+                        data: response.data,
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: response.headers,
+                        config: config,
+                    });
+                })
+                .catch(() => {
+                    return reject(
+                        new AxiosError(
+                            "Something went wrong with the request",
+                            "ERR_INTERNAL_SERVER",
+                            {
+                                ...config,
+                                headers: config.headers as AxiosHeaders,
+                            },
+                            null,
+                            undefined
+                        )
+                    );
+                });
+        });
+    };
 /**
  * Dispatches an API request using axios and PostRobot.
  * @param url - The URL of the API endpoint.
  * @param options - Optional request options.
  * @returns A promise that resolves to a partial Response object.
  */
-export const dispatchApiRequest = async (url: string, options?: RequestInit): Promise<Response> => {
-  try {
-    const config = fetchToAxiosConfig(url, options);
-    const responseData = await dispatchAdapter(PostRobot)(config) as AxiosResponse; 
-    return new Response(responseData.data,{
-      status: responseData.status,
-      statusText: responseData.statusText,
-      headers: new Headers(responseData.config.headers || {}),
-    });
+export const dispatchApiRequest = async (
+    url: string,
+    options?: RequestInit
+): Promise<Response> => {
+    try {
+        const config = fetchToAxiosConfig(url, options);
+        const response = (await dispatchAdapter(PostRobot)(
+            config
+        )) as AxiosResponse;
 
-  } catch (error: any) {
-    if (error.response) {
-      const fetchResponse = new Response(error.response.data, {
-          status: error.response.status,
-          statusText: error.response.statusText,
-          headers: new Headers(error.response.headers) 
-      });
-      return Promise.reject(fetchResponse);
-    } else if (error.request) {
-        return Promise.reject(new Response(null, { status: 0, statusText: 'Network Error' }));
-    } else {
-        return Promise.reject(new Response(null, { status: 0, statusText: error.message }));
+        return new Response(response?.data, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: response.config.headers,
+        });
+    } catch (err: any) {
+        if (err.response) {
+            return new Response(err.response?.data, {
+                status: err.response.status,
+                statusText: err.response.statusText,
+                headers: err.response.headers
+             
+            });
+        }
+        return new Response(err.stack, {
+            status: err.status || 500,
+            statusText: err.message || "Internal Server Error",
+            headers: err.config.headers,
+        });
     }
-  }
 };

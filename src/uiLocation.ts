@@ -1,3 +1,4 @@
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import postRobot from "post-robot";
 import EventEmitter from "wolfy87-eventemitter";
 
@@ -26,15 +27,15 @@ import {
     InitializationData,
     LocationType,
     Manifest,
-    Region,
     IOrgFullPageLocation,
+    RegionType,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import { dispatchApiRequest, dispatchAdapter } from './utils/adapter';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { dispatchApiRequest, dispatchAdapter } from "./utils/adapter";
+import { ContentstackEndpoints } from "./types/api.type";
 
 const emitter = new EventEmitter();
 
@@ -68,6 +69,8 @@ class UiLocation {
      * The configuration set for an app.
      */
     private config: GenericObjectType;
+
+    readonly endpoints: ContentstackEndpoints;
 
     /**
      * This holds the instance of Cross-domain communication library for posting messages between windows.
@@ -103,7 +106,7 @@ class UiLocation {
     /**
      * The Contentstack Region on which the app is running.
      */
-    readonly region: Region;
+    readonly region: RegionType;
     version: number | null;
 
     ids: {
@@ -177,7 +180,7 @@ class UiLocation {
             FullPage: null,
             FieldModifierLocation: null,
             ContentTypeSidebarWidget: null,
-            OrganizationFullPage: null
+            OrganizationFullPage: null,
         };
 
         window["postRobot"] = postRobot;
@@ -185,6 +188,7 @@ class UiLocation {
         this.modal = new Modal();
 
         this.region = formatAppRegion(initializationData.region);
+        this.endpoints = initializationData.endpoints;
 
         const stack = new Stack(initializationData.stack, postRobot, {
             currentBranch: initializationData.currentBranch,
@@ -287,10 +291,10 @@ class UiLocation {
 
             case LocationType.ORGANIZATION_FULL_PAGE: {
                 this.location.OrganizationFullPage = {
-                  currentOrganization: initializationData.organization,
+                    currentOrganization: initializationData.organization,
                 };
                 break;
-            } 
+            }
 
             case LocationType.CONTENT_TYPE_SIDEBAR_WIDGET: {
                 this.location.ContentTypeSidebarWidget =
@@ -468,24 +472,32 @@ class UiLocation {
     /**
      * Method used to get the Contentstack Region on which the app is running.
      */
-    getCurrentRegion = (): Region => {
+    getCurrentRegion = (): RegionType => {
         return this.region;
     };
 
+    getEndpoints = (): ContentstackEndpoints => {
+        return this.endpoints;
+    };
     /**
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestInit): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
+    api = (url: string, option?: RequestInit): Promise<Response> =>
+        dispatchApiRequest(url, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.
      */
-    createAdapter = (): (config: AxiosRequestConfig) => Promise<AxiosResponse> => {
+    createAdapter = (): ((
+        config: AxiosRequestConfig
+    ) => Promise<AxiosResponse>) => {
         return (config: AxiosRequestConfig): Promise<AxiosResponse> => {
-          return dispatchAdapter(postRobot)(config) as Promise<AxiosResponse>;
+            return dispatchAdapter(postRobot)(config) as Promise<
+                AxiosResponse<any, any>
+            >;
         };
-      };
+    };
 
     /**
      * Method used to initialize the App SDK.
