@@ -75,6 +75,7 @@ class FieldModifierLocationField {
         this._emitter = emitter;
 
         const separatedData = separateResolvedData(this, fieldDataObject.value);
+        console.log("Separated Data", separatedData);
 
         this._data = separatedData.unResolvedData;
 
