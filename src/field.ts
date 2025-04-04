@@ -13,6 +13,7 @@ const excludedDataTypesForSetField = [
 ];
 
 function separateResolvedData(field: Field, value: GenericObjectType) {
+    console.log("value inside separateResolvedData", value);
     let resolvedData = value;
     let unResolvedData = value;
     if (field.data_type === "file") {
@@ -27,6 +28,8 @@ function separateResolvedData(field: Field, value: GenericObjectType) {
             unResolvedData = [];
         }
     }
+    console.log("resolvedData", resolvedData);
+    console.log("unResolvedData", unResolvedData);
     return { resolvedData, unResolvedData };
 }
 
@@ -145,6 +148,9 @@ class Field {
      * @return {Object|string|number} Returns the field data.
      */
     getData({ resolved = false } = {}) {
+        console.log("resolved data inside getData", this._resolvedData);
+        console.log("unresolved data inside getData", this._data);
+        console.log("resolved", resolved);
         return resolved ? this._resolvedData : this._data;
     }
 
