@@ -27,7 +27,7 @@ import {
     InitializationData,
     LocationType,
     Manifest,
-    IOrgFullPageLocation,
+    IGlobalFullPageLocation,
     RegionType,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
@@ -132,7 +132,7 @@ class UiLocation {
         FullPage: IFullPageLocation | null;
         FieldModifierLocation: IFieldModifierLocation | null;
         ContentTypeSidebarWidget: ContentTypeSidebarWidget | null;
-        OrganizationFullPage: IOrgFullPageLocation | null;
+        GlobalFullPageLocation: IGlobalFullPageLocation | null;
     };
 
     constructor(initData: InitializationData) {
@@ -180,7 +180,7 @@ class UiLocation {
             FullPage: null,
             FieldModifierLocation: null,
             ContentTypeSidebarWidget: null,
-            OrganizationFullPage: null,
+            GlobalFullPageLocation: null,
         };
 
         window["postRobot"] = postRobot;
@@ -289,8 +289,8 @@ class UiLocation {
                 break;
             }
 
-            case LocationType.ORGANIZATION_FULL_PAGE: {
-                this.location.OrganizationFullPage = {
+            case LocationType.GLOBAL_FULL_PAGE_LOCATION: {
+                this.location.GlobalFullPageLocation = {
                     currentOrganization: initializationData.organization,
                 };
                 break;
