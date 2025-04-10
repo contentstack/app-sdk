@@ -7,7 +7,7 @@ import { GenericObjectType } from "./types/common.types";
 import { Entry } from "./types/entry.types";
 import { Asset, ContentType, Schema, StackDetail } from "./types/stack.types";
 import { OrganizationDetails } from "./types/organization.types";
-import { ContentstackEndpoints } from './types/api.type';
+import { ContentstackEndpoints } from "./types/api.type";
 import { User } from "./types/user.types";
 import Window from "./window";
 
@@ -69,7 +69,7 @@ export declare interface IAppConfigWidget {
     stack: Stack;
 }
 
-export declare interface IOrgFullPageLocation {
+export declare interface IGlobalFullPageLocation {
     currentOrganization: OrganizationDetails;
 }
 
@@ -88,7 +88,7 @@ export enum LocationType {
     RTE = "RTE",
     WIDGET = "WIDGET",
     CONTENT_TYPE_SIDEBAR_WIDGET = "CONTENT_TYPE_SIDEBAR_WIDGET",
-    ORGANIZATION_FULL_PAGE = "ORGANIZATION_FULL_PAGE",
+    GLOBAL_FULL_PAGE_LOCATION = "GLOBAL_FULL_PAGE_LOCATION",
 }
 
 // Init data
@@ -106,10 +106,11 @@ declare interface ICommonInitData {
     endpoints: ContentstackEndpoints;
 }
 
-export declare interface IOrgFullPageLocationInitData extends ICommonInitData {
+export declare interface IGlobalFullPageLocationInitData
+    extends ICommonInitData {
     organization: OrganizationDetails;
     config?: GenericObjectType;
-    type: LocationType.ORGANIZATION_FULL_PAGE;
+    type: LocationType.GLOBAL_FULL_PAGE_LOCATION;
 }
 
 export declare interface IDashboardInitData extends ICommonInitData {
@@ -217,7 +218,7 @@ export type InitializationData =
     | IRTEInitData
     | ISidebarInitData
     | IContentTypeSidebarInitData
-    | IOrgFullPageLocationInitData;
+    | IGlobalFullPageLocationInitData;
 
 /**
  * installation details API response
@@ -259,4 +260,11 @@ export enum Region {
     GCP_EU = "GCP_EU",
 }
 
-export type RegionType = "UNKNOWN" | "NA" | "EU" | "AZURE_NA" | "AZURE_EU" | "GCP_NA" | string;
+export type RegionType =
+    | "UNKNOWN"
+    | "NA"
+    | "EU"
+    | "AZURE_NA"
+    | "AZURE_EU"
+    | "GCP_NA"
+    | string;

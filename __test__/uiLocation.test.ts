@@ -1,3 +1,5 @@
+import { AxiosRequestConfig, AxiosResponse } from "axios";
+
 import postRobot from "post-robot";
 
 import UiLocation from "../src/uiLocation";
@@ -12,9 +14,8 @@ import {
     LocationType,
     Region,
 } from "../src/types";
-import { RequestOption } from '../src/types/common.types';
-import { RequestConfig } from '../src/types/api.type';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { RequestOption } from "../src/types/common.types";
+import { RequestConfig } from "../src/types/api.type";
 
 jest.mock("post-robot");
 jest.mock("wolfy87-eventemitter");
@@ -60,7 +61,11 @@ const initData: IAppConfigInitData = {
     installation_uid: "installation_uid",
     extension_uid: "extension_uid",
     region: "NA",
-    endpoints: { CMA: "https://api.contentstack.io", APP: "https://app.contentstack.app",DEVELOPER_HUB:"" },
+    endpoints: {
+        CMA: "https://api.contentstack.io",
+        APP: "https://app.contentstack.app",
+        DEVELOPER_HUB: "",
+    },
     stack: mockStackData,
     user: {} as any,
     currentBranch: "currentBranch",
@@ -135,7 +140,7 @@ describe("UI Location", () => {
         });
     });
 
-    describe('dispatchPostRobotRequest', () => {
+    describe("dispatchPostRobotRequest", () => {
         let mockPostRobot: typeof postRobot;
         let opts: RequestOption;
         let uiLocationInstance: UiLocation;
@@ -143,35 +148,40 @@ describe("UI Location", () => {
 
         beforeEach(() => {
             mockPostRobot = postRobot;
-            opts = { method: 'GET' };
+            opts = { method: "GET" };
             uiLocationInstance = new UiLocation(initData);
             onError = jest.fn();
             uiLocationInstance.api = jest.fn().mockResolvedValue({
-                method: 'GET',
-                url: "https://test.com/test?limit=10&skip=0"
+                method: "GET",
+                url: "https://test.com/test?limit=10&skip=0",
             });
         });
 
-        it('should call sendToParent with the correct arguments and resolve with data', async () => {
+        it("should call sendToParent with the correct arguments and resolve with data", async () => {
             const mockData = { success: true };
             // Call the method that uses uiLocationInstance.api
-            const result = await uiLocationInstance.api("https://test.com/test?limit=10&skip=0",{
-                method: 'GET'
-            });
+            const result = await uiLocationInstance.api(
+                "https://test.com/test?limit=10&skip=0",
+                {
+                    method: "GET",
+                }
+            );
 
             // Assertions
-            expect(uiLocationInstance.api).toHaveBeenCalledWith('https://test.com/test?limit=10&skip=0',{
-                method: 'GET'
-            });
+            expect(uiLocationInstance.api).toHaveBeenCalledWith(
+                "https://test.com/test?limit=10&skip=0",
+                {
+                    method: "GET",
+                }
+            );
             expect(result).toEqual({
-                method: 'GET',
-                url: 'https://test.com/test?limit=10&skip=0',
+                method: "GET",
+                url: "https://test.com/test?limit=10&skip=0",
             });
-
         });
 
-        it('should call onError if sendToParent rejects', async () => {
-            const mockError = new Error('Test error');
+        it("should call onError if sendToParent rejects", async () => {
+            const mockError = new Error("Test error");
 
             // Mock the api method to reject with an error
             uiLocationInstance.api = jest.fn().mockRejectedValue(mockError);
@@ -182,84 +192,102 @@ describe("UI Location", () => {
             });
 
             // Call the method that uses uiLocationInstance.api and expect it to throw an error
-            await expect(uiLocationInstance.api("https://test.com/test?limit=10&skip=0",{
-                method: 'GET'
-            })).rejects.toThrow('Test error');
+            await expect(
+                uiLocationInstance.api(
+                    "https://test.com/test?limit=10&skip=0",
+                    {
+                        method: "GET",
+                    }
+                )
+            ).rejects.toThrow("Test error");
         });
     });
-
 
     describe("createSDKAdapter", () => {
         let mockPostRobot: typeof postRobot;
         let opts: RequestConfig;
         let uiLocationInstance: UiLocation;
         let onError: jest.Mock;
-    
+
         beforeEach(() => {
             mockPostRobot = postRobot;
-            opts = { method: 'GET', baseURL: "https://test.com", url: "/test?limit10&skip=0" };
+            opts = {
+                method: "GET",
+                baseURL: "https://test.com",
+                url: "/test?limit10&skip=0",
+            };
             uiLocationInstance = new UiLocation(initData);
             onError = jest.fn();
-            uiLocationInstance.createAdapter = jest.fn().mockImplementation(() => async (config: AxiosRequestConfig) => {
-                return {
-                    method: 'GET',
-                    url: '/test?limit=10&skip=0',
-                    baseURL: 'https://test.com',
-                    data: {}
-                } as unknown as AxiosResponse;
-            });
+            uiLocationInstance.createAdapter = jest
+                .fn()
+                .mockImplementation(
+                    () => async (config: AxiosRequestConfig) => {
+                        return {
+                            method: "GET",
+                            url: "/test?limit=10&skip=0",
+                            baseURL: "https://test.com",
+                            data: {},
+                        } as unknown as AxiosResponse;
+                    }
+                );
         });
-    
+
         afterEach(() => {
             postRobotOnMock.mockClear();
             postRobotSendToParentMock.mockClear();
-    
+
             jest.clearAllMocks();
             window["postRobot"] = undefined;
             window["iframeRef"] = undefined;
         });
-    
-        it('should call createAdapter with the correct arguments and resolve with data', async () => {
+
+        it("should call createAdapter with the correct arguments and resolve with data", async () => {
             const mockData = { success: true };
             // Call the method that uses uiLocationInstance.createAdapter
             const result = await uiLocationInstance.createAdapter()({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                data: {}
+                method: "GET",
+                url: "/test?limit=10&skip=0",
+                baseURL: "https://test.com",
+                data: {},
             });
-    
+
             expect(result).toEqual({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                data: {}
+                method: "GET",
+                url: "/test?limit=10&skip=0",
+                baseURL: "https://test.com",
+                data: {},
             });
         });
-    
-        it('should call onError if createAdapter rejects', async () => {
-            const mockError = new Error('Test error');
-    
+
+        it("should call onError if createAdapter rejects", async () => {
+            const mockError = new Error("Test error");
+
             // Mock the createAdapter method to reject with an error
-            uiLocationInstance.createAdapter = jest.fn().mockImplementation(() => async (config: AxiosRequestConfig) => {
-                throw mockError;
-            });
-    
+            uiLocationInstance.createAdapter = jest
+                .fn()
+                .mockImplementation(
+                    () => async (config: AxiosRequestConfig) => {
+                        throw mockError;
+                    }
+                );
+
             // Mock the onError implementation
             onError.mockImplementation((error) => {
                 throw error;
             });
-    
+
             // Call the method that uses uiLocationInstance.createAdapter and expect it to throw an error
-            await expect(uiLocationInstance.createAdapter()({
-                method: 'GET',
-                url: '/test?limit=10&skip=0',
-                baseURL: 'https://test.com',
-                data: {}
-            })).rejects.toThrow('Test error');
+            await expect(
+                uiLocationInstance.createAdapter()({
+                    method: "GET",
+                    url: "/test?limit=10&skip=0",
+                    baseURL: "https://test.com",
+                    data: {},
+                })
+            ).rejects.toThrow("Test error");
         });
     });
-    
+
     describe("getConfig", () => {
         it("should return config if no installation uid present", async () => {
             const uiLocation = new UiLocation(initDataJsonRte as any);
