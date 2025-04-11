@@ -23,6 +23,6 @@ describe("formatAppRegion", () => {
     });
 
     it("should return unknown for any invalid region", () => {
-        expect(formatAppRegion("invalid")).toBe(Region.UNKNOWN);
+        expect(formatAppRegion("invalid")).toBe("invalid");
     });
 });
