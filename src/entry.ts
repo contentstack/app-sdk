@@ -51,6 +51,8 @@ class Entry {
 
         this._data = initializationData.entry;
 
+        console.warn("initializationData", initializationData);
+
         if (
             (initializationData as IFieldModifierLocationInitData).changedData
         ) {
@@ -83,12 +85,31 @@ class Entry {
     }
 
     /**
-     * Gets data of the current entry.
+     * Gets data of the current entry. -- testing 5:22
      * @return {Object} Returns entry data.
      */
 
     getData() {
+        console.log("Data Requested", this);
         return this._data;
+    }
+
+    /**
+     * Gets the draft data of the current entry.
+     * If no changes are available, returns an empty object.
+     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
+     */
+    getDraftData() {
+        console.log("Draft Data Requested");
+
+        // If `_changedData` exists and has at least one change, return it; otherwise, return an empty object
+        if (this._changedData && Object.keys(this._changedData).length > 0) {
+            console.log("Returning Draft Data:", this._changedData);
+            return this._changedData;
+        } else {
+            console.warn("No Draft Data Available, returning actual data");
+            return this._data;
+        }
     }
 
     /**
