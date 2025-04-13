@@ -51,8 +51,6 @@ class Entry {
 
         this._data = initializationData.entry;
 
-        console.warn("initializationData", initializationData);
-
         if (
             (initializationData as IFieldModifierLocationInitData).changedData
         ) {
@@ -85,32 +83,53 @@ class Entry {
     }
 
     /**
-     * Gets data of the current entry. -- testing 5:22
-     * @return {Object} Returns entry data.
+     * Gets data of the current entry.
+     * If `options.draft` is true, it will attempt to fetch the current live (unsaved) state from the parent UI.
+     * Falls back to `_data` if UI communication fails.
+     * @param options Optional object with `draft: true` to request unsaved data
+     * @returns Entry data
      */
 
-    getData() {
-        console.log("Data Requested", this);
+    // async getData(options?: { draft?: boolean }): Promise<EntryType> {
+    //     const requestDraft = options?.draft ?? false;
+
+    //     if (requestDraft) {
+    //         try {
+    //             const result = await this._connection.send(
+    //                 window.parent,
+    //                 "getDraftData"
+    //             );
+    //             return result.data as EntryType;
+    //         } catch (err) {
+    //             console.warn(
+    //                 "[SDK] Failed to get draft data from parent UI. Falling back to saved data.",
+    //                 err
+    //             );
+    //             return this._data;
+    //         }
+    //     }
+
+    //     return this._data;
+    // }
+
+    //-----------------------------------TO ENSURE BACKWARD COMPATIBILITY-----------------------------------
+
+    //------------- WE SPILT THE FUNCTION INTO TWO PARTS TO ENSURE BACKWARD COMPATIBILITY ----------------
+      getData(): EntryType {
         return this._data;
-    }
+      }
 
-    /**
-     * Gets the draft data of the current entry.
-     * If no changes are available, returns an empty object.
-     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
-     */
-    getDraftData() {
-        console.log("Draft Data Requested");
-
-        // If `_changedData` exists and has at least one change, return it; otherwise, return an empty object
-        if (this._changedData && Object.keys(this._changedData).length > 0) {
-            console.log("Returning Draft Data:", this._changedData);
-            return this._changedData;
-        } else {
-            console.warn("No Draft Data Available, returning actual data");
-            return this._data;
+      async getDraftData(): Promise<EntryType> {
+        try {
+          const result = await this._connection.send(window.parent, 'getDraftData');
+          return result.data as EntryType;
+        } catch (err) {
+          console.warn('[SDK] Failed to get draft data from parent UI. Falling back.', err);
+          return this._data;
         }
-    }
+      }
+
+    //-----------------------------------TO ENSURE BACKWARD COMPATIBILITY-----------------------------------
 
     /**
      *
