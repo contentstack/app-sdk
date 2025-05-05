@@ -251,33 +251,20 @@ class Entry {
     onBeforeSave(callback: (entry: EntryType) => void | Promise<void>) {
         console.log("method is invoked");
         const entryObj = this;
-        if (typeof callback !== "function") {
+        console.log("entryObj", entryObj);
+        if (callback && typeof callback === "function") {
+            entryObj._emitter.on(
+                "entryBeforeSave",
+                (event: { data: EntryType }) => {
+                    callback(event.data);
+                }
+            );
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryBeforeSave" },
+            ]);
+        } else {
             throw Error("Callback must be a function");
         }
-
-        const handler = async (event: CustomEvent) => {
-            try {
-                await callback(event.detail.data);
-            } catch (e) {
-                event.preventDefault(); // Block the save
-                console.warn("Save blocked by onBeforeSave due to:", e);
-            }
-        };
-
-        window.addEventListener(
-            "entryBeforeSave",
-            handler as unknown as EventListener,
-            {
-                once: false,
-                passive: false,
-            }
-        );
-
-        console.log("event listener is added");
-
-        this._emitter.emitEvent("_eventRegistration", [
-            { name: "entryBeforeSave" },
-        ]);
     }
 
     /**
