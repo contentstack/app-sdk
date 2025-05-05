@@ -243,6 +243,44 @@ class Entry {
     }
 
     /**
+     * The onBeforeSave() function executes the callback before the entry is saved.
+     * You can perform validations or async operations here.
+     * Returning a rejected promise or throwing an error will block the save.
+     * @param {function} callback The function to be called before the entry is saved.
+     */
+    onBeforeSave(callback: (entry: EntryType) => void | Promise<void>) {
+        console.log("method is invoked");
+        const entryObj = this;
+        if (typeof callback !== "function") {
+            throw Error("Callback must be a function");
+        }
+
+        const handler = async (event: CustomEvent) => {
+            try {
+                await callback(event.detail.data);
+            } catch (e) {
+                event.preventDefault(); // Block the save
+                console.warn("Save blocked by onBeforeSave due to:", e);
+            }
+        };
+
+        window.addEventListener(
+            "entryBeforeSave",
+            handler as unknown as EventListener,
+            {
+                once: false,
+                passive: false,
+            }
+        );
+
+        console.log("event listener is added");
+
+        this._emitter.emitEvent("_eventRegistration", [
+            { name: "entryBeforeSave" },
+        ]);
+    }
+
+    /**
      * The onChange() function executes the provided callback function whenever an entry is updated.
      * @param {function} callback - The function to be called when the entry is edited or changed.
      */
