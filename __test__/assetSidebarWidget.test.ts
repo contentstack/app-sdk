@@ -25,6 +25,7 @@ describe("AssetSidebarWidget", () => {
         user: {} as any,
         currentBranch: "mock_branch",
         region: "region",
+        endpoints: { CMA: "", APP: "",DEVELOPER_HUB:"" },
     };
 
     let connection: { sendToParent: (...props: any[]) => any };
