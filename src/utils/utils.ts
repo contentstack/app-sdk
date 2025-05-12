@@ -1,4 +1,4 @@
-import { AxiosHeaders, AxiosRequestConfig } from "axios";
+import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { Region, RegionType } from "../types";
 
@@ -85,3 +85,55 @@ export const fetchToAxiosConfig = (
 
     return axiosConfig;
 };
+
+export function axiosToFetchResponse(
+    axiosRes: AxiosResponse,
+    sanitizeHeadersFn?: (headers: Record<string, string>) => Record<string, string>
+  ): Response {
+    const { data, status, statusText, headers: rawHeaders } = axiosRes;
+  
+    let body: BodyInit;
+    let contentType = 'application/json';
+  
+    if (data instanceof Blob || typeof data === 'string' || data instanceof ArrayBuffer) {
+      body = data;
+      contentType = rawHeaders['content-type'] || 'application/octet-stream';
+    } else {
+      body = JSON.stringify(data);
+    }
+  
+    const headersObj = sanitizeHeadersFn
+      ? sanitizeHeadersFn(
+          Object.fromEntries(
+            Object.entries(rawHeaders).map(([key, value]) => [key, String(value)])
+          )
+        )
+      : Object.fromEntries(
+          Object.entries(rawHeaders).map(([key, value]) => [key, String(value)])
+        );
+  
+    if (!headersObj['content-type']) {
+      headersObj['content-type'] = contentType;
+    }
+  
+    const responseInit: ResponseInit = {
+      status,
+      statusText,
+      headers: new Headers(headersObj),
+    };
+  
+    return new Response(body, responseInit);
+  }
+  
+  export function sanitizeFetchResponseHeader(headers: Record<string, string>): Record<string, string> {
+    const blocked = ['authorization', 'cookie', 'set-cookie'];
+    const sanitized: Record<string, string> = {};
+  
+    for (const [key, value] of Object.entries(headers)) {
+      if (!blocked.includes(key.toLowerCase())) {
+        sanitized[key] = value;
+      }
+    }
+  
+    return sanitized;
+  }
