@@ -6,7 +6,7 @@ import {
     AxiosResponse,
 } from "axios";
 
-import { axiosToFetchResponse, fetchToAxiosConfig, sanitizeFetchResponseHeader } from "./utils";
+import { axiosToFetchResponse, fetchToAxiosConfig } from "./utils";
 
 /**
  * Dispatches a request using PostRobot.
@@ -64,7 +64,7 @@ export const dispatchApiRequest = async (
             config
         )) as AxiosResponse;
 
-        return axiosToFetchResponse(axiosResponse, sanitizeFetchResponseHeader);
+        return axiosToFetchResponse(axiosResponse);
     } catch (err: any) {
         if (err.response) {
             return new Response(err.response?.data, {
