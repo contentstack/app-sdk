@@ -1,4 +1,4 @@
-import { AxiosHeaders, AxiosRequestConfig } from "axios";
+import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { Region, RegionType } from "../types";
 
@@ -85,3 +85,33 @@ export const fetchToAxiosConfig = (
 
     return axiosConfig;
 };
+
+export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
+    const { data, status, statusText, config } = axiosRes;
+
+    let body: BodyInit;
+    let contentType = "application/json";
+
+    if (
+        data instanceof Blob ||
+        typeof data === "string" ||
+        data instanceof ArrayBuffer
+    ) {
+        body = data;
+        contentType = config.headers["content-type"] || "application/octet-stream";
+    } else {
+        body = JSON.stringify(data);
+    }
+
+    if (!config.headers["content-type"]) {
+        config.headers["content-type"] = contentType;
+    }
+
+    const responseInit: ResponseInit = {
+        status,
+        statusText,
+        headers: config.headers,
+    };
+
+    return new Response(body, responseInit);
+}
