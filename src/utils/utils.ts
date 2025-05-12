@@ -87,7 +87,11 @@ export const fetchToAxiosConfig = (
 };
 
 export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
-    const { data, status, statusText, headers: rawHeaders } = axiosRes;
+    const { data, status, statusText, config } = axiosRes;
+
+    const headersObj = Object.fromEntries(
+        Object.entries(config.headers).map(([key, value]) => [key, String(value)])
+    );
 
     let body: BodyInit;
     let contentType = "application/json";
@@ -98,14 +102,10 @@ export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
         data instanceof ArrayBuffer
     ) {
         body = data;
-        contentType = rawHeaders["content-type"] || "application/octet-stream";
+        contentType = config.headers["content-type"] || "application/octet-stream";
     } else {
         body = JSON.stringify(data);
     }
-
-    const headersObj = Object.fromEntries(
-        Object.entries(rawHeaders).map(([key, value]) => [key, String(value)])
-    );
 
     if (!headersObj["content-type"]) {
         headersObj["content-type"] = contentType;
