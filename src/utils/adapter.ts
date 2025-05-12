@@ -58,7 +58,7 @@ export const dispatchAdapter =
  */
 export const dispatchApiRequest = async (
     url: string,
-    options?: RequestInit,
+    options?: RequestInit
 ): Promise<Response> => {
     try {
         const config = fetchToAxiosConfig(url, options);
