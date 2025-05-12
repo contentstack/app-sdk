@@ -89,10 +89,6 @@ export const fetchToAxiosConfig = (
 export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
     const { data, status, statusText, config } = axiosRes;
 
-    const headersObj = Object.fromEntries(
-        Object.entries(config.headers).map(([key, value]) => [key, String(value)])
-    );
-
     let body: BodyInit;
     let contentType = "application/json";
 
@@ -107,14 +103,14 @@ export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
         body = JSON.stringify(data);
     }
 
-    if (!headersObj["content-type"]) {
-        headersObj["content-type"] = contentType;
+    if (!config.headers["content-type"]) {
+        config.headers["content-type"] = contentType;
     }
 
     const responseInit: ResponseInit = {
         status,
         statusText,
-        headers: new Headers(headersObj),
+        headers: config.headers,
     };
 
     return new Response(body, responseInit);
