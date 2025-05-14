@@ -25,6 +25,12 @@ declare class Entry {
      */
     getData(): EntryType;
     /**
+     * Gets the draft data of the current entry.
+     * If no changes are available, returns an empty object.
+     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
+     */
+    getDraftData(): GenericObjectType;
+    /**
      *
      *
      * Safely retrieves the value of a property from an object.
@@ -57,13 +63,6 @@ declare class Entry {
      * @param {function} callback The function to be called when an entry is saved.
      */
     onSave(callback: (arg0: EntryType) => void): void;
-    /**
-     * The onBeforeSave() function executes the callback before the entry is saved.
-     * You can perform validations or async operations here.
-     * Returning a rejected promise or throwing an error will block the save.
-     * @param {function} callback The function to be called before the entry is saved.
-     */
-    onBeforeSave(callback: (entry: EntryType) => void | Promise<void>): void;
     /**
      * The onChange() function executes the provided callback function whenever an entry is updated.
      * @param {function} callback - The function to be called when the entry is edited or changed.

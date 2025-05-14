@@ -92,6 +92,23 @@ class Entry {
     }
 
     /**
+     * Gets the draft data of the current entry.
+     * If no changes are available, returns an empty object.
+     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
+     */
+    getDraftData() {
+        console.log("Draft Data Requested");
+
+        // If `_changedData` exists and has at least one change, return it; otherwise, return an empty object
+        if (this._changedData && Object.keys(this._changedData).length > 0) {
+            console.log("Returning Draft Data:", this._changedData);
+            return this._changedData;
+        } else {
+            return {};
+        }
+    }
+
+    /**
      *
      *
      * Safely retrieves the value of a property from an object.
@@ -236,31 +253,6 @@ class Entry {
             });
             this._emitter.emitEvent("_eventRegistration", [
                 { name: "entrySave" },
-            ]);
-        } else {
-            throw Error("Callback must be a function");
-        }
-    }
-
-    /**
-     * The onBeforeSave() function executes the callback before the entry is saved.
-     * You can perform validations or async operations here.
-     * Returning a rejected promise or throwing an error will block the save.
-     * @param {function} callback The function to be called before the entry is saved.
-     */
-    onBeforeSave(callback: (entry: EntryType) => void | Promise<void>) {
-        console.log("method is invoked");
-        const entryObj = this;
-        console.log("entryObj", entryObj);
-        if (callback && typeof callback === "function") {
-            entryObj._emitter.on(
-                "entryBeforeSave",
-                (event: { data: EntryType }) => {
-                    callback(event.data);
-                }
-            );
-            this._emitter.emitEvent("_eventRegistration", [
-                { name: "entryBeforeSave" },
             ]);
         } else {
             throw Error("Callback must be a function");
