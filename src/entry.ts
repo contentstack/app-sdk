@@ -92,6 +92,19 @@ class Entry {
     }
 
     /**
+     * Gets the draft data of the current entry.
+     * If no changes are available, returns an empty object.
+     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
+     */
+    getDraftData() {
+        if (this._changedData && Object.keys(this._changedData).length > 0) {
+            return this._changedData;
+        } else {
+            return {};
+        }
+    }
+
+    /**
      *
      *
      * Safely retrieves the value of a property from an object.
