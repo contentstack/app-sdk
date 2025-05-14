@@ -57,6 +57,17 @@ describe("Entry", () => {
         expect(testData.entry).toEqual(entry.getData());
     });
 
+    it("getDraftData", () => {
+        entry._changedData = { title: "Draft Title", content: "Draft Content" };
+        expect(entry.getDraftData()).toEqual({
+            title: "Draft Title",
+            content: "Draft Content",
+        });
+
+        entry._changedData = {};
+        expect(entry.getDraftData()).toEqual({});
+    });
+
     describe("getField", () => {
         it("getField undefined", function () {
             const uid = "group1.group";
@@ -133,7 +144,7 @@ describe("Entry", () => {
         });
         it("should use custom Field instance if internal flag is set", () => {
             const fieldInstance: any = jest.fn();
-            entry = new Entry(testData as any, connection as any, emitter ,{
+            entry = new Entry(testData as any, connection as any, emitter, {
                 _internalFlags: {
                     FieldInstance: fieldInstance,
                 },
