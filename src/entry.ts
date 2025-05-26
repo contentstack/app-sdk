@@ -30,7 +30,7 @@ class Entry {
     locale: string;
     _connection: typeof postRobot;
     _emitter: EventEmitter;
-    _changedData?: GenericObjectType;
+    _changedData?: GenericObjectType | EntryType;
     _options: IEntryOptions;
 
     constructor(
