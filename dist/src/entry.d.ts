@@ -16,7 +16,7 @@ declare class Entry {
     locale: string;
     _connection: typeof postRobot;
     _emitter: EventEmitter;
-    _changedData?: GenericObjectType | EntryType;
+    _changedData?: GenericObjectType;
     _options: IEntryOptions;
     constructor(initializationData: IFieldInitData | ISidebarInitData | IRTEInitData | IFieldModifierLocationInitData, connection: typeof postRobot, emitter: EventEmitter, options?: IEntryOptions);
     /**
@@ -29,7 +29,7 @@ declare class Entry {
      * If no changes are available, returns an empty object.
      * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
      */
-    getDraftData(): GenericObjectType;
+    getDraftData(): {};
     /**
      *
      *

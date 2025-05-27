@@ -30,7 +30,7 @@ class Entry {
     locale: string;
     _connection: typeof postRobot;
     _emitter: EventEmitter;
-    _changedData?: GenericObjectType | EntryType;
+    _changedData?: GenericObjectType;
     _options: IEntryOptions;
 
     constructor(
@@ -96,17 +96,27 @@ class Entry {
      * If no changes are available, returns an empty object.
      * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
      */
-    getDraftData() {
-        console.log("Draft Data Requested");
+   getDraftData() {
+    console.log("Draft Data Requested");
 
-        // If `_changedData` exists and has at least one change, return it; otherwise, return an empty object
-        if (this._changedData && Object.keys(this._changedData).length > 0) {
-            console.log("Returning Draft Data:", this._changedData);
-            return this._changedData;
-        } else {
-            return {};
+    if (this._changedData && Object.keys(this._changedData).length > 0) {
+        const draftEntry = { ...this._data };
+
+        for (const key in this._changedData) {
+            if (Object.prototype.hasOwnProperty.call(this._changedData, key)) {
+                draftEntry[key] = this._changedData[key];
+            }
         }
+
+        console.log("Returning Draft Data:", draftEntry);
+        return draftEntry;
     }
+
+    console.log("No changes detected, returning empty object");
+    return {};
+  }
+
+
 
     /**
      *
