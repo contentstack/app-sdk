@@ -20,10 +20,16 @@ declare class Entry {
     _options: IEntryOptions;
     constructor(initializationData: IFieldInitData | ISidebarInitData | IRTEInitData | IFieldModifierLocationInitData, connection: typeof postRobot, emitter: EventEmitter, options?: IEntryOptions);
     /**
-     * Gets data of the current entry.
-     * @return {Object} Returns entry data.
-     */
-    getData(): EntryType;
+ * Gets data of the current entry.
+ * @param {Object} [options] - Options to control data resolution and draft state.
+ * @param {boolean} [options.draft] - If true, returns draft (unsaved) entry data.
+ * @param {boolean} [options.resolved] - If true, returns resolved data for assets/references.
+ * @return {Object} Entry data based on provided options.
+ */
+    getData(options?: {
+        draft?: boolean;
+        resolved?: boolean;
+    }): GenericObjectType;
     /**
      * Gets the draft data of the current entry.
      * If no changes are available, returns an empty object.

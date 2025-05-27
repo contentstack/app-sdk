@@ -83,13 +83,40 @@ class Entry {
     }
 
     /**
-     * Gets data of the current entry.
-     * @return {Object} Returns entry data.
-     */
+ * Gets data of the current entry.
+ * @param {Object} [options] - Options to control data resolution and draft state.
+ * @param {boolean} [options.draft] - If true, returns draft (unsaved) entry data.
+ * @param {boolean} [options.resolved] - If true, returns resolved data for assets/references.
+ * @return {Object} Entry data based on provided options.
+ */
+getData(options?: { draft?: boolean; resolved?: boolean }): GenericObjectType {
+    console.log("updated getData called with options:", options);
+    const { draft = false, resolved = false } = options || {};
 
-    getData() {
-        return this._data;
+    const baseData = draft
+        ? this._changedData && Object.keys(this._changedData).length > 0
+            ? Object.assign({ ...this._data }, this._changedData)
+            : {}
+        : this._data;
+
+    if (resolved) {
+        const resolvedData = draft
+            ? (this as any)._resolvedChangedData
+            : (this as any)._resolvedData;
+
+        if (resolvedData && typeof resolvedData === 'object') {
+            return {
+                ...baseData,
+                ...resolvedData,
+            };
+        }
     }
+
+    console.log("Returning base data:", baseData);
+
+    return baseData;
+}
+
 
     /**
      * Gets the draft data of the current entry.
