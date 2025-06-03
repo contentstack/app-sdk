@@ -30,7 +30,6 @@ class Entry {
     _data: EntryType;
     locale: string;
     _connection: typeof postRobot;
-    // _postRobots: typeof postRobot;
     _emitter: EventEmitter;
     _changedData?: GenericObjectType;
     _options: IEntryOptions;
@@ -42,7 +41,6 @@ class Entry {
             | IRTEInitData
             | IFieldModifierLocationInitData,
         connection: typeof postRobot,
-        // postRobots: typeof postRobot,
         emitter: EventEmitter,
         options?: IEntryOptions
     ) {
@@ -69,8 +67,6 @@ class Entry {
         this.locale = initializationData.locale;
 
         this._connection = connection;
-
-        // this._postRobots = postRobots;
 
         this._emitter = emitter;
 
@@ -123,22 +119,30 @@ getData(options?: { draft?: boolean; resolved?: boolean }): GenericObjectType {
 }
 
 
-getDraftData(): Promise<any> {
-    console.log("getDraftData called");
-    return this._connection
-        .sendToParent("getDraftData")
-        .then((event: { data: any }) => {
-            console.log("Draft data received:", event.data);
-            return event.data;
-        })
-        .catch((error) => {
-            console.error("Error sending getDraftData:", error);
-            throw error;
-        });
-}
+    /**
+     * Gets the draft data of the current entry.
+     * If no changes are available, returns an empty object.
+     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
+     */
+   getDraftData() {
+    console.log("Draft Data Requested");
 
+    if (this._changedData && Object.keys(this._changedData).length > 0) {
+        const draftEntry = { ...this._data };
 
-  
+        for (const key in this._changedData) {
+            if (Object.prototype.hasOwnProperty.call(this._changedData, key)) {
+                draftEntry[key] = this._changedData[key];
+            }
+        }
+
+        console.log("Returning Draft Data:", draftEntry);
+        return draftEntry;
+    }
+
+    console.log("No changes detected, returning empty object");
+    return {};
+  }
 
 
 
