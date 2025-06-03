@@ -17,6 +17,7 @@ import {
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
 import EventRegistry from "./EventRegistry";
+import { onData, onError } from "./utils/utils";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -29,6 +30,7 @@ class Entry {
     _data: EntryType;
     locale: string;
     _connection: typeof postRobot;
+    // _postRobots: typeof postRobot;
     _emitter: EventEmitter;
     _changedData?: GenericObjectType;
     _options: IEntryOptions;
@@ -40,6 +42,7 @@ class Entry {
             | IRTEInitData
             | IFieldModifierLocationInitData,
         connection: typeof postRobot,
+        // postRobots: typeof postRobot,
         emitter: EventEmitter,
         options?: IEntryOptions
     ) {
@@ -66,6 +69,8 @@ class Entry {
         this.locale = initializationData.locale;
 
         this._connection = connection;
+
+        // this._postRobots = postRobots;
 
         this._emitter = emitter;
 
@@ -118,30 +123,22 @@ getData(options?: { draft?: boolean; resolved?: boolean }): GenericObjectType {
 }
 
 
-    /**
-     * Gets the draft data of the current entry.
-     * If no changes are available, returns an empty object.
-     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
-     */
-   getDraftData() {
-    console.log("Draft Data Requested");
+getDraftData(): Promise<any> {
+    console.log("getDraftData called");
+    return this._connection
+        .sendToParent("getDraftData")
+        .then((event: { data: any }) => {
+            console.log("Draft data received:", event.data);
+            return event.data;
+        })
+        .catch((error) => {
+            console.error("Error sending getDraftData:", error);
+            throw error;
+        });
+}
 
-    if (this._changedData && Object.keys(this._changedData).length > 0) {
-        const draftEntry = { ...this._data };
 
-        for (const key in this._changedData) {
-            if (Object.prototype.hasOwnProperty.call(this._changedData, key)) {
-                draftEntry[key] = this._changedData[key];
-            }
-        }
-
-        console.log("Returning Draft Data:", draftEntry);
-        return draftEntry;
-    }
-
-    console.log("No changes detected, returning empty object");
-    return {};
-  }
+  
 
 
 
@@ -294,6 +291,20 @@ getData(options?: { draft?: boolean; resolved?: boolean }): GenericObjectType {
         } else {
             throw Error("Callback must be a function");
         }
+    }
+
+    onBeforeSave(callback: (arg0: EntryType) => void) {
+        const entryObj = this;
+        if (callback && typeof callback === "function") {
+            entryObj._emitter.on("entryBeforeSave", (event: { data: EntryType }) => {
+                callback(event.data);
+            });
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryBeforeSave" },
+            ]);
+        } else {
+            throw Error("Callback must be a function");
+        } 
     }
 
     /**

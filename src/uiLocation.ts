@@ -302,6 +302,13 @@ class UiLocation {
                     ]);
                 }
 
+                if (event.data.name === "entryBeforeSave") {
+                    emitter.emitEvent("entryBeforeSave", [{ data: event.data.data }]);
+                    emitter.emitEvent("updateFields", [
+                        { data: event.data.data },
+                    ]);
+                }
+
                 if (event.data.name === "entryChange") {
                     emitter.emitEvent("entryChange", [
                         {
