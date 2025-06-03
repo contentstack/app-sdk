@@ -124,25 +124,20 @@ getData(options?: { draft?: boolean; resolved?: boolean }): GenericObjectType {
      * If no changes are available, returns an empty object.
      * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
      */
-   getDraftData() {
-    console.log("Draft Data Requested");
+   getDraftData(): Promise<EntryType> {
+    console.log("method getDraftData called");
+    return this._connection
+        .sendToParent("getDraftData")
+        .then((event: { data: any }) => {
+            console.log("getDraftData response received:", event.data);
+            return event.data;
+        })
+        .catch((error) => {
+            console.error("Error sending getDraftData:", error);
+            throw error;
+        });
+}
 
-    if (this._changedData && Object.keys(this._changedData).length > 0) {
-        const draftEntry = { ...this._data };
-
-        for (const key in this._changedData) {
-            if (Object.prototype.hasOwnProperty.call(this._changedData, key)) {
-                draftEntry[key] = this._changedData[key];
-            }
-        }
-
-        console.log("Returning Draft Data:", draftEntry);
-        return draftEntry;
-    }
-
-    console.log("No changes detected, returning empty object");
-    return {};
-  }
 
 
 
