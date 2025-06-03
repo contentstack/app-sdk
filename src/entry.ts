@@ -296,6 +296,20 @@ getData(options?: { draft?: boolean; resolved?: boolean }): GenericObjectType {
         }
     }
 
+    onBeforeSave(callback: (arg0: EntryType) => void) {
+        const entryObj = this;
+        if (callback && typeof callback === "function") {
+            entryObj._emitter.on("entryBeforeSave", (event: { data: EntryType }) => {
+                callback(event.data);
+            });
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: "entryBeforeSave" },
+            ]);
+        } else {
+            throw Error("Callback must be a function");
+        } 
+    }
+
     /**
      * The onChange() function executes the provided callback function whenever an entry is updated.
      * @param {function} callback - The function to be called when the entry is edited or changed.
