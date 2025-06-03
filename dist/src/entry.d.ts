@@ -35,7 +35,7 @@ declare class Entry {
      * If no changes are available, returns an empty object.
      * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
      */
-    getDraftData(): {};
+    getDraftData(): Promise<EntryType>;
     /**
      *
      *
