@@ -17,6 +17,7 @@ import {
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
 import EventRegistry from "./EventRegistry";
+import { onData, onError } from "./utils/utils";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -29,6 +30,7 @@ class Entry {
     _data: EntryType;
     locale: string;
     _connection: typeof postRobot;
+    _postRobots: typeof postRobot;
     _emitter: EventEmitter;
     _changedData?: GenericObjectType;
     _options: IEntryOptions;
@@ -40,6 +42,7 @@ class Entry {
             | IRTEInitData
             | IFieldModifierLocationInitData,
         connection: typeof postRobot,
+        postRobots: typeof postRobot,
         emitter: EventEmitter,
         options?: IEntryOptions
     ) {
@@ -66,6 +69,8 @@ class Entry {
         this.locale = initializationData.locale;
 
         this._connection = connection;
+
+        this._postRobots = postRobots;
 
         this._emitter = emitter;
 
@@ -118,30 +123,21 @@ getData(options?: { draft?: boolean; resolved?: boolean }): GenericObjectType {
 }
 
 
-    /**
-     * Gets the draft data of the current entry.
-     * If no changes are available, returns an empty object.
-     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
-     */
-   getDraftData() {
-    console.log("Draft Data Requested");
+  getDraftData = (): Promise<EntryType> => {
+    console.log("Fetching draft data...");
+    return this._postRobots
+        .sendToParent("getDraftData")
+        .then((event: { data: any } ) => {
+            console.log("Draft data fetched successfully:", event.data);
+            return (event as { data: any }).data;
+        })
+        .catch((err) => {
+            console.error("Failed to fetch draft data:", err);
+            throw err;
+        });
+};
 
-    if (this._changedData && Object.keys(this._changedData).length > 0) {
-        const draftEntry = { ...this._data };
-
-        for (const key in this._changedData) {
-            if (Object.prototype.hasOwnProperty.call(this._changedData, key)) {
-                draftEntry[key] = this._changedData[key];
-            }
-        }
-
-        console.log("Returning Draft Data:", draftEntry);
-        return draftEntry;
-    }
-
-    console.log("No changes detected, returning empty object");
-    return {};
-  }
+  
 
 
 
