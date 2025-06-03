@@ -69,6 +69,7 @@ declare class Entry {
      * @param {function} callback The function to be called when an entry is saved.
      */
     onSave(callback: (arg0: EntryType) => void): void;
+    onBeforeSave(callback: (arg0: EntryType) => void): void;
     /**
      * The onChange() function executes the provided callback function whenever an entry is updated.
      * @param {function} callback - The function to be called when the entry is edited or changed.
