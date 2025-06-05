@@ -1,10 +1,10 @@
 import {
+    IConfig,
     IConfigCallback,
     IContainerMetaData,
     IOnFunction,
     IPluginMetaData,
     IRteParam,
-    IConfig,
 } from "./types";
 
 export class RTEPlugin {
