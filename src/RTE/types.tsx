@@ -1,15 +1,15 @@
 import React, { ReactElement } from "react";
 import {
+    Editor,
+    ElementEntry,
     Location,
+    Node,
     NodeEntry,
+    NodeMatch,
     Path,
     Point,
-    Node,
-    ElementEntry,
-    Transforms,
-    Editor,
     Span,
-    NodeMatch,
+    Transforms,
 } from "slate";
 
 import { RTEPlugin } from "./index";
@@ -199,7 +199,7 @@ export declare interface IRteElementType {
     children: Array<IRteElementType | IRteTextType>;
 }
 
-type IDynamicFunction = (
+export type IDynamicFunction = (
     element: IRteElementType
 ) =>
     | Exclude<IElementTypeOptions, "text">
