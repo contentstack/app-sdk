@@ -17,6 +17,7 @@ import {
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
 import EventRegistry from "./EventRegistry";
+import { onData, onError } from "./utils/utils";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -92,15 +93,20 @@ class Entry {
     }
 
     /**
-     * Gets the draft data of the current entry.
-     * If no changes are available, returns an empty object.
-     * @return {Object} Returns the draft entry data (_changedData) if available; otherwise, returns an empty object.
+     * Retrieves the draft data of the current unsaved entry.
+     * Returns an empty object if there are no changes.
+     *
+     * @returns {Promise<GenericObjectType>} The draft entry data or an empty object.
      */
-    getDraftData() {
-        if (this._changedData && Object.keys(this._changedData).length > 0) {
-            return this._changedData;
-        } else {
-            return {};
+    async getDraftData(): Promise<GenericObjectType> {
+        try {
+            const response =
+                await this._connection.sendToParent<GenericObjectType>(
+                    "getDraftData"
+                );
+            return response?.data ?? {};
+        } catch (error) {
+            throw new Error("Failed to retrieve draft data.");
         }
     }
 

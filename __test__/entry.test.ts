@@ -57,15 +57,54 @@ describe("Entry", () => {
         expect(testData.entry).toEqual(entry.getData());
     });
 
-    it("getDraftData", () => {
-        entry._changedData = { title: "Draft Title", content: "Draft Content" };
-        expect(entry.getDraftData()).toEqual({
-            title: "Draft Title",
-            content: "Draft Content",
+    describe("getDraftData", () => {
+        it("should return draft data successfully", async () => {
+            const mockDraftData = {
+                title: "Draft Title",
+                description: "Draft Description",
+            };
+            const sendToParentSpy = jest
+                .spyOn(connection, "sendToParent")
+                .mockResolvedValue({ data: mockDraftData });
+
+            const result = await entry.getDraftData();
+
+            expect(sendToParentSpy).toHaveBeenCalledWith("getDraftData");
+            expect(result).toEqual(mockDraftData);
         });
 
-        entry._changedData = {};
-        expect(entry.getDraftData()).toEqual({});
+        it("should return empty object when response data is null", async () => {
+            const sendToParentSpy = jest
+                .spyOn(connection, "sendToParent")
+                .mockResolvedValue({ data: null });
+
+            const result = await entry.getDraftData();
+
+            expect(sendToParentSpy).toHaveBeenCalledWith("getDraftData");
+            expect(result).toEqual({});
+        });
+
+        it("should return empty object when response data is undefined", async () => {
+            const sendToParentSpy = jest
+                .spyOn(connection, "sendToParent")
+                .mockResolvedValue({ data: undefined });
+
+            const result = await entry.getDraftData();
+
+            expect(sendToParentSpy).toHaveBeenCalledWith("getDraftData");
+            expect(result).toEqual({});
+        });
+
+        it("should throw error when sendToParent fails", async () => {
+            const sendToParentSpy = jest
+                .spyOn(connection, "sendToParent")
+                .mockRejectedValue(new Error("Connection failed"));
+
+            await expect(entry.getDraftData()).rejects.toThrow(
+                "Failed to retrieve draft data."
+            );
+            expect(sendToParentSpy).toHaveBeenCalledWith("getDraftData");
+        });
     });
 
     describe("getField", () => {
