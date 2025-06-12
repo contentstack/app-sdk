@@ -93,17 +93,21 @@ class Entry {
     }
 
     /**
-     * Gets the draft data of the current entry.
-     * If no changes are available, returns an empty object.
-     * @return {Promise<Object>} Returns a promise that resolves to the draft entry data (_changedData) if available; otherwise, returns an empty object.
+     * Retrieves the draft data of the current unsaved entry.
+     * Returns an empty object if there are no changes.
+     *
+     * @returns {Promise<GenericObjectType>} The draft entry data or an empty object.
      */
     async getDraftData(): Promise<GenericObjectType> {
-        const changedData = this._changedData || {};
-        console.log("changedData", changedData);
-        return this._connection
-            .sendToParent<GenericObjectType>("getDraftData", { changedData })
-            .then(onData)
-            .catch(onError);
+        try {
+            const response =
+                await this._connection.sendToParent<GenericObjectType>(
+                    "getDraftData"
+                );
+            return response?.data ?? {};
+        } catch (error) {
+            throw new Error("Failed to retrieve draft data.");
+        }
     }
 
     /**
