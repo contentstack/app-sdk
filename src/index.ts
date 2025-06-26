@@ -1,12 +1,12 @@
 import postRobot from "post-robot";
 
 import { version } from "../package.json";
-import { RTEPlugin } from "./RTE";
 import { IRteParam } from "./RTE/types";
-import { PluginDefinition, registerPlugins,PluginBuilder } from "./rtePlugin";
-import { InitializationData, IRTEInitData } from "./types";
+import { PluginDefinition, PluginBuilder, registerPlugins } from "./rtePlugin";
+import { Extension, InitializationData, RTEContext } from "./types";
 import UiLocation from "./uiLocation";
 
+// Configure post-robot logging
 postRobot.CONFIG.LOG_LEVEL = "error";
 
 /**
@@ -23,58 +23,72 @@ postRobot.CONFIG.LOG_LEVEL = "error";
  * })
  * @return {Promise} A promise object which will be resolved with an instance of the {@link UiLocation} class.
  * @hideconstructor
- */
-
+*/
 class ContentstackAppSDK {
     /**
      * A static variable that stores the instance of {@link UiLocation} class after initialization
      */
     static _uiLocation: UiLocation;
-    /**
+    private static _rteInitData: Extension | null = null;
+
+     /**
      * Initializes the App SDK and returns an instance of {@link UiLocation} class
      */
     static init(): Promise<UiLocation> {
         if (this._uiLocation) {
-            return Promise.resolve<UiLocation>(this._uiLocation);
+            return Promise.resolve(this._uiLocation);
         }
+
         return UiLocation.initialize(version)
             .then((initializationData: InitializationData) => {
-                this._uiLocation = new UiLocation(initializationData);
-                return Promise.resolve(this._uiLocation);
+                // Merge with RTE context if available
+                const mergedInitData = this._rteInitData 
+                    ? {
+                        ...initializationData,
+                        app_id: this._rteInitData.app_uid,
+                        installation_uid: this._rteInitData.app_installation_uid,
+                        extension_uid: this._rteInitData.uid,
+                      }
+                    : initializationData;
+
+                this._uiLocation = new UiLocation(mergedInitData);
+                return this._uiLocation;
             })
             .catch((e: Error) => Promise.reject(e));
     }
 
     /**
-     * Registers RTE plugins with the Contentstack platform.
-     * Contentstack platform loader, providing the `context` (initialization data) and
-     * the `rte` instance. When called, it materializes and returns a map of the
-     * registered `RTEPlugin` instances, keyed by their IDs.
+     * Register RTE plugins with enhanced context capture
+     * @param pluginDefinitions Plugin definitions to register
+     * @returns Plugin registration object
      */
-    static async registerRTEPlugins(
-        ...pluginDefinitions: PluginDefinition[]
-    ): Promise<{
-        __isPluginBuilder__: boolean;
-        version: string;
-        plugins: (context: IRTEInitData, rte: IRteParam) => Promise<{
-            [key: string]: RTEPlugin;
-        }>;
-    }> {
+    static async registerRTEPlugins(...pluginDefinitions: PluginDefinition[]) {
         return {
             __isPluginBuilder__: true,
             version,
-            plugins: registerPlugins(...pluginDefinitions)
+            plugins: (context: RTEContext, rte: IRteParam) => {
+                // Capture RTE context for SDK enhancement
+                this._rteInitData = context.extension;
+                return registerPlugins(...pluginDefinitions)(context, rte);
+            }
         };
     }
 
     /**
-     * Version of Contentstack App SDK.
+     * Get SDK version
      */
     static get SDK_VERSION() {
         return version;
     }
 }
 
+// ES6 exports
 export default ContentstackAppSDK;
 export { PluginBuilder };
-module.exports = ContentstackAppSDK;
+
+// CommonJS compatibility
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ContentstackAppSDK;
+    module.exports.default = ContentstackAppSDK;
+    module.exports.PluginBuilder = PluginBuilder;
+}

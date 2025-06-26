@@ -268,3 +268,24 @@ export type RegionType =
     | "AZURE_EU"
     | "GCP_NA"
     | string;
+
+export type Extension = {
+    app_installation_uid: string
+    app_uid: string
+    config: GenericObjectType
+    created_at: string
+    created_by: string
+    signed: boolean
+    src: string
+    tags: string[]
+    title: string
+    type: string
+    uid: string
+    updated_at: string
+    updated_by: string
+    _version: number
+}
+
+export type RTEContext = IRTEInitData & {
+    extension: Extension
+}
