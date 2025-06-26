@@ -81,6 +81,8 @@ App Config UI Location allows you to manage all the app settings centrally. Once
 
 The RTE Location allows you to create custom plugins to expand the functionality of your JSON Rich Text Editor. Using the Audience and Variables plugin, you can tailor your content as per your requirements.
 
+New RTE plugin examples [RTE PLUGIN](/docs/rte-plugin.md)
+
 ### Sidebar Location
 
 The Sidebar Location provides powerful tools for analyzing and recommending ideas for your entry. Use the [Smartling](https://help.smartling.com/hc/en-us/articles/4865477629083) sidebar location to help translate your content.
