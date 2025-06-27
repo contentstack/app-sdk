@@ -29,6 +29,7 @@ import {
     Manifest,
     IGlobalFullPageLocation,
     RegionType,
+    Region,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
@@ -187,7 +188,7 @@ class UiLocation {
 
         this.modal = new Modal();
 
-        this.region = formatAppRegion(initializationData.region);
+        this.region = formatAppRegion(initializationData.region as Region);
         this.endpoints = initializationData.endpoints;
 
         const stack = new Stack(initializationData.stack, postRobot, {
