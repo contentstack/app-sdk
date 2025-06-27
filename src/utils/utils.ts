@@ -13,8 +13,8 @@ export function onError(error: Error) {
     return Promise.reject(error);
 }
 
-export function formatAppRegion(region: Region): RegionType {
-    return region ?? Region.UNKNOWN;;
+export function formatAppRegion(region: string): RegionType {
+    return region as RegionType;
 }
 
 /**
