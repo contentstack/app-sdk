@@ -286,6 +286,15 @@ export type Extension = {
     _version: number
 }
 
-export type RTEContext = IRTEInitData & {
-    extension: Extension
+export type RTEContext = {
+    extension: Extension;
+    type: "RTE";
+    stack: StackDetail;
+    user: User;
+    region: RegionType;
+    endpoints: ContentstackEndpoints;
+    entry: Entry;
+    content_type: ContentType;
+    locale: string;
+    currentBranch: string;
 }
