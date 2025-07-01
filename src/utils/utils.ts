@@ -1,6 +1,6 @@
 import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { Region, RegionType, RTEContext, IRTEInitData, LocationType } from "../types";
+import { RegionType, } from "../types";
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -15,27 +15,6 @@ export function onError(error: Error) {
 
 export function formatAppRegion(region: string): RegionType {
     return region as RegionType;
-}
-
-/**
- * Helper function to convert RTEContext to InitializationData format
- */
-export function convertRTEContextToInitData(context: RTEContext): IRTEInitData {
-    return {
-        app_id: context.extension.app_uid,
-        currentBranch: context.currentBranch,
-        extension_uid: context.extension.uid,
-        installation_uid: context.extension.app_installation_uid,
-        region: context.region,
-        stack: context.stack,
-        type: LocationType.RTE,
-        user: context.user,
-        endpoints: context.endpoints,
-        config: context.extension.config,
-        entry: context.entry,
-        content_type: context.content_type,
-        locale: context.locale,
-    };
 }
 
 export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
