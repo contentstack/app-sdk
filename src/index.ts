@@ -3,9 +3,8 @@ import postRobot from "post-robot";
 import { version } from "../package.json";
 import { IRteParam } from "./RTE/types";
 import { PluginDefinition, PluginBuilder, registerPlugins } from "./rtePlugin";
-import { InitializationData, RTEContext } from "./types";
-import UiLocation from "./uiLocation";
-import { convertRTEContextToInitData } from "./utils/utils";
+import { InitializationData } from "./types";
+import UiLocation from "./uiLocation"
 
 // Configure post-robot logging
 postRobot.CONFIG.LOG_LEVEL = "error";
@@ -90,10 +89,8 @@ class ContentstackAppSDK {
         return {
             __isPluginBuilder__: true,
             version,
-            plugins: (context: RTEContext, rte: IRteParam) => {
-                // Convert RTEContext to InitializationData format
-                const initializationData = convertRTEContextToInitData(context); 
-                return registerPlugins(...pluginDefinitions)(initializationData, rte);
+            plugins: (context: InitializationData, rte: IRteParam) => {
+                return registerPlugins(...pluginDefinitions)(context, rte);
             }
         };
     }

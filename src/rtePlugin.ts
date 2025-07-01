@@ -8,7 +8,7 @@ import {
     IRteElementType,
     IRteParam,
 } from "./RTE/types";
-import { IRTEInitData } from "./types";
+import { InitializationData, IRTEInitData } from "./types";
 import UiLocation from "./uiLocation";
 
 type PluginConfigCallback = (sdk: UiLocation) => Promise<IConfig> | IConfig;
@@ -129,11 +129,11 @@ async function materializePlugin(
 function registerPlugins(
     ...pluginDefinitions: PluginDefinition[]
 ): (
-    context: IRTEInitData,
+    context: InitializationData,
     rte: IRteParam
 ) => Promise<{ [key: string]: Plugin }> {
     const definitionsToProcess = [...pluginDefinitions];
-    const plugins = async (context: IRTEInitData, rte: IRteParam) => {
+    const plugins = async (context: InitializationData, rte: IRteParam) => {
         try {
             const sdk = new UiLocation(context);
             const materializedPlugins: { [key: string]: Plugin } = {};
