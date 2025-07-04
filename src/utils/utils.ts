@@ -1,6 +1,6 @@
 import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { Region, RegionType } from "../types";
+import { RegionType, } from "../types";
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -14,7 +14,7 @@ export function onError(error: Error) {
 }
 
 export function formatAppRegion(region: string): RegionType {
-    return region ?? Region.UNKNOWN;
+    return region as RegionType;
 }
 
 export function getPreferredBodyElement(nodeCollection: HTMLCollection) {
