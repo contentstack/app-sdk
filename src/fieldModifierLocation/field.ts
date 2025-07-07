@@ -120,16 +120,13 @@ class FieldModifierLocationField {
             self: currentFieldObj._self,
         };
 
-        if (
-            !currentFieldObj._self &&
-            (excludedDataTypesForSetField.indexOf(currentFieldObj.data_type) !==
-                -1 ||
-                !currentFieldObj.data_type)
-        ) {
-            return Promise.reject(
-                new Error("Cannot call set data for current field type")
-            );
-        }
+        // 🔍 POC Logging: Track what field types are being set
+        console.log(`Setting data for ${currentFieldObj.data_type} field`, {
+            uid: currentFieldObj.uid,
+            self: currentFieldObj._self,
+            dataType: currentFieldObj.data_type,
+            dataPreview: typeof data === "object" ? Object.keys(data) : data,
+        });
 
         return this._connection
             .sendToParent("setData", dataObj)
