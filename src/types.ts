@@ -267,4 +267,6 @@ export type RegionType =
     | "AZURE_NA"
     | "AZURE_EU"
     | "GCP_NA"
+    | "GCP_EU"
+    | "AU"
     | (string & {});
