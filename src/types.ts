@@ -254,6 +254,7 @@ export enum Region {
     UNKNOWN = "UNKNOWN",
     NA = "NA",
     EU = "EU",
+    AU = "AU",
     AZURE_NA = "AZURE_NA",
     AZURE_EU = "AZURE_EU",
     GCP_NA = "GCP_NA",
@@ -264,7 +265,9 @@ export type RegionType =
     | "UNKNOWN"
     | "NA"
     | "EU"
+    | "AU"
     | "AZURE_NA"
     | "AZURE_EU"
     | "GCP_NA"
-    | string;
+    | "GCP_EU"
+    | (string & {});
