@@ -54,8 +54,32 @@ class PluginBuilder {
         this._config.elementType = elementType;
         return this;
     }
-    render(renderFn: (...params: any) => React.ReactElement): PluginBuilder {
-        this._config.render = renderFn;
+    render(renderFn: (element: React.ReactElement, attrs: { [key: string]: any }, path: number[], rte: IRteParam) => React.ReactElement): PluginBuilder {
+        // Wrap the render function with path validation
+        this._config.render = (element: React.ReactElement, attrs: { [key: string]: any }, path: number[], rte: IRteParam) => {
+            try {
+                // Validate that the path exists in the document
+                if (path && path.length > 0 && rte) {
+                    try {
+                        // Try to get the node at the given path to validate it exists
+                        const nodeEntry = rte.getNode(path);
+                        if (!nodeEntry) {
+                            console.warn(`Path ${path} does not exist in document, skipping render`);
+                            return element;
+                        }
+                    } catch (pathError) {
+                        console.warn(`Invalid path ${path} in render function:`, pathError);
+                        return element;
+                    }
+                }
+                
+                return renderFn(element, attrs, path, rte);
+            } catch (error) {
+                console.error('Error in plugin render function:', error);
+                // Return the original element as fallback
+                return element;
+            }
+        };
         return this;
     }
     shouldOverride(
@@ -109,10 +133,23 @@ async function materializePlugin(
     }
     const plugin = rtePluginInitializer(
         pluginDef.id,
-        (rte: IRteParam | void) => finalConfig
+        (rte: IRteParam | void) => {
+            // The rte parameter is passed when the plugin is actually used
+            // finalConfig already contains the merged configuration
+            return finalConfig;
+        }
     );
     Object.entries(pluginDef.callbacks).forEach(([type, callback]) => {
-        plugin.on(type as keyof IOnFunction, callback);
+        // Wrap callbacks with error handling
+        const wrappedCallback = (params: any) => {
+            try {
+                return callback(params);
+            } catch (error) {
+                console.error(`Error in plugin callback ${type}:`, error);
+                // Don't re-throw to prevent breaking the RTE
+            }
+        };
+        plugin.on(type as keyof IOnFunction, wrappedCallback);
     });
     if (pluginDef.childBuilders.length > 0) {
         const childPlugins = await Promise.all(
@@ -136,12 +173,19 @@ function registerPlugins(
     const plugins = async (context: InitializationData, rte: IRteParam) => {
         try {
             const sdk = new UiLocation(context);
+            console.log("sdk", sdk);
+            
             const materializedPlugins: { [key: string]: Plugin } = {};
+            console.log("materializedPlugins", materializedPlugins);
+            
             for (const def of definitionsToProcess) {
                 const pluginInstance = await materializePlugin(def, sdk);
                 materializedPlugins[def.id] = pluginInstance;
             }
             rte.sdk = sdk;
+            console.log("rte", rte);
+            console.log("materializedPlugins", materializedPlugins);
+            
             return materializedPlugins;
         } catch (err) {
             console.error("Error during plugin registration:", err);
