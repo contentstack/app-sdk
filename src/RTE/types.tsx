@@ -199,7 +199,7 @@ export declare interface IRteElementType {
     children: Array<IRteElementType | IRteTextType>;
 }
 
-type IDynamicFunction = (
+export type IDynamicFunction = (
     element: IRteElementType
 ) =>
     | Exclude<IElementTypeOptions, "text">
