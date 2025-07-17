@@ -53,12 +53,14 @@ class ContentstackAppSDK {
   *
   * @example
   * // In your plugin's entry file (e.g., src/index.ts):
-  * import ContentstackAppSDK from '@contentstack/app-sdk';
-  * import { PluginBuilder, IRteParam } from '@contentstack/app-sdk/rtePlugin';
+  * import ContentstackAppSDK, { PluginBuilder } from '@contentstack/app-sdk';
   *
   * const MyCustomPlugin = new PluginBuilder("my-plugin-id")
   * .title("My Plugin")
   * .icon(<MyIconComponent />)
+  * .elementType("block")
+  * .display("toolbar")
+  * .render(()=>{return <Comment />})
   * .on("exec", (rte: IRteParam) => {
   * // Access SDK via rte.sdk if needed:
   * const sdk = rte.sdk;
