@@ -110,22 +110,11 @@ async function materializePlugin(
     const plugin = rtePluginInitializer(
         pluginDef.id,
         (rte: IRteParam | void) => {
-            // The rte parameter is passed when the plugin is actually used
-            // finalConfig already contains the merged configuration
             return finalConfig;
         }
     );
     Object.entries(pluginDef.callbacks).forEach(([type, callback]) => {
-        // Wrap callbacks with error handling
-        const wrappedCallback = (params: any) => {
-            try {
-                return callback(params);
-            } catch (error) {
-                console.error(`Error in plugin callback ${type}:`, error);
-                // Don't re-throw to prevent breaking the RTE
-            }
-        };
-        plugin.on(type as keyof IOnFunction, wrappedCallback);
+        plugin.on(type as keyof IOnFunction, callback);
     });
     if (pluginDef.childBuilders.length > 0) {
         const childPlugins = await Promise.all(
@@ -149,19 +138,12 @@ function registerPlugins(
     const plugins = async (context: InitializationData, rte: IRteParam) => {
         try {
             const sdk = new UiLocation(context);
-            console.log("sdk", sdk);
-            
             const materializedPlugins: { [key: string]: Plugin } = {};
-            console.log("materializedPlugins", materializedPlugins);
-            
             for (const def of definitionsToProcess) {
                 const pluginInstance = await materializePlugin(def, sdk);
                 materializedPlugins[def.id] = pluginInstance;
             }
             rte.sdk = sdk;
-            console.log("rte", rte);
-            console.log("materializedPlugins", materializedPlugins);
-            
             return materializedPlugins;
         } catch (err) {
             console.error("Error during plugin registration:", err);
