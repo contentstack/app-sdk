@@ -137,7 +137,12 @@ function registerPlugins(
     const definitionsToProcess = [...pluginDefinitions];
     const plugins = async (context: InitializationData, rte: IRteParam) => {
         try {
-            const sdk = new UiLocation(context);
+            // Import ContentstackAppSDK to access the shared UiLocation instance
+            const { default: ContentstackAppSDK } = await import('./index');
+            
+            // Use the existing UiLocation instance if available, otherwise create new one
+            const sdk = ContentstackAppSDK._uiLocation || new UiLocation(context);
+            
             const materializedPlugins: { [key: string]: Plugin } = {};
             for (const def of definitionsToProcess) {
                 const pluginInstance = await materializePlugin(def, sdk);
