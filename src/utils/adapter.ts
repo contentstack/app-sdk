@@ -18,7 +18,7 @@ export const dispatchAdapter =
             postRobot
                 .sendToParent("apiAdapter",  {
                     data:config,
-                    extemsion:context
+                    extension:context
                 })
                 .then((event: unknown) => {
                     const { data: response } = event as { data: AxiosResponse };

@@ -54,7 +54,7 @@ class PluginBuilder {
         this._config.elementType = elementType;
         return this;
     }
-    render(renderFn: (...params: any) => React.ReactElement): PluginBuilder {
+    render(renderFn: (element: React.ReactElement, attrs: { [key: string]: any }, path: number[], rte: IRteParam) => React.ReactElement): PluginBuilder {
         this._config.render = renderFn;
         return this;
     }
@@ -107,15 +107,29 @@ async function materializePlugin(
         );
         finalConfig = { ...finalConfig, ...dynamicConfig };
     }
+    
+    // CRITICAL FIX: Match the old RTE implementation exactly
+    // In the old implementation, the plugin was created and then callbacks were set
+    // But the key difference is that the old implementation used direct RTEPlugin instantiation
     const plugin = rtePluginInitializer(
         pluginDef.id,
         (rte: IRteParam | void) => {
             return finalConfig;
         }
     );
+    
+    // IMPORTANT: Set callbacks immediately after plugin creation
+    // This must happen BEFORE the RTE system calls plugin.get()
     Object.entries(pluginDef.callbacks).forEach(([type, callback]) => {
+        console.log(`Setting callback for plugin ${pluginDef.id}: ${type}`);
         plugin.on(type as keyof IOnFunction, callback);
     });
+    
+    // DEBUG: Log the final config to see what's being passed
+    console.log(`Plugin ${pluginDef.id} final config:`, finalConfig);
+    console.log(`Plugin ${pluginDef.id} has render:`, !!finalConfig.render);
+    console.log(`Plugin ${pluginDef.id} callbacks:`, Object.keys(pluginDef.callbacks));
+    
     if (pluginDef.childBuilders.length > 0) {
         const childPlugins = await Promise.all(
             pluginDef.childBuilders.map((childBuilder) =>
