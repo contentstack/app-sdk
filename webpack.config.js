@@ -30,4 +30,16 @@ module.exports = {
         extensions: [".json", ".js", ".ts", ".css", ".tsx"],
     },
     devtool: "source-map",
+    optimization: {
+        // Enable tree shaking
+        usedExports: true,
+        // Minimize the bundle
+        minimize: true,
+    },
+    performance: {
+        // Increase the size limit warnings to be more reasonable for a library
+        maxAssetSize: 500000, // 500 KiB
+        maxEntrypointSize: 500000, // 500 KiB
+        hints: "warning",
+    },
 };
