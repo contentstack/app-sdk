@@ -1,121 +1,192 @@
-# Contentstack App SDK Readme
+# Contentstack App SDK
 
-The Contentstack App SDK allows you to customize your applications. This document will help you integrate the App SDK with your application.
+<div align="center">
 
-## Getting started
+[![npm version](https://img.shields.io/npm/v/@contentstack/app-sdk.svg?style=for-the-badge&color=blue)](https://www.npmjs.com/package/@contentstack/app-sdk)
+[![npm downloads](https://img.shields.io/npm/dm/@contentstack/app-sdk.svg?style=for-the-badge&color=green)](https://www.npmjs.com/package/@contentstack/app-sdk)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg?style=for-the-badge)](https://www.typescriptlang.org/)
 
-Include the compiled version of the extension client library by adding the following line to your application.
+**The modern way to build Contentstack extensions**
 
-```html
-<script
-    src="https://unpkg.com/@contentstack/app-sdk@2.1.0/dist/index.js"
-    integrity="sha512-wlEBUkZA+vdcHXRTK69fZvK44c5Y8KeU/kw9OOShWNDjddtrIB8a1lfbLjH5nKWQqkWZ2L9VYEqr96P7qx3ZZg=="
-    crossorigin="anonymous"
-></script>
-```
+*TypeScript-first • Extend Contentstack UI • Production-ready*
 
-To include the App SDK in your project, you need to run the following command:
+[Get Started](#-get-started) • [Documentation](./docs/api-reference.md) • [Examples](#-examples) • [Community](https://community.contentstack.com/)
 
-```sh
+</div>
+
+## Installation
+
+```bash
 npm install @contentstack/app-sdk
 ```
 
-Alternatively, you can use the following command within the script tag to install the App SDK:
+## Quick Start
 
-```html
-<script src="https://unpkg.com/@contentstack/app-sdk@2.0.0/dist/index.js"></script>
+```ts
+import ContentstackAppSDK from '@contentstack/app-sdk';
+
+const sdk = await ContentstackAppSDK.init();
+console.log('SDK initialized:', sdk);
 ```
 
-### Initializing the App SDK
+## Documentation
 
-To Initialize the App SDK you need to run the following command:
+- **API Reference**: https://github.com/contentstack/app-sdk/blob/main/docs/api-reference.md
+- **Migration Guide**: https://github.com/contentstack/app-sdk/blob/main/docs/app-sdk-v2-migration.md
+- **Asset Extension API**: https://github.com/contentstack/app-sdk/blob/main/docs/asset-extension-api-reference.md
 
-```js
-ContentstackAppSdk.init().then(function (appSdk) {
-    // add code here
+## UI Locations
+
+The SDK supports 11 UI locations for extending Contentstack functionality:
+
+| UI Location | Description |
+|-------------|-------------|
+| **[DashboardWidget](./docs/api-reference.md#dashboardwidget)** | Stack dashboard widgets |
+| **[CustomField](./docs/api-reference.md#customfield)** | Custom input components for content types |
+| **[SidebarWidget](./docs/api-reference.md#sidebarwidget)** | Entry sidebar functionality |
+| **[AssetSidebarWidget](./docs/api-reference.md#assetsidebarwidget)** | Asset management tools |
+| **[AppConfigWidget](./docs/api-reference.md#appconfigwidget)** | App configuration interface |
+| **[RTEPlugin](./docs/rte-plugin.md)** | Create Rich Text Editor plugins |
+| **[FullPage](./docs/api-reference.md#fullpage)** | Full-page applications |
+| **[FieldModifierLocation](./docs/api-reference.md#fieldmodifierlocation)** | Field behavior modification |
+| **[ContentTypeSidebarWidget](./docs/api-reference.md#contenttypesidebarwidget)** | Content type management |
+| **[GlobalFullPageLocation](./docs/api-reference.md#globalfullpagelocation)** | Organization-level applications |
+| **[RTELocation](./docs/api-reference.md#rtelocation)** | RTE context access |
+
+
+
+### Custom Field
+
+```ts
+const customField = sdk.location.CustomField;
+if (customField) {
+  const fieldData = await customField.field.getData();
+  await customField.field.setData('Hello, Contentstack!');
+}
+```
+
+### Dashboard Widget
+
+```ts
+const dashboard = sdk.location.DashboardWidget;
+if (dashboard) {
+  dashboard.frame.enableAutoResizing();
+  const stackData = await dashboard.stack.getData();
+}
+```
+
+### Asset Sidebar
+
+```ts
+const assetSidebar = sdk.location.AssetSidebarWidget;
+if (assetSidebar) {
+  const assetData = await assetSidebar.getData();
+  await assetSidebar.setData({ title: 'Updated Title' });
+}
+```
+
+## Data Storage
+
+Built-in key-value storage for persisting app data:
+
+```ts
+const store = sdk.store;
+
+// Store data
+await store.set('userPreferences', { theme: 'dark', language: 'en' });
+
+// Retrieve data
+const preferences = await store.get('userPreferences');
+
+// Get all data
+const allData = await store.getAll();
+
+// Remove data
+await store.remove('userPreferences');
+
+// Clear all data
+await store.clear();
+```
+
+## Stack Operations
+
+Access stack-level operations and data:
+
+```ts
+const stack = sdk.stack;
+
+// Get stack information
+const stackData = stack.getData();
+
+// Get content types
+const contentTypes = await stack.getContentTypes();
+
+// Get assets
+const assets = await stack.Asset.getAssets();
+
+// Search entries
+const entries = await stack.search({
+  content_type: 'blog_post',
+  query: { title: 'Hello World' }
 });
+
+// Get environments and locales
+const environments = await stack.getEnvironments();
+const locales = await stack.getLocales();
 ```
 
-For more information, please refer to our [App SDK API Reference](https://github.com/contentstack/app-sdk-docs#contentstack-app-sdk-api-reference) document.
+## Common Functions
 
-## Download the Boilerplate
+Available in all UI locations:
 
-You can extend or customize the functionality of Contentstack CMS with Marketplace apps. To simplify and speed up the building process, boilerplates describe repetitive elements in a project. This boilerplate will help you build custom applications for your organization or stack.
+```ts
+// Get app configuration
+const config = await sdk.getConfig();
 
-Download the [boilerplate](https://github.com/contentstack/marketplace-app-boilerplate/archive/refs/heads/master.zip).
+// Get current UI location type
+const location = sdk.getCurrentLocation();
 
-## UI Locations and Examples
+// Get Contentstack region
+const region = sdk.getCurrentRegion();
 
-UI Locations allow you to extend Contentstack's functionality. Through these UI locations, you can customize Contentstack's default behavior and UI. Integration of third-party applications is possible using different UI locations.
-
-The Contentstack App SDK currently supports the following UI Locations:
-
--   [Custom Field Location](https://www.contentstack.com/docs/developers/developer-hub/custom-field-location)
--   [Dashboard Location](https://www.contentstack.com/docs/developers/developer-hub/dashboard-location)
--   [Asset Sidebar Location](https://www.contentstack.com/docs/developers/developer-hub/asset-sidebar-location)
--   [App Config Location](https://www.contentstack.com/docs/developers/developer-hub/app-config-location)
--   [RTE Location](https://www.contentstack.com/docs/developers/developer-hub/rte-location)
--   [Sidebar Location](https://www.contentstack.com/docs/developers/developer-hub/sidebar-location)
--   [Field Modifier Location](https://www.contentstack.com/docs/developers/developer-hub/field-modifier-location/)
--   [Full Page Location](https://www.contentstack.com/docs/developers/developer-hub/full-page-location)
-
-### Custom Field Location
-
-Custom Field Location allows you to create custom fields that can be used in your content types. You can integrate with various business applications, such as [Bynder](https://www.contentstack.com/docs/developers/marketplace-apps/bynder), [Cloudinary](https://www.contentstack.com/docs/developers/marketplace-apps/cloudinary), [Shopify](https://www.contentstack.com/docs/developers/marketplace-apps/shopify), by adding them as a custom field to your stack's content type.
-
-### Dashboard Location
-
-With the Dashboard Location, you can create widgets for your stack dashboard. Integration with [Google Analytics](https://www.contentstack.com/docs/developers/marketplace-apps/google-analytics/) provides meaningful insights about your website.
-
-### Asset Sidebar Location
-
-Using the Asset Sidebar Location, you can create customized sidebar widgets to extend the functionality of your assets.
-
-Manage, transform, and optimize your stack's assets efficiently using the [Image Preset Builder](https://www.contentstack.com/docs/developers/marketplace-apps/image-preset-builder).
-
-### App Config Location
-
-App Config UI Location allows you to manage all the app settings centrally. Once configured, all other locations (where the app is installed) can access these settings.
-
-### RTE Location
-
-The RTE Location allows you to create custom plugins to expand the functionality of your JSON Rich Text Editor. Using the Audience and Variables plugin, you can tailor your content as per your requirements.
-
-### Sidebar Location
-
-The Sidebar Location provides powerful tools for analyzing and recommending ideas for your entry. Use the [Smartling](https://help.smartling.com/hc/en-us/articles/4865477629083) sidebar location to help translate your content.
-
-### Field Modifier Location
-
-The Field Modifier Location is a type of UI location which extends the capabilities of entry fields. With the Field Modifier UI location, you can allow the different apps to appear on defined field data types such as Text, Number, JSON, Boolean, File, Reference fields etc.
-
-### Full Page Location
-
-The Full Page location is a type of UI location that lets you view full page apps such as [Release Preview](https://www.contentstack.com/docs/developers/marketplace-apps/release-preview) within your stack.
-
-## Using Contentstack styles
-
-Install the Venus UI library package to style your app according to the Contentstack UI:
-
-```sh
-npm i @contentstack/venus-components --save
+// Get app version
+const version = await sdk.getAppVersion();
 ```
 
-For more information on styling your application, refer to our [style guide](https://www.contentstack.com/docs/developers/venus-component-library/).
+## Requirements
 
-## More information
+- Node.js: >= 18.x
+- TypeScript: >= 4.4.4 (for development)
+- Browsers: Chrome 60+, Firefox 55+, Safari 12+, Edge 79+
 
--   [App SDK API Reference](https://github.com/contentstack/app-sdk-docs#readme)
--   [Marketplace Platform Guides](https://www.contentstack.com/docs/developers/marketplace-platform-guides/)
--   [Marketplace Apps](https://www.contentstack.com/docs/developers/marketplace-apps/)
--   [Contentstack App Development](https://www.contentstack.com/docs/developers/developer-hub/)
+## Contributing
 
-## App SDK v2.0.0 Migration Guide
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'feat: add your feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
 
-This guide provides instructions for migrating your application to App SDK version 2.0.0. It covers changes in metadata responses, field modifier and full page location updates, and the transition from the `_extension` property to `_uiLocation`. If you are upgrading your app to the latest version, make sure to follow these steps for a smooth transition.
+### Development
 
-[Read the Migration Guide](./docs/app-sdk-v2-migration.md)
+```bash
+git clone https://github.com/contentstack/app-sdk.git
+cd app-sdk
+npm install
+
+npm run dev
+npm run build
+npm test
+npm run lint
+```
+
+## Support
+
+- Community Forum: https://community.contentstack.com/
+- GitHub Issues: https://github.com/contentstack/app-sdk/issues
+- Contact Support: https://www.contentstack.com/support/
 
 ## License
 
-Licensed under [MIT](https://opensource.org/licenses/MIT).
+MIT — https://opensource.org/licenses/MIT

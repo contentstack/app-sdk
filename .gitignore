@@ -132,6 +132,9 @@ temp/
 # Docs
 jsdocs/
 
+# Local development and analysis files
+.local/
+
 .DS_Store
 
 ### vscode ###
