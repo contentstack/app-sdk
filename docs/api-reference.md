@@ -24,27 +24,13 @@ if (customField) {
 }
 ```
 
-## SDK Reference
-
-### ContentstackAppSDK
+## ContentstackAppSDK
 
 The main SDK class that provides access to all functionality.
 
-#### Methods
-
-##### [init()](https://github.com/contentstack/app-sdk/blob/main/src/index.ts)
-
-Initializes the SDK and returns a configured instance.
-
-```ts
-const sdk = await ContentstackAppSDK.init();
-```
-
-**Returns:** `Promise<ContentstackAppSDK>`
-
 #### Properties
 
-##### [location](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
+### [location](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
 
 Access to all available UI locations.
 
@@ -53,7 +39,7 @@ const customField = sdk.location.CustomField;
 const sidebar = sdk.location.SidebarWidget;
 ```
 
-##### [region](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
+### [region](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
 
 The Contentstack region identifier.
 
@@ -61,13 +47,25 @@ The Contentstack region identifier.
 console.log(sdk.region); // "NA", "EU", "AU"
 ```
 
-##### [version](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
+### [version](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
 
 The current app version.
 
 ```ts
 console.log(sdk.version); // 1
 ```
+
+#### Methods
+
+### [init()](https://github.com/contentstack/app-sdk/blob/main/src/index.ts)
+
+Initializes the SDK and returns a configured instance.
+
+```ts
+const sdk = await ContentstackAppSDK.init();
+```
+
+**Returns:** `Promise<ContentstackAppSDK>`
 
 ## UI Locations
 
@@ -87,7 +85,7 @@ The SDK provides access to 11 different UI locations within the Contentstack int
 | **RTEPlugin** | RTE plugin development | Custom buttons, elements, functionality |
 | **AppConfigWidget** | App configuration | Settings, configuration management |
 
-### DashboardWidget
+## DashboardWidget
 
 Integrates with the Contentstack dashboard to provide stack-level functionality.
 
@@ -99,19 +97,21 @@ if (dashboard) {
 }
 ```
 
-#### API Reference
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L16)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L16)
 
 Stack operations and data access.
 
 ```ts
 // Get content types and entries
-const contentTypes = await dashboard.stack.getContentTypes();
-const entries = await dashboard.stack.getEntries('blog_post');
+const contentTypes = await widget.stack.getContentTypes();
+const entries = await widget.stack.getEntries('blog_post');
 ```
 
 **Available Methods:**
+- [getData()](#stack-getdata) - the data of the current stack
+- [getAllStacks(orgUid?, params?)](#stack-getallstacks) - all stacks in the current organization
+- [getContentType(uid, params?)](#stack-getcontenttype) - data of a single content type
 - [getContentTypes(query?, params?)](#stack-getcontenttypes) - data of all content types in the stack
 - [getEntries(contentType, params?)](#stack-getentries) - entries of a specific content type
 - [getAssets(query?, params?)](#stack-getassets) - assets from the stack
@@ -119,6 +119,8 @@ const entries = await dashboard.stack.getEntries('blog_post');
 - [search(queries, apiKey?)](#stack-search) - search results based on user query
 - [getEnvironment(name, params?)](#stack-getenvironment) - environment details
 - [getEnvironments(query?, params?)](#stack-getenvironments) - details of all environments
+- [getReleases(query?, params?)](#stack-getreleases) - details of releases of a stack
+- [getPublishes(query?, params?)](#stack-getpublishes) - details of publish queue of a stack
 - [getLocale(code, params?)](#stack-getlocale) - a specific locale
 - [getLocales(query?, params?)](#stack-getlocales) - all locales
 - [getWorkflow(uid, params?)](#stack-getworkflow) - a specific workflow
@@ -129,7 +131,7 @@ const entries = await dashboard.stack.getEntries('blog_post');
 - [getGlobalField(uid, params?)](#stack-getglobalfield) - a specific global field
 - [getGlobalFields(query?, params?)](#stack-getglobalfields) - all global fields
 
-##### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L15)
+### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L15)
 
 Window management and resizing.
 
@@ -139,7 +141,7 @@ await frame.enableResizing();
 await frame.updateHeight(600);
 ```
 
-### FullPage
+## FullPage
 
 Enables full-page applications within the Contentstack interface.
 
@@ -151,19 +153,21 @@ if (fullPage) {
 }
 ```
 
-#### API Reference
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L40)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L40)
 
 Stack operations and data access.
 
 ```ts
 // Get content types and entries
-const contentTypes = await fullPage.stack.getContentTypes();
-const entries = await fullPage.stack.getEntries('blog_post');
+const contentTypes = await widget.stack.getContentTypes();
+const entries = await widget.stack.getEntries('blog_post');
 ```
 
 **Available Methods:**
+- [getData()](#stack-getdata) - the data of the current stack
+- [getAllStacks(orgUid?, params?)](#stack-getallstacks) - all stacks in the current organization
+- [getContentType(uid, params?)](#stack-getcontenttype) - data of a single content type
 - [getContentTypes(query?, params?)](#stack-getcontenttypes) - data of all content types in the stack
 - [getEntries(contentType, params?)](#stack-getentries) - entries of a specific content type
 - [getAssets(query?, params?)](#stack-getassets) - assets from the stack
@@ -171,6 +175,8 @@ const entries = await fullPage.stack.getEntries('blog_post');
 - [search(queries, apiKey?)](#stack-search) - search results based on user query
 - [getEnvironment(name, params?)](#stack-getenvironment) - environment details
 - [getEnvironments(query?, params?)](#stack-getenvironments) - details of all environments
+- [getReleases(query?, params?)](#stack-getreleases) - details of releases of a stack
+- [getPublishes(query?, params?)](#stack-getpublishes) - details of publish queue of a stack
 - [getLocale(code, params?)](#stack-getlocale) - a specific locale
 - [getLocales(query?, params?)](#stack-getlocales) - all locales
 - [getWorkflow(uid, params?)](#stack-getworkflow) - a specific workflow
@@ -181,7 +187,7 @@ const entries = await fullPage.stack.getEntries('blog_post');
 - [getGlobalField(uid, params?)](#stack-getglobalfield) - a specific global field
 - [getGlobalFields(query?, params?)](#stack-getglobalfields) - all global fields
 
-### GlobalFullPageLocation
+## GlobalFullPageLocation
 
 Provides cross-stack functionality for global applications.
 
@@ -193,9 +199,8 @@ if (globalFullPage) {
 }
 ```
 
-#### API Reference
 
-##### [currentOrganization](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L73)
+### [currentOrganization](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L73)
 
 Current organization details.
 
@@ -205,7 +210,7 @@ console.log('Organization name:', currentOrg.name);
 console.log('Organization UID:', currentOrg.uid);
 ```
 
-### CustomField
+## CustomField
 
 Extends field functionality with custom validation and input components.
 
@@ -219,30 +224,31 @@ if (customField) {
 }
 ```
 
-#### API Reference
 
-##### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L21)
+### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L21)
 
 Field data operations and validation.
 
 ```ts
 // Get and set field data
-const fieldData = customField.field.getData();
-customField.field.setData({ title: 'New Title' });
+const fieldData = widget.field.getData();
+widget.field.setData({ title: 'New Title' });
 ```
 
 **Available Methods:**
 - [getData(options?)](#field-getdata) - the data of the current field
 - [setData(data)](#field-setdata) - the data for the current field
+- [setFocus()](#field-setfocus) - the focus for a field when an App is being used. This method shows user presence and highlights the App's Custom Field that the user is currently accessing in Contentstack UI
+- [onChange(callback)](#field-onchange) - callback when another extension or app programmatically modifies the data of this field using the `field.setData()` function. It is specifically designed for App's Custom Fields of data types text, number, boolean, or date
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L20)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L20)
 
 Entry data access and monitoring.
 
 ```ts
 // Get entry data and listen for changes
-const entryData = customField.entry.getData();
-customField.entry.onChange((data) => {
+const entryData = widget.entry.getData();
+widget.entry.onChange((data) => {
   console.log('Entry changed:', data);
 });
 ```
@@ -257,17 +263,20 @@ customField.entry.onChange((data) => {
 - [onPublish(callback)](#entry-onpublish) - callback when entry is published
 - [onUnPublish(callback)](#entry-onunpublish) - callback when entry is unpublished
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L24)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L24)
 
 Stack operations and data access.
 
 ```ts
 // Get content types and entries
-const contentTypes = await customField.stack.getContentTypes();
-const entries = await customField.stack.getEntries('blog_post');
+const contentTypes = await widget.stack.getContentTypes();
+const entries = await widget.stack.getEntries('blog_post');
 ```
 
 **Available Methods:**
+- [getData()](#stack-getdata) - the data of the current stack
+- [getAllStacks(orgUid?, params?)](#stack-getallstacks) - all stacks in the current organization
+- [getContentType(uid, params?)](#stack-getcontenttype) - data of a single content type
 - [getContentTypes(query?, params?)](#stack-getcontenttypes) - data of all content types in the stack
 - [getEntries(contentType, params?)](#stack-getentries) - entries of a specific content type
 - [getAssets(query?, params?)](#stack-getassets) - assets from the stack
@@ -275,6 +284,8 @@ const entries = await customField.stack.getEntries('blog_post');
 - [search(queries, apiKey?)](#stack-search) - search results based on user query
 - [getEnvironment(name, params?)](#stack-getenvironment) - environment details
 - [getEnvironments(query?, params?)](#stack-getenvironments) - details of all environments
+- [getReleases(query?, params?)](#stack-getreleases) - details of releases of a stack
+- [getPublishes(query?, params?)](#stack-getpublishes) - details of publish queue of a stack
 - [getLocale(code, params?)](#stack-getlocale) - a specific locale
 - [getLocales(query?, params?)](#stack-getlocales) - all locales
 - [getWorkflow(uid, params?)](#stack-getworkflow) - a specific workflow
@@ -285,7 +296,7 @@ const entries = await customField.stack.getEntries('blog_post');
 - [getGlobalField(uid, params?)](#stack-getglobalfield) - a specific global field
 - [getGlobalFields(query?, params?)](#stack-getglobalfields) - all global fields
 
-##### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L23)
+### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L23)
 
 Window management and resizing.
 
@@ -294,7 +305,7 @@ const frame = customField.frame;
 await frame.updateHeight(300);
 ```
 
-##### [fieldConfig](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L22)
+### [fieldConfig](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L22)
 
 Field configuration and metadata.
 
@@ -304,7 +315,7 @@ console.log('Field config:', fieldConfig);
 console.log('Field type:', fieldConfig.type);
 ```
 
-### SidebarWidget
+## SidebarWidget
 
 Integrates with entry sidebars to provide contextual tools and information.
 
@@ -316,16 +327,15 @@ if (sidebar) {
 }
 ```
 
-#### API Reference
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L28)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L28)
 
 Entry data access and monitoring.
 
 ```ts
 // Get entry data and listen for changes
-const entryData = sidebar.entry.getData();
-sidebar.entry.onChange((data) => {
+const entryData = widget.entry.getData();
+widget.entry.onChange((data) => {
   console.log('Entry changed:', data);
 });
 ```
@@ -340,17 +350,20 @@ sidebar.entry.onChange((data) => {
 - [onPublish(callback)](#entry-onpublish) - callback when entry is published
 - [onUnPublish(callback)](#entry-onunpublish) - callback when entry is unpublished
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L29)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L29)
 
 Stack operations and data access.
 
 ```ts
 // Get content types and entries
-const contentTypes = await sidebar.stack.getContentTypes();
-const entries = await sidebar.stack.getEntries('blog_post');
+const contentTypes = await widget.stack.getContentTypes();
+const entries = await widget.stack.getEntries('blog_post');
 ```
 
 **Available Methods:**
+- [getData()](#stack-getdata) - the data of the current stack
+- [getAllStacks(orgUid?, params?)](#stack-getallstacks) - all stacks in the current organization
+- [getContentType(uid, params?)](#stack-getcontenttype) - data of a single content type
 - [getContentTypes(query?, params?)](#stack-getcontenttypes) - data of all content types in the stack
 - [getEntries(contentType, params?)](#stack-getentries) - entries of a specific content type
 - [getAssets(query?, params?)](#stack-getassets) - assets from the stack
@@ -358,6 +371,8 @@ const entries = await sidebar.stack.getEntries('blog_post');
 - [search(queries, apiKey?)](#stack-search) - search results based on user query
 - [getEnvironment(name, params?)](#stack-getenvironment) - environment details
 - [getEnvironments(query?, params?)](#stack-getenvironments) - details of all environments
+- [getReleases(query?, params?)](#stack-getreleases) - details of releases of a stack
+- [getPublishes(query?, params?)](#stack-getpublishes) - details of publish queue of a stack
 - [getLocale(code, params?)](#stack-getlocale) - a specific locale
 - [getLocales(query?, params?)](#stack-getlocales) - all locales
 - [getWorkflow(uid, params?)](#stack-getworkflow) - a specific workflow
@@ -368,7 +383,7 @@ const entries = await sidebar.stack.getEntries('blog_post');
 - [getGlobalField(uid, params?)](#stack-getglobalfield) - a specific global field
 - [getGlobalFields(query?, params?)](#stack-getglobalfields) - all global fields
 
-### FieldModifierLocation
+## FieldModifierLocation
 
 Enables field data transformation and manipulation.
 
@@ -382,16 +397,15 @@ if (fieldModifier) {
 }
 ```
 
-#### API Reference
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L33)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L33)
 
 Entry data access and monitoring.
 
 ```ts
 // Get entry data and listen for changes
-const entryData = fieldModifier.entry.getData();
-fieldModifier.entry.onChange((data) => {
+const entryData = widget.entry.getData();
+widget.entry.onChange((data) => {
   console.log('Entry changed:', data);
 });
 ```
@@ -406,31 +420,36 @@ fieldModifier.entry.onChange((data) => {
 - [onPublish(callback)](#entry-onpublish) - callback when entry is published
 - [onUnPublish(callback)](#entry-onunpublish) - callback when entry is unpublished
 
-##### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L35)
+### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L35)
 
 Field data operations and validation.
 
 ```ts
 // Get and set field data
-const fieldData = fieldModifier.field.getData();
-fieldModifier.field.setData({ title: 'New Title' });
+const fieldData = widget.field.getData();
+widget.field.setData({ title: 'New Title' });
 ```
 
 **Available Methods:**
 - [getData(options?)](#field-getdata) - the data of the current field
 - [setData(data)](#field-setdata) - the data for the current field
+- [setFocus()](#field-setfocus) - the focus for a field when an App is being used. This method shows user presence and highlights the App's Custom Field that the user is currently accessing in Contentstack UI
+- [onChange(callback)](#field-onchange) - callback when another extension or app programmatically modifies the data of this field using the `field.setData()` function. It is specifically designed for App's Custom Fields of data types text, number, boolean, or date
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L34)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L34)
 
 Stack operations and data access.
 
 ```ts
 // Get content types and entries
-const contentTypes = await fieldModifier.stack.getContentTypes();
-const entries = await fieldModifier.stack.getEntries('blog_post');
+const contentTypes = await widget.stack.getContentTypes();
+const entries = await widget.stack.getEntries('blog_post');
 ```
 
 **Available Methods:**
+- [getData()](#stack-getdata) - the data of the current stack
+- [getAllStacks(orgUid?, params?)](#stack-getallstacks) - all stacks in the current organization
+- [getContentType(uid, params?)](#stack-getcontenttype) - data of a single content type
 - [getContentTypes(query?, params?)](#stack-getcontenttypes) - data of all content types in the stack
 - [getEntries(contentType, params?)](#stack-getentries) - entries of a specific content type
 - [getAssets(query?, params?)](#stack-getassets) - assets from the stack
@@ -438,6 +457,8 @@ const entries = await fieldModifier.stack.getEntries('blog_post');
 - [search(queries, apiKey?)](#stack-search) - search results based on user query
 - [getEnvironment(name, params?)](#stack-getenvironment) - environment details
 - [getEnvironments(query?, params?)](#stack-getenvironments) - details of all environments
+- [getReleases(query?, params?)](#stack-getreleases) - details of releases of a stack
+- [getPublishes(query?, params?)](#stack-getpublishes) - details of publish queue of a stack
 - [getLocale(code, params?)](#stack-getlocale) - a specific locale
 - [getLocales(query?, params?)](#stack-getlocales) - all locales
 - [getWorkflow(uid, params?)](#stack-getworkflow) - a specific workflow
@@ -448,7 +469,7 @@ const entries = await fieldModifier.stack.getEntries('blog_post');
 - [getGlobalField(uid, params?)](#stack-getglobalfield) - a specific global field
 - [getGlobalFields(query?, params?)](#stack-getglobalfields) - all global fields
 
-##### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L36)
+### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L36)
 
 Window management and resizing.
 
@@ -458,17 +479,20 @@ frame.enableAutoResizing();
 frame.startAutoResizing();
 ```
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L133)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L133)
 
 Stack operations and data access.
 
 ```ts
 // Get content types and entries
-const contentTypes = await fieldModifier.stack.getContentTypes();
-const entries = await fieldModifier.stack.getEntries('blog_post');
+const contentTypes = await widget.stack.getContentTypes();
+const entries = await widget.stack.getEntries('blog_post');
 ```
 
 **Available Methods:**
+- [getData()](#stack-getdata) - the data of the current stack
+- [getAllStacks(orgUid?, params?)](#stack-getallstacks) - all stacks in the current organization
+- [getContentType(uid, params?)](#stack-getcontenttype) - data of a single content type
 - [getContentTypes(query?, params?)](#stack-getcontenttypes) - data of all content types in the stack
 - [getEntries(contentType, params?)](#stack-getentries) - entries of a specific content type
 - [getAssets(query?, params?)](#stack-getassets) - assets from the stack
@@ -476,6 +500,8 @@ const entries = await fieldModifier.stack.getEntries('blog_post');
 - [search(queries, apiKey?)](#stack-search) - search results based on user query
 - [getEnvironment(name, params?)](#stack-getenvironment) - environment details
 - [getEnvironments(query?, params?)](#stack-getenvironments) - details of all environments
+- [getReleases(query?, params?)](#stack-getreleases) - details of releases of a stack
+- [getPublishes(query?, params?)](#stack-getpublishes) - details of publish queue of a stack
 - [getLocale(code, params?)](#stack-getlocale) - a specific locale
 - [getLocales(query?, params?)](#stack-getlocales) - all locales
 - [getWorkflow(uid, params?)](#stack-getworkflow) - a specific workflow
@@ -486,7 +512,7 @@ const entries = await fieldModifier.stack.getEntries('blog_post');
 - [getGlobalField(uid, params?)](#stack-getglobalfield) - a specific global field
 - [getGlobalFields(query?, params?)](#stack-getglobalfields) - all global fields
 
-### AssetSidebarWidget
+## AssetSidebarWidget
 
 Integrates with asset management interfaces.
 
@@ -501,9 +527,20 @@ if (assetSidebar) {
 }
 ```
 
-#### API Reference
+#### Properties
 
-##### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L61)
+### [currentAsset](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L15)
+
+Gets the current asset object directly.
+
+```ts
+const asset = assetSidebar.currentAsset;
+console.log('Current asset:', asset);
+```
+
+#### Methods
+
+### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L61)
 
 Gets the current asset data.
 
@@ -513,7 +550,7 @@ console.log('Asset title:', assetData.title);
 console.log('Asset URL:', assetData.url);
 ```
 
-##### [setData(asset)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L70)
+### [setData(asset)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L70)
 
 Sets data for the asset.
 
@@ -524,7 +561,7 @@ await assetSidebar.setData({
 });
 ```
 
-##### [syncAsset()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L78)
+### [syncAsset()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L78)
 
 Synchronizes the asset with the parent application.
 
@@ -532,7 +569,7 @@ Synchronizes the asset with the parent application.
 await assetSidebar.syncAsset();
 ```
 
-##### [updateWidth(width)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L88)
+### [updateWidth(width)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L88)
 
 Updates the width of the Asset Sidebar widget.
 
@@ -540,7 +577,7 @@ Updates the width of the Asset Sidebar widget.
 await assetSidebar.updateWidth(400);
 ```
 
-##### [replaceAsset(file)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L103)
+### [replaceAsset(file)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L103)
 
 Replaces the current asset with a new file.
 
@@ -550,7 +587,7 @@ const file = fileInput.files[0];
 await assetSidebar.replaceAsset(file);
 ```
 
-##### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L113)
+### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L113)
 
 Listens for asset save events.
 
@@ -560,7 +597,7 @@ assetSidebar.onSave((savedAsset) => {
 });
 ```
 
-##### [onChange(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L132)
+### [onChange(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L132)
 
 Listens for asset change events.
 
@@ -570,7 +607,7 @@ assetSidebar.onChange((changedAsset) => {
 });
 ```
 
-##### [onPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L154)
+### [onPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L154)
 
 Listens for asset publish events.
 
@@ -580,7 +617,7 @@ assetSidebar.onPublish((publishedAsset) => {
 });
 ```
 
-##### [onUnPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L176)
+### [onUnPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L176)
 
 Listens for asset unpublish events.
 
@@ -590,16 +627,7 @@ assetSidebar.onUnPublish((unpublishedAsset) => {
 });
 ```
 
-##### [currentAsset](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L15)
-
-Gets the current asset object directly.
-
-```ts
-const asset = assetSidebar.currentAsset;
-console.log('Current asset:', asset);
-```
-
-### ContentTypeSidebarWidget
+## ContentTypeSidebarWidget
 
 Provides content type management and schema tools.
 
@@ -613,9 +641,20 @@ if (contentTypeSidebar) {
 }
 ```
 
-#### API Reference
+#### Properties
 
-##### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L44)
+### [currentContentType](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L14)
+
+Gets the current content type object directly.
+
+```ts
+const contentType = contentTypeSidebar.currentContentType;
+console.log('Current content type:', contentType);
+```
+
+#### Methods
+
+### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L44)
 
 Gets the current content type data.
 
@@ -625,7 +664,7 @@ console.log('Content type:', contentTypeData.title);
 console.log('Schema:', contentTypeData.schema);
 ```
 
-##### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L53)
+### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L53)
 
 Listens for content type save events.
 
@@ -636,16 +675,7 @@ contentTypeSidebar.onSave((updatedContentType) => {
 });
 ```
 
-##### [currentContentType](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L14)
-
-Gets the current content type object directly.
-
-```ts
-const contentType = contentTypeSidebar.currentContentType;
-console.log('Current content type:', contentType);
-```
-
-### AppConfigWidget
+## AppConfigWidget
 
 Enables app configuration and settings management.
 
@@ -657,19 +687,21 @@ if (appConfig) {
 }
 ```
 
-#### API Reference
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L69)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L69)
 
 Stack operations and data access.
 
 ```ts
 // Get content types and entries
-const contentTypes = await appConfig.stack.getContentTypes();
-const entries = await appConfig.stack.getEntries('blog_post');
+const contentTypes = await widget.stack.getContentTypes();
+const entries = await widget.stack.getEntries('blog_post');
 ```
 
 **Available Methods:**
+- [getData()](#stack-getdata) - the data of the current stack
+- [getAllStacks(orgUid?, params?)](#stack-getallstacks) - all stacks in the current organization
+- [getContentType(uid, params?)](#stack-getcontenttype) - data of a single content type
 - [getContentTypes(query?, params?)](#stack-getcontenttypes) - data of all content types in the stack
 - [getEntries(contentType, params?)](#stack-getentries) - entries of a specific content type
 - [getAssets(query?, params?)](#stack-getassets) - assets from the stack
@@ -677,6 +709,8 @@ const entries = await appConfig.stack.getEntries('blog_post');
 - [search(queries, apiKey?)](#stack-search) - search results based on user query
 - [getEnvironment(name, params?)](#stack-getenvironment) - environment details
 - [getEnvironments(query?, params?)](#stack-getenvironments) - details of all environments
+- [getReleases(query?, params?)](#stack-getreleases) - details of releases of a stack
+- [getPublishes(query?, params?)](#stack-getpublishes) - details of publish queue of a stack
 - [getLocale(code, params?)](#stack-getlocale) - a specific locale
 - [getLocales(query?, params?)](#stack-getlocales) - all locales
 - [getWorkflow(uid, params?)](#stack-getworkflow) - a specific workflow
@@ -687,7 +721,7 @@ const entries = await appConfig.stack.getEntries('blog_post');
 - [getGlobalField(uid, params?)](#stack-getglobalfield) - a specific global field
 - [getGlobalFields(query?, params?)](#stack-getglobalfields) - all global fields
 
-##### [installation](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L61)
+### [installation](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L61)
 
 App installation data management.
 
@@ -823,6 +857,24 @@ Sets the data for the current field.
 await field.setData('new value');
 ```
 
+##### [setFocus()](#field-setfocus)
+
+Sets the focus for a field when an App is being used. This method shows user presence and highlights the App's Custom Field that the user is currently accessing in Contentstack UI.
+
+```ts
+await field.setFocus();
+```
+
+##### [onChange(callback)](#field-onchange)
+
+Executes callback when another extension or app programmatically modifies the data of this field using the `field.setData()` function. It is specifically designed for App's Custom Fields of data types text, number, boolean, or date.
+
+```ts
+field.onChange((data) => {
+  console.log('Field changed:', data);
+});
+```
+
 #### Properties
 
 ##### [uid](#field-uid)
@@ -856,6 +908,33 @@ console.log('Field schema:', fieldSchema);
 ### Stack Object
 
 #### Methods
+
+##### [getData()](#stack-getdata)
+
+Returns the data of the current stack.
+
+```ts
+const stackData = stack.getData();
+console.log('Stack name:', stackData.name);
+console.log('Stack UID:', stackData.uid);
+```
+
+##### [getAllStacks(orgUid?, params?)](#stack-getallstacks)
+
+Returns all stacks in the current organization.
+
+```ts
+const allStacks = await stack.getAllStacks();
+const orgStacks = await stack.getAllStacks('org_uid');
+```
+
+##### [getContentType(uid, params?)](#stack-getcontenttype)
+
+Retrieves data of a single content type.
+
+```ts
+const contentType = await stack.getContentType('content_type_uid');
+```
 
 ##### [getContentTypes(query?, params?)](#stack-getcontenttypes)
 
@@ -918,6 +997,22 @@ Retrieves details of all environments.
 
 ```ts
 const environments = await stack.getEnvironments();
+```
+
+##### [getReleases(query?, params?)](#stack-getreleases)
+
+Retrieves details of releases of a stack.
+
+```ts
+const releases = await stack.getReleases();
+```
+
+##### [getPublishes(query?, params?)](#stack-getpublishes)
+
+Retrieves details of publish queue of a stack.
+
+```ts
+const publishQueue = await stack.getPublishes();
 ```
 
 ##### [getLocale(code, params?)](#stack-getlocale)
@@ -1038,6 +1133,123 @@ await store.clear();
 ```
 
 
+## Frame Object
+
+Window management and resizing functionality for UI locations.
+
+#### Methods
+
+### [enableResizing()](#frame-enableresizing)
+
+Activates the resize button that allows you to resize the window size of your Dashboard Widget.
+
+```ts
+const frame = dashboard.frame;
+await frame.enableResizing();
+```
+
+**Returns:** `Promise<void>`
+
+### [updateHeight(height?)](#frame-updateheight)
+
+Updates the Widget height on Contentstack UI. If the 'height' argument is not provided, it will automatically calculate the scroll height and adjust the widget window height accordingly.
+
+```ts
+const frame = customField.frame;
+await frame.updateHeight(600);
+```
+
+**Parameters:**
+- `height` (optional): The desired height of the iframe window
+
+**Returns:** `Promise<void>`
+
+### [enableAutoResizing()](#frame-enableautoresizing)
+
+Enables auto resizing of the Widget height.
+
+```ts
+const frame = fieldModifier.frame;
+frame.enableAutoResizing();
+```
+
+**Returns:** `Window` - The context of the Window class
+
+### [disableAutoResizing()](#frame-disableautoresizing)
+
+Disables auto resizing of the Widget height.
+
+```ts
+const frame = fieldModifier.frame;
+frame.disableAutoResizing();
+```
+
+**Returns:** `Window` - The context of the Window class
+
+### [onDashboardResize(callback)](#frame-ondashboardresize)
+
+Executes the callback function whenever a Dashboard Widget is maximized or minimized. Only applicable on Dashboard Widgets.
+
+```ts
+const frame = dashboard.frame;
+frame.onDashboardResize((state) => {
+  console.log('Dashboard resized:', state);
+});
+```
+
+**Parameters:**
+- `callback`: The function to be called when a Dashboard Widget is maximized or minimized
+
+**Returns:** `boolean` - Returns true if the operation completes successfully without errors
+
+### [enablePaddingTop()](#frame-enablepaddingtop)
+
+Adds a padding on top of the Dashboard widget.
+
+```ts
+const frame = dashboard.frame;
+await frame.enablePaddingTop();
+```
+
+**Returns:** `Promise<void>`
+
+### [disablePaddingTop()](#frame-disablepaddingtop)
+
+Removes the padding previously added on top of the Dashboard widget.
+
+```ts
+const frame = dashboard.frame;
+await frame.disablePaddingTop();
+```
+
+**Returns:** `Promise<void>`
+
+### [updateDimension(dimension?)](#frame-updatedimension)
+
+Updates the UI location height and width on Contentstack UI. If the value is not passed, it will update the height and width of the UI location with the current height and width of the UI location.
+
+```ts
+const frame = fieldModifier.frame;
+await frame.updateDimension({ height: 400, width: 300 });
+```
+
+**Parameters:**
+- `dimension` (optional): Object with `height` and `width` properties
+
+**Returns:** `Promise<void>`
+
+### [closeModal()](#frame-closemodal)
+
+Closes the app modal.
+
+```ts
+const frame = fieldModifier.frame;
+await frame.closeModal();
+```
+
+**Returns:** `Promise<void>`
+
+
 ## Rich Text Editor
 
 ### RTEPlugin
@@ -1074,16 +1286,15 @@ if (rteLocation) {
 }
 ```
 
-#### API Reference
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L129)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L129)
 
 Entry data access and monitoring.
 
 ```ts
 // Get entry data and listen for changes
-const entryData = rteLocation.entry.getData();
-rteLocation.entry.onChange((data) => {
+const entryData = widget.entry.getData();
+widget.entry.onChange((data) => {
   console.log('Entry changed:', data);
 });
 ```

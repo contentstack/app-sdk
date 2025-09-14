@@ -2,6 +2,33 @@
 
 #### Methods
 
+##### [getData()](#stack-getdata)
+
+Returns the data of the current stack.
+
+```ts
+const stackData = stack.getData();
+console.log('Stack name:', stackData.name);
+console.log('Stack UID:', stackData.uid);
+```
+
+##### [getAllStacks(orgUid?, params?)](#stack-getallstacks)
+
+Returns all stacks in the current organization.
+
+```ts
+const allStacks = await stack.getAllStacks();
+const orgStacks = await stack.getAllStacks('org_uid');
+```
+
+##### [getContentType(uid, params?)](#stack-getcontenttype)
+
+Retrieves data of a single content type.
+
+```ts
+const contentType = await stack.getContentType('content_type_uid');
+```
+
 ##### [getContentTypes(query?, params?)](#stack-getcontenttypes)
 
 Retrieves data of all content types in the stack.
@@ -63,6 +90,22 @@ Retrieves details of all environments.
 
 ```ts
 const environments = await stack.getEnvironments();
+```
+
+##### [getReleases(query?, params?)](#stack-getreleases)
+
+Retrieves details of releases of a stack.
+
+```ts
+const releases = await stack.getReleases();
+```
+
+##### [getPublishes(query?, params?)](#stack-getpublishes)
+
+Retrieves details of publish queue of a stack.
+
+```ts
+const publishQueue = await stack.getPublishes();
 ```
 
 ##### [getLocale(code, params?)](#stack-getlocale)
