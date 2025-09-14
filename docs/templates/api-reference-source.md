@@ -24,27 +24,13 @@ if (customField) {
 }
 ```
 
-## SDK Reference
-
-### ContentstackAppSDK
+## ContentstackAppSDK
 
 The main SDK class that provides access to all functionality.
 
-#### Methods
-
-##### [init()](https://github.com/contentstack/app-sdk/blob/main/src/index.ts)
-
-Initializes the SDK and returns a configured instance.
-
-```ts
-const sdk = await ContentstackAppSDK.init();
-```
-
-**Returns:** `Promise<ContentstackAppSDK>`
-
 #### Properties
 
-##### [location](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
+### [location](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
 
 Access to all available UI locations.
 
@@ -53,7 +39,7 @@ const customField = sdk.location.CustomField;
 const sidebar = sdk.location.SidebarWidget;
 ```
 
-##### [region](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
+### [region](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
 
 The Contentstack region identifier.
 
@@ -61,13 +47,25 @@ The Contentstack region identifier.
 console.log(sdk.region); // "NA", "EU", "AU"
 ```
 
-##### [version](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
+### [version](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts)
 
 The current app version.
 
 ```ts
 console.log(sdk.version); // 1
 ```
+
+#### Methods
+
+### [init()](https://github.com/contentstack/app-sdk/blob/main/src/index.ts)
+
+Initializes the SDK and returns a configured instance.
+
+```ts
+const sdk = await ContentstackAppSDK.init();
+```
+
+**Returns:** `Promise<ContentstackAppSDK>`
 
 ## UI Locations
 
@@ -87,7 +85,7 @@ The SDK provides access to 11 different UI locations within the Contentstack int
 | **RTEPlugin** | RTE plugin development | Custom buttons, elements, functionality |
 | **AppConfigWidget** | App configuration | Settings, configuration management |
 
-### DashboardWidget
+## DashboardWidget
 
 Integrates with the Contentstack dashboard to provide stack-level functionality.
 
@@ -99,15 +97,14 @@ if (dashboard) {
 }
 ```
 
-#### API Reference
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L16)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L16)
 
 Stack operations and data access.
 
 {% include shared/stack-summary.md %}
 
-##### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L15)
+### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L15)
 
 Window management and resizing.
 
@@ -117,7 +114,7 @@ await frame.enableResizing();
 await frame.updateHeight(600);
 ```
 
-### FullPage
+## FullPage
 
 Enables full-page applications within the Contentstack interface.
 
@@ -129,15 +126,14 @@ if (fullPage) {
 }
 ```
 
-#### API Reference
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L40)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L40)
 
 Stack operations and data access.
 
 {% include shared/stack-summary.md %}
 
-### GlobalFullPageLocation
+## GlobalFullPageLocation
 
 Provides cross-stack functionality for global applications.
 
@@ -149,9 +145,8 @@ if (globalFullPage) {
 }
 ```
 
-#### API Reference
 
-##### [currentOrganization](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L73)
+### [currentOrganization](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L73)
 
 Current organization details.
 
@@ -161,7 +156,7 @@ console.log('Organization name:', currentOrg.name);
 console.log('Organization UID:', currentOrg.uid);
 ```
 
-### CustomField
+## CustomField
 
 Extends field functionality with custom validation and input components.
 
@@ -175,27 +170,26 @@ if (customField) {
 }
 ```
 
-#### API Reference
 
-##### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L21)
+### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L21)
 
 Field data operations and validation.
 
 {% include shared/field-summary.md %}
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L20)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L20)
 
 Entry data access and monitoring.
 
 {% include shared/entry-summary.md %}
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L24)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L24)
 
 Stack operations and data access.
 
 {% include shared/stack-summary.md %}
 
-##### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L23)
+### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L23)
 
 Window management and resizing.
 
@@ -204,7 +198,7 @@ const frame = customField.frame;
 await frame.updateHeight(300);
 ```
 
-##### [fieldConfig](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L22)
+### [fieldConfig](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L22)
 
 Field configuration and metadata.
 
@@ -214,7 +208,7 @@ console.log('Field config:', fieldConfig);
 console.log('Field type:', fieldConfig.type);
 ```
 
-### SidebarWidget
+## SidebarWidget
 
 Integrates with entry sidebars to provide contextual tools and information.
 
@@ -226,21 +220,20 @@ if (sidebar) {
 }
 ```
 
-#### API Reference
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L28)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L28)
 
 Entry data access and monitoring.
 
 {% include shared/entry-summary.md %}
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L29)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L29)
 
 Stack operations and data access.
 
 {% include shared/stack-summary.md %}
 
-### FieldModifierLocation
+## FieldModifierLocation
 
 Enables field data transformation and manipulation.
 
@@ -254,27 +247,26 @@ if (fieldModifier) {
 }
 ```
 
-#### API Reference
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L33)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L33)
 
 Entry data access and monitoring.
 
 {% include shared/entry-summary.md %}
 
-##### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L35)
+### [field](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L35)
 
 Field data operations and validation.
 
 {% include shared/field-summary.md %}
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L34)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L34)
 
 Stack operations and data access.
 
 {% include shared/stack-summary.md %}
 
-##### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L36)
+### [frame](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L36)
 
 Window management and resizing.
 
@@ -284,13 +276,13 @@ frame.enableAutoResizing();
 frame.startAutoResizing();
 ```
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L133)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L133)
 
 Stack operations and data access.
 
 {% include shared/stack-summary.md %}
 
-### AssetSidebarWidget
+## AssetSidebarWidget
 
 Integrates with asset management interfaces.
 
@@ -305,9 +297,20 @@ if (assetSidebar) {
 }
 ```
 
-#### API Reference
+#### Properties
 
-##### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L61)
+### [currentAsset](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L15)
+
+Gets the current asset object directly.
+
+```ts
+const asset = assetSidebar.currentAsset;
+console.log('Current asset:', asset);
+```
+
+#### Methods
+
+### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L61)
 
 Gets the current asset data.
 
@@ -317,7 +320,7 @@ console.log('Asset title:', assetData.title);
 console.log('Asset URL:', assetData.url);
 ```
 
-##### [setData(asset)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L70)
+### [setData(asset)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L70)
 
 Sets data for the asset.
 
@@ -328,7 +331,7 @@ await assetSidebar.setData({
 });
 ```
 
-##### [syncAsset()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L78)
+### [syncAsset()](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L78)
 
 Synchronizes the asset with the parent application.
 
@@ -336,7 +339,7 @@ Synchronizes the asset with the parent application.
 await assetSidebar.syncAsset();
 ```
 
-##### [updateWidth(width)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L88)
+### [updateWidth(width)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L88)
 
 Updates the width of the Asset Sidebar widget.
 
@@ -344,7 +347,7 @@ Updates the width of the Asset Sidebar widget.
 await assetSidebar.updateWidth(400);
 ```
 
-##### [replaceAsset(file)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L103)
+### [replaceAsset(file)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L103)
 
 Replaces the current asset with a new file.
 
@@ -354,7 +357,7 @@ const file = fileInput.files[0];
 await assetSidebar.replaceAsset(file);
 ```
 
-##### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L113)
+### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L113)
 
 Listens for asset save events.
 
@@ -364,7 +367,7 @@ assetSidebar.onSave((savedAsset) => {
 });
 ```
 
-##### [onChange(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L132)
+### [onChange(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L132)
 
 Listens for asset change events.
 
@@ -374,7 +377,7 @@ assetSidebar.onChange((changedAsset) => {
 });
 ```
 
-##### [onPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L154)
+### [onPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L154)
 
 Listens for asset publish events.
 
@@ -384,7 +387,7 @@ assetSidebar.onPublish((publishedAsset) => {
 });
 ```
 
-##### [onUnPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L176)
+### [onUnPublish(callback)](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L176)
 
 Listens for asset unpublish events.
 
@@ -394,16 +397,7 @@ assetSidebar.onUnPublish((unpublishedAsset) => {
 });
 ```
 
-##### [currentAsset](https://github.com/contentstack/app-sdk/blob/main/src/AssetSidebarWidget.ts#L15)
-
-Gets the current asset object directly.
-
-```ts
-const asset = assetSidebar.currentAsset;
-console.log('Current asset:', asset);
-```
-
-### ContentTypeSidebarWidget
+## ContentTypeSidebarWidget
 
 Provides content type management and schema tools.
 
@@ -417,9 +411,20 @@ if (contentTypeSidebar) {
 }
 ```
 
-#### API Reference
+#### Properties
 
-##### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L44)
+### [currentContentType](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L14)
+
+Gets the current content type object directly.
+
+```ts
+const contentType = contentTypeSidebar.currentContentType;
+console.log('Current content type:', contentType);
+```
+
+#### Methods
+
+### [getData()](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L44)
 
 Gets the current content type data.
 
@@ -429,7 +434,7 @@ console.log('Content type:', contentTypeData.title);
 console.log('Schema:', contentTypeData.schema);
 ```
 
-##### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L53)
+### [onSave(callback)](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L53)
 
 Listens for content type save events.
 
@@ -440,16 +445,7 @@ contentTypeSidebar.onSave((updatedContentType) => {
 });
 ```
 
-##### [currentContentType](https://github.com/contentstack/app-sdk/blob/main/src/ContentTypeSidebarWidget.ts#L14)
-
-Gets the current content type object directly.
-
-```ts
-const contentType = contentTypeSidebar.currentContentType;
-console.log('Current content type:', contentType);
-```
-
-### AppConfigWidget
+## AppConfigWidget
 
 Enables app configuration and settings management.
 
@@ -461,15 +457,14 @@ if (appConfig) {
 }
 ```
 
-#### API Reference
 
-##### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L69)
+### [stack](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L69)
 
 Stack operations and data access.
 
 {% include shared/stack-summary.md %}
 
-##### [installation](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L61)
+### [installation](https://github.com/contentstack/app-sdk/blob/main/src/types.ts#L61)
 
 App installation data management.
 
@@ -491,6 +486,8 @@ These objects provide the fundamental functionality for working with Contentstac
 {% include shared/stack-detailed.md %}
 
 {% include shared/store-detailed.md %}
+
+{% include shared/frame-detailed.md %}
 
 ## Rich Text Editor
 
@@ -528,9 +525,8 @@ if (rteLocation) {
 }
 ```
 
-#### API Reference
 
-##### [entry](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L129)
+### [entry](https://github.com/contentstack/app-sdk/blob/main/src/uiLocation.ts#L129)
 
 Entry data access and monitoring.
 
