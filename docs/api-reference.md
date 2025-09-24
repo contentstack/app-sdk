@@ -2299,12 +2299,6 @@ Following are a list of helpful functions and properties for a JSON RTE instance
 | `title`          | Title of the field                                                            | string                           |
 | `uid`            | Unique ID for the field                                                       | string                           |
 
-### `rte.getConfig: () => Object`
-
-Provides configuration which are defined while creating the plugin or while selecting a plugin in the content type builder page.
-
-For example, if your plugin requires API Key or any other config parameters then, you can specify these configurations while creating a new plugin or you can specify field specific configurations from the content type builder page while selecting the plugin. These configurations can be accessed through the `getConfig() `method.
-
 ### Methods:
 
 These methods are part of the RTE instance and can be accessed as rte.methodName().
