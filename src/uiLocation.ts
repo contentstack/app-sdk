@@ -431,7 +431,7 @@ class UiLocation {
             return Promise.resolve(this.config);
         }
         return this.postRobot
-            .sendToParent("getConfig")
+            .sendToParent("getConfig", {context:{installationUID:this.installationUID, extensionUID:this.locationUID}})
             .then(onData)
             .catch(onError);
     };
@@ -484,7 +484,7 @@ class UiLocation {
      */
 
     api = (url: string, option?: RequestInit): Promise<Response> =>
-        dispatchApiRequest(url, option) as Promise<Response>;
+        dispatchApiRequest(url, option, {installationUID:this.installationUID, extensionUID:this.locationUID}) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.

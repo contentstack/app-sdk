@@ -1,8 +1,10 @@
 import postRobot from "post-robot";
 
+import { InitializationData } from "./types";
+import { IRteParam } from "./RTE/types";
+import { PluginDefinition, PluginBuilder, registerPlugins } from "./rtePlugin";
 import UiLocation from "./uiLocation";
 import { version } from "../package.json";
-import { InitializationData } from "./types";
 
 postRobot.CONFIG.LOG_LEVEL = "error";
 
@@ -44,6 +46,55 @@ class ContentstackAppSDK {
     }
 
     /**
+  * Registers RTE plugins with the Contentstack platform.
+  * This method is the primary entry point for defining and registering custom RTE plugins
+  * built using the PluginBuilder pattern. It returns a function that the Contentstack
+  * platform will invoke at runtime, providing the necessary context.
+  *
+  * @example
+  * // In your plugin's entry file (e.g., src/index.ts):
+  * import ContentstackAppSDK, { PluginBuilder } from '@contentstack/app-sdk';
+  *
+  * const MyCustomPlugin = new PluginBuilder("my-plugin-id")
+  * .title("My Plugin")
+  * .icon(<MyIconComponent />)
+  * .elementType("block")
+  * .display("toolbar")
+  * .render(()=>{return <Comment />})
+  * .on("exec", (rte: IRteParam) => {
+  * // Access SDK via rte.sdk if needed:
+  * const sdk = rte.sdk;
+  * // ... plugin execution logic ...
+  * })
+  * .build();
+  *
+  * export default ContentstackAppSDK.registerRTEPlugins(
+  * MyCustomPlugin
+  * );
+  *
+  * @param {...PluginDefinition} pluginDefinitions - One or more plugin definitions created using the `PluginBuilder`.
+  * Each `PluginDefinition` describes the plugin's configuration, callbacks, and any child plugins.
+  * @returns {Promise<{ __isPluginBuilder__: boolean; version: string; plugins: (context: RTEContext, rte: IRteParam) => Promise<{ [key: string]: RTEPlugin; }>; }>}
+  * A Promise that resolves to an object containing:
+  * - `__isPluginBuilder__`: A boolean flag indicating this is a builder-based plugin export.
+  * - `version`: The version of the SDK that registered the plugins.
+  * - `plugins`: An asynchronous function. This function is designed to be invoked by the
+  * Contentstack platform loader, providing the `context` (initialization data) and
+  * the `rte` instance. When called, it materializes and returns a map of the
+  * registered `RTEPlugin` instances, keyed by their IDs.
+  */
+
+    static async registerRTEPlugins(...pluginDefinitions: PluginDefinition[]) {
+        return {
+            __isPluginBuilder__: true,
+            version,
+            plugins: (context: InitializationData, rte: IRteParam) => {
+                return registerPlugins(...pluginDefinitions)(context, rte);
+            }
+        };
+    }
+
+    /**
      * Version of Contentstack App SDK.
      */
     static get SDK_VERSION() {
@@ -52,4 +103,11 @@ class ContentstackAppSDK {
 }
 
 export default ContentstackAppSDK;
-module.exports = ContentstackAppSDK;
+export { PluginBuilder };
+
+// CommonJS compatibility
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ContentstackAppSDK;
+    module.exports.default = ContentstackAppSDK;
+    module.exports.PluginBuilder = PluginBuilder;
+}
