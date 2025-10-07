@@ -112,11 +112,17 @@ class Stack {
   /**
    * Gets the results of the search based on user query
    * @param queries Array of key value pair of query parameters
+   * @param params Optional parameters for the GET call
    * @param apiKey API key of the stack
    * @returns Result of the query
    */
-  search(queries: StackSearchQuery, apiKey: string | null = this._data.api_key) {
-    const options = { params: queries, api_key: apiKey, action: "search" };
+  search(queries: StackSearchQuery, params: { [key: string]: any } = {}, apiKey: string | null = this._data.api_key) {
+    const { branch } = params;
+    const options: any = { params: queries, api_key: apiKey, action: "search" };
+
+    if (branch) {
+      options.headers = { branch };
+    }
     return this._connection
       .sendToParent("stackQuery", options)
       .then(onData)
