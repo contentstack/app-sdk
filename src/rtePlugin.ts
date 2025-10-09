@@ -108,9 +108,6 @@ async function materializePlugin(
         finalConfig = { ...finalConfig, ...dynamicConfig };
     }
     
-    // CRITICAL FIX: Match the old RTE implementation exactly
-    // In the old implementation, the plugin was created and then callbacks were set
-    // But the key difference is that the old implementation used direct RTEPlugin instantiation
     const plugin = rtePluginInitializer(
         pluginDef.id,
         (rte: IRteParam | void) => {
@@ -118,8 +115,6 @@ async function materializePlugin(
         }
     );
     
-    // IMPORTANT: Set callbacks immediately after plugin creation
-    // This must happen BEFORE the RTE system calls plugin.get()
     Object.entries(pluginDef.callbacks).forEach(([type, callback]) => {
         plugin.on(type as keyof IOnFunction, callback);
     });
