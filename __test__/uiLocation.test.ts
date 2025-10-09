@@ -310,7 +310,7 @@ describe("UI Location", () => {
             const config = await uiLocation.getConfig();
             expect(config).toEqual({});
             expect(postRobotSendToParentMock).toHaveBeenLastCalledWith(
-                "getConfig"
+                "getConfig", {"context": {"extensionUID": "extension_uid", "installationUID": "installation_uid"}}
             );
         });
     });
