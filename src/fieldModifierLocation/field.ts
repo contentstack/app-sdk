@@ -6,9 +6,7 @@ import { GenericObjectType } from "../types/common.types";
 import { Schema } from "../types/stack.types";
 
 const excludedDataTypesForSetField = [
-    "reference",
     "blocks",
-    "group",
     "global_field",
 ];
 
