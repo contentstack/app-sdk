@@ -79,7 +79,7 @@ App Config UI Location allows you to manage all the app settings centrally. Once
 
 ### RTE Location
 
-The RTE Location allows you to create custom plugins to expand the functionality of your JSON Rich Text Editor. Using the Audience and Variables plugin, you can tailor your content as per your requirements. [RTE PLUGIN](docs/rte-plugin.md)
+The RTE Location allows you to create custom plugins to expand the functionality of your JSON Rich Text Editor. Using the Audience and Variables plugin, you can tailor your content as per your requirements.
 
 ### Sidebar Location
 
