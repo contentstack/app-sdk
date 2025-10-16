@@ -4,9 +4,6 @@ import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
 
-const excludedDataTypesForSetField = [
-];
-
 function separateResolvedData(field: Field, value: GenericObjectType) {
     let resolvedData = value;
     let unResolvedData = value;
@@ -110,17 +107,6 @@ class Field {
             uid: currentFieldObj.uid,
             self: currentFieldObj._self,
         };
-
-        if (
-            !currentFieldObj._self &&
-            (excludedDataTypesForSetField.indexOf(currentFieldObj.data_type) !==
-                -1 ||
-                !currentFieldObj.data_type)
-        ) {
-            return Promise.reject(
-                new Error("Cannot call set data for current field type")
-            );
-        }
 
         return this._connection
             .sendToParent("setData", dataObj)
