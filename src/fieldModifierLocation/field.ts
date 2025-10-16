@@ -6,8 +6,6 @@ import { GenericObjectType } from "../types/common.types";
 import { Schema } from "../types/stack.types";
 
 const excludedDataTypesForSetField = [
-    "blocks",
-    "global_field",
 ];
 
 function separateResolvedData(
