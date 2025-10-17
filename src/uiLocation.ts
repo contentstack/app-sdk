@@ -157,7 +157,7 @@ class UiLocation {
         });
 
         this.metadata = new Metadata(postRobot);
-
+        
         this.config = initializationData.config ?? {};
 
         this.ids = {
@@ -483,8 +483,7 @@ class UiLocation {
      * Method used to make an API request to the Contentstack's CMA APIs.
      */
 
-    api = (url: string, option?: RequestInit): Promise<Response> =>
-        dispatchApiRequest(url, option, {installationUID:this.installationUID, extensionUID:this.locationUID}) as Promise<Response>;
+    api = (url: string, option?: RequestInit): Promise<Response> => dispatchApiRequest(url, option) as Promise<Response>;
 
     /**
      * Method used to create an adapter for management sdk.
