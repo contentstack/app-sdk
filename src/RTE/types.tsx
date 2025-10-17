@@ -13,6 +13,7 @@ import {
 } from "slate";
 
 import { RTEPlugin } from "./index";
+import UiLocation from "../uiLocation";
 
 declare interface TransformOptions {
     at?: Location;
@@ -48,7 +49,7 @@ export declare interface IRteParam {
                 voids?: boolean;
             }
         ) => Point | undefined;
-
+        sdk: UiLocation;
         isPointEqual: (point: Point, another: Point) => boolean;
     };
 
@@ -140,6 +141,7 @@ export declare interface IRteParam {
     getVariable: <T = unknown>(name: string, defaultValue: any) => T;
     setVariable: <T = unknown>(name: string, value: T) => void;
     getConfig: <T>() => { [key: string]: T };
+    sdk: UiLocation;
 }
 
 export declare type IRteParamWithPreventDefault = {
@@ -199,7 +201,7 @@ export declare interface IRteElementType {
     children: Array<IRteElementType | IRteTextType>;
 }
 
-type IDynamicFunction = (
+export type IDynamicFunction = (
     element: IRteElementType
 ) =>
     | Exclude<IElementTypeOptions, "text">
