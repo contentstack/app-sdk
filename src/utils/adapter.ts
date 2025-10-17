@@ -58,12 +58,14 @@ export const dispatchAdapter =
  */
 export const dispatchApiRequest = async (
     url: string,
-    options?: RequestInit
+    options?: RequestInit,
+    context?: {installationUID: string, extensionUID: string}
 ): Promise<Response> => {
     try {
         const config = fetchToAxiosConfig(url, options);
         const axiosResponse = (await dispatchAdapter(PostRobot)(
-            config
+            config,
+            context
         )) as AxiosResponse;
 
         return axiosToFetchResponse(axiosResponse);
