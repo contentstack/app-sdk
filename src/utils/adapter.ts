@@ -14,10 +14,17 @@ import { axiosToFetchResponse, fetchToAxiosConfig } from "./utils";
  * @returns A function that takes AxiosRequestConfig and returns a promise.
  */
 export const dispatchAdapter =
-    (postRobot: typeof PostRobot) => (config: AxiosRequestConfig) => {
+    (postRobot: typeof PostRobot) =>
+    (
+        config: AxiosRequestConfig,
+        context?: { installationUID: string; extensionUID: string }
+    ) => {
         return new Promise((resolve, reject) => {
             postRobot
-                .sendToParent("apiAdapter", config)
+                .sendToParent("apiAdapter", {
+                    data: config,
+                    extension: context,
+                })
                 .then((event: unknown) => {
                     const { data: response } = event as { data: AxiosResponse };
 
@@ -56,12 +63,14 @@ export const dispatchAdapter =
  */
 export const dispatchApiRequest = async (
     url: string,
-    options?: RequestInit
+    options?: RequestInit,
+    context?: { installationUID: string; extensionUID: string }
 ): Promise<Response> => {
     try {
         const config = fetchToAxiosConfig(url, options);
         const axiosResponse = (await dispatchAdapter(PostRobot)(
-            config
+            config,
+            context
         )) as AxiosResponse;
 
         return axiosToFetchResponse(axiosResponse);
@@ -70,8 +79,7 @@ export const dispatchApiRequest = async (
             return new Response(err.response?.data, {
                 status: err.response.status,
                 statusText: err.response.statusText,
-                headers: err.response.headers
-             
+                headers: err.response.headers,
             });
         }
         return new Response(err.stack, {
@@ -81,3 +89,4 @@ export const dispatchApiRequest = async (
         });
     }
 };
+
