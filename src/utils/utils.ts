@@ -10,8 +10,6 @@ import { Response } from "node-fetch";
 
 import { Region, RegionType } from "../types";
 
-import { Region, RegionType } from "../types";
-
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
         return Promise.reject(data.data);
