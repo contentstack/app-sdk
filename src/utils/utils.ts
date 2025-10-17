@@ -1,4 +1,12 @@
-import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
+import {
+    AxiosError,
+    AxiosHeaders,
+    AxiosRequestConfig,
+    AxiosResponse,
+    isAxiosError,
+    RawAxiosRequestHeaders,
+} from "axios";
+import { Response } from "node-fetch";
 
 import { Region, RegionType } from "../types";
 
@@ -12,6 +20,58 @@ export function onData<Data extends Record<string, any>>(data: { data: Data }) {
 export function onError(error: Error) {
     return Promise.reject(error);
 }
+
+export const createAxiosErrorResponse = (error: AxiosError): Response => {
+    const { response, message, config } = error;
+
+    const responseBody = response?.data || { message };
+    const status = response?.status || 500;
+    const statusText = response?.statusText || "Internal Server Error";
+    const headers = new Headers(
+        sanitizeResponseHeader(config?.headers || {})
+    );
+
+    return new Response(JSON.stringify(responseBody), {
+        status,
+        statusText,
+        headers,
+    });
+};
+
+export const sanitizeResponseHeader = (headers: RawAxiosRequestHeaders) => {
+    const responseHeaders = new Headers();
+    const filterHeaders = [
+        "api_key",
+        "authorization",
+        "x-api-key",
+        "user-agent",
+    ];
+    if (headers instanceof Headers) {
+        headers.forEach((value, key) => {
+            if (!filterHeaders.includes(key.toLowerCase())) {
+                responseHeaders.set(key, value);
+            }
+        });
+    }
+    return responseHeaders;
+};
+
+export const handleApiError = (error: unknown): Response => {
+    return isAxiosError(error)
+        ? createErrorResponse(createAxiosErrorResponse(error))
+        : createErrorResponse(error as Error);
+};
+
+export const createErrorResponse = (error: Error): Response => {
+    return new Response(
+        JSON.stringify({ message: (error).message || error }),
+        {
+            status: 500,
+            statusText: "Internal Server Error",
+            headers: new Headers(),
+        }
+    );
+};
 
 export function formatAppRegion(region: string): RegionType {
     return region ?? Region.UNKNOWN;
