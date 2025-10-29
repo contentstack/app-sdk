@@ -223,7 +223,7 @@ describe("Entry", () => {
         dataWithoutEntry.entry = {};
         entry = new Entry(dataWithoutEntry, connection as any, emitter);
         expect(() => entry.getField("invaliduid")).toThrowError(
-            "The data is unsaved. Save the data before requesting the field."
+            "Invalid uid, Field not found"
         );
     });
 
