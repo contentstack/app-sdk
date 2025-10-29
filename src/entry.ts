@@ -154,14 +154,6 @@ class Entry {
             : this._data;
         let schema: Schema[0] = this.content_type.schema;
 
-        const isDataEmpty = Object.keys(value).length === 0;
-
-        if (isDataEmpty) {
-            throw new Error(
-                "The data is unsaved. Save the data before requesting the field."
-            );
-        }
-
         try {
             let skipNext = false;
             let skipNextTwo = false;
