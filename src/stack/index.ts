@@ -113,10 +113,15 @@ class Stack {
    * Gets the results of the search based on user query
    * @param queries Array of key value pair of query parameters
    * @param apiKey API key of the stack
+   * @param config Optional configuration. Only pass this if you need to query a specific branch using `{ branch: 'branch-name' }. If not provided, queries the default branch.`
    * @returns Result of the query
    */
-  search(queries: StackSearchQuery, apiKey: string | null = this._data.api_key) {
-    const options = { params: queries, api_key: apiKey, action: "search" };
+  search(queries: StackSearchQuery, apiKey: string | null = this._data.api_key, config: { [key: string]: any } = {}) {
+    const { branch } = config;
+    const options: any = { params: queries, api_key: apiKey, action: "search" };
+    if (branch) {
+      options.headers = { branch };
+    }
     return this._connection
       .sendToParent("stackQuery", options)
       .then(onData)
