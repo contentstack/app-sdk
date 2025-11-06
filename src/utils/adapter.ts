@@ -16,15 +16,11 @@ import { axiosToFetchResponse, fetchToAxiosConfig } from "./utils";
 export const dispatchAdapter =
     (postRobot: typeof PostRobot) =>
     (
-        config: AxiosRequestConfig,
-        context?: { installationUID: string; extensionUID: string }
+        config: AxiosRequestConfig
     ) => {
         return new Promise((resolve, reject) => {
             postRobot
-                .sendToParent("apiAdapter", {
-                    data: config,
-                    extension: context,
-                })
+                .sendToParent("apiAdapter", config)
                 .then((event: unknown) => {
                     const { data: response } = event as { data: AxiosResponse };
 
@@ -63,14 +59,12 @@ export const dispatchAdapter =
  */
 export const dispatchApiRequest = async (
     url: string,
-    options?: RequestInit,
-    context?: { installationUID: string; extensionUID: string }
+    options?: RequestInit
 ): Promise<Response> => {
     try {
         const config = fetchToAxiosConfig(url, options);
         const axiosResponse = (await dispatchAdapter(PostRobot)(
-            config,
-            context
+            config
         )) as AxiosResponse;
 
         return axiosToFetchResponse(axiosResponse);
