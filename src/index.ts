@@ -7,7 +7,7 @@ import UiLocation from "./uiLocation";
 import { version } from "../package.json";
 
 postRobot.CONFIG.LOG_LEVEL = "error";
-
+postRobot.CONFIG.ACK_TIMEOUT = 10000;
 /**
  * Class to initialize the App on Contentstack UI.
  * Import Contentstack App SDK and then call ContentstackAppSDK.init in your code base
