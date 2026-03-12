@@ -64,6 +64,7 @@ declare module "post-robot" {
 
     interface Config {
         LOG_LEVEL: string;
+        ACK_TIMEOUT: number;
     }
 
     export const CONFIG: Config;
