@@ -79,6 +79,7 @@
         "node": ">=18.x"
     },
     "overrides": {
-        "@tootallnate/once": "3.0.1"
+        "http-proxy-agent": "^7.0.2",
+        "micromatch": "^4.0.8"
     }
 }
