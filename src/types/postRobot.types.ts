@@ -44,4 +44,5 @@ interface FireAndForgetRequestOptionsType {
 
 interface Config {
     LOG_LEVEL: string;
+    ACK_TIMEOUT: number;
 }
