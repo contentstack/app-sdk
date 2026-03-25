@@ -33,6 +33,11 @@ class Window {
         this.type = type;
         this.state = state;
         this._emitter = emitter;
+
+        this.enableResizing = this.enableResizing.bind(this);
+        this.updateHeight = this.updateHeight.bind(this);
+        this.enableAutoResizing = this.enableAutoResizing.bind(this);
+        this.disableAutoResizing = this.disableAutoResizing.bind(this);
     }
 
     /**
@@ -112,7 +117,7 @@ class Window {
         }
         this._autoResizingEnabled = true;
         //@ts-ignore
-        observer = new MutationObserver(this.updateHeight.bind(this));
+        observer = new MutationObserver(this.updateHeight);
         observer.observe(window.document.body, config);
         return this;
     }

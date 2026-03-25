@@ -4,7 +4,17 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "../types";
 import { GenericObjectType } from "../types/common.types";
 import { Schema } from "../types/stack.types";
+import {
+    getSetDataWarnings,
+    getValidationErrorPayload,
+    isDebouncedSkippedResponse,
+    isValidationErrorPayload,
+    getResolutionErrorPayload,
+    isResolutionErrorPayload,
+} from "../utils/setDataBridgeResponse";
+import { shouldExcludeComplexTypesForNonSelfSetData } from "../utils/sdkSetDataVersionGate";
 
+/** Same rules as `field.ts` — legacy init versions block complex non-self setData client-side. */
 const excludedDataTypesForSetField = [
     "file",
     "reference",
@@ -12,6 +22,12 @@ const excludedDataTypesForSetField = [
     "group",
     "global_field",
 ];
+
+function activeExcludedDataTypesForNonSelfSetData(): string[] {
+    return shouldExcludeComplexTypesForNonSelfSetData()
+        ? excludedDataTypesForSetField
+        : [];
+}
 
 function separateResolvedData(
     field: FieldModifierLocationField,
@@ -120,10 +136,10 @@ class FieldModifierLocationField {
             self: currentFieldObj._self,
         };
 
+        const excluded = activeExcludedDataTypesForNonSelfSetData();
         if (
             !currentFieldObj._self &&
-            (excludedDataTypesForSetField.indexOf(currentFieldObj.data_type) !==
-                -1 ||
+            (excluded.indexOf(currentFieldObj.data_type) !== -1 ||
                 !currentFieldObj.data_type)
         ) {
             return Promise.reject(
@@ -133,8 +149,27 @@ class FieldModifierLocationField {
 
         return this._connection
             .sendToParent("setData", dataObj)
-            .then(() => {
+            .then((response) => {
+                if (isValidationErrorPayload(response)) {
+                    return Promise.reject(getValidationErrorPayload(response));
+                }
+                if (isResolutionErrorPayload(response)) {
+                    return Promise.reject(getResolutionErrorPayload(response));
+                }
+                if (isDebouncedSkippedResponse(response)) {
+                    return Promise.resolve({
+                        ...currentFieldObj,
+                        debounced: true,
+                    } as FieldModifierLocationField);
+                }
                 this._data = data;
+                const warnings = getSetDataWarnings(response);
+                if (warnings.length > 0) {
+                    return Promise.resolve({
+                        ...currentFieldObj,
+                        warnings,
+                    } as FieldModifierLocationField);
+                }
                 return Promise.resolve(currentFieldObj);
             })
             .catch((e: Error) => {
