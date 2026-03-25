@@ -35,6 +35,7 @@ import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { dispatchApiRequest, dispatchAdapter } from "./utils/adapter";
+import { setAppSdkInitVersion } from "./utils/sdkSetDataVersionGate";
 import { ContentstackEndpoints } from "./types/api.type";
 
 const emitter = new EventEmitter();
@@ -504,6 +505,7 @@ class UiLocation {
      * @param version - Version of the app SDK in use.
      */
     static async initialize(version: string): Promise<InitializationData> {
+        setAppSdkInitVersion(version);
         const meta = {
             sdkType: "app-sdk",
         };

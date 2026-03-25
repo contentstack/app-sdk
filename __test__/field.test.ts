@@ -75,6 +75,70 @@ describe("Field", () => {
             field.setFocus();
             expect(connection.sendToParent).toHaveBeenCalledWith("focus");
         });
+
+        it("setData rejects on bridge VALIDATION_ERROR", async () => {
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: {
+                    code: "VALIDATION_ERROR",
+                    message: "bad",
+                    details: [],
+                },
+            });
+            await expect(field.setData("bad")).rejects.toMatchObject({
+                code: "VALIDATION_ERROR",
+            });
+        });
+
+        it("setData rejects on host SETDATA_RESOLUTION_ERROR", async () => {
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: {
+                    code: "SETDATA_RESOLUTION_ERROR",
+                    message: "resolve failed",
+                    failures: [{ kind: "asset", uid: "bltx", reason: "x" }],
+                },
+            });
+            await expect(field.setData("bltx")).rejects.toMatchObject({
+                code: "SETDATA_RESOLUTION_ERROR",
+                failures: [{ kind: "asset", uid: "bltx", reason: "x" }],
+            });
+        });
+
+        it("setData resolves with warnings when bridge returns warnings", async () => {
+            const warn = [
+                {
+                    field: "title",
+                    fieldUid: "title",
+                    fieldLabel: "Title",
+                    fieldType: "text",
+                    reasons: [{ reason: "MIN_LENGTH", message: "too short" }],
+                },
+            ];
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: { warnings: warn },
+            });
+            const out: any = await field.setData("ab");
+            expect(out.warnings).toEqual(warn);
+        });
+
+        it("setData skips _data update when debounced skipped", async () => {
+            const before = field.getData();
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: { debounced: true, skipped: true },
+            });
+            const out: any = await field.setData("new");
+            expect(out.debounced).toBe(true);
+            expect(field.getData()).toEqual(before);
+        });
+
+        it("setData skips _data when debounced nested like app-extension-component", async () => {
+            const before = field.getData();
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: { data: { debounced: true, skipped: true } },
+            });
+            const out: any = await field.setData("new");
+            expect(out.debounced).toBe(true);
+            expect(field.getData()).toEqual(before);
+        });
     });
 
     describe("File", () => {

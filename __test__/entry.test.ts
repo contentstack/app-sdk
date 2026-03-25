@@ -1,4 +1,5 @@
 import Entry from "../src/entry";
+import { setAppSdkInitVersion } from "../src/utils/sdkSetDataVersionGate";
 import testData from "./data/testData.json";
 import { jest } from "@jest/globals";
 
@@ -9,6 +10,7 @@ describe("Entry", () => {
     let sendToParent: any;
 
     beforeEach(() => {
+        setAppSdkInitVersion("2.4.0");
         sendToParent = () => {};
         connection = { sendToParent };
 
@@ -195,13 +197,79 @@ describe("Entry", () => {
         });
     });
 
-    it("set field data restriction", async () => {
+    describe("entry.setData", () => {
+        it("merges fields on success", async () => {
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: { success: true },
+            });
+            const r = await entry.setData({ title: "merged-title" } as any);
+            expect(connection.sendToParent).toHaveBeenCalledWith(
+                "setEntryData",
+                { data: { title: "merged-title" } }
+            );
+            expect((entry.getData() as any).title).toEqual("merged-title");
+            expect((r as any).title).toEqual("merged-title");
+        });
+
+        it("rejects on VALIDATION_ERROR", async () => {
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: {
+                    code: "VALIDATION_ERROR",
+                    message: "x",
+                    details: [],
+                },
+            });
+            await expect(
+                entry.setData({ title: "x" } as any)
+            ).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+        });
+
+        it("rejects on SETDATA_RESOLUTION_ERROR without merging entry", async () => {
+            const before = { ...(entry.getData() as any) };
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: {
+                    code: "SETDATA_RESOLUTION_ERROR",
+                    message: "resolve failed",
+                    failures: [],
+                },
+            });
+            await expect(
+                entry.setData({ file_field: "bltx" } as any)
+            ).rejects.toMatchObject({ code: "SETDATA_RESOLUTION_ERROR" });
+            expect(entry.getData()).toEqual(before);
+        });
+
+        it("rejects when no entry data", async () => {
+            const dataNoEntry = JSON.parse(JSON.stringify(testData));
+            dataNoEntry.entry = undefined;
+            const badEntry = new Entry(dataNoEntry as any, connection as any, emitter);
+            await expect(badEntry.setData({} as any)).rejects.toThrow(
+                "not available in this location"
+            );
+        });
+    });
+
+    it("setData on nested multiple group field calls parent (bridge validates)", async () => {
         const uid = "group.group.group";
         const field = entry.getField(uid);
+        jest.spyOn(connection, "sendToParent").mockResolvedValue({
+            data: { success: true },
+        });
+        await field.setData([{ single_line: "x" }] as any);
+        expect(connection.sendToParent).toHaveBeenCalledWith("setData", {
+            data: [{ single_line: "x" }],
+            uid,
+            self: false,
+        });
+    });
 
-        await expect(field.setData({ d: "dummy" })).rejects.toThrowError(
-            "Cannot call set data for current field type"
-        );
+    it("rejects non-self setData on group when init version is below 2.4.0", async () => {
+        setAppSdkInitVersion("2.3.0");
+        const uid = "group.group.group";
+        const field = entry.getField(uid);
+        await expect(
+            field.setData([{ single_line: "x" }] as any)
+        ).rejects.toThrow("Cannot call set data for current field type");
     });
 
     it("set field data restriction for modular blocks, one complete block", async () => {
