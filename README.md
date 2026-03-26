@@ -29,7 +29,7 @@ npm install @contentstack/app-sdk
 Alternatively, you can use the following command within the script tag to install the App SDK:
 
 ```html
-<script src="https://unpkg.com/@contentstack/app-sdk@2.0.0/dist/index.js"></script>
+<script src="https://unpkg.com/@contentstack/app-sdk@2.3.6/dist/index.js"></script>
 ```
 
 ### Initializing the App SDK
@@ -38,7 +38,7 @@ To Initialize the App SDK you need to run the following command:
 
 ```js
 ContentstackAppSdk.init().then(function (appSdk) {
-    // add code here
+// add code here
 });
 ```
 
