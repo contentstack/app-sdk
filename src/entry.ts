@@ -23,6 +23,12 @@ import {
     isResolutionErrorPayload,
     isValidationErrorPayload,
 } from "./utils/setDataBridgeResponse";
+import {
+    SetDataResolutionError,
+    SetDataValidationError,
+} from "./utils/setDataErrors";
+import type { SetDataValidationEvent } from "./types/setDataValidation.types";
+import { SET_DATA_VALIDATION_EMITTER_EVENT } from "./types/setDataValidation.types";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -103,25 +109,28 @@ class Entry {
      */
     async setData(data: GenericObjectType): Promise<GenericObjectType> {
         if (!this._data) {
-            return Promise.reject(
-                new Error(
-                    "entry.setData() is not available in this location"
-                )
+            throw new Error(
+                "entry.setData() is not available in this location"
             );
         }
         try {
+            const payload = { data };
             const response = await this._connection.sendToParent<
                 GenericObjectType & {
                     code?: string;
                     warnings?: unknown[];
                 }
-            >("setEntryData", { data });
+            >("setEntryData", payload);
             const envelope = { data: response?.data };
             if (isValidationErrorPayload(envelope)) {
-                return Promise.reject(getValidationErrorPayload(envelope));
+                throw SetDataValidationError.fromBridgePayload(
+                    getValidationErrorPayload(envelope)
+                );
             }
             if (isResolutionErrorPayload(envelope)) {
-                return Promise.reject(getResolutionErrorPayload(envelope));
+                throw SetDataResolutionError.fromBridgePayload(
+                    getResolutionErrorPayload(envelope)
+                );
             }
             Object.assign(this._data, data);
             const result: GenericObjectType = { ...data };
@@ -131,11 +140,16 @@ class Entry {
                     warnings;
             }
             return result;
-        } catch {
-            return Promise.reject(
-                new Error(
-                    "entry.setData() requires host support (app-extension-component >= 2.7.0)."
-                )
+        } catch (e) {
+            if (
+                e instanceof SetDataValidationError ||
+                e instanceof SetDataResolutionError
+            ) {
+                throw e;
+            }
+            const suffix = e instanceof Error ? ` ${e.message}` : "";
+            throw new Error(
+                `entry.setData() requires host support (app-extension-component >= 2.7.0).${suffix}`
             );
         }
     }
@@ -181,7 +195,7 @@ class Entry {
     /**
      * Gets the field object for the saved data, which allows you to interact with the field.
      * This object will have all the same methods and properties of appSDK.location.CustomField.field.
-     * Note: For fields from getField with _self false, complex setData (file, reference, blocks, group, global_field) requires app-sdk init version 2.4.0+ so the host bridge can validate; older init versions keep the legacy client-side block for those types.
+     * Note: Non-self fields (`entry.getField`) delegate `setData` to the host bridge for all field types.
      * @example
      * var field = entry.getField('field_uid');
      * var fieldSchema = field.schema;
@@ -364,6 +378,27 @@ class Entry {
             );
             this._emitter.emitEvent("_eventRegistration", [
                 { name: "entryUnPublish" },
+            ]);
+        } else {
+            throw Error("Callback must be a function");
+        }
+    }
+
+    /**
+     * Post-apply async validation for programmatic `field.setData` / `entry.setData`
+     * (`SET_DATA_VALIDATION` via extensionEvent). Sync outcomes stay on the Promise; see TRD §6.
+     */
+    onSetDataValidation(callback: (event: SetDataValidationEvent) => void) {
+        const entryObj = this;
+        if (callback && typeof callback === "function") {
+            entryObj._emitter.on(
+                SET_DATA_VALIDATION_EMITTER_EVENT,
+                (event: SetDataValidationEvent) => {
+                    callback(event);
+                }
+            );
+            this._emitter.emitEvent("_eventRegistration", [
+                { name: SET_DATA_VALIDATION_EMITTER_EVENT },
             ]);
         } else {
             throw Error("Callback must be a function");

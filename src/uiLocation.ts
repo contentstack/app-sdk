@@ -31,11 +31,15 @@ import {
     RegionType,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
+import {
+    SET_DATA_VALIDATION_EMITTER_EVENT,
+    SET_DATA_VALIDATION_WIRE_NAME,
+} from "./types/setDataValidation.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
 import { dispatchApiRequest, dispatchAdapter } from "./utils/adapter";
-import { setAppSdkInitVersion } from "./utils/sdkSetDataVersionGate";
+import { parseSetDataValidationPayload } from "./utils/setDataRequestCorrelation";
 import { ContentstackEndpoints } from "./types/api.type";
 
 const emitter = new EventEmitter();
@@ -400,6 +404,17 @@ class UiLocation {
                         { data: event.data.data },
                     ]);
                 }
+
+                if (event.data.name === SET_DATA_VALIDATION_WIRE_NAME) {
+                    const parsed = parseSetDataValidationPayload(
+                        event.data.data
+                    );
+                    if (parsed) {
+                        emitter.emitEvent(SET_DATA_VALIDATION_EMITTER_EVENT, [
+                            parsed,
+                        ]);
+                    }
+                }
             });
         } catch (err) {
             console.error("Extension Event", err);
@@ -505,7 +520,6 @@ class UiLocation {
      * @param version - Version of the app SDK in use.
      */
     static async initialize(version: string): Promise<InitializationData> {
-        setAppSdkInitVersion(version);
         const meta = {
             sdkType: "app-sdk",
         };

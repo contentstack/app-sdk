@@ -6,31 +6,16 @@ import { Schema } from "./types/stack.types";
 import {
     getSetDataWarnings,
     getValidationErrorPayload,
-    isDebouncedSkippedResponse,
     isValidationErrorPayload,
     getResolutionErrorPayload,
     isResolutionErrorPayload,
 } from "./utils/setDataBridgeResponse";
-import { shouldExcludeComplexTypesForNonSelfSetData } from "./utils/sdkSetDataVersionGate";
-
-/**
- * Blocked from `field.setData` when `_self === false` and init version is below 2.4.0
- * (no bridge validation contract). At 2.4.0+ this list is not applied — complex payloads are
- * validated in app-extension-component.
- */
-const excludedDataTypesForSetField = [
-    "file",
-    "reference",
-    "blocks",
-    "group",
-    "global_field",
-];
-
-function activeExcludedDataTypesForNonSelfSetData(): string[] {
-    return shouldExcludeComplexTypesForNonSelfSetData()
-        ? excludedDataTypesForSetField
-        : [];
-}
+import {
+    SetDataResolutionError,
+    SetDataValidationError,
+} from "./utils/setDataErrors";
+import type { SetDataValidationEvent } from "./types/setDataValidation.types";
+import { SET_DATA_VALIDATION_EMITTER_EVENT } from "./types/setDataValidation.types";
 
 function separateResolvedData(field: Field, value: GenericObjectType) {
     let resolvedData = value;
@@ -128,53 +113,38 @@ class Field {
      * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
      */
 
-    setData(data: any): Promise<Field> {
+    async setData(data: any): Promise<Field> {
         const currentFieldObj = this;
-        const dataObj = {
+        const dataObj: {
+            data: any;
+            uid: string;
+            self: boolean;
+        } = {
             data,
             uid: currentFieldObj.uid,
             self: currentFieldObj._self,
         };
 
-        const excluded = activeExcludedDataTypesForNonSelfSetData();
-        if (
-            !currentFieldObj._self &&
-            (excluded.indexOf(currentFieldObj.data_type) !== -1 ||
-                !currentFieldObj.data_type)
-        ) {
-            return Promise.reject(
-                new Error("Cannot call set data for current field type")
+        const response = await this._connection.sendToParent("setData", dataObj);
+        if (isValidationErrorPayload(response)) {
+            throw SetDataValidationError.fromBridgePayload(
+                getValidationErrorPayload(response)
             );
         }
-
-        return this._connection
-            .sendToParent("setData", dataObj)
-            .then((response) => {
-                if (isValidationErrorPayload(response)) {
-                    return Promise.reject(getValidationErrorPayload(response));
-                }
-                if (isResolutionErrorPayload(response)) {
-                    return Promise.reject(getResolutionErrorPayload(response));
-                }
-                if (isDebouncedSkippedResponse(response)) {
-                    return Promise.resolve({
-                        ...currentFieldObj,
-                        debounced: true,
-                    } as Field);
-                }
-                this._data = data;
-                const warnings = getSetDataWarnings(response);
-                if (warnings.length > 0) {
-                    return Promise.resolve({
-                        ...currentFieldObj,
-                        warnings,
-                    } as Field);
-                }
-                return Promise.resolve(currentFieldObj);
-            })
-            .catch((e: Error) => {
-                return Promise.reject(e);
-            });
+        if (isResolutionErrorPayload(response)) {
+            throw SetDataResolutionError.fromBridgePayload(
+                getResolutionErrorPayload(response)
+            );
+        }
+        this._data = data;
+        const warnings = getSetDataWarnings(response);
+        if (warnings.length > 0) {
+            return {
+                ...currentFieldObj,
+                warnings,
+            } as Field;
+        }
+        return currentFieldObj;
     }
 
     /**
@@ -210,6 +180,45 @@ class Field {
             });
             this._emitter.emitEvent("_eventRegistration", [
                 { name: "extensionFieldChange" },
+            ]);
+        } else {
+            throw Error("Callback must be a function");
+        }
+    }
+
+    /**
+     * Subscribe to post-apply / async setData validation for **this field** (wire `SET_DATA_VALIDATION`).
+     * Full entry lifecycle is available on {@link Entry#onSetDataValidation}.
+     */
+    onSetDataValidation(callback: (event: SetDataValidationEvent) => void) {
+        const fieldObj = this;
+        if (callback && typeof callback === "function") {
+            fieldObj._emitter.on(
+                SET_DATA_VALIDATION_EMITTER_EVENT,
+                (event: SetDataValidationEvent) => {
+                    if (event.source !== "field") {
+                        return;
+                    }
+                    const uid = fieldObj.uid;
+                    if (
+                        event.fieldUid !== undefined &&
+                        event.fieldUid !== uid
+                    ) {
+                        return;
+                    }
+                    if (
+                        event.errors?.some(
+                            (e) =>
+                                e.fieldUid != null && e.fieldUid !== uid
+                        )
+                    ) {
+                        return;
+                    }
+                    callback(event);
+                }
+            );
+            fieldObj._emitter.emitEvent("_eventRegistration", [
+                { name: SET_DATA_VALIDATION_EMITTER_EVENT },
             ]);
         } else {
             throw Error("Callback must be a function");

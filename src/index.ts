@@ -1,5 +1,6 @@
 import postRobot from "post-robot";
 
+import { SetDataResolutionError, SetDataValidationError } from "./utils/setDataErrors";
 import { InitializationData } from "./types";
 import { IRteParam } from "./RTE/types";
 import { PluginDefinition, PluginBuilder, registerPlugins } from "./rtePlugin";
@@ -104,6 +105,7 @@ class ContentstackAppSDK {
 
 export default ContentstackAppSDK;
 export { PluginBuilder };
+export { SetDataResolutionError, SetDataValidationError };
 
 // CommonJS compatibility
 if (typeof module !== 'undefined' && module.exports) {
