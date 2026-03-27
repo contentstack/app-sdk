@@ -7,27 +7,14 @@ import { Schema } from "../types/stack.types";
 import {
     getSetDataWarnings,
     getValidationErrorPayload,
-    isDebouncedSkippedResponse,
     isValidationErrorPayload,
     getResolutionErrorPayload,
     isResolutionErrorPayload,
 } from "../utils/setDataBridgeResponse";
-import { shouldExcludeComplexTypesForNonSelfSetData } from "../utils/sdkSetDataVersionGate";
-
-/** Same rules as `field.ts` — legacy init versions block complex non-self setData client-side. */
-const excludedDataTypesForSetField = [
-    "file",
-    "reference",
-    "blocks",
-    "group",
-    "global_field",
-];
-
-function activeExcludedDataTypesForNonSelfSetData(): string[] {
-    return shouldExcludeComplexTypesForNonSelfSetData()
-        ? excludedDataTypesForSetField
-        : [];
-}
+import {
+    SetDataResolutionError,
+    SetDataValidationError,
+} from "../utils/setDataErrors";
 
 function separateResolvedData(
     field: FieldModifierLocationField,
@@ -130,51 +117,36 @@ class FieldModifierLocationField {
      */
     async setData(data: any): Promise<FieldModifierLocationField> {
         const currentFieldObj = this;
-        const dataObj = {
+        const dataObj: {
+            data: any;
+            uid: string;
+            self: boolean;
+        } = {
             data,
             uid: currentFieldObj.uid,
             self: currentFieldObj._self,
         };
 
-        const excluded = activeExcludedDataTypesForNonSelfSetData();
-        if (
-            !currentFieldObj._self &&
-            (excluded.indexOf(currentFieldObj.data_type) !== -1 ||
-                !currentFieldObj.data_type)
-        ) {
-            return Promise.reject(
-                new Error("Cannot call set data for current field type")
+        const response = await this._connection.sendToParent("setData", dataObj);
+        if (isValidationErrorPayload(response)) {
+            throw SetDataValidationError.fromBridgePayload(
+                getValidationErrorPayload(response)
             );
         }
-
-        return this._connection
-            .sendToParent("setData", dataObj)
-            .then((response) => {
-                if (isValidationErrorPayload(response)) {
-                    return Promise.reject(getValidationErrorPayload(response));
-                }
-                if (isResolutionErrorPayload(response)) {
-                    return Promise.reject(getResolutionErrorPayload(response));
-                }
-                if (isDebouncedSkippedResponse(response)) {
-                    return Promise.resolve({
-                        ...currentFieldObj,
-                        debounced: true,
-                    } as FieldModifierLocationField);
-                }
-                this._data = data;
-                const warnings = getSetDataWarnings(response);
-                if (warnings.length > 0) {
-                    return Promise.resolve({
-                        ...currentFieldObj,
-                        warnings,
-                    } as FieldModifierLocationField);
-                }
-                return Promise.resolve(currentFieldObj);
-            })
-            .catch((e: Error) => {
-                return Promise.reject(e);
-            });
+        if (isResolutionErrorPayload(response)) {
+            throw SetDataResolutionError.fromBridgePayload(
+                getResolutionErrorPayload(response)
+            );
+        }
+        this._data = data;
+        const warnings = getSetDataWarnings(response);
+        if (warnings.length > 0) {
+            return {
+                ...currentFieldObj,
+                warnings,
+            } as FieldModifierLocationField;
+        }
+        return currentFieldObj;
     }
 
     /**

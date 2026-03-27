@@ -1,7 +1,7 @@
 /**
  * Interprets post-robot `sendToParent("setData", ...)` results from the CMS bridge
- * (app-extension-component). Bridge may return debounce metadata on `data` or nested
- * under `data.data` depending on post-robot serialization.
+ * (app-extension-component). Shapes may be flat on `data` or nested under `data.data`
+ * depending on post-robot serialization.
  */
 
 type ResponseEnvelope = { data?: unknown };
@@ -10,20 +10,6 @@ function asRecord(v: unknown): Record<string, unknown> | undefined {
     return v && typeof v === "object" && !Array.isArray(v)
         ? (v as Record<string, unknown>)
         : undefined;
-}
-
-/** Whether this payload marks a superseded debounced setData call. */
-export function isDebouncedSkippedResponse(response: ResponseEnvelope): boolean {
-    const payload = asRecord(response?.data);
-    if (!payload) return false;
-    if (payload.debounced === true && payload.skipped === true) {
-        return true;
-    }
-    const inner = asRecord(payload.data);
-    return (
-        inner?.debounced === true &&
-        inner?.skipped === true
-    );
 }
 
 /** Host failed to resolve file/reference UIDs (CMA fetch) before applying setData. */
