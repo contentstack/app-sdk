@@ -3,28 +3,11 @@ import {
     getResolutionErrorPayload,
     getSetDataWarnings,
     getValidationErrorPayload,
-    isDebouncedSkippedResponse,
     isResolutionErrorPayload,
     isValidationErrorPayload,
 } from "../src/utils/setDataBridgeResponse";
 
 describe("setDataBridgeResponse", () => {
-    it("detects debounced skipped flat", () => {
-        expect(
-            isDebouncedSkippedResponse({
-                data: { debounced: true, skipped: true },
-            })
-        ).toBe(true);
-    });
-
-    it("detects debounced skipped nested under data.data", () => {
-        expect(
-            isDebouncedSkippedResponse({
-                data: { data: { debounced: true, skipped: true } },
-            })
-        ).toBe(true);
-    });
-
     it("detects VALIDATION_ERROR flat and nested", () => {
         expect(
             isValidationErrorPayload({

@@ -1,5 +1,4 @@
 import Entry from "../src/entry";
-import { setAppSdkInitVersion } from "../src/utils/sdkSetDataVersionGate";
 import testData from "./data/testData.json";
 import { jest } from "@jest/globals";
 
@@ -10,7 +9,6 @@ describe("Entry", () => {
     let sendToParent: any;
 
     beforeEach(() => {
-        setAppSdkInitVersion("2.4.0");
         sendToParent = () => {};
         connection = { sendToParent };
 
@@ -211,6 +209,16 @@ describe("Entry", () => {
             expect((r as any).title).toEqual("merged-title");
         });
 
+        it("does not attach _setDataRequestId (correlation deferred)", async () => {
+            jest.spyOn(connection, "sendToParent").mockResolvedValue({
+                data: { success: true },
+            });
+            await entry.setData({ title: "x" } as any);
+            expect(connection.sendToParent).toHaveBeenCalledWith("setEntryData", {
+                data: { title: "x" },
+            });
+        });
+
         it("rejects on VALIDATION_ERROR", async () => {
             jest.spyOn(connection, "sendToParent").mockResolvedValue({
                 data: {
@@ -263,21 +271,32 @@ describe("Entry", () => {
         });
     });
 
-    it("rejects non-self setData on group when init version is below 2.4.0", async () => {
-        setAppSdkInitVersion("2.3.0");
+    it("non-self setData on group calls parent", async () => {
         const uid = "group.group.group";
         const field = entry.getField(uid);
-        await expect(
-            field.setData([{ single_line: "x" }] as any)
-        ).rejects.toThrow("Cannot call set data for current field type");
+        jest.spyOn(connection, "sendToParent").mockResolvedValue({
+            data: { success: true },
+        });
+        await field.setData([{ single_line: "x" }] as any);
+        expect(connection.sendToParent).toHaveBeenCalledWith("setData", {
+            data: [{ single_line: "x" }],
+            uid,
+            self: false,
+        });
     });
 
-    it("set field data restriction for modular blocks, one complete block", async () => {
+    it("setData on modular blocks field calls parent", async () => {
         const uid = "modular_blocks.0";
         const field = entry.getField(uid);
-        await expect(field.setData({ d: "dummy" })).rejects.toThrowError(
-            "Cannot call set data for current field type"
-        );
+        jest.spyOn(connection, "sendToParent").mockResolvedValue({
+            data: { success: true },
+        });
+        await field.setData({ d: "dummy" });
+        expect(connection.sendToParent).toHaveBeenCalledWith("setData", {
+            data: { d: "dummy" },
+            uid,
+            self: false,
+        });
     });
 
     it("getField Invalid Uid", function () {

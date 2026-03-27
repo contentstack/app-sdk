@@ -1,4 +1,5 @@
 import Field from "../src/field";
+import { SetDataValidationError } from "../src/utils/setDataErrors";
 import testData from "./data/testData.json";
 import fileFieldData from "./data/fileField.json";
 import helpers from "./helpers";
@@ -84,8 +85,12 @@ describe("Field", () => {
                     details: [],
                 },
             });
+            await expect(field.setData("bad")).rejects.toBeInstanceOf(
+                SetDataValidationError
+            );
             await expect(field.setData("bad")).rejects.toMatchObject({
                 code: "VALIDATION_ERROR",
+                message: "bad",
             });
         });
 
@@ -118,26 +123,6 @@ describe("Field", () => {
             });
             const out: any = await field.setData("ab");
             expect(out.warnings).toEqual(warn);
-        });
-
-        it("setData skips _data update when debounced skipped", async () => {
-            const before = field.getData();
-            jest.spyOn(connection, "sendToParent").mockResolvedValue({
-                data: { debounced: true, skipped: true },
-            });
-            const out: any = await field.setData("new");
-            expect(out.debounced).toBe(true);
-            expect(field.getData()).toEqual(before);
-        });
-
-        it("setData skips _data when debounced nested like app-extension-component", async () => {
-            const before = field.getData();
-            jest.spyOn(connection, "sendToParent").mockResolvedValue({
-                data: { data: { debounced: true, skipped: true } },
-            });
-            const out: any = await field.setData("new");
-            expect(out.debounced).toBe(true);
-            expect(field.getData()).toEqual(before);
         });
     });
 
