@@ -200,16 +200,19 @@ class Field {
                         return;
                     }
                     const uid = fieldObj.uid;
+                    const uidStr = String(uid);
                     if (
                         event.fieldUid !== undefined &&
-                        event.fieldUid !== uid
+                        event.fieldUid !== null &&
+                        String(event.fieldUid) !== uidStr
                     ) {
                         return;
                     }
                     if (
                         event.errors?.some(
                             (e) =>
-                                e.fieldUid != null && e.fieldUid !== uid
+                                e.fieldUid != null &&
+                                String(e.fieldUid) !== uidStr
                         )
                     ) {
                         return;
