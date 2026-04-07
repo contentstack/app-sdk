@@ -93,6 +93,49 @@ describe("setDataValidationExtensionEvent", () => {
                         requestId: "older",
                         source: "entry",
                         status: "error",
+                        validationError: {
+                            code: "VALIDATION_ERROR",
+                            message: "Request validation failed",
+                            details: [
+                                {
+                                    field: "a",
+                                    fieldType: "",
+                                    reasons: [
+                                        {
+                                            reason: "CONSTRAINT_VIOLATION",
+                                            message: "bad",
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    },
+                },
+            },
+            emitter
+        );
+
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(
+            (cb.mock.calls[0][0] as SetDataValidationEvent).validationError
+        ).toMatchObject({
+            code: "VALIDATION_ERROR",
+            details: [{ field: "a", reasons: [{ message: "bad" }] }],
+        });
+    });
+
+    it("normalizes legacy flat errors array to validationError", () => {
+        const emitter = new EventEmitter();
+        const cb = jest.fn();
+        emitter.on(SET_DATA_VALIDATION_EMITTER_EVENT, cb);
+
+        emitSetDataValidationFromExtensionEvent(
+            {
+                data: {
+                    name: "SET_DATA_VALIDATION",
+                    data: {
+                        source: "entry",
+                        status: "error",
                         errors: [{ fieldUid: "a", message: "bad" }],
                     },
                 },
@@ -101,6 +144,24 @@ describe("setDataValidationExtensionEvent", () => {
         );
 
         expect(cb).toHaveBeenCalledTimes(1);
+        expect(
+            (cb.mock.calls[0][0] as SetDataValidationEvent).validationError
+        ).toEqual({
+            code: "VALIDATION_ERROR",
+            message: "Request validation failed",
+            details: [
+                {
+                    field: "a",
+                    fieldType: "",
+                    reasons: [
+                        {
+                            reason: "CONSTRAINT_VIOLATION",
+                            message: "bad",
+                        },
+                    ],
+                },
+            ],
+        });
     });
 
     it("drops malformed payloads", () => {
@@ -116,7 +177,6 @@ describe("setDataValidationExtensionEvent", () => {
                         source: "field",
                         fieldUid: "title",
                         status: "error",
-                        errors: [],
                     },
                 },
             },

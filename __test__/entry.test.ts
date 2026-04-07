@@ -232,18 +232,18 @@ describe("Entry", () => {
             ).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
         });
 
-        it("rejects on SETDATA_RESOLUTION_ERROR without merging entry", async () => {
+        it("rejects on VALIDATION_ERROR without merging entry", async () => {
             const before = { ...(entry.getData() as any) };
             jest.spyOn(connection, "sendToParent").mockResolvedValue({
                 data: {
-                    code: "SETDATA_RESOLUTION_ERROR",
+                    code: "VALIDATION_ERROR",
                     message: "resolve failed",
-                    failures: [],
+                    details: [],
                 },
             });
             await expect(
                 entry.setData({ file_field: "bltx" } as any)
-            ).rejects.toMatchObject({ code: "SETDATA_RESOLUTION_ERROR" });
+            ).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
             expect(entry.getData()).toEqual(before);
         });
 

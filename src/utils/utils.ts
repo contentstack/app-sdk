@@ -1,6 +1,7 @@
 import { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { Region, RegionType } from "../types";
+import { SetDataValidationError } from "./setDataErrors";
 
 export function onData<Data extends Record<string, any>>(data: { data: Data }) {
     if (typeof data.data === "string") {
@@ -114,4 +115,45 @@ export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
     };
 
     return new Response(body, responseInit);
+}
+
+export function fromBridgePayload(
+    payload: Record<string, unknown>
+): SetDataValidationError {
+    const detailMessage = formatValidationMessage(payload.details);
+    const rawMessage =
+        typeof payload.message === "string"
+            ? payload.message
+            : "Request validation failed";
+    const message =
+        rawMessage === "Request validation failed" && detailMessage
+            ? detailMessage
+            : rawMessage;
+    return new SetDataValidationError(message, payload.details);
+}
+
+function formatValidationMessage(details: unknown): string | null {
+    if (!Array.isArray(details) || details.length === 0) {
+        return null;
+    }
+    const parts = details
+        .map((detail) => {
+            if (!detail || typeof detail !== "object") return "";
+            const d = detail as Record<string, unknown>;
+            const field = typeof d.field === "string" ? d.field : "";
+            const reasons = Array.isArray(d.reasons) ? d.reasons : [];
+            const reasonMessages = reasons
+                .map((reason) => {
+                    if (!reason || typeof reason !== "object") return "";
+                    const r = reason as Record<string, unknown>;
+                    return typeof r.message === "string" ? r.message : "";
+                })
+                .filter((msg) => msg.length > 0);
+            if (reasonMessages.length === 0) return "";
+            const reasonMessage = reasonMessages.join("; ");
+            return field ? `${field}: ${reasonMessage}` : reasonMessage;
+        })
+        .filter((msg) => msg.length > 0);
+
+    return parts.length > 0 ? parts.join("; ") : null;
 }

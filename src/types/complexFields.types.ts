@@ -14,13 +14,11 @@ export type ValidationReasonDetail = {
 
 export type ValidationErrorDetail = {
     field: string;
-    fieldUid: string;
-    fieldLabel: string;
+    fieldUid?: string;
+    fieldLabel?: string;
     fieldType: string;
     reasons: ValidationReasonDetail[];
 };
-
-export type ConstraintViolation = ValidationErrorDetail;
 
 export type ValidationError = {
     code: "VALIDATION_ERROR";
@@ -29,5 +27,5 @@ export type ValidationError = {
 };
 
 export type SetEntryDataResult = Record<string, unknown> & {
-    warnings?: ConstraintViolation[];
+    warnings?: ValidationErrorDetail[];
 };

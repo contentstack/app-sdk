@@ -2,8 +2,15 @@
  * Inbound payload on `extensionEvent` when {@link SET_DATA_VALIDATION_WIRE_NAME} is used.
  * Align with docs/PLAN-async-setdata-validation-extensionEvent.md.
  */
+import type { ValidationError } from "./complexFields.types";
+
+/**
+ * @deprecated Hosts should send {@link SetDataValidationEvent.validationError} instead.
+ * The SDK normalizes this shape when `validationError` is absent.
+ */
 export type SetDataValidationErrorItem = {
     fieldUid?: string;
+    fieldType?: string;
     message: string;
     code?: string;
     details?: unknown;
@@ -15,7 +22,11 @@ export type SetDataValidationEvent = {
     source: "field" | "entry";
     fieldUid?: string;
     status: "error" | "success";
-    errors?: SetDataValidationErrorItem[];
+    /**
+     * Same structure as tier-1 bridge `VALIDATION_ERROR` payloads:
+     * `code`, `message`, and `details` with `field`, `fieldType`, and `reasons`.
+     */
+    validationError?: ValidationError;
 };
 
 /** Wire-level discriminator on `extensionEvent` (parent → iframe). */

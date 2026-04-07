@@ -94,26 +94,10 @@ describe("Field", () => {
             });
         });
 
-        it("setData rejects on host SETDATA_RESOLUTION_ERROR", async () => {
-            jest.spyOn(connection, "sendToParent").mockResolvedValue({
-                data: {
-                    code: "SETDATA_RESOLUTION_ERROR",
-                    message: "resolve failed",
-                    failures: [{ kind: "asset", uid: "bltx", reason: "x" }],
-                },
-            });
-            await expect(field.setData("bltx")).rejects.toMatchObject({
-                code: "SETDATA_RESOLUTION_ERROR",
-                failures: [{ kind: "asset", uid: "bltx", reason: "x" }],
-            });
-        });
-
         it("setData resolves with warnings when bridge returns warnings", async () => {
             const warn = [
                 {
                     field: "title",
-                    fieldUid: "title",
-                    fieldLabel: "Title",
                     fieldType: "text",
                     reasons: [{ reason: "MIN_LENGTH", message: "too short" }],
                 },
