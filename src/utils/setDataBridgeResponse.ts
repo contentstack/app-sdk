@@ -12,32 +12,6 @@ function asRecord(v: unknown): Record<string, unknown> | undefined {
         : undefined;
 }
 
-/** Host failed to resolve file/reference UIDs (CMA fetch) before applying setData. */
-export const SETDATA_RESOLUTION_ERROR_CODE = "SETDATA_RESOLUTION_ERROR" as const;
-
-/** Resolution failure shape returned by the CMS host when asset/entry fetch fails. */
-export function isResolutionErrorPayload(response: ResponseEnvelope): boolean {
-    const payload = asRecord(response?.data);
-    if (payload?.code === SETDATA_RESOLUTION_ERROR_CODE) return true;
-    const inner = asRecord(payload?.data);
-    return inner?.code === SETDATA_RESOLUTION_ERROR_CODE;
-}
-
-/** Resolution error object for Promise.reject (top-level or nested under data). */
-export function getResolutionErrorPayload(
-    response: ResponseEnvelope
-): Record<string, unknown> {
-    const payload = asRecord(response?.data);
-    if (payload?.code === SETDATA_RESOLUTION_ERROR_CODE) {
-        return payload;
-    }
-    const inner = asRecord(payload?.data);
-    if (inner?.code === SETDATA_RESOLUTION_ERROR_CODE) {
-        return inner;
-    }
-    return payload ?? {};
-}
-
 /** Tier 1 validation failure shape from the bridge. */
 export function isValidationErrorPayload(response: ResponseEnvelope): boolean {
     const payload = asRecord(response?.data);

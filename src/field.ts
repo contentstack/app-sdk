@@ -4,18 +4,12 @@ import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
 import {
-    getSetDataWarnings,
     getValidationErrorPayload,
     isValidationErrorPayload,
-    getResolutionErrorPayload,
-    isResolutionErrorPayload,
 } from "./utils/setDataBridgeResponse";
-import {
-    SetDataResolutionError,
-    SetDataValidationError,
-} from "./utils/setDataErrors";
 import type { SetDataValidationEvent } from "./types/setDataValidation.types";
 import { SET_DATA_VALIDATION_EMITTER_EVENT } from "./types/setDataValidation.types";
+import { fromBridgePayload } from "./utils/utils";
 
 function separateResolvedData(field: Field, value: GenericObjectType) {
     let resolvedData = value;
@@ -127,23 +121,12 @@ class Field {
 
         const response = await this._connection.sendToParent("setData", dataObj);
         if (isValidationErrorPayload(response)) {
-            throw SetDataValidationError.fromBridgePayload(
+            throw fromBridgePayload(
                 getValidationErrorPayload(response)
             );
         }
-        if (isResolutionErrorPayload(response)) {
-            throw SetDataResolutionError.fromBridgePayload(
-                getResolutionErrorPayload(response)
-            );
-        }
         this._data = data;
-        const warnings = getSetDataWarnings(response);
-        if (warnings.length > 0) {
-            return {
-                ...currentFieldObj,
-                warnings,
-            } as Field;
-        }
+     
         return currentFieldObj;
     }
 
@@ -190,6 +173,7 @@ class Field {
      * Subscribe to post-apply / async setData validation for **this field** (wire `SET_DATA_VALIDATION`).
      * Full entry lifecycle is available on {@link Entry#onSetDataValidation}.
      */
+    // setDataValidationError 
     onSetDataValidation(callback: (event: SetDataValidationEvent) => void) {
         const fieldObj = this;
         if (callback && typeof callback === "function") {
@@ -209,10 +193,11 @@ class Field {
                         return;
                     }
                     if (
-                        event.errors?.some(
-                            (e) =>
-                                e.fieldUid != null &&
-                                String(e.fieldUid) !== uidStr
+                        event.validationError?.details?.some(
+                            (d) =>
+                                d.field != null &&
+                                String(d.field) !== "" &&
+                                String(d.field) !== uidStr
                         )
                     ) {
                         return;

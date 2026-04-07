@@ -17,18 +17,12 @@ import {
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
 import {
-    getResolutionErrorPayload,
-    getSetDataWarnings,
     getValidationErrorPayload,
-    isResolutionErrorPayload,
     isValidationErrorPayload,
 } from "./utils/setDataBridgeResponse";
-import {
-    SetDataResolutionError,
-    SetDataValidationError,
-} from "./utils/setDataErrors";
 import type { SetDataValidationEvent } from "./types/setDataValidation.types";
 import { SET_DATA_VALIDATION_EMITTER_EVENT } from "./types/setDataValidation.types";
+import { fromBridgePayload } from "./utils/utils";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -113,45 +107,22 @@ class Entry {
                 "entry.setData() is not available in this location"
             );
         }
-        try {
-            const payload = { data };
-            const response = await this._connection.sendToParent<
-                GenericObjectType & {
-                    code?: string;
-                    warnings?: unknown[];
-                }
-            >("setEntryData", payload);
-            const envelope = { data: response?.data };
-            if (isValidationErrorPayload(envelope)) {
-                throw SetDataValidationError.fromBridgePayload(
-                    getValidationErrorPayload(envelope)
-                );
+        const payload = { data };
+        const response = await this._connection.sendToParent<
+            GenericObjectType & {
+                code?: string;
+                warnings?: unknown[];
             }
-            if (isResolutionErrorPayload(envelope)) {
-                throw SetDataResolutionError.fromBridgePayload(
-                    getResolutionErrorPayload(envelope)
-                );
-            }
-            Object.assign(this._data, data);
-            const result: GenericObjectType = { ...data };
-            const warnings = getSetDataWarnings(envelope);
-            if (warnings.length > 0) {
-                (result as GenericObjectType & { warnings?: unknown[] }).warnings =
-                    warnings;
-            }
-            return result;
-        } catch (e) {
-            if (
-                e instanceof SetDataValidationError ||
-                e instanceof SetDataResolutionError
-            ) {
-                throw e;
-            }
-            const suffix = e instanceof Error ? ` ${e.message}` : "";
-            throw new Error(
-                `entry.setData() requires host support (app-extension-component >= 2.7.0).${suffix}`
+        >("setEntryData", payload);
+        const envelope = { data: response?.data };
+        if (isValidationErrorPayload(envelope)) {
+            throw fromBridgePayload(
+                getValidationErrorPayload(envelope)
             );
         }
+        Object.assign(this._data, data);
+       
+        return this._data;
     }
 
     /**

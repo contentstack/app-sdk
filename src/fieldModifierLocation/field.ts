@@ -8,13 +8,8 @@ import {
     getSetDataWarnings,
     getValidationErrorPayload,
     isValidationErrorPayload,
-    getResolutionErrorPayload,
-    isResolutionErrorPayload,
 } from "../utils/setDataBridgeResponse";
-import {
-    SetDataResolutionError,
-    SetDataValidationError,
-} from "../utils/setDataErrors";
+import { fromBridgePayload } from "../utils/utils";
 
 function separateResolvedData(
     field: FieldModifierLocationField,
@@ -129,13 +124,8 @@ class FieldModifierLocationField {
 
         const response = await this._connection.sendToParent("setData", dataObj);
         if (isValidationErrorPayload(response)) {
-            throw SetDataValidationError.fromBridgePayload(
+            throw fromBridgePayload(
                 getValidationErrorPayload(response)
-            );
-        }
-        if (isResolutionErrorPayload(response)) {
-            throw SetDataResolutionError.fromBridgePayload(
-                getResolutionErrorPayload(response)
             );
         }
         this._data = data;
