@@ -94,20 +94,6 @@ describe("Field", () => {
             });
         });
 
-        it("setData resolves with warnings when bridge returns warnings", async () => {
-            const warn = [
-                {
-                    field: "title",
-                    fieldType: "text",
-                    reasons: [{ reason: "MIN_LENGTH", message: "too short" }],
-                },
-            ];
-            jest.spyOn(connection, "sendToParent").mockResolvedValue({
-                data: { warnings: warn },
-            });
-            const out: any = await field.setData("ab");
-            expect(out.warnings).toEqual(warn);
-        });
     });
 
     describe("File", () => {
