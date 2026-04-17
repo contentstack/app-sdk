@@ -3,8 +3,7 @@ import { jest } from "@jest/globals";
 
 import type { SetDataValidationEvent } from "../src/types/setDataValidation.types";
 import {
-    SET_DATA_VALIDATION_EMITTER_EVENT,
-    SET_DATA_VALIDATION_WIRE_NAME,
+    SET_DATA_VALIDATION_ERROR
 } from "../src/types/setDataValidation.types";
 import { parseSetDataValidationPayload } from "../src/utils/setDataRequestCorrelation";
 
@@ -13,29 +12,40 @@ function emitSetDataValidationFromExtensionEvent(
     event: { data?: { name?: string; data?: unknown } },
     emitter: EventEmitter
 ): void {
-    if (event.data?.name === SET_DATA_VALIDATION_WIRE_NAME) {
+    if (event.data?.name === SET_DATA_VALIDATION_ERROR) {
         const parsed = parseSetDataValidationPayload(event.data.data);
         if (parsed) {
-            emitter.emitEvent(SET_DATA_VALIDATION_EMITTER_EVENT, [parsed]);
+            emitter.emitEvent(SET_DATA_VALIDATION_ERROR, [parsed]);
         }
     }
 }
 
 describe("setDataValidationExtensionEvent", () => {
-    it("dispatches field validation to emitter", () => {
+    it("dispatches field validation error to emitter", () => {
         const emitter = new EventEmitter();
         const cb = jest.fn();
-        emitter.on(SET_DATA_VALIDATION_EMITTER_EVENT, cb);
+        emitter.on(SET_DATA_VALIDATION_ERROR, cb);
 
         emitSetDataValidationFromExtensionEvent(
             {
                 data: {
-                    name: "SET_DATA_VALIDATION",
+                    name: "setDataValidationError",
                     data: {
                         requestId: "req-1",
                         source: "field",
                         fieldUid: "title",
-                        status: "success",
+                        status: "error",
+                        validationError: {
+                            code: "VALIDATION_ERROR",
+                            message: "Field is invalid",
+                            details: [
+                                {
+                                    field: "title",
+                                    fieldType: "text",
+                                    reasons: [{ reason: "REQUIRED", message: "Title is required" }]
+                                }
+                            ]
+                        },
                     },
                 },
             },
@@ -46,23 +56,35 @@ describe("setDataValidationExtensionEvent", () => {
         expect(cb.mock.calls[0][0]).toMatchObject({
             requestId: "req-1",
             source: "field",
-            status: "success",
+            fieldUid: "title",
+            status: "error",
         });
     });
 
-    it("dispatches when requestId is omitted (simplified path)", () => {
+    it("dispatches error when requestId is omitted (simplified path)", () => {
         const emitter = new EventEmitter();
         const cb = jest.fn();
-        emitter.on(SET_DATA_VALIDATION_EMITTER_EVENT, cb);
+        emitter.on(SET_DATA_VALIDATION_ERROR, cb);
 
         emitSetDataValidationFromExtensionEvent(
             {
                 data: {
-                    name: "SET_DATA_VALIDATION",
+                    name: "setDataValidationError",
                     data: {
                         source: "field",
                         fieldUid: "title",
-                        status: "success",
+                        status: "error",
+                        validationError: {
+                            code: "VALIDATION_ERROR",
+                            message: "Field is invalid",
+                            details: [
+                                {
+                                    field: "title",
+                                    fieldType: "text",
+                                    reasons: [{ reason: "REQUIRED", message: "Title is required" }]
+                                }
+                            ]
+                        },
                     },
                 },
             },
@@ -73,7 +95,7 @@ describe("setDataValidationExtensionEvent", () => {
         expect(cb.mock.calls[0][0]).toMatchObject({
             source: "field",
             fieldUid: "title",
-            status: "success",
+            status: "error",
         });
         expect(
             (cb.mock.calls[0][0] as SetDataValidationEvent).requestId
@@ -83,12 +105,12 @@ describe("setDataValidationExtensionEvent", () => {
     it("dispatches entry batch validation without stale filtering", () => {
         const emitter = new EventEmitter();
         const cb = jest.fn();
-        emitter.on(SET_DATA_VALIDATION_EMITTER_EVENT, cb);
+        emitter.on(SET_DATA_VALIDATION_ERROR, cb);
 
         emitSetDataValidationFromExtensionEvent(
             {
                 data: {
-                    name: "SET_DATA_VALIDATION",
+                    name: "setDataValidationError",
                     data: {
                         requestId: "older",
                         source: "entry",
@@ -127,12 +149,12 @@ describe("setDataValidationExtensionEvent", () => {
     it("normalizes legacy flat errors array to validationError", () => {
         const emitter = new EventEmitter();
         const cb = jest.fn();
-        emitter.on(SET_DATA_VALIDATION_EMITTER_EVENT, cb);
+        emitter.on(SET_DATA_VALIDATION_ERROR, cb);
 
         emitSetDataValidationFromExtensionEvent(
             {
                 data: {
-                    name: "SET_DATA_VALIDATION",
+                    name: "setDataValidationError",
                     data: {
                         source: "entry",
                         status: "error",
@@ -167,16 +189,38 @@ describe("setDataValidationExtensionEvent", () => {
     it("drops malformed payloads", () => {
         const emitter = new EventEmitter();
         const cb = jest.fn();
-        emitter.on(SET_DATA_VALIDATION_EMITTER_EVENT, cb);
+        emitter.on(SET_DATA_VALIDATION_ERROR, cb);
 
         emitSetDataValidationFromExtensionEvent(
             {
                 data: {
-                    name: "SET_DATA_VALIDATION",
+                    name: "setDataValidationError",
                     data: {
                         source: "field",
                         fieldUid: "title",
                         status: "error",
+                    },
+                },
+            },
+            emitter
+        );
+
+        expect(cb).not.toHaveBeenCalled();
+    });
+
+    it("ignores success status (error-only event)", () => {
+        const emitter = new EventEmitter();
+        const cb = jest.fn();
+        emitter.on(SET_DATA_VALIDATION_ERROR, cb);
+
+        emitSetDataValidationFromExtensionEvent(
+            {
+                data: {
+                    name: "setDataValidationError",
+                    data: {
+                        source: "field",
+                        fieldUid: "title",
+                        status: "success", // Should be ignored
                     },
                 },
             },
