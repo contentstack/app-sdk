@@ -21,7 +21,7 @@ import {
     isValidationErrorPayload,
 } from "./utils/setDataBridgeResponse";
 import type { SetDataValidationEvent } from "./types/setDataValidation.types";
-import { SET_DATA_VALIDATION_EMITTER_EVENT } from "./types/setDataValidation.types";
+import { SET_DATA_VALIDATION_ERROR } from "./types/setDataValidation.types";
 import { fromBridgePayload } from "./utils/utils";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
@@ -101,7 +101,7 @@ class Entry {
      * Updates multiple fields on the current entry in a single call (partial merge).
      * Requires host support for `setEntryData` (app-extension-component 2.7.0+).
      */
-    async setData(data: GenericObjectType): Promise<GenericObjectType> {
+    async setData(data: EntryType): Promise<EntryType> {
         if (!this._data) {
             throw new Error(
                 "entry.setData() is not available in this location"
@@ -357,19 +357,19 @@ class Entry {
 
     /**
      * Post-apply async validation for programmatic `field.setData` / `entry.setData`
-     * (`SET_DATA_VALIDATION` via extensionEvent). Sync outcomes stay on the Promise; see TRD §6.
+     * (`SET_DATA_VALIDATION` via extensionEvent). Sync outcomes stay on the Promise;.
      */
-    onSetDataValidation(callback: (event: SetDataValidationEvent) => void) {
+    onSetDataValidationError(callback: (event: SetDataValidationEvent) => void) {
         const entryObj = this;
         if (callback && typeof callback === "function") {
             entryObj._emitter.on(
-                SET_DATA_VALIDATION_EMITTER_EVENT,
+                SET_DATA_VALIDATION_ERROR,
                 (event: SetDataValidationEvent) => {
                     callback(event);
                 }
             );
             this._emitter.emitEvent("_eventRegistration", [
-                { name: SET_DATA_VALIDATION_EMITTER_EVENT },
+                { name: SET_DATA_VALIDATION_ERROR },
             ]);
         } else {
             throw Error("Callback must be a function");

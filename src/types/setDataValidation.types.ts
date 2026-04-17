@@ -22,17 +22,10 @@ export type SetDataValidationEvent = {
     source: "field" | "entry";
     fieldUid?: string;
     status: "error" | "success";
-    /**
-     * Same structure as tier-1 bridge `VALIDATION_ERROR` payloads:
-     * `code`, `message`, and `details` with `field`, `fieldType`, and `reasons`.
-     */
     validationError?: ValidationError;
 };
-
-/** Wire-level discriminator on `extensionEvent` (parent → iframe). */
-export const SET_DATA_VALIDATION_WIRE_NAME = "SET_DATA_VALIDATION";
 
 /**
  * Internal {@link wolfy87-eventemitter} event key after stale filtering — camelCase like `entrySave`, not the wire name.
  */
-export const SET_DATA_VALIDATION_EMITTER_EVENT = "setDataValidation";
+export const SET_DATA_VALIDATION_ERROR = "setDataValidationError";

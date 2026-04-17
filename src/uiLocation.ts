@@ -31,10 +31,7 @@ import {
     RegionType,
 } from "./types";
 import { GenericObjectType } from "./types/common.types";
-import {
-    SET_DATA_VALIDATION_EMITTER_EVENT,
-    SET_DATA_VALIDATION_WIRE_NAME,
-} from "./types/setDataValidation.types";
+import { SET_DATA_VALIDATION_ERROR } from "./types/setDataValidation.types";
 import { User } from "./types/user.types";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
@@ -405,14 +402,12 @@ class UiLocation {
                     ]);
                 }
 
-                if (event.data.name === SET_DATA_VALIDATION_WIRE_NAME) {
+                if (event.data.name === SET_DATA_VALIDATION_ERROR) {
                     const parsed = parseSetDataValidationPayload(
                         event.data.data
                     );
                     if (parsed) {
-                        emitter.emitEvent(SET_DATA_VALIDATION_EMITTER_EVENT, [
-                            parsed,
-                        ]);
+                        emitter.emitEvent(SET_DATA_VALIDATION_ERROR, [parsed]);
                     }
                 }
             });
@@ -447,7 +442,12 @@ class UiLocation {
             return Promise.resolve(this.config);
         }
         return this.postRobot
-            .sendToParent("getConfig", {context:{installationUID:this.installationUID, extensionUID:this.locationUID}})
+            .sendToParent("getConfig", {
+                context: {
+                    installationUID: this.installationUID,
+                    extensionUID: this.locationUID,
+                },
+            })
             .then(onData)
             .catch(onError);
     };
@@ -501,7 +501,7 @@ class UiLocation {
 
     api = (url: string, option?: RequestInit): Promise<Response> =>
         dispatchApiRequest(url, option) as Promise<Response>;
-    
+
     /**
      * Method used to create an adapter for management sdk.
      */

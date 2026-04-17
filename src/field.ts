@@ -171,10 +171,10 @@ class Field {
 
     /**
      * Subscribe to post-apply / async setData validation for **this field** (wire `SET_DATA_VALIDATION`).
-     * Full entry lifecycle is available on {@link Entry#onSetDataValidation}.
+     * Full entry lifecycle is available on {@link Entry#onSetDataValidationError}.
      */
-    // setDataValidationError 
-    onSetDataValidation(callback: (event: SetDataValidationEvent) => void) {
+    // onSetDataValidationError 
+    onSetDataValidationError(callback: (event: SetDataValidationEvent) => void) {
         const fieldObj = this;
         if (callback && typeof callback === "function") {
             fieldObj._emitter.on(
