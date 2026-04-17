@@ -8,7 +8,7 @@ import {
     isValidationErrorPayload,
 } from "./utils/setDataBridgeResponse";
 import type { SetDataValidationEvent } from "./types/setDataValidation.types";
-import { SET_DATA_VALIDATION_EMITTER_EVENT } from "./types/setDataValidation.types";
+import { SET_DATA_VALIDATION_ERROR } from "./types/setDataValidation.types";
 import { fromBridgePayload } from "./utils/utils";
 
 function separateResolvedData(field: Field, value: GenericObjectType) {
@@ -178,7 +178,7 @@ class Field {
         const fieldObj = this;
         if (callback && typeof callback === "function") {
             fieldObj._emitter.on(
-                SET_DATA_VALIDATION_EMITTER_EVENT,
+                SET_DATA_VALIDATION_ERROR,
                 (event: SetDataValidationEvent) => {
                     if (event.source !== "field") {
                         return;
@@ -206,7 +206,7 @@ class Field {
                 }
             );
             fieldObj._emitter.emitEvent("_eventRegistration", [
-                { name: SET_DATA_VALIDATION_EMITTER_EVENT },
+                { name: SET_DATA_VALIDATION_ERROR },
             ]);
         } else {
             throw Error("Callback must be a function");
