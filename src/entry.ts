@@ -356,8 +356,8 @@ class Entry {
     }
 
     /**
-     * Post-apply async validation for programmatic `field.setData` / `entry.setData`
-     * (`SET_DATA_VALIDATION` via extensionEvent). Sync outcomes stay on the Promise;.
+     * Post-apply async validation errors for programmatic `field.setData` / `entry.setData`.
+     * Only receives error events, not success cases. Sync outcomes stay on the Promise.
      */
     onSetDataValidationError(callback: (event: SetDataValidationEvent) => void) {
         const entryObj = this;

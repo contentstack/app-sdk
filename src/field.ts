@@ -170,7 +170,8 @@ class Field {
     }
 
     /**
-     * Subscribe to post-apply / async setData validation for **this field** (wire `SET_DATA_VALIDATION`).
+     * Subscribe to post-apply / async setData validation errors for **this field**.
+     * Only receives error events, not success cases.
      * Full entry lifecycle is available on {@link Entry#onSetDataValidationError}.
      */
     // onSetDataValidationError 

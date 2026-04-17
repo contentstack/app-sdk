@@ -1,5 +1,6 @@
 /**
- * Inbound payload on `extensionEvent` when {@link SET_DATA_VALIDATION_WIRE_NAME} is used.
+ * Inbound validation error payload on `extensionEvent` with name `setDataValidationError`.
+ * This event is only sent for validation errors, not success cases.
  * Align with docs/PLAN-async-setdata-validation-extensionEvent.md.
  */
 import type { ValidationError } from "./complexFields.types";
@@ -21,11 +22,12 @@ export type SetDataValidationEvent = {
     requestId?: string;
     source: "field" | "entry";
     fieldUid?: string;
-    status: "error" | "success";
+    status: "error";
     validationError?: ValidationError;
 };
 
 /**
- * Internal {@link wolfy87-eventemitter} event key after stale filtering — camelCase like `entrySave`, not the wire name.
+ * Internal {@link wolfy87-eventemitter} event key for validation errors only.
+ * CamelCase consistent with other events like `entrySave`.
  */
 export const SET_DATA_VALIDATION_ERROR = "setDataValidationError";

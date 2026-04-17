@@ -73,21 +73,12 @@ export function parseSetDataValidationPayload(
     if (source !== "field" && source !== "entry") {
         return null;
     }
-    if (status !== "error" && status !== "success") {
+    // Only process error status since this is a validation error event
+    if (status !== "error") {
         return null;
     }
 
     let resolvedValidationError: ValidationError | undefined;
-
-    if (status === "success") {
-        const legacyErrors = o.errors;
-        if (Array.isArray(legacyErrors) && legacyErrors.length > 0) {
-            return null;
-        }
-        if (isValidationErrorShape(o.validationError)) {
-            return null;
-        }
-    } else {
         if (isValidationErrorShape(o.validationError)) {
             resolvedValidationError = o.validationError;
         } else if (Array.isArray(o.errors) && o.errors.length > 0) {
@@ -107,7 +98,6 @@ export function parseSetDataValidationPayload(
         if (!resolvedValidationError) {
             return null;
         }
-    }
 
     if (o.fieldUid !== undefined && typeof o.fieldUid !== "string") {
         return null;
