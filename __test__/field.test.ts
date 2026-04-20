@@ -16,7 +16,7 @@ describe("Field", () => {
     describe("Generic", () => {
         beforeEach(() => {
             sendToParent = function () {
-                return Promise.resolve();
+                return Promise.resolve({ data: { success: true } });
             };
 
             connection = { sendToParent: sendToParent };
