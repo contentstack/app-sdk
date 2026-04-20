@@ -1,90 +1,121 @@
-Contentstack App SDK Readme
+# Contentstack App SDK Readme
+
 The Contentstack App SDK allows you to customize your applications. This document will help you integrate the App SDK with your application.
 
-Getting started
+## Getting started
 
 Include the compiled version of the extension client library by adding the following line to your application.
 
+```html
 <script
     src="https://unpkg.com/@contentstack/app-sdk@{{pkg.version}}/dist/index.js"
     integrity="{{subresourceIntegrity.js}}"
     crossorigin="anonymous"
 ></script>
+```
 
 To include the App SDK in your project, you need to run the following command:
 
+```sh
 npm install @contentstack/app-sdk
+```
+
 Alternatively, you can use the following command within the script tag to install the App SDK:
 
+```html
 <script src="https://unpkg.com/@contentstack/app-sdk@2.0.0/dist/index.js"></script>
+```
 
-Initializing the App SDK
+### Initializing the App SDK
+
 To Initialize the App SDK you need to run the following command:
 
+```js
 ContentstackAppSdk.init().then(function (appSdk) {
-// add code here
+    // add code here
 });
-For more information, please refer to our App SDK API Reference document.
+```
 
-Download the Boilerplate
+For more information, please refer to our [App SDK API Reference](https://github.com/contentstack/app-sdk-docs#contentstack-app-sdk-api-reference) document.
+
+## Download the Boilerplate
+
 You can extend or customize the functionality of Contentstack CMS with Marketplace apps. To simplify and speed up the building process, boilerplates describe repetitive elements in a project. This boilerplate will help you build custom applications for your organization or stack.
 
-Download the boilerplate.
+Download the [boilerplate](https://github.com/contentstack/marketplace-app-boilerplate/archive/refs/heads/master.zip).
 
-UI Locations and Examples
+## UI Locations and Examples
+
 UI Locations allow you to extend Contentstack's functionality. Through these UI locations, you can customize Contentstack's default behavior and UI. Integration of third-party applications is possible using different UI locations.
 
 The Contentstack App SDK currently supports the following UI Locations:
 
-Custom Field Location
-Dashboard Location
-Asset Sidebar Location
-App Config Location
-RTE Location
-Sidebar Location
-Field Modifier Location
-Full Page Location
-Custom Field Location
-Custom Field Location allows you to create custom fields that can be used in your content types. You can integrate with various business applications, such as Bynder, Cloudinary, Shopify, by adding them as a custom field to your stack's content type.
+-   [Custom Field Location](https://www.contentstack.com/docs/developers/developer-hub/custom-field-location)
+-   [Dashboard Location](https://www.contentstack.com/docs/developers/developer-hub/dashboard-location)
+-   [Asset Sidebar Location](https://www.contentstack.com/docs/developers/developer-hub/asset-sidebar-location)
+-   [App Config Location](https://www.contentstack.com/docs/developers/developer-hub/app-config-location)
+-   [RTE Location](https://www.contentstack.com/docs/developers/developer-hub/rte-location)
+-   [Sidebar Location](https://www.contentstack.com/docs/developers/developer-hub/sidebar-location)
+-   [Field Modifier Location](https://www.contentstack.com/docs/developers/developer-hub/field-modifier-location/)
+-   [Full Page Location](https://www.contentstack.com/docs/developers/developer-hub/full-page-location)
 
-Dashboard Location
-With the Dashboard Location, you can create widgets for your stack dashboard. Integration with Google Analytics provides meaningful insights about your website.
+### Custom Field Location
 
-Asset Sidebar Location
+Custom Field Location allows you to create custom fields that can be used in your content types. You can integrate with various business applications, such as [Bynder](https://www.contentstack.com/docs/developers/marketplace-apps/bynder), [Cloudinary](https://www.contentstack.com/docs/developers/marketplace-apps/cloudinary), [Shopify](https://www.contentstack.com/docs/developers/marketplace-apps/shopify), by adding them as a custom field to your stack's content type.
+
+### Dashboard Location
+
+With the Dashboard Location, you can create widgets for your stack dashboard. Integration with [Google Analytics](https://www.contentstack.com/docs/developers/marketplace-apps/google-analytics/) provides meaningful insights about your website.
+
+### Asset Sidebar Location
+
 Using the Asset Sidebar Location, you can create customized sidebar widgets to extend the functionality of your assets.
 
-Manage, transform, and optimize your stack's assets efficiently using the Image Preset Builder.
+Manage, transform, and optimize your stack's assets efficiently using the [Image Preset Builder](https://www.contentstack.com/docs/developers/marketplace-apps/image-preset-builder).
 
-App Config Location
+### App Config Location
+
 App Config UI Location allows you to manage all the app settings centrally. Once configured, all other locations (where the app is installed) can access these settings.
 
-RTE Location
+### RTE Location
+
 The RTE Location allows you to create custom plugins to expand the functionality of your JSON Rich Text Editor. Using the Audience and Variables plugin, you can tailor your content as per your requirements.
 
-Sidebar Location
-The Sidebar Location provides powerful tools for analyzing and recommending ideas for your entry. Use the Smartling sidebar location to help translate your content.
+### Sidebar Location
 
-Field Modifier Location
+The Sidebar Location provides powerful tools for analyzing and recommending ideas for your entry. Use the [Smartling](https://help.smartling.com/hc/en-us/articles/4865477629083) sidebar location to help translate your content.
+
+### Field Modifier Location
+
 The Field Modifier Location is a type of UI location which extends the capabilities of entry fields. With the Field Modifier UI location, you can allow the different apps to appear on defined field data types such as Text, Number, JSON, Boolean, File, Reference fields etc.
 
-Full Page Location
-The Full Page location is a type of UI location that lets you view full page apps such as Release Preview within your stack.
+### Full Page Location
 
-Using Contentstack styles
+The Full Page location is a type of UI location that lets you view full page apps such as [Release Preview](https://www.contentstack.com/docs/developers/marketplace-apps/release-preview) within your stack.
+
+## Using Contentstack styles
+
 Install the Venus UI library package to style your app according to the Contentstack UI:
 
+```sh
 npm i @contentstack/venus-components --save
-For more information on styling your application, refer to our style guide.
+```
 
-More information
-App SDK API Reference
-Marketplace Platform Guides
-Marketplace Apps
-Contentstack App Development
-App SDK v2.0.0 Migration Guide
-This guide provides instructions for migrating your application to App SDK version 2.0.0. It covers changes in metadata responses, field modifier and full page location updates, and the transition from the \_extension property to \_uiLocation. If you are upgrading your app to the latest version, make sure to follow these steps for a smooth transition.
+For more information on styling your application, refer to our [style guide](https://www.contentstack.com/docs/developers/venus-component-library/).
 
-Read the Migration Guide
+## More information
 
-License
-Licensed under MIT.
+-   [App SDK API Reference](https://github.com/contentstack/app-sdk-docs#readme)
+-   [Marketplace Platform Guides](https://www.contentstack.com/docs/developers/marketplace-platform-guides/)
+-   [Marketplace Apps](https://www.contentstack.com/docs/developers/marketplace-apps/)
+-   [Contentstack App Development](https://www.contentstack.com/docs/developers/developer-hub/)
+
+## App SDK v2.0.0 Migration Guide
+
+This guide provides instructions for migrating your application to App SDK version 2.0.0. It covers changes in metadata responses, field modifier and full page location updates, and the transition from the `_extension` property to `_uiLocation`. If you are upgrading your app to the latest version, make sure to follow these steps for a smooth transition.
+
+[Read the Migration Guide](./docs/app-sdk-v2-migration.md)
+
+## License
+
+Licensed under [MIT](https://opensource.org/licenses/MIT).

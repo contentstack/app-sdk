@@ -4,14 +4,8 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "../types";
 import { GenericObjectType } from "../types/common.types";
 import { Schema } from "../types/stack.types";
-
-const excludedDataTypesForSetField = [
-    "file",
-    "reference",
-    "blocks",
-    "group",
-    "global_field",
-];
+import { SetDataResponse } from "../types/setData.types";
+import { ValidationError } from "../utils/validationError";
 
 function separateResolvedData(
     field: FieldModifierLocationField,
@@ -114,32 +108,23 @@ class FieldModifierLocationField {
      */
     async setData(data: any): Promise<FieldModifierLocationField> {
         const currentFieldObj = this;
-        const dataObj = {
+        const dataObj: {
+            data: any;
+            uid: string;
+            self: boolean;
+        } = {
             data,
             uid: currentFieldObj.uid,
             self: currentFieldObj._self,
         };
 
-        if (
-            !currentFieldObj._self &&
-            (excludedDataTypesForSetField.indexOf(currentFieldObj.data_type) !==
-                -1 ||
-                !currentFieldObj.data_type)
-        ) {
-            return Promise.reject(
-                new Error("Cannot call set data for current field type")
-            );
+        const response = await this._connection.sendToParent<SetDataResponse<any>>("setData", dataObj);
+        if (!response.data?.success) {
+            const error = response.data?.error as ValidationError;
+            throw new ValidationError(error.message, error.details);
         }
-
-        return this._connection
-            .sendToParent("setData", dataObj)
-            .then(() => {
-                this._data = data;
-                return Promise.resolve(currentFieldObj);
-            })
-            .catch((e: Error) => {
-                return Promise.reject(e);
-            });
+        this._data = data;
+        return currentFieldObj;
     }
 
     /**
