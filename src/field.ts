@@ -3,14 +3,9 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "./types";
 import { GenericObjectType } from "./types/common.types";
 import { Schema } from "./types/stack.types";
-
-const excludedDataTypesForSetField = [
-    "file",
-    "reference",
-    "blocks",
-    "group",
-    "global_field",
-];
+import { ON_ERROR_EVENT_NAME } from "./constants";
+import { ValidationError } from "./utils/validationError";
+import { SetDataResponse } from "./types/setData.types";
 
 function separateResolvedData(field: Field, value: GenericObjectType) {
     let resolvedData = value;
@@ -108,34 +103,25 @@ class Field {
      * @return {external:Promise} A promise object which is resolved when data is set for a field. Note: The data set by this function will only be saved when user saves the entry.
      */
 
-    setData(data: any): Promise<Field> {
+    async setData(data: any): Promise<Field> {
         const currentFieldObj = this;
-        const dataObj = {
+        const dataObj: {
+            data: any;
+            uid: string;
+            self: boolean;
+        } = {
             data,
             uid: currentFieldObj.uid,
             self: currentFieldObj._self,
         };
 
-        if (
-            !currentFieldObj._self &&
-            (excludedDataTypesForSetField.indexOf(currentFieldObj.data_type) !==
-                -1 ||
-                !currentFieldObj.data_type)
-        ) {
-            return Promise.reject(
-                new Error("Cannot call set data for current field type")
-            );
+        const response = await this._connection.sendToParent<SetDataResponse<any>>("setData", dataObj);
+        if (!response.data?.success) {
+            const error = response.data?.error as ValidationError;
+            throw new ValidationError(error.message, error.details);
         }
-
-        return this._connection
-            .sendToParent("setData", dataObj)
-            .then(() => {
-                this._data = data;
-                return Promise.resolve(currentFieldObj);
-            })
-            .catch((e: Error) => {
-                return Promise.reject(e);
-            });
+        this._data = data;        
+        return currentFieldObj;
     }
 
     /**
@@ -171,6 +157,36 @@ class Field {
             });
             this._emitter.emitEvent("_eventRegistration", [
                 { name: "extensionFieldChange" },
+            ]);
+        } else {
+            throw Error("Callback must be a function");
+        }
+    }
+
+    /**
+     * Subscribe to post-apply / async setData validation errors for **this field**.
+     * Only receives error events, not success cases.
+     * Full entry lifecycle is available on {@link Entry#onSetDataValidationError}.
+     */
+    // onSetDataValidationError 
+    onError(callback: (error: Error) => void) {
+        const fieldObj = this;
+        if (callback && typeof callback === "function") {
+            fieldObj._emitter.on(
+                ON_ERROR_EVENT_NAME,
+                (error: Error) => {
+                    if(error instanceof ValidationError) {
+                        const uid = fieldObj.uid;
+                        if (error.details.some((d) =>d.field === uid)) {
+                            callback(error);
+                        }
+                        return;
+                    }
+                    callback(error);
+                }
+            );
+            fieldObj._emitter.emitEvent("_eventRegistration", [
+                { name: ON_ERROR_EVENT_NAME },
             ]);
         } else {
             throw Error("Callback must be a function");
