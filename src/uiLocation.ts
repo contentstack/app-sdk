@@ -399,6 +399,11 @@ class UiLocation {
                         { data: event.data.data },
                     ]);
                 }
+                if (event.data.name === "onError") {
+                    emitter.emitEvent("onError", [
+                        event.data.data,
+                    ]);
+                }
             });
         } catch (err) {
             console.error("Extension Event", err);
