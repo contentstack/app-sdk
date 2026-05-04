@@ -177,7 +177,7 @@ class Field {
                 (error: Error) => {
                     if(error instanceof ValidationError) {
                         const uid = fieldObj.uid;
-                        if (error.details.some((d) =>d.field === uid)) {
+                        if (error.details.some((d) =>d.fieldUid === uid)) {
                             callback(error);
                         }
                         return;
