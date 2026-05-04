@@ -7,10 +7,9 @@ export class ValidationError extends Error {
     constructor(
       message: string,
       public readonly details: Array<{
-        field: string;
         fieldUid: string;
-        fieldLabel: string;
-        fieldType: string;
+        fieldLabel?: string;
+        fieldType?: string;
         reasons: Array<{ reason: string; message: string }>;
       }>
     ) {
