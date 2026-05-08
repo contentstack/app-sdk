@@ -177,7 +177,15 @@ class Field {
                 (error: Error) => {
                     if(error instanceof ValidationError) {
                         const uid = fieldObj.uid;
-                        if (error.details.some((d) =>d.fieldUid === uid)) {
+                        if (
+                            error.details.some(
+                                (d) =>
+                                    d.fieldUid === uid ||
+                                    (d.fieldUid.includes(".")
+                                        ? d.fieldUid.startsWith(`${uid}.`)
+                                        : false)
+                            )
+                        ) {
                             callback(error);
                         }
                         return;
