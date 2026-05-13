@@ -6,6 +6,7 @@ import { GenericObjectType } from "../types/common.types";
 import { Schema } from "../types/stack.types";
 import { SetDataResponse } from "../types/setData.types";
 import { ValidationError } from "../utils/validationError";
+import { ON_ERROR_EVENT_NAME } from '../constants';
 
 function separateResolvedData(
     field: FieldModifierLocationField,
@@ -136,6 +137,44 @@ class FieldModifierLocationField {
     getData({ resolved = false } = {}): GenericObjectType {
         return resolved ? this._resolvedData : this._data;
     }
+
+     /**
+         * Subscribe to post-apply / async setData validation errors for **this field**.
+         * Only receives error events, not success cases.
+         * Full entry lifecycle is available on {@link Entry#onSetDataValidationError}.
+         */
+        // onSetDataValidationError 
+        onError(callback: (error: Error) => void) {
+            const fieldObj = this;
+            if (callback && typeof callback === "function") {
+                fieldObj._emitter.on(
+                    ON_ERROR_EVENT_NAME,
+                    (error: Error) => {
+                        if(error instanceof ValidationError) {
+                            const uid = fieldObj.uid;
+                            if (
+                                error.details.some(
+                                    (d) =>
+                                        d.fieldUid === uid ||
+                                        (d.fieldUid.includes(".")
+                                            ? d.fieldUid.startsWith(`${uid}.`)
+                                            : false)
+                                )
+                            ) {
+                                callback(error);
+                            }
+                            return;
+                        }
+                        callback(error);
+                    }
+                );
+                fieldObj._emitter.emitEvent("_eventRegistration", [
+                    { name: ON_ERROR_EVENT_NAME },
+                ]);
+            } else {
+                throw Error("Callback must be a function");
+            }
+        }
 }
 
 export default FieldModifierLocationField;
