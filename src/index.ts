@@ -5,6 +5,7 @@ import { IRteParam } from "./RTE/types";
 import { PluginDefinition, PluginBuilder, registerPlugins } from "./rtePlugin";
 import UiLocation from "./uiLocation";
 import { version } from "../package.json";
+import { ValidationError } from "./utils/validationError";
 
 postRobot.CONFIG.LOG_LEVEL = "error";
 postRobot.CONFIG.ACK_TIMEOUT = 10000;
@@ -104,10 +105,12 @@ class ContentstackAppSDK {
 
 export default ContentstackAppSDK;
 export { PluginBuilder };
+export { ValidationError };
 
 // CommonJS compatibility
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = ContentstackAppSDK;
     module.exports.default = ContentstackAppSDK;
     module.exports.PluginBuilder = PluginBuilder;
+    module.exports.ValidationError = ValidationError;
 }

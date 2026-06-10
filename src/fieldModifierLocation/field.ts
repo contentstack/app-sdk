@@ -4,14 +4,9 @@ import postRobot from "post-robot";
 import { IFieldInitData, IFieldModifierLocationInitData } from "../types";
 import { GenericObjectType } from "../types/common.types";
 import { Schema } from "../types/stack.types";
-
-const excludedDataTypesForSetField = [
-    "file",
-    "reference",
-    "blocks",
-    "group",
-    "global_field",
-];
+import { SetDataResponse } from "../types/setData.types";
+import { ValidationError } from "../utils/validationError";
+import { ON_ERROR_EVENT_NAME } from '../constants';
 
 function separateResolvedData(
     field: FieldModifierLocationField,
@@ -114,32 +109,23 @@ class FieldModifierLocationField {
      */
     async setData(data: any): Promise<FieldModifierLocationField> {
         const currentFieldObj = this;
-        const dataObj = {
+        const dataObj: {
+            data: any;
+            uid: string;
+            self: boolean;
+        } = {
             data,
             uid: currentFieldObj.uid,
             self: currentFieldObj._self,
         };
 
-        if (
-            !currentFieldObj._self &&
-            (excludedDataTypesForSetField.indexOf(currentFieldObj.data_type) !==
-                -1 ||
-                !currentFieldObj.data_type)
-        ) {
-            return Promise.reject(
-                new Error("Cannot call set data for current field type")
-            );
+        const response = await this._connection.sendToParent<SetDataResponse<any>>("setData", dataObj);
+        if (!response.data?.success) {
+            const error = response.data?.error as ValidationError;
+            throw new ValidationError(error.message, error.details);
         }
-
-        return this._connection
-            .sendToParent("setData", dataObj)
-            .then(() => {
-                this._data = data;
-                return Promise.resolve(currentFieldObj);
-            })
-            .catch((e: Error) => {
-                return Promise.reject(e);
-            });
+        this._data = data;
+        return currentFieldObj;
     }
 
     /**
@@ -151,6 +137,44 @@ class FieldModifierLocationField {
     getData({ resolved = false } = {}): GenericObjectType {
         return resolved ? this._resolvedData : this._data;
     }
+
+     /**
+         * Subscribe to post-apply / async setData validation errors for **this field**.
+         * Only receives error events, not success cases.
+         * Full entry lifecycle is available on {@link Entry#onSetDataValidationError}.
+         */
+        // onSetDataValidationError 
+        onError(callback: (error: Error) => void) {
+            const fieldObj = this;
+            if (callback && typeof callback === "function") {
+                fieldObj._emitter.on(
+                    ON_ERROR_EVENT_NAME,
+                    (error: Error) => {
+                        if(error instanceof ValidationError) {
+                            const uid = fieldObj.uid;
+                            if (
+                                error.details.some(
+                                    (d) =>
+                                        d.fieldUid === uid ||
+                                        (d.fieldUid.includes(".")
+                                            ? d.fieldUid.startsWith(`${uid}.`)
+                                            : false)
+                                )
+                            ) {
+                                callback(error);
+                            }
+                            return;
+                        }
+                        callback(error);
+                    }
+                );
+                fieldObj._emitter.emitEvent("_eventRegistration", [
+                    { name: ON_ERROR_EVENT_NAME },
+                ]);
+            } else {
+                throw Error("Callback must be a function");
+            }
+        }
 }
 
 export default FieldModifierLocationField;
