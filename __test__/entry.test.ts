@@ -9,7 +9,25 @@ describe("Entry", () => {
     let sendToParent: any;
 
     beforeEach(() => {
-        sendToParent = () => {};
+        sendToParent = (action: string, dataObj: any) => {
+            if (action === "setData") {
+                // Check if this is a restricted field type
+                if (dataObj.uid === "group.group.group" || dataObj.uid === "modular_blocks.0") {
+                    return Promise.resolve({
+                        data: {
+                            success: false,
+                            error: {
+                                message: "Cannot call set data for current field type",
+                                details: []
+                            }
+                        }
+                    });
+                }
+                // Default successful response for other setData calls
+                return Promise.resolve({ data: { success: true } });
+            }
+            return Promise.resolve();
+        };
         connection = { sendToParent };
 
         emitter = {
