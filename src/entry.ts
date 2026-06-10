@@ -16,8 +16,9 @@ import {
 } from "./types/entry.types";
 import { ContentType, PublishDetails, Schema } from "./types/stack.types";
 import { GenericObjectType } from "./types/common.types";
-import EventRegistry from "./EventRegistry";
-import { onData, onError } from "./utils/utils";
+import { ON_ERROR_EVENT_NAME } from "./constants";
+import { SetDataResponse } from "./types/setData.types";
+import { ValidationError } from "./utils/validationError";
 
 /** Class representing an entry from Contentstack UI. Not available for Dashboard UI Location.  */
 
@@ -93,6 +94,27 @@ class Entry {
     }
 
     /**
+     * Updates multiple fields on the current entry in a single call (partial merge).
+     * Requires host support for `setEntryData` (app-extension-component 2.7.0+).
+     */
+    async setData(data: EntryType): Promise<EntryType> {
+        if (!this._data) {
+            throw new Error(
+                "entry.setData() is not available in this location"
+            );
+        }
+        const payload = { data };
+        const response = await this._connection.sendToParent<SetDataResponse<any>>("setEntryData", payload);
+        if (!response.data?.success) {
+            const error = response.data?.error as ValidationError;
+            throw new ValidationError(error.message, error.details);
+        }
+        Object.assign(this._data, data);
+       
+        return this._data;
+    }
+
+    /**
      * Retrieves the draft data of the current unsaved entry.
      * Returns an empty object if there are no changes.
      *
@@ -133,7 +155,7 @@ class Entry {
     /**
      * Gets the field object for the saved data, which allows you to interact with the field.
      * This object will have all the same methods and properties of appSDK.location.CustomField.field.
-     * Note: For fields initialized using the getFields function, the setData function currently works only for the following fields: as single_line, multi_line, RTE, markdown, select, number, boolean, date, link, and Custom Field UI Location of data type text, number, boolean, and date.
+     * Note: Non-self fields (`entry.getField`) delegate `setData` to the host bridge for all field types.
      * @example
      * var field = entry.getField('field_uid');
      * var fieldSchema = field.schema;
@@ -316,6 +338,23 @@ class Entry {
             );
             this._emitter.emitEvent("_eventRegistration", [
                 { name: "entryUnPublish" },
+            ]);
+        } else {
+            throw Error("Callback must be a function");
+        }
+    }
+
+    onError(callback: (error: Error) => void) {
+        const fieldObj = this;
+        if (callback && typeof callback === "function") {
+            fieldObj._emitter.on(
+                ON_ERROR_EVENT_NAME,
+                (error: Error) => {
+                    callback(error);
+                }
+            );
+            fieldObj._emitter.emitEvent("_eventRegistration", [
+                { name: ON_ERROR_EVENT_NAME },
             ]);
         } else {
             throw Error("Callback must be a function");
