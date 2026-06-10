@@ -1,6 +1,6 @@
 {
     "name": "@contentstack/app-sdk",
-    "version": "2.3.6",
+    "version": "2.4.0",
     "types": "dist/src/index.d.ts",
     "description": "The Contentstack App SDK allows you to customize your Contentstack applications.",
     "main": "dist/index.js",
@@ -44,7 +44,7 @@
         "eslint-plugin-only-warn": "^1.1.0",
         "husky": "^8.0.0",
         "jest": "^27.3.1",
-        "lint-staged": "^13.2.3",
+        "lint-staged": "^16.4.0",
         "react": "^17.0.2",
         "slate": "^0.72.3",
         "ts-jest": "^27.0.7",
