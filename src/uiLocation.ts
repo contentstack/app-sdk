@@ -2,10 +2,9 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 import postRobot from "post-robot";
 import EventEmitter from "wolfy87-eventemitter";
 
+import { AppConfig } from "./appConfig";
 import AssetSidebarWidget from "./AssetSidebarWidget";
 import ContentTypeSidebarWidget from "./ContentTypeSidebarWidget";
-import { IRTEPluginInitializer } from "./RTE/types";
-import { AppConfig } from "./appConfig";
 import Entry from "./entry";
 import EventRegistry from "./EventRegistry";
 import Field from "./field";
@@ -14,6 +13,7 @@ import FieldModifierLocationField from "./fieldModifierLocation/field";
 import FieldModifierLocationFrame from "./fieldModifierLocation/frame";
 import Metadata from "./metadata";
 import Modal from "./modal";
+import { IRTEPluginInitializer } from "./RTE/types";
 import Stack from "./stack";
 import Store from "./store";
 import {
@@ -22,20 +22,20 @@ import {
     IDashboardWidget,
     IFieldModifierLocation,
     IFullPageLocation,
+    IGlobalFullPageLocation,
     IRTEInitData,
     ISidebarWidget,
     InitializationData,
     LocationType,
     Manifest,
-    IGlobalFullPageLocation,
     RegionType,
 } from "./types";
+import { ContentstackEndpoints } from "./types/api.type";
 import { GenericObjectType } from "./types/common.types";
 import { User } from "./types/user.types";
+import { dispatchAdapter, dispatchApiRequest } from "./utils/adapter";
 import { formatAppRegion, onData, onError } from "./utils/utils";
 import Window from "./window";
-import { dispatchApiRequest, dispatchAdapter } from "./utils/adapter";
-import { ContentstackEndpoints } from "./types/api.type";
 
 const emitter = new EventEmitter();
 
@@ -263,6 +263,11 @@ class UiLocation {
 
             case LocationType.FIELD_MODIFIER_LOCATION: {
                 initializationData.self = true;
+                // Fix for FIELD_NOT_FOUND issue introduced in v2.4.0
+                // Schema field UIDs contain the complete field path, including parent paths
+                // Custom Field and Field Modifier UIDs currently contain only the field UID
+                // As a result, schema field lookup fails for nested fields because the full path is required
+                // MKT-18455
                 this.location.FieldModifierLocation = {
                     entry: new FieldModifierLocationEntry(
                         initializationData,
@@ -273,7 +278,10 @@ class UiLocation {
                         currentBranch: initializationData.currentBranch,
                     }),
                     field: new FieldModifierLocationField(
-                        initializationData,
+                        {
+                            ...initializationData,
+                            uid: initializationData.schema.$uid,
+                        },
                         postRobot,
                         emitter
                     ),
@@ -309,8 +317,20 @@ class UiLocation {
             case LocationType.FIELD:
             default: {
                 initializationData.self = true;
+                // Fix for FIELD_NOT_FOUND issue introduced in v2.4.0
+                // Schema field UIDs contain the complete field path, including parent paths
+                // Custom Field and Field Modifier UIDs currently contain only the field UID
+                // As a result, schema field lookup fails for nested fields because the full path is required
+                // MKT-18455
                 this.location.CustomField = {
-                    field: new Field(initializationData, postRobot, emitter),
+                    field: new Field(
+                        {
+                            ...initializationData,
+                            uid: initializationData.schema.$uid,
+                        },
+                        postRobot,
+                        emitter
+                    ),
                     fieldConfig: initializationData.field_config,
                     entry: new Entry(initializationData, postRobot, emitter),
                     stack: new Stack(initializationData.stack, postRobot, {
@@ -400,9 +420,7 @@ class UiLocation {
                     ]);
                 }
                 if (event.data.name === "onError") {
-                    emitter.emitEvent("onError", [
-                        event.data.data,
-                    ]);
+                    emitter.emitEvent("onError", [event.data.data]);
                 }
             });
         } catch (err) {
@@ -436,7 +454,12 @@ class UiLocation {
             return Promise.resolve(this.config);
         }
         return this.postRobot
-            .sendToParent("getConfig", {context:{installationUID:this.installationUID, extensionUID:this.locationUID}})
+            .sendToParent("getConfig", {
+                context: {
+                    installationUID: this.installationUID,
+                    extensionUID: this.locationUID,
+                },
+            })
             .then(onData)
             .catch(onError);
     };
@@ -490,7 +513,7 @@ class UiLocation {
 
     api = (url: string, option?: RequestInit): Promise<Response> =>
         dispatchApiRequest(url, option) as Promise<Response>;
-    
+
     /**
      * Method used to create an adapter for management sdk.
      */
