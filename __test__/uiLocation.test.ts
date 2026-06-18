@@ -2,7 +2,6 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 import postRobot from "post-robot";
 
-import UiLocation from "../src/uiLocation";
 import {
     IAppConfigInitData,
     IAssetSidebarInitData,
@@ -14,8 +13,9 @@ import {
     LocationType,
     Region,
 } from "../src/types";
-import { RequestOption } from "../src/types/common.types";
 import { RequestConfig } from "../src/types/api.type";
+import { RequestOption } from "../src/types/common.types";
+import UiLocation from "../src/uiLocation";
 
 jest.mock("post-robot");
 jest.mock("wolfy87-eventemitter");
@@ -310,7 +310,13 @@ describe("UI Location", () => {
             const config = await uiLocation.getConfig();
             expect(config).toEqual({});
             expect(postRobotSendToParentMock).toHaveBeenLastCalledWith(
-                "getConfig", {"context": {"extensionUID": "extension_uid", "installationUID": "installation_uid"}}
+                "getConfig",
+                {
+                    context: {
+                        extensionUID: "extension_uid",
+                        installationUID: "installation_uid",
+                    },
+                }
             );
         });
     });
@@ -458,6 +464,9 @@ describe("UI Location", () => {
             const uiLocation = new UiLocation({
                 ...initData,
                 type: "FIELD_MODIFIER_LOCATION",
+                schema: {
+                    $uid: "",
+                },
             } as IFieldModifierLocationInitData);
             expect(uiLocation.location.FieldModifierLocation).toBeDefined();
             expect(uiLocation.location.FieldModifierLocation).toHaveProperty(
@@ -478,6 +487,9 @@ describe("UI Location", () => {
             const uiLocation = new UiLocation({
                 ...initData,
                 type: "FULL_PAGE_LOCATION",
+                schema: {
+                    $uid: "",
+                },
             } as IFullPageLocationInitData);
             expect(uiLocation.location.FullPage).toBeDefined();
             expect(uiLocation.location.FullPage).toHaveProperty("stack");
@@ -487,6 +499,9 @@ describe("UI Location", () => {
             const uiLocation = new UiLocation({
                 ...initData,
                 type: "FIELD",
+                schema: {
+                    $uid: "",
+                },
             } as IFieldInitData);
             expect(uiLocation.location.CustomField).toBeDefined();
             expect(uiLocation.location.CustomField).toHaveProperty("field");
@@ -502,6 +517,9 @@ describe("UI Location", () => {
             const uiLocation = new UiLocation({
                 ...initData,
                 type: "",
+                schema: {
+                    $uid: "",
+                },
             } as any);
             expect(uiLocation.location.CustomField).toBeDefined();
             expect(uiLocation.location.CustomField).toHaveProperty("field");
