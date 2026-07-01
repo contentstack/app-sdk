@@ -36,6 +36,7 @@ export type ContentstackEndpoints = {
     DEVELOPER_HUB: string;
     /** Launch API URL. OAuth-callable (management plane). */
     LAUNCH?: string;
+    LYTICS?: string;
     /** Automate (Automations) Management API URL. OAuth-callable (management plane). */
     AUTOMATE?: string;
     /** Brand Kit Management API URL. OAuth-callable (management plane). */
@@ -43,8 +44,8 @@ export type ContentstackEndpoints = {
     /** Generative AI API URL. OAuth-callable (management plane). */
     GEN_AI?: string;
     /** Personalize Management API URL. OAuth-callable (management plane). */
-    PERSONALIZE_MANAGEMENT?: string;
+    PERSONALIZE?: string;
     /** Asset Management API URL. OAuth-callable. Available only in the AWS North America region. */
-    ASSET_MANAGEMENT?: string;
+    ASSETS?: string;
     [key: string]: string | undefined;
 };
