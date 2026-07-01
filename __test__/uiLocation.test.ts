@@ -65,6 +65,8 @@ const initData: IAppConfigInitData = {
         CMA: "https://api.contentstack.io",
         APP: "https://app.contentstack.app",
         DEVELOPER_HUB: "",
+        LAUNCH: "https://launch-api.contentstack.com",
+        BRAND_KIT: "https://brand-kit-api.contentstack.com",
     },
     stack: mockStackData,
     user: {} as any,
