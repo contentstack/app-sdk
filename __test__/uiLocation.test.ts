@@ -390,6 +390,22 @@ describe("UI Location", () => {
         });
     });
 
+    describe("getEndpoints", () => {
+        it("should return injected required and optional endpoints", () => {
+            const uiLocation = new UiLocation(initData);
+            const endpoints = uiLocation.getEndpoints();
+
+            expect(endpoints).toEqual(initData.endpoints);
+            expect(endpoints.CMA).toBe("https://api.contentstack.io");
+            expect(endpoints.LAUNCH).toBe(
+                "https://launch-api.contentstack.com"
+            );
+            expect(endpoints.BRAND_KIT).toBe(
+                "https://brand-kit-api.contentstack.com"
+            );
+        });
+    });
+
     describe("initialize", () => {
         it("should have static initialize method", () => {
             expect(UiLocation.initialize).toBeDefined();
