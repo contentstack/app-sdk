@@ -65,6 +65,8 @@ const initData: IAppConfigInitData = {
         CMA: "https://api.contentstack.io",
         APP: "https://app.contentstack.app",
         DEVELOPER_HUB: "",
+        LAUNCH: "https://launch-api.contentstack.com",
+        BRAND_KIT: "https://brand-kit-api.contentstack.com",
     },
     stack: mockStackData,
     user: {} as any,
@@ -385,6 +387,22 @@ describe("UI Location", () => {
             const uiLocation = new UiLocation(initData);
             const region = uiLocation.getCurrentRegion();
             expect(region).toBe(Region.NA);
+        });
+    });
+
+    describe("getEndpoints", () => {
+        it("should return injected required and optional endpoints", () => {
+            const uiLocation = new UiLocation(initData);
+            const endpoints = uiLocation.getEndpoints();
+
+            expect(endpoints).toEqual(initData.endpoints);
+            expect(endpoints.CMA).toBe("https://api.contentstack.io");
+            expect(endpoints.LAUNCH).toBe(
+                "https://launch-api.contentstack.com"
+            );
+            expect(endpoints.BRAND_KIT).toBe(
+                "https://brand-kit-api.contentstack.com"
+            );
         });
     });
 
