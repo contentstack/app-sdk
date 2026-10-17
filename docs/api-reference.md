@@ -148,6 +148,28 @@ ContentstackAppSdk.init().then(function (location) {
 });
 ```
 
+### **ContentstackAppSdk endpoints**
+
+The SDK instance exposes Contentstack product URLs through `appSdk.endpoints` and `appSdk.getEndpoints()`. These URLs are injected by the Contentstack host shell during initialization. Apps can build request URLs from these values and send requests through `appSdk.api(url, option)`.
+
+`APP`, `CMA`, and `DEVELOPER_HUB` are always provided. Product-specific URLs such as `LAUNCH`, `AUTOMATE`, `BRAND_KIT`, `GEN_AI`, `PERSONALIZE_MANAGEMENT`, and `ASSET_MANAGEMENT` are optional because availability can vary by host shell and region. Check that an optional endpoint exists before using it.
+
+`appSdk.api()` proxies requests through the host shell and uses the app's OAuth access token. Use these endpoints for Contentstack management-plane APIs that accept OAuth authorization. Delivery-plane APIs, including Content Delivery, GraphQL Delivery, Preview, Image or Asset CDN, and Personalize Edge, require their own delivery or preview credentials.
+
+**Example**
+
+```js
+ContentstackAppSdk.init().then(async function (appSdk) {
+    var endpoints = appSdk.getEndpoints();
+
+    if (endpoints.LAUNCH) {
+        var response = await appSdk.api(endpoints.LAUNCH + "/launches", {
+            method: "GET",
+        });
+    }
+});
+```
+
 ## **CustomField**
 
 It is an object representing the current Custom field reference in the Contentstack UI.
