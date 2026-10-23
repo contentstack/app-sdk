@@ -86,8 +86,17 @@ export const fetchToAxiosConfig = (
     return axiosConfig;
 };
 
+const BLOCKED_RESPONSE_HEADERS = ["set-cookie", "authorization"];
+
 export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
-    const { data, status, statusText, config } = axiosRes;
+    const { data, status, statusText, headers: rawHeaders } = axiosRes;
+
+    const headersObj: Record<string, string> = {};
+    Object.entries(rawHeaders ?? {}).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+        if (BLOCKED_RESPONSE_HEADERS.includes(key.toLowerCase())) return;
+        headersObj[key.toLowerCase()] = String(value);
+    });
 
     let body: BodyInit;
     let contentType = "application/json";
@@ -98,19 +107,19 @@ export function axiosToFetchResponse(axiosRes: AxiosResponse): Response {
         data instanceof ArrayBuffer
     ) {
         body = data;
-        contentType = config.headers["content-type"] || "application/octet-stream";
+        contentType = headersObj["content-type"] || "application/octet-stream";
     } else {
         body = JSON.stringify(data);
     }
 
-    if (!config.headers["content-type"]) {
-        config.headers["content-type"] = contentType;
+    if (!headersObj["content-type"]) {
+        headersObj["content-type"] = contentType;
     }
 
     const responseInit: ResponseInit = {
         status,
         statusText,
-        headers: config.headers,
+        headers: new Headers(headersObj),
     };
 
     return new Response(body, responseInit);
