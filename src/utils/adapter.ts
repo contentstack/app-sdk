@@ -25,7 +25,19 @@ export const dispatchAdapter =
                     const { data: response } = event as { data: AxiosResponse };
 
                     if (response.status >= 400) {
-                        return reject({ ...response, config });
+                        // The host replies with the upstream AxiosResponse for
+                        // HTTP errors and with `{ status, message, stack }` for
+                        // transport failures. Keep the flat keys that
+                        // createAdapter() consumers already read (err.status,
+                        // err.data) and, for HTTP errors, also nest the reply
+                        // under `response` so api() can convert it the same
+                        // way it converts an AxiosError.
+                        const isHttpError = "data" in response;
+                        return reject({
+                            ...response,
+                            config,
+                            ...(isHttpError && { response }),
+                        });
                     }
                     resolve({
                         data: response.data,
@@ -69,17 +81,17 @@ export const dispatchApiRequest = async (
 
         return axiosToFetchResponse(axiosResponse);
     } catch (err: any) {
+        // HTTP error (4xx/5xx): the backend body, status text and response
+        // headers are passed through unchanged, as fetch would.
         if (err.response) {
-            return new Response(err.response?.data, {
-                status: err.response.status,
-                statusText: err.response.statusText,
-                headers: err.response.headers,
-            });
+            return axiosToFetchResponse(err.response);
         }
+        // Transport error (host could not reach the backend, or the
+        // post-robot call itself failed).
         return new Response(err.stack, {
             status: err.status || 500,
             statusText: err.message || "Internal Server Error",
-            headers: err.config.headers,
+            headers: err.config?.headers,
         });
     }
 };
