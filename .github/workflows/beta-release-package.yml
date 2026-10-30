@@ -14,6 +14,8 @@ jobs:
               with:
                   node-version: 14
             - run: npm ci
+            - name: Install ggshield
+              run: pipx install ggshield
             - run: npm test
         name: Build and test
 
@@ -30,8 +32,11 @@ jobs:
                   node-version: 14
                   registry-url: https://npm.pkg.github.com/
             - run: npm ci
+            - name: Install ggshield
+              run: pipx install ggshield
             - run: npm publish --tag beta
               env:
+                  GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
                   NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         name: Publish to GitHub
 
@@ -45,8 +50,11 @@ jobs:
                 node-version: 16
                 registry-url: https://registry.npmjs.org/
             - run: npm ci
+            - name: Install ggshield
+              run: pipx install ggshield
             - run: npm publish --tag beta
               env:
+                GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
                 NODE_AUTH_TOKEN: ${{secrets.APP_SDK_AUTOMATION}}
         name: Publish to NPM
 
