@@ -6,7 +6,8 @@
     "main": "dist/index.js",
     "repository": "https://github.com/contentstack/app-sdk",
     "scripts": {
-        "prepublish": "npm run build",
+            "postpack": "ggshield secret scan archive ./*.tgz",
+    "prepublish": "npm run build",
         "build": "webpack",
         "test": "jest",
         "test:watch": "jest --watchAll",

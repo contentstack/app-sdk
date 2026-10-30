@@ -16,6 +16,8 @@ jobs:
               with:
                   node-version: 18
             - run: npm ci
+            - name: Install ggshield
+              run: pipx install ggshield
             - run: npm test
 
     publish-gpr:
@@ -31,6 +33,9 @@ jobs:
                   node-version: 18
                   registry-url: https://npm.pkg.github.com/
             - run: npm ci
+            - name: Install ggshield
+              run: pipx install ggshield
             - run: npm publish
               env:
+                  GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
                   NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
