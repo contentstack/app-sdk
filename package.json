@@ -29,11 +29,12 @@
     },
     "license": "MIT",
     "devDependencies": {
-        "@babel/core": "^7.2.2",
+        "@babel/core": "^7.29.7",
         "@babel/preset-env": "^7.3.1",
         "@testing-library/jest-dom": "^5.16.5",
         "@types/chai": "^4.2.22",
         "@types/jest": "^27.0.2",
+        "@types/node": "^25.6.0",
         "@types/react": "^17.0.18",
         "@typescript-eslint/eslint-plugin": "^5.10.1",
         "@typescript-eslint/parser": "^5.10.1",
@@ -58,7 +59,7 @@
         "webpack-dev-server": "^5.2.3"
     },
     "dependencies": {
-        "axios": "^1.7.9",
+        "axios": "^1.21.0",
         "jsonfile": "^6.1.0",
         "loader-utils": "^3.2.1",
         "post-robot": "^8.0.31",
