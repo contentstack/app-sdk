@@ -12,7 +12,7 @@ interface EventRegistryConfig {
 class EventRegistry {
     private events: string[] = [];
     private eventsSubject: Subject<string> = new Subject<string>();
-    private debounceInterval: number = 400;
+    private debounceInterval = 400;
     private _connection: typeof postRobot;
     private installationUID: string;
     private appUID: string;

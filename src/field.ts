@@ -83,7 +83,7 @@ class Field {
             const path = schemaPath.split(".");
 
             let value = event.data;
-            let sanitizedObject = Object.create(null);
+            const sanitizedObject = Object.create(null);
             Object.assign(sanitizedObject, value);
             path.forEach((key) => {
                 if (value) {
