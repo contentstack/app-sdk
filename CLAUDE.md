@@ -20,7 +20,7 @@ Bug fixes and support cases keep this repo's usual path. Not sure which applies?
 ## Public API contract (hard rules)
 - This package is public and runs in every Marketplace app. No breaking change: exported names, types and method signatures, the `init` handshake, post-robot channel names and payload shapes stay as they are.
 - Change runtime behaviour only for a confirmed bug fix, and say in the PR exactly what consumers will see differ. Every other PR says it changes nothing for consumers; prove it by building `main` and the branch and diffing `dist/src/**/*.d.ts`.
-- Host-to-app listeners (`postRobot.on`) accept messages from `window.parent` only.
+- Host-to-app listeners (`postRobot.on`) accept messages from `window.parent` only, after #193 (MKT-22128) merges; until then `main` still accepts any window, and new listeners must pass `{ window: window.parent }`.
 - Never log tokens, request headers or bodies; `console.error` gets the error, nothing else.
 - A version bump, release or `npm publish` is the release process's job, never part of a feature or fix PR.
 
