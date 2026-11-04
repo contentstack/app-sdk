@@ -274,6 +274,7 @@ class Asset extends Base {
             try {
                 const uploadReadyListener = postRobot.on(
                     `uploadReady_${uid}`,
+                    { window: window.parent },
                     function () {
                         window.parent.postMessage(
                             {
