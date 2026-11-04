@@ -2,17 +2,6 @@
 
 `@contentstack/app-sdk`: the public npm library every Marketplace app loads inside its UI-location iframe. It does the `init` handshake with the Contentstack host (`app-extension-component`) over post-robot and exposes the per-location API (custom field, sidebars, dashboard, app config, full page, field modifier, RTE plugins, `stack`, `api()`).
 
-## Developer Ecosystem workflow (read first)
-
-This repo belongs to a Developer Ecosystem pod (DevEx: MCP, CLI, SDK, Starters including the SAP connector; Marketplace; Mkt Apps; Developer Hub).
-New features and changes go through the deveco workflow before any code is written here:
-
-1. Find the work's DSCDX idea and where it is in the flow. No idea yet: write one with the `brief` skill in `contentstack/product-wiki`.
-2. The PRD, TRD, test cases, tickets and code come from your own routines (PM, Architect, QA agent, Dev), gate by gate. Do not plan, draft or build them in this session. No routine for a step yet: set it up with the `deveco-aisdlc-onboarding` skill in `contentstack/agent-skills`.
-3. The order, gates and intake: https://github.com/contentstack/agent-skills/blob/main/skills/deveco-aisdlc-onboarding/references/run-protocol.md
-
-Bug fixes and support cases keep this repo's usual path. Not sure which applies? Ask before building.
-
 **Stack:** TypeScript 4 · webpack 5 (UMD bundle `dist/index.js`, typings `dist/src/**/*.d.ts`) · Jest 27 (jsdom) · post-robot 8 · npm · Node from `.nvmrc` when present
 **Commands:** `npm ci` (its `prepare` script builds) · `npm run build` · `npm test` · `npm run test:coverage` · `npm run lint` · `npx tsc --noEmit -p .`
 **Env:** the library reads no environment variables, so there is no env sample.
@@ -20,7 +9,7 @@ Bug fixes and support cases keep this repo's usual path. Not sure which applies?
 ## Public API contract (hard rules)
 - This package is public and runs in every Marketplace app. No breaking change: exported names, types and method signatures, the `init` handshake, post-robot channel names and payload shapes stay as they are.
 - Change runtime behaviour only for a confirmed bug fix, and say in the PR exactly what consumers will see differ. Every other PR says it changes nothing for consumers; prove it by building `main` and the branch and diffing `dist/src/**/*.d.ts`.
-- Host-to-app listeners (`postRobot.on`) accept messages from `window.parent` only, after #193 (MKT-22128) merges; until then `main` still accepts any window, and new listeners must pass `{ window: window.parent }`.
+- Host-to-app listeners (`postRobot.on`) accept messages from `window.parent` only, after https://github.com/contentstack/app-sdk/pull/193 merges; until then `main` still accepts any window, and new listeners must pass `{ window: window.parent }`.
 - Never log tokens, request headers or bodies; `console.error` gets the error, nothing else.
 - A version bump, release or `npm publish` is the release process's job, never part of a feature or fix PR.
 
@@ -37,7 +26,9 @@ Bug fixes and support cases keep this repo's usual path. Not sure which applies?
 | `docs/` | API reference and v2 migration guide |
 
 ## Known traps
-See the product-wiki pages under `developer-hub/gotchas/`: `app-sdk-event-registration-never-batches`, `set-installation-data-replaces-not-merges`, `app-sdk-dead-import-under-ts-nocheck`, `unit-test-workflow-triggers-on-master`.
+- `EventRegistry` debounces, but each `on*` call builds its own registry, so every `eventRegistration` message carries one event.
+- `setInstallationData` replaces the stored configuration; it never merges. Omit `serverConfiguration` unless a secret is being set or removed.
+- `src/stack/api/base.ts` is under `@ts-nocheck` and imports `dispatchPostRobotRequest`, which does not exist; delete the import before editing that file.
 
 ## Review rules (from the `main` ruleset)
 The ruleset "Default branch protection rules for releases branch" covers `main`:
@@ -51,5 +42,5 @@ The ruleset "Default branch protection rules for releases branch" covers `main`:
 - `npm test` is green, with a test for every public method the change adds or changes, written from the docs, not from the code's output.
 - `npm run build` and `npx tsc --noEmit -p .` pass; `npm run lint` adds no new warning.
 - The PR states the consumer impact (none, or exactly what changes) with the `dist` typings diff.
-- Docs updated: `docs/api-reference.md` for public API changes, and the Developer Hub pages in `contentstack/product-wiki`.
+- Docs updated: `docs/api-reference.md` for public API changes.
 - No secrets in code, commits or logs.
