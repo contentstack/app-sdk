@@ -205,7 +205,7 @@ class Asset extends Base {
       });
      * @return {external:Promise}
      */
-    publish(payload: { [key: string]: any }, api_version: string = "") {
+    publish(payload: { [key: string]: any }, api_version = "") {
         if (
             !payload ||
             typeof payload !== "object" ||
