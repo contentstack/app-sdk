@@ -348,7 +348,9 @@ class UiLocation {
         }
 
         try {
-            postRobot.on("extensionEvent", async (event) => {
+            // Only the host (the window holding this iframe) sends events; ignore sibling frames.
+            const fromHost = { window: window.parent };
+            postRobot.on("extensionEvent", fromHost, async (event) => {
                 if (event.data.name === "entrySave") {
                     emitter.emitEvent("entrySave", [{ data: event.data.data }]);
                     emitter.emitEvent("updateFields", [

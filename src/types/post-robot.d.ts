@@ -23,7 +23,11 @@ declare module "post-robot" {
         cancel: () => void;
     }
 
-    export function on(name: string, handler?: HandlerType): CancelableType;
+    export function on(
+        name: string,
+        options?: ServerOptionsType | HandlerType,
+        handler?: HandlerType
+    ): CancelableType;
 
     export function once(
         name: string,
