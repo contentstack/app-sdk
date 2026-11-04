@@ -11,12 +11,18 @@ jest.mock("post-robot");
 // window.parent. A listener without a window filter also accepts the same
 // messages from sibling app frames, so both must be scoped to window.parent.
 describe("host-only post-robot listeners (MKT-22128)", () => {
+    // jsdom's window.parent is window itself; a distinct parent proves the
+    // listener is bound to the parent and not to the app's own window.
+    const fakeParent = {} as Window;
+
     beforeEach(() => {
+        jest.spyOn(window, "parent", "get").mockReturnValue(fakeParent);
         (postRobot as any).on.mockReturnValue({ cancel: jest.fn() });
         (postRobot as any).sendToParent.mockResolvedValue({ data: {} });
     });
 
     afterEach(() => {
+        jest.restoreAllMocks();
         jest.clearAllMocks();
         window["postRobot"] = undefined;
     });
@@ -40,7 +46,7 @@ describe("host-only post-robot listeners (MKT-22128)", () => {
         );
         expect(call).toBeDefined();
         // compare by identity: printing a Window on failure exhausts memory
-        expect(call[1]?.window === window.parent).toBe(true);
+        expect(call[1]?.window === fakeParent).toBe(true);
         expect(typeof call[2]).toBe("function");
     });
 
@@ -51,7 +57,7 @@ describe("host-only post-robot listeners (MKT-22128)", () => {
             String(name).startsWith("uploadReady_")
         );
         expect(call).toBeDefined();
-        expect(call[1]?.window === window.parent).toBe(true);
+        expect(call[1]?.window === fakeParent).toBe(true);
         expect(typeof call[2]).toBe("function");
     });
 });
